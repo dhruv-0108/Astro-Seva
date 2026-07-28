@@ -31,6 +31,7 @@ import {
   HeartHandshake,
   Compass,
   AlertCircle,
+  Image as ImageIcon,
 } from 'lucide-react';
 
 interface BirthDetails {
@@ -173,6 +174,9 @@ export default function Home() {
   const [step, setStep] = useState<number>(0);
   const [selectedService, setSelectedService] = useState<typeof SERVICES[0]>(SERVICES[1]);
 
+  // Background Theme Selector: 'mandala' | 'purple-studio' | 'purple-plain'
+  const [bgChoice, setBgChoice] = useState<'mandala' | 'purple-studio' | 'purple-plain'>('purple-studio');
+
   const [name, setName] = useState<string>('');
   const [countryCode, setCountryCode] = useState<string>('+91');
   const [phoneRaw, setPhoneRaw] = useState<string>('');
@@ -197,14 +201,14 @@ export default function Home() {
   const bookingRef = useRef<HTMLDivElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
-  // Buttery Smooth Scroll Zoom ONLY (No Rotation)
+  // Buttery Smooth Scroll Zoom ONLY
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   });
 
-  const mandalaScale = useTransform(scrollYProgress, [0, 1], [1.0, 1.30]);
-  const mandalaY = useTransform(scrollYProgress, [0, 1], [0, -50]);
+  const mandalaScale = useTransform(scrollYProgress, [0, 1], [1.0, 1.25]);
+  const mandalaY = useTransform(scrollYProgress, [0, 1], [0, -40]);
 
   // Close place suggestions dropdown when clicking outside
   useEffect(() => {
@@ -344,10 +348,22 @@ export default function Home() {
     setLang((prev) => (prev === 'GU' ? 'EN' : 'GU'));
   };
 
+  const getBgImagePath = () => {
+    switch (bgChoice) {
+      case 'purple-studio':
+        return '/bg-purple-studio.jpg';
+      case 'purple-plain':
+        return '/bg-purple-plain.jpg';
+      case 'mandala':
+      default:
+        return '/mandala-bg.jpg';
+    }
+  };
+
   return (
     <div ref={containerRef} className="flex flex-col flex-1 min-h-screen text-stone-900 font-sans relative overflow-hidden selection:bg-amber-100">
       
-      {/* BUTTERY SMOOTH SCROLL ZOOM MANDALA BACKGROUND (NO ROTATION) */}
+      {/* BUTTERY SMOOTH SCROLL ZOOM BACKGROUND LAYER */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         <motion.div
           style={{
@@ -357,14 +373,19 @@ export default function Home() {
           className="w-full h-full min-h-screen flex items-center justify-center transform-gpu will-change-transform"
         >
           <img
-            src="/mandala-bg.jpg"
-            alt="Golden Mandala Background"
-            className="w-full h-full object-cover object-center"
+            key={bgChoice}
+            src={getBgImagePath()}
+            alt="Background Design"
+            className="w-full h-full object-cover object-center transition-all duration-700"
           />
         </motion.div>
         
-        {/* Transparent Tint to preserve text contrast */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FAF9F6]/40 via-[#FAF9F6]/25 to-[#FAF9F6]/50" />
+        {/* Soft Vignette Overlay depending on theme */}
+        <div className={`absolute inset-0 transition-all duration-500 ${
+          bgChoice === 'mandala' 
+            ? 'bg-gradient-to-b from-[#FAF9F6]/40 via-[#FAF9F6]/25 to-[#FAF9F6]/50'
+            : 'bg-gradient-to-b from-purple-950/20 via-transparent to-stone-900/40'
+        }`} />
       </div>
 
       {/* Serene Navigation Header */}
@@ -378,10 +399,35 @@ export default function Home() {
             <p className="text-xs text-stone-500 font-medium">{t.subtitle}</p>
           </div>
         </div>
-        <Button variant="outline" size="sm" onClick={toggleLanguage}>
-          <Globe className="w-3.5 h-3.5 text-stone-600" />
-          <span>{t.language}</span>
-        </Button>
+
+        <div className="flex items-center gap-2">
+          {/* Quick Background Theme Tester Switcher */}
+          <div className="hidden sm:flex items-center gap-1 bg-stone-100/80 p-1 rounded-2xl border border-stone-200 text-xs font-bold">
+            <button
+              onClick={() => setBgChoice('purple-studio')}
+              className={`px-2.5 py-1 rounded-xl transition-all ${bgChoice === 'purple-studio' ? 'bg-[#A14E15] text-white shadow-xs' : 'text-stone-600 hover:text-stone-900'}`}
+            >
+              Purple Ambient
+            </button>
+            <button
+              onClick={() => setBgChoice('purple-plain')}
+              className={`px-2.5 py-1 rounded-xl transition-all ${bgChoice === 'purple-plain' ? 'bg-[#A14E15] text-white shadow-xs' : 'text-stone-600 hover:text-stone-900'}`}
+            >
+              Purple Plain
+            </button>
+            <button
+              onClick={() => setBgChoice('mandala')}
+              className={`px-2.5 py-1 rounded-xl transition-all ${bgChoice === 'mandala' ? 'bg-[#A14E15] text-white shadow-xs' : 'text-stone-600 hover:text-stone-900'}`}
+            >
+              Golden Mandala
+            </button>
+          </div>
+
+          <Button variant="outline" size="sm" onClick={toggleLanguage}>
+            <Globe className="w-3.5 h-3.5 text-stone-600" />
+            <span>{t.language}</span>
+          </Button>
+        </div>
       </header>
 
       {/* Content wrapper floating over smooth background */}
@@ -406,10 +452,10 @@ export default function Home() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="space-y-4 max-w-2xl mx-auto"
           >
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-stone-900 tracking-tight leading-tight drop-shadow-xs">
+            <h2 className={`text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight drop-shadow-sm ${bgChoice.startsWith('purple') ? 'text-white' : 'text-stone-900'}`}>
               {t.heroTagline}
             </h2>
-            <p className="text-base text-stone-800 leading-relaxed font-semibold max-w-xl mx-auto drop-shadow-xs">
+            <p className={`text-base leading-relaxed font-semibold max-w-xl mx-auto drop-shadow-sm ${bgChoice.startsWith('purple') ? 'text-purple-100' : 'text-stone-800'}`}>
               {t.heroSubtitle}
             </p>
           </motion.div>
@@ -428,7 +474,7 @@ export default function Home() {
 
         {/* 2. MEET GURU JI CREDIBILITY SECTION */}
         <section className="w-full max-w-3xl mx-auto py-8 px-6">
-          <Card className="p-8 sm:p-10 space-y-6 text-center bg-white/92 backdrop-blur-md shadow-xl border border-stone-200">
+          <Card className="p-8 sm:p-10 space-y-6 text-center bg-white/94 backdrop-blur-md shadow-xl border border-stone-200">
             <div className="space-y-2">
               <Badge variant="secondary" className="mx-auto">{t.meetRole}</Badge>
               <h3 className="text-2xl font-bold text-stone-900">{t.meetTitle}</h3>
@@ -467,7 +513,7 @@ export default function Home() {
         <section className="w-full max-w-3xl mx-auto py-8 px-6 space-y-6">
           <div className="text-center space-y-1">
             <Badge variant="secondary" className="mx-auto">Simple Process</Badge>
-            <h3 className="text-xl font-bold text-stone-900">{t.howTitle}</h3>
+            <h3 className={`text-xl font-bold ${bgChoice.startsWith('purple') ? 'text-white' : 'text-stone-900'}`}>{t.howTitle}</h3>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -477,7 +523,7 @@ export default function Home() {
               { num: '03', title: t.howStep3, desc: t.howStep3Desc, icon: User },
               { num: '04', title: t.howStep4, desc: t.howStep4Desc, icon: Compass },
             ].map((item, idx) => (
-              <Card key={idx} className="p-6 flex items-start gap-4 bg-white/92 backdrop-blur-md shadow-md border border-stone-200">
+              <Card key={idx} className="p-6 flex items-start gap-4 bg-white/94 backdrop-blur-md shadow-md border border-stone-200">
                 <span className="text-base font-extrabold text-[#A14E15] font-mono bg-amber-50 border border-amber-200/80 px-2.5 py-1 rounded-xl shrink-0">
                   {item.num}
                 </span>
@@ -520,7 +566,7 @@ export default function Home() {
           </div>
 
           {/* Step Card with Motion Transitions */}
-          <Card className="w-full relative bg-white/95 backdrop-blur-md shadow-2xl border border-stone-200">
+          <Card className="w-full relative bg-white/96 backdrop-blur-md shadow-2xl border border-stone-200">
             <AnimatePresence mode="wait">
               
               {/* STEP 0: CHOOSE CONSULTATION FORMAT */}
