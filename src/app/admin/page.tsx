@@ -25,6 +25,11 @@ interface ClientSubmission {
   id: string;
   name: string;
   phone: string;
+  serviceSelected?: {
+    id: string;
+    title: string;
+    price: number;
+  };
   birthDetails: {
     date: string;
     time: string;
@@ -36,6 +41,7 @@ interface ClientSubmission {
   paymentStatus: 'pending' | 'paid';
   createdAt: any;
 }
+
 
 export default function AdminDashboard() {
   const [user, setUser] = useState<User | null>(null);
@@ -282,7 +288,13 @@ export default function AdminDashboard() {
                             <Phone className="w-3 h-3 text-gray-400" />
                             <span>{client.phone}</span>
                           </div>
+                          {client.serviceSelected && (
+                            <span className="inline-block mt-1.5 text-[11px] font-bold bg-amber-50 text-[#cc6600] border border-amber-200 px-2 py-0.5 rounded-md">
+                              {client.serviceSelected.title} (₹{client.serviceSelected.price})
+                            </span>
+                          )}
                         </td>
+
 
                         {/* Birth Details */}
                         <td className="p-4 text-xs space-y-1">
@@ -376,7 +388,13 @@ export default function AdminDashboard() {
                           <Phone className="w-3.5 h-3.5 text-gray-400 shrink-0" />
                           <span className="truncate">{client.phone}</span>
                         </p>
+                        {client.serviceSelected && (
+                          <span className="inline-block mt-1 text-[10px] font-bold bg-amber-50 text-[#cc6600] border border-amber-200 px-2 py-0.5 rounded-md">
+                            {client.serviceSelected.title} (₹{client.serviceSelected.price})
+                          </span>
+                        )}
                       </div>
+
                       <span
                         className={`text-[11px] font-bold px-2.5 py-1 rounded-full shrink-0 ${
                           client.paymentStatus === 'paid'

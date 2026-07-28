@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 import React, { useState, useEffect, useRef } from 'react';
 import { db } from '../lib/firebase/config';
 import { collection, addDoc } from 'firebase/firestore';
-import { Sparkles, Calendar, Clock, MapPin, Phone, User, CheckCircle2, ArrowRight, ShieldCheck, Globe, CreditCard } from 'lucide-react';
+import { Sparkles, Calendar, Clock, MapPin, Phone, User, CheckCircle2, ArrowRight, ShieldCheck, Globe, CreditCard, PhoneCall, HelpCircle, Check } from 'lucide-react';
 
 interface BirthDetails {
   date: string;
@@ -26,17 +26,50 @@ const COUNTRY_CODES = [
   { code: '+977', country: 'Nepal', flag: '🇳🇵' },
 ];
 
+const SERVICES = [
+  {
+    id: '3-questions',
+    titleEN: '3 Questions Consultation',
+    titleGU: '૩ પ્રશ્નો પરામર્શ (3 Questions)',
+    price: 251,
+    descEN: 'Get detailed astrological answers to your 3 specific life questions.',
+    descGU: 'તમારા ૩ ચોક્કસ પ્રશ્નોના વિગતવાર વૈદિક જ્યોતિષીય જવાબો મેળવો.',
+    icon: '🔮',
+    popular: false,
+  },
+  {
+    id: '5-questions',
+    titleEN: '5 Questions Consultation',
+    titleGU: '૫ પ્રશ્નો પરામર્શ (5 Questions)',
+    price: 501,
+    descEN: 'Comprehensive analysis for 5 questions + Kundli overview.',
+    descGU: 'તમારા ૫ જીવન પ્રશ્નોનું વિગતવાર વિશ્લેષણ અને કુંડળી વિહંગાવલોકન.',
+    icon: '✨',
+    popular: true,
+  },
+  {
+    id: '30-min-call',
+    titleEN: '30 Mins Live Call Consultation',
+    titleGU: '૩૦ મિનિટ લાઇવ કૉલ (30 Mins Call)',
+    price: 999,
+    descEN: 'Direct 1-on-1 30-minute phone call consultation with Guruji.',
+    descGU: 'ગુરુજી સાથે સીધો ૩૦ મિનિટનો ૧-ઓન-૧ ફોન કૉલ પરામર્શ.',
+    icon: '📞',
+    popular: false,
+  },
+];
+
 const TRANSLATIONS = {
   EN: {
     title: 'Astro-Seva',
-    subtitle: 'Get your authentic Vedic Kundli report from Guruji',
-    step1Title: 'Contact Information',
-    step2Title: 'Dakshina Payment',
-    step3Title: 'Birth Details',
-    step4Title: 'Submission Successful!',
+    subtitle: 'Get your authentic Vedic Kundli report & guidance from Guruji',
+    step0Title: 'Step 1: Select Your Service',
+    step1Title: 'Step 2: Pay Dakshina',
+    step2Title: 'Step 3: Enter Your Complete Details',
+    step3Title: 'Submission Successful!',
+    selectServiceBtn: 'Select Service & Proceed to Pay',
     nameLabel: 'Full Name',
     phoneLabel: 'WhatsApp Number',
-    nextBtn: 'Proceed to Payment',
     payBtn: 'Open UPI App to Pay',
     qrDesktopText: 'Or scan this QR code using GPay / PhonePe / Paytm:',
     paidBtn: 'I Have Completed Payment',
@@ -44,7 +77,7 @@ const TRANSLATIONS = {
     birthTimeLabel: 'Exact Time of Birth',
     birthPlaceLabel: 'Place of Birth (City / Town)',
     tzLabel: 'Timezone Offset (Hours)',
-    submitBtn: 'Submit Details to Guruji',
+    submitBtn: 'Submit Complete Details to Guruji',
     successMsg: 'Hari Om. Your birth details & payment notification have been submitted to Guruji.',
     successSub: 'Guruji will verify the payment and send your complete Kundli report directly to your WhatsApp.',
     searching: 'Searching location...',
@@ -54,14 +87,14 @@ const TRANSLATIONS = {
   },
   GU: {
     title: 'એસ્ટ્રો-સેવા',
-    subtitle: 'ગુરુજી પાસેથી તમારી ઓથેન્ટિક વૈદિક કુંડળી મેળવો',
-    step1Title: 'સંપર્ક માહિતી',
-    step2Title: 'દક્ષિણા ચુકવણી',
-    step3Title: 'જન્મ વિગતો',
-    step4Title: 'સફળતાપૂર્વક સબમિટ થયેલ!',
+    subtitle: 'ગુરુજી પાસેથી તમારી ઓથેન્ટિક વૈદિક કુંડળી અને માર્ગદર્શન મેળવો',
+    step0Title: 'પગલું ૧: સેવાની પસંદગી કરો',
+    step1Title: 'પગલું ૨: દક્ષિણા ચુકવણી કરો',
+    step2Title: 'પગલું ૩: તમારી સંપૂર્ણ વિગતો દાખલ કરો',
+    step3Title: 'સફળતાપૂર્વક સબમિટ થયેલ!',
+    selectServiceBtn: 'સેવા પસંદ કરો અને આગળ વધો',
     nameLabel: 'આખું નામ',
     phoneLabel: 'વોટ્સએપ નંબર',
-    nextBtn: 'ચુકવણી તરફ આગળ વધો',
     payBtn: 'ચુકવણી કરવા માટે યુપીઆઈ એપ ખોલો',
     qrDesktopText: 'અથવા જીપે/ફોનપે/પેટીએમ વડે આ ક્યુઆર કોડ સ્કેન કરો:',
     paidBtn: 'મેં ચુકવણી પૂર્ણ કરી દીધી છે',
@@ -69,7 +102,7 @@ const TRANSLATIONS = {
     birthTimeLabel: 'ચોક્કસ જન્મ સમય',
     birthPlaceLabel: 'જન્મ સ્થળ (શહેર/ગામ)',
     tzLabel: 'ટાઇમઝોન તફાવત (કલાકો)',
-    submitBtn: 'વિગતો ગુરુજીને સબમિટ કરો',
+    submitBtn: 'સંપૂર્ણ વિગતો ગુરુજીને સબમિટ કરો',
     successMsg: 'હરિ ઓમ. તમારી જન્મ વિગતો અને ચુકવણી નોટિફિકેશન ગુરુજીને મોકલી દેવાયા છે.',
     successSub: 'ગુરુજી ચુકવણીની ખાતરી કરીને ટૂંક સમયમાં તમારા વોટ્સએપ પર કુંડળી મોકલશે.',
     searching: 'સ્થળ શોધી રહ્યા છીએ...',
@@ -79,12 +112,13 @@ const TRANSLATIONS = {
   }
 };
 
-const FEE_AMOUNT = 501;
 const GURU_UPI_ID = 'verify@ybl';
 
 export default function Home() {
   const [lang, setLang] = useState<'EN' | 'GU'>('GU');
   const [step, setStep] = useState<number>(0);
+  const [selectedService, setSelectedService] = useState<typeof SERVICES[0]>(SERVICES[1]);
+
   const [name, setName] = useState<string>('');
   const [countryCode, setCountryCode] = useState<string>('+91');
   const [phoneRaw, setPhoneRaw] = useState<string>('');
@@ -146,7 +180,6 @@ export default function Home() {
   }, [placeSearch]);
 
   const handleSelectPlace = (item: any) => {
-    // Extract clean display name in English
     const parts = item.display_name.split(',').map((s: string) => s.trim());
     const cleanName = parts.length > 3 ? `${parts[0]}, ${parts[parts.length - 2]}, ${parts[parts.length - 1]}` : item.display_name;
 
@@ -160,45 +193,34 @@ export default function Home() {
     setPlaceSuggestions([]);
   };
 
-  const validateStep1 = () => {
+  const fullPhoneNumber = `${countryCode} ${phoneRaw.trim()}`;
+  const upiLink = `upi://pay?pa=${GURU_UPI_ID}&pn=AstroSeva&am=${selectedService.price}&tn=AstroSeva-${encodeURIComponent(
+    selectedService.id
+  )}&cu=INR`;
+
+  const handleSubmitDetails = async (e: React.FormEvent) => {
+    e.preventDefault();
     setFormError('');
+
     if (!name.trim() || name.trim().length < 2) {
       setFormError('Please enter a valid full name (minimum 2 characters).');
-      return false;
+      return;
     }
     const cleanPhone = phoneRaw.replace(/\D/g, '');
     if (!cleanPhone || cleanPhone.length < 7 || cleanPhone.length > 15) {
       setFormError('Please enter a valid phone number (7 to 15 digits).');
-      return false;
+      return;
     }
-    return true;
-  };
-
-  const handleNextStep = () => {
-    if (validateStep1()) {
-      setStep(1);
-    }
-  };
-
-  const fullPhoneNumber = `${countryCode} ${phoneRaw.trim()}`;
-  const upiLink = `upi://pay?pa=${GURU_UPI_ID}&pn=AstroSeva&am=${FEE_AMOUNT}&tn=AstroSeva-${encodeURIComponent(
-    name
-  )}&cu=INR`;
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setFormError('');
-
     if (!birthDetails.date) {
-      setFormError('Please select your birth date.');
+      setFormError('Please select your date of birth.');
       return;
     }
     if (!birthDetails.time) {
-      setFormError('Please enter your exact birth time.');
+      setFormError('Please enter your exact time of birth.');
       return;
     }
     if (!birthDetails.place || birthDetails.lat === 0) {
-      setFormError('Please select a valid birth place from the dropdown suggestions.');
+      setFormError('Please select a valid birth place location from the dropdown suggestions.');
       return;
     }
 
@@ -210,6 +232,11 @@ export default function Home() {
       const docRef = await addDoc(collection(db, 'submissions'), {
         name: name.trim(),
         phone: fullPhoneNumber,
+        serviceSelected: {
+          id: selectedService.id,
+          title: lang === 'GU' ? selectedService.titleGU : selectedService.titleEN,
+          price: selectedService.price,
+        },
         birthDetails: {
           ...birthDetails,
           date: birthDetails.date,
@@ -227,6 +254,8 @@ export default function Home() {
           name: name.trim(),
           phone: fullPhoneNumber,
           submissionId: docRef.id,
+          serviceTitle: selectedService.titleEN,
+          servicePrice: selectedService.price,
           birthDetails,
         }),
       });
@@ -265,10 +294,10 @@ export default function Home() {
         </button>
       </header>
 
-      <main className="w-full max-w-lg flex flex-col flex-1 py-8 px-4 sm:px-6">
+      <main className="w-full max-w-xl flex flex-col flex-1 py-8 px-4 sm:px-6">
         
         {/* Progress Step Bar */}
-        <div className="flex justify-center items-center gap-4 mb-8">
+        <div className="flex justify-center items-center gap-3 mb-8">
           {[0, 1, 2].map((i) => (
             <div key={i} className="flex items-center gap-2">
               <div
@@ -303,16 +332,134 @@ export default function Home() {
             </div>
           )}
 
-          {/* STEP 1: CONTACT INFORMATION */}
+          {/* STEP 0: SELECT SERVICE */}
           {step === 0 && (
             <div className="flex flex-col gap-6">
               <div className="text-center">
-                <span className="p-3 bg-amber-50 text-[#cc6600] rounded-2xl inline-block text-2xl mb-2">👤</span>
-                <h2 className="text-xl font-bold text-gray-900">{t.step1Title}</h2>
+                <span className="p-3 bg-amber-50 text-[#cc6600] rounded-2xl inline-block text-2xl mb-2">🔮</span>
+                <h2 className="text-xl font-bold text-gray-900">{t.step0Title}</h2>
                 <p className="text-gray-500 text-xs mt-1">{t.subtitle}</p>
               </div>
 
-              {/* Full Name Input */}
+              {/* 3 Service Options Cards */}
+              <div className="space-y-4">
+                {SERVICES.map((s) => {
+                  const isSelected = selectedService.id === s.id;
+                  return (
+                    <div
+                      key={s.id}
+                      onClick={() => setSelectedService(s)}
+                      className={`p-5 rounded-2xl border-2 transition-all cursor-pointer relative flex items-start gap-4 ${
+                        isSelected
+                          ? 'border-[#cc6600] bg-amber-50/60 shadow-md'
+                          : 'border-[#e8e2d5] bg-white hover:border-amber-300'
+                      }`}
+                    >
+                      {s.popular && (
+                        <span className="absolute -top-3 right-4 bg-[#cc6600] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-0.5 rounded-full shadow-sm">
+                          Most Popular
+                        </span>
+                      )}
+                      
+                      <span className="text-3xl p-2 bg-white rounded-xl shadow-xs border border-amber-100">{s.icon}</span>
+
+                      <div className="flex-1 min-w-0">
+                        <div className="flex justify-between items-center gap-2">
+                          <h3 className="font-bold text-base text-gray-900 truncate">
+                            {lang === 'GU' ? s.titleGU : s.titleEN}
+                          </h3>
+                          <span className="text-lg font-extrabold text-[#cc6600] shrink-0">
+                            ₹{s.price}
+                          </span>
+                        </div>
+                        <p className="text-xs text-gray-600 mt-1 leading-relaxed">
+                          {lang === 'GU' ? s.descGU : s.descEN}
+                        </p>
+                      </div>
+
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-1 ${
+                        isSelected ? 'border-[#cc6600] bg-[#cc6600] text-white' : 'border-gray-300'
+                      }`}>
+                        {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <button
+                onClick={() => setStep(1)}
+                className="bg-[#cc6600] text-white font-bold py-4 px-6 rounded-xl hover:bg-[#a65300] transition-all w-full mt-2 cursor-pointer shadow-md flex items-center justify-center gap-2 text-base"
+              >
+                <span>Proceed to Pay ₹{selectedService.price}</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          )}
+
+          {/* STEP 1: DAKSHINA PAYMENT (DYNAMIC FOR SELECTED SERVICE) */}
+          {step === 1 && (
+            <div className="flex flex-col gap-6 text-center">
+              <div>
+                <span className="p-3 bg-amber-50 text-[#cc6600] rounded-2xl inline-block text-2xl mb-2">🙏</span>
+                <h2 className="text-xl font-bold text-gray-900">{t.step1Title}</h2>
+                <div className="mt-2 bg-amber-50 border border-amber-200 rounded-xl p-3 inline-block">
+                  <span className="text-xs text-gray-600 block">Selected Service:</span>
+                  <span className="text-base font-bold text-[#cc6600]">
+                    {lang === 'GU' ? selectedService.titleGU : selectedService.titleEN} — ₹{selectedService.price}
+                  </span>
+                </div>
+              </div>
+
+              {/* UPI Intent Button for Mobile */}
+              <div className="block md:hidden">
+                <a
+                  href={upiLink}
+                  className="inline-flex items-center justify-center gap-2 bg-[#cc6600] text-white text-base font-bold py-4 px-6 rounded-xl hover:bg-[#a65300] transition-all w-full shadow-md"
+                >
+                  <CreditCard className="w-5 h-5" />
+                  <span>Pay ₹{selectedService.price} via UPI App</span>
+                </a>
+              </div>
+
+              {/* UPI QR Code for Desktop (Dynamically generated with exact price) */}
+              <div className="flex flex-col items-center gap-3">
+                <p className="text-xs text-gray-500 font-semibold md:block hidden">
+                  {t.qrDesktopText}
+                </p>
+                <div className="border-4 border-[#cc6600] rounded-2xl p-2 bg-white shadow-md">
+                  <img
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(
+                      upiLink
+                    )}`}
+                    alt="UPI QR Code"
+                    className="w-44 h-44"
+                  />
+                </div>
+                <span className="text-xs text-gray-400 font-mono font-bold bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
+                  UPI ID: {GURU_UPI_ID} (Amount: ₹{selectedService.price})
+                </span>
+              </div>
+
+              <button
+                onClick={() => setStep(2)}
+                className="bg-[#cc6600] text-white font-bold py-4 px-6 rounded-xl hover:bg-[#a65300] transition-all w-full mt-2 cursor-pointer shadow-md text-base"
+              >
+                {t.paidBtn}
+              </button>
+            </div>
+          )}
+
+          {/* STEP 2: COMPLETE DETAILS ENTRY (NAME + PHONE + DOB + TOB + POB ALL TOGETHER) */}
+          {step === 2 && (
+            <form onSubmit={handleSubmitDetails} className="flex flex-col gap-5">
+              <div className="text-center">
+                <span className="p-3 bg-amber-50 text-[#cc6600] rounded-2xl inline-block text-2xl mb-2">📋</span>
+                <h2 className="text-xl font-bold text-gray-900">{t.step2Title}</h2>
+                <p className="text-xs text-gray-500 mt-1">Please fill your details below so Guruji can prepare your Kundli</p>
+              </div>
+
+              {/* Full Name */}
               <div className="flex flex-col gap-2">
                 <label className="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
                   <User className="w-3.5 h-3.5 text-[#cc6600]" />
@@ -328,7 +475,7 @@ export default function Home() {
                 />
               </div>
 
-              {/* Phone Input with Country Code Dropdown */}
+              {/* WhatsApp Number with Country Code Dropdown */}
               <div className="flex flex-col gap-2">
                 <label className="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
                   <Phone className="w-3.5 h-3.5 text-[#cc6600]" />
@@ -336,7 +483,6 @@ export default function Home() {
                 </label>
 
                 <div className="flex gap-2">
-                  {/* Country Code Dropdown */}
                   <select
                     value={countryCode}
                     onChange={(e) => setCountryCode(e.target.value)}
@@ -349,7 +495,6 @@ export default function Home() {
                     ))}
                   </select>
 
-                  {/* Phone Number Input */}
                   <input
                     type="tel"
                     value={phoneRaw}
@@ -359,74 +504,6 @@ export default function Home() {
                     required
                   />
                 </div>
-              </div>
-
-              <button
-                onClick={handleNextStep}
-                className="bg-[#cc6600] text-white font-bold py-4 px-6 rounded-xl hover:bg-[#a65300] transition-all w-full mt-2 cursor-pointer shadow-md flex items-center justify-center gap-2 text-base"
-              >
-                <span>{t.nextBtn}</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-          )}
-
-          {/* STEP 2: DAKSHINA PAYMENT */}
-          {step === 1 && (
-            <div className="flex flex-col gap-6 text-center">
-              <div>
-                <span className="p-3 bg-amber-50 text-[#cc6600] rounded-2xl inline-block text-2xl mb-2">🙏</span>
-                <h2 className="text-xl font-bold text-gray-900">{t.step2Title}</h2>
-                <p className="text-gray-600 text-sm mt-1 font-semibold">
-                  {lang === 'GU' ? `દક્ષિણા રાશિ: ₹${FEE_AMOUNT}` : `Dakshina Fee: ₹${FEE_AMOUNT}`}
-                </p>
-              </div>
-
-              {/* UPI Intent Button for Mobile */}
-              <div className="block md:hidden">
-                <a
-                  href={upiLink}
-                  className="inline-flex items-center justify-center gap-2 bg-[#cc6600] text-white text-base font-bold py-4 px-6 rounded-xl hover:bg-[#a65300] transition-all w-full shadow-md"
-                >
-                  <CreditCard className="w-5 h-5" />
-                  <span>{t.payBtn}</span>
-                </a>
-              </div>
-
-              {/* UPI QR Code for Desktop */}
-              <div className="flex flex-col items-center gap-3">
-                <p className="text-xs text-gray-500 font-semibold md:block hidden">
-                  {t.qrDesktopText}
-                </p>
-                <div className="border-4 border-[#cc6600] rounded-2xl p-2 bg-white shadow-md">
-                  <img
-                    src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(
-                      upiLink
-                    )}`}
-                    alt="UPI QR Code"
-                    className="w-44 h-44"
-                  />
-                </div>
-                <span className="text-xs text-gray-400 font-mono font-bold bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
-                  UPI ID: {GURU_UPI_ID}
-                </span>
-              </div>
-
-              <button
-                onClick={() => setStep(2)}
-                className="bg-[#cc6600] text-white font-bold py-4 px-6 rounded-xl hover:bg-[#a65300] transition-all w-full mt-2 cursor-pointer shadow-md text-base"
-              >
-                {t.paidBtn}
-              </button>
-            </div>
-          )}
-
-          {/* STEP 3: BIRTH DETAILS */}
-          {step === 2 && (
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-              <div className="text-center">
-                <span className="p-3 bg-amber-50 text-[#cc6600] rounded-2xl inline-block text-2xl mb-2">✨</span>
-                <h2 className="text-xl font-bold text-gray-900">{t.step3Title}</h2>
               </div>
 
               {/* Date of Birth */}
@@ -535,14 +612,14 @@ export default function Home() {
             </form>
           )}
 
-          {/* STEP 4: SUCCESS CONFIRMATION */}
+          {/* STEP 3: SUCCESS CONFIRMATION */}
           {step === 3 && (
             <div className="flex flex-col gap-6 text-center py-6">
               <div className="flex justify-center">
                 <CheckCircle2 className="w-16 h-16 text-[#cc6600] animate-bounce" />
               </div>
               <div className="space-y-3">
-                <h2 className="text-2xl font-bold text-[#cc6600]">{t.step4Title}</h2>
+                <h2 className="text-2xl font-bold text-[#cc6600]">{t.step3Title}</h2>
                 <p className="text-gray-800 text-base font-semibold leading-relaxed">
                   {t.successMsg}
                 </p>
@@ -552,6 +629,7 @@ export default function Home() {
               </div>
             </div>
           )}
+
 
         </div>
       </main>
