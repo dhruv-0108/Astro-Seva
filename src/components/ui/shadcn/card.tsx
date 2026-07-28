@@ -10,7 +10,7 @@ const Card = React.forwardRef<
     className={cn(
       'rounded-3xl bg-white p-6 sm:p-8 transition-all duration-200',
       selected
-        ? 'ring-2 ring-[#B45309] shadow-[0_8px_30px_rgba(180,83,9,0.12)] bg-amber-50/20'
+        ? 'ring-2 ring-[#A14E15] shadow-[0_8px_30px_rgba(161,78,21,0.12)] bg-amber-50/20'
         : 'shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-stone-200/60 hover:shadow-[0_8px_25px_rgba(0,0,0,0.05)]',
       className
     )}

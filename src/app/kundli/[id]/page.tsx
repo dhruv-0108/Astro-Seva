@@ -119,7 +119,7 @@ export default function KundliPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-[#FAF9F5] text-[#B45309] gap-3 p-6">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-[#FAF9F6] text-[#A14E15] gap-3 p-6">
         <Loader2 className="w-8 h-8 animate-spin" />
         <h2 className="text-base font-bold text-stone-900">Calculating Kundli Details...</h2>
         <p className="text-xs text-stone-500 font-medium">Please wait while planetary positions & dasha chains are computed.</p>
@@ -129,7 +129,7 @@ export default function KundliPage() {
 
   if (errorMsg || !kundliData) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-[#FAF9F5] text-red-600 gap-4 p-6 text-center">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-[#FAF9F6] text-red-600 gap-4 p-6 text-center">
         <span className="text-4xl">⚠️</span>
         <h2 className="text-lg font-bold">{errorMsg || 'Could not load Kundli data.'}</h2>
         <Button onClick={() => window.location.reload()} variant="default">
@@ -143,7 +143,7 @@ export default function KundliPage() {
   const { client, currentDashaChain, astro } = kundliData;
 
   return (
-    <div className="min-h-screen bg-[#FAF9F5] text-stone-900 font-sans flex flex-col">
+    <div className="min-h-screen bg-[#FAF9F6] text-stone-900 font-sans flex flex-col">
       
       {/* Navigation Header */}
       <header className="bg-white border-b border-stone-200/60 px-6 py-4 flex justify-between items-center shadow-xs print:hidden">
@@ -177,15 +177,15 @@ export default function KundliPage() {
               <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">{client.name}</h2>
               <div className="flex flex-wrap items-center gap-4 text-xs text-stone-600 font-medium pt-2">
                 <div className="flex items-center gap-1.5">
-                  <Calendar className="w-4 h-4 text-[#B45309]" />
+                  <Calendar className="w-4 h-4 text-[#A14E15]" />
                   <span>{client.birthDetails.date}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <Clock className="w-4 h-4 text-[#B45309]" />
+                  <Clock className="w-4 h-4 text-[#A14E15]" />
                   <span>{client.birthDetails.time} (IST +{client.birthDetails.tzOffset})</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <MapPin className="w-4 h-4 text-[#B45309]" />
+                  <MapPin className="w-4 h-4 text-[#A14E15]" />
                   <span className="truncate max-w-[220px]" title={client.birthDetails.place}>{client.birthDetails.place}</span>
                 </div>
               </div>
@@ -193,12 +193,12 @@ export default function KundliPage() {
 
             {currentDashaChain && (
               <div className="bg-amber-50/80 border border-amber-200/80 rounded-2xl p-4 sm:p-5 flex items-center gap-4">
-                <div className="p-3 bg-white rounded-xl text-[#B45309] shadow-xs">
+                <div className="p-3 bg-white rounded-xl text-[#A14E15] shadow-xs">
                   <Sparkles className="w-6 h-6" />
                 </div>
                 <div>
                   <span className="text-[10px] uppercase font-bold tracking-wider text-stone-500 block">Active Mahadasha</span>
-                  <span className="text-xl font-extrabold text-[#B45309]">{currentDashaChain.mahadasha.lord} Period</span>
+                  <span className="text-xl font-extrabold text-[#A14E15]">{currentDashaChain.mahadasha.lord} Period</span>
                   <span className="text-xs font-mono text-stone-600 block mt-0.5">
                     Until {formatDateShort(currentDashaChain.mahadasha.endDate)}
                   </span>
@@ -223,7 +223,7 @@ export default function KundliPage() {
 
             <div className="bg-stone-50 border border-stone-200/60 rounded-2xl p-5 space-y-1">
               <span className="text-[10px] uppercase font-bold tracking-wider text-stone-500 block">Birth Nakshatra</span>
-              <span className="text-xl font-extrabold text-[#B45309] block truncate">
+              <span className="text-xl font-extrabold text-[#A14E15] block truncate">
                 {NAKSHATRA_NAMES[Math.floor((astro.planets.Moon.longitude % 360) / (360 / 27))]}
               </span>
               <span className="text-xs text-stone-500 font-medium">Lunar Mansion at Birth</span>
@@ -250,12 +250,12 @@ export default function KundliPage() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`py-4 relative whitespace-nowrap cursor-pointer transition-all duration-200 ${
-                  isActive ? 'text-[#B45309] font-bold' : 'text-stone-500 hover:text-stone-900'
+                  isActive ? 'text-[#A14E15] font-bold' : 'text-stone-500 hover:text-stone-900'
                 }`}
               >
                 {tab.label}
                 {isActive && (
-                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#B45309] rounded-full shadow-[0_0_8px_rgba(180,83,9,0.4)]" />
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#A14E15] rounded-full shadow-[0_0_8px_rgba(161,78,21,0.4)]" />
                 )}
               </button>
             );
@@ -273,7 +273,7 @@ export default function KundliPage() {
             {/* Active Period Highlights Card */}
             <Card className="space-y-6">
               <div className="flex items-center gap-3 border-b border-stone-100 pb-4">
-                <div className="w-10 h-10 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-[#B45309]">
+                <div className="w-10 h-10 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-[#A14E15]">
                   <TrendingUp className="w-5 h-5" />
                 </div>
                 <div>
@@ -286,7 +286,7 @@ export default function KundliPage() {
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                   <div className="p-4 bg-amber-50/50 rounded-2xl border border-amber-200/80">
                     <span className="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">MahaDasha</span>
-                    <span className="text-lg font-bold text-[#B45309] block mt-0.5">{currentDashaChain.mahadasha.lord}</span>
+                    <span className="text-lg font-bold text-[#A14E15] block mt-0.5">{currentDashaChain.mahadasha.lord}</span>
                     <span className="text-[11px] text-stone-600 font-mono block mt-1">
                       {formatDateShort(currentDashaChain.mahadasha.startDate)} to {formatDateShort(currentDashaChain.mahadasha.endDate)}
                     </span>
@@ -330,7 +330,7 @@ export default function KundliPage() {
             {/* Key Auspicious Metrics Summary */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               <Card className="space-y-3">
-                <div className="w-9 h-9 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-[#B45309]">
+                <div className="w-9 h-9 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-[#A14E15]">
                   <Zap className="w-4 h-4" />
                 </div>
                 <h4 className="font-bold text-stone-900 text-sm">Numerology Metrics</h4>
@@ -342,19 +342,19 @@ export default function KundliPage() {
               </Card>
 
               <Card className="space-y-3">
-                <div className="w-9 h-9 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-[#B45309]">
+                <div className="w-9 h-9 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-[#A14E15]">
                   <Award className="w-4 h-4" />
                 </div>
                 <h4 className="font-bold text-stone-900 text-sm">Auspicious Gemstones</h4>
                 <div className="space-y-1 text-xs text-stone-600 font-medium">
-                  <div>Primary Gem: <span className="font-bold text-[#B45309]">{kundliData.shubha.gemstone}</span></div>
+                  <div>Primary Gem: <span className="font-bold text-[#A14E15]">{kundliData.shubha.gemstone}</span></div>
                   <div>Sub-Gem: <span className="font-bold text-stone-900">{kundliData.shubha.subGemstone}</span></div>
                   <div>Fortune Gem: <span className="font-bold text-stone-900">{kundliData.shubha.fortuneGemstone}</span></div>
                 </div>
               </Card>
 
               <Card className="space-y-3">
-                <div className="w-9 h-9 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-[#B45309]">
+                <div className="w-9 h-9 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-[#A14E15]">
                   <ShieldCheck className="w-4 h-4" />
                 </div>
                 <h4 className="font-bold text-stone-900 text-sm">Harmonious Elements</h4>
@@ -461,7 +461,7 @@ export default function KundliPage() {
                           {pObj.isRetrograde ? 'Retrograde (R)' : 'Direct'}
                         </Badge>
                       </td>
-                      <td className="p-4 font-semibold text-[#B45309] text-sm">{RASHI_NAMES_EN[pObj.sign]}</td>
+                      <td className="p-4 font-semibold text-[#A14E15] text-sm">{RASHI_NAMES_EN[pObj.sign]}</td>
                       <td className="p-4 font-mono text-stone-800 text-sm">{formatDegStr(pObj.longitude)}</td>
                       <td className="p-4 text-stone-700 text-sm">{getNakshatraInfo(pObj.longitude)}</td>
                     </tr>
@@ -524,25 +524,25 @@ export default function KundliPage() {
                   <tbody className="divide-y divide-stone-100 font-medium">
                     <tr>
                       <td className="p-4 font-bold text-stone-900">Tithi</td>
-                      <td className="p-4 text-[#B45309] font-semibold">{kundliData.panchanga.tithi.name} ({kundliData.panchanga.tithi.paksha})</td>
+                      <td className="p-4 text-[#A14E15] font-semibold">{kundliData.panchanga.tithi.name} ({kundliData.panchanga.tithi.paksha})</td>
                       <td className="p-4 text-stone-600 font-mono">{formatShortTime(kundliData.panchanga.tithi.startTime)}</td>
                       <td className="p-4 text-stone-600 font-mono">{formatShortTime(kundliData.panchanga.tithi.endTime)}</td>
                     </tr>
                     <tr>
                       <td className="p-4 font-bold text-stone-900">Nakshatra</td>
-                      <td className="p-4 text-[#B45309] font-semibold">{kundliData.panchanga.nakshatra.name}</td>
+                      <td className="p-4 text-[#A14E15] font-semibold">{kundliData.panchanga.nakshatra.name}</td>
                       <td className="p-4 text-stone-600 font-mono">{formatShortTime(kundliData.panchanga.nakshatra.startTime)}</td>
                       <td className="p-4 text-stone-600 font-mono">{formatShortTime(kundliData.panchanga.nakshatra.endTime)}</td>
                     </tr>
                     <tr>
                       <td className="p-4 font-bold text-stone-900">Yoga</td>
-                      <td className="p-4 text-[#B45309] font-semibold">{kundliData.panchanga.yoga.name}</td>
+                      <td className="p-4 text-[#A14E15] font-semibold">{kundliData.panchanga.yoga.name}</td>
                       <td className="p-4 text-stone-600 font-mono">{formatShortTime(kundliData.panchanga.yoga.startTime)}</td>
                       <td className="p-4 text-stone-600 font-mono">{formatShortTime(kundliData.panchanga.yoga.endTime)}</td>
                     </tr>
                     <tr>
                       <td className="p-4 font-bold text-stone-900">Karana</td>
-                      <td className="p-4 text-[#B45309] font-semibold">{kundliData.panchanga.karana.name}</td>
+                      <td className="p-4 text-[#A14E15] font-semibold">{kundliData.panchanga.karana.name}</td>
                       <td className="p-4 text-stone-600 font-mono">{formatShortTime(kundliData.panchanga.karana.startTime)}</td>
                       <td className="p-4 text-stone-600 font-mono">{formatShortTime(kundliData.panchanga.karana.endTime)}</td>
                     </tr>

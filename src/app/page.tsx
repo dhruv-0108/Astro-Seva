@@ -336,12 +336,12 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col flex-1 min-h-screen bg-[#FAF9F5] text-stone-900 font-sans selection:bg-amber-100">
+    <div className="flex flex-col flex-1 min-h-screen bg-[#FAF9F6] text-stone-900 font-sans selection:bg-amber-100">
       
       {/* Serene Navigation Header */}
       <header className="w-full bg-white/80 backdrop-blur-md border-b border-stone-200/60 sticky top-0 z-30 px-6 sm:px-10 py-4 flex justify-between items-center">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-2xl bg-amber-100/70 border border-amber-200 flex items-center justify-center text-[#B45309]">
+          <div className="w-9 h-9 rounded-2xl bg-amber-100/70 border border-amber-200 flex items-center justify-center text-[#A14E15]">
             <Sparkles className="w-4 h-4" />
           </div>
           <div>
@@ -356,7 +356,7 @@ export default function Home() {
       </header>
 
       {/* 1. WELCOME & REASSURANCE HERO SECTION */}
-      <section className="w-full max-w-3xl mx-auto pt-12 pb-8 px-6 text-center space-y-6">
+      <section className="w-full max-w-3xl mx-auto pt-16 pb-10 px-6 text-center space-y-6">
         <Badge variant="default" className="mx-auto">
           <HeartHandshake className="w-3.5 h-3.5" />
           <span>Personal Vedic Astrology Consultation</span>
@@ -407,7 +407,7 @@ export default function Home() {
               { icon: MessageCircle, title: 'Direct', sub: 'WhatsApp Guidance' },
             ].map((pillar, i) => (
               <div key={i} className="bg-stone-50/80 border border-stone-200/60 rounded-2xl p-4 space-y-1">
-                <pillar.icon className="w-4 h-4 text-[#B45309]" />
+                <pillar.icon className="w-4 h-4 text-[#A14E15]" />
                 <div className="text-xs font-bold text-stone-900">{pillar.title}</div>
                 <div className="text-[10px] text-stone-500 font-medium">{pillar.sub}</div>
               </div>
@@ -431,7 +431,7 @@ export default function Home() {
             { num: '04', title: t.howStep4, desc: t.howStep4Desc, icon: Compass },
           ].map((item, idx) => (
             <Card key={idx} className="p-6 flex items-start gap-4">
-              <span className="text-base font-extrabold text-[#B45309] font-mono bg-amber-50 border border-amber-200/80 px-2.5 py-1 rounded-xl shrink-0">
+              <span className="text-base font-extrabold text-[#A14E15] font-mono bg-amber-50 border border-amber-200/80 px-2.5 py-1 rounded-xl shrink-0">
                 {item.num}
               </span>
               <div className="space-y-1">
@@ -453,9 +453,9 @@ export default function Home() {
               <div
                 className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs transition-all duration-300 ${
                   step === i
-                    ? 'bg-[#B45309] text-white ring-4 ring-amber-100 shadow-md scale-110'
+                    ? 'bg-[#A14E15] text-white ring-4 ring-amber-100 shadow-md scale-110'
                     : step > i
-                    ? 'bg-amber-800 text-white'
+                    ? 'bg-amber-900 text-white'
                     : 'bg-stone-200 text-stone-500'
                 }`}
               >
@@ -464,7 +464,7 @@ export default function Home() {
               {i < 2 && (
                 <div
                   className={`w-12 sm:w-16 h-1 rounded-full transition-all duration-300 ${
-                    step > i ? 'bg-[#B45309]' : 'bg-stone-200'
+                    step > i ? 'bg-[#A14E15]' : 'bg-stone-200'
                   }`}
                 />
               )}
@@ -487,7 +487,7 @@ export default function Home() {
                 className="space-y-6"
               >
                 <div className="text-center space-y-1.5">
-                  <span className="inline-block p-3 rounded-2xl bg-amber-50 text-[#B45309] mb-1">
+                  <span className="inline-block p-3 rounded-2xl bg-amber-50 text-[#A14E15] mb-1">
                     <Sparkles className="w-5 h-5" />
                   </span>
                   <h3 className="text-xl font-bold text-stone-900">{t.step0Title}</h3>
@@ -504,17 +504,17 @@ export default function Home() {
                         onClick={() => setSelectedService(s)}
                         className={`p-5 rounded-2xl border transition-all duration-200 cursor-pointer relative flex items-start gap-4 ${
                           isSelected
-                            ? 'border-[#B45309] bg-amber-50/40 ring-1 ring-[#B45309]/30 shadow-xs'
+                            ? 'border-[#A14E15] bg-amber-50/40 ring-1 ring-[#A14E15]/30 shadow-xs'
                             : 'border-stone-200 bg-white hover:border-stone-300'
                         }`}
                       >
                         {s.popular && (
-                          <span className="absolute -top-3 right-4 bg-[#B45309] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-0.5 rounded-full shadow-xs">
+                          <span className="absolute -top-3 right-4 bg-[#A14E15] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-0.5 rounded-full shadow-xs">
                             Most Popular
                           </span>
                         )}
                         
-                        <div className="p-2.5 bg-white rounded-xl border border-stone-200 text-[#B45309] shrink-0">
+                        <div className="p-2.5 bg-white rounded-xl border border-stone-200 text-[#A14E15] shrink-0">
                           <IconComponent className="w-5 h-5" />
                         </div>
 
@@ -523,7 +523,7 @@ export default function Home() {
                             <h4 className="font-bold text-base text-stone-900 truncate">
                               {lang === 'GU' ? s.titleGU : s.titleEN}
                             </h4>
-                            <span className="text-base font-extrabold text-[#B45309] shrink-0">
+                            <span className="text-base font-extrabold text-[#A14E15] shrink-0">
                               ₹{s.price}
                             </span>
                           </div>
@@ -533,7 +533,7 @@ export default function Home() {
                         </div>
 
                         <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-1 transition-all ${
-                          isSelected ? 'border-[#B45309] bg-[#B45309] text-white' : 'border-stone-300'
+                          isSelected ? 'border-[#A14E15] bg-[#A14E15] text-white' : 'border-stone-300'
                         }`}>
                           {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
                         </div>
@@ -560,13 +560,13 @@ export default function Home() {
                 className="space-y-6 text-center"
               >
                 <div className="space-y-2">
-                  <span className="inline-block p-3 rounded-2xl bg-amber-50 text-[#B45309] mb-1">
+                  <span className="inline-block p-3 rounded-2xl bg-amber-50 text-[#A14E15] mb-1">
                     <CreditCard className="w-5 h-5" />
                   </span>
                   <h3 className="text-xl font-bold text-stone-900">{t.step1Title}</h3>
                   <div className="mt-2 bg-amber-50/70 border border-amber-200/80 rounded-2xl p-3.5 inline-block">
                     <span className="text-xs text-stone-600 block font-medium">Selected Format:</span>
-                    <span className="text-base font-bold text-[#B45309]">
+                    <span className="text-base font-bold text-[#A14E15]">
                       {lang === 'GU' ? selectedService.titleGU : selectedService.titleEN} — ₹{selectedService.price}
                     </span>
                   </div>
@@ -576,7 +576,7 @@ export default function Home() {
                 <div className="block sm:hidden">
                   <a
                     href={upiLink}
-                    className="w-full inline-flex items-center justify-center gap-2 bg-[#B45309] text-white font-bold py-4 px-6 rounded-2xl text-base shadow-md"
+                    className="w-full inline-flex items-center justify-center gap-2 bg-[#A14E15] text-white font-bold py-4 px-6 rounded-2xl text-base shadow-md"
                   >
                     <CreditCard className="w-5 h-5" />
                     <span>Pay ₹{selectedService.price} via UPI App</span>
@@ -619,7 +619,7 @@ export default function Home() {
               >
                 <form onSubmit={handleSubmitDetails} className="space-y-5">
                   <div className="text-center space-y-1">
-                    <span className="inline-block p-3 rounded-2xl bg-amber-50 text-[#B45309] mb-1">
+                    <span className="inline-block p-3 rounded-2xl bg-amber-50 text-[#A14E15] mb-1">
                       <User className="w-5 h-5" />
                     </span>
                     <h3 className="text-xl font-bold text-stone-900">{t.step2Title}</h3>
@@ -636,7 +636,7 @@ export default function Home() {
                   {/* Full Name */}
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
-                      <User className="w-3.5 h-3.5 text-[#B45309]" />
+                      <User className="w-3.5 h-3.5 text-[#A14E15]" />
                       <span>{t.nameLabel}</span>
                     </label>
                     <Input
@@ -651,14 +651,14 @@ export default function Home() {
                   {/* WhatsApp Number with Country Code Dropdown */}
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
-                      <Phone className="w-3.5 h-3.5 text-[#B45309]" />
+                      <Phone className="w-3.5 h-3.5 text-[#A14E15]" />
                       <span>{t.phoneLabel}</span>
                     </label>
                     <div className="flex gap-2.5">
                       <select
                         value={countryCode}
                         onChange={(e) => setCountryCode(e.target.value)}
-                        className="border border-stone-200 bg-stone-50 rounded-2xl px-3.5 py-4 text-sm font-bold text-stone-800 outline-none focus:border-[#B45309] cursor-pointer"
+                        className="border border-stone-200 bg-stone-50 rounded-2xl px-3.5 py-4 text-sm font-bold text-stone-800 outline-none focus:border-[#A14E15] cursor-pointer"
                       >
                         {COUNTRY_CODES.map((c) => (
                           <option key={c.code} value={c.code}>
@@ -672,7 +672,7 @@ export default function Home() {
                         value={phoneRaw}
                         onChange={(e) => setPhoneRaw(e.target.value.replace(/[^\d\s-]/g, ''))}
                         placeholder="98765 43210"
-                        className="flex-1 bg-white border border-stone-200 rounded-2xl p-4 text-base font-mono text-stone-900 outline-none focus:border-[#B45309] focus:ring-4 focus:ring-amber-500/10 transition-all"
+                        className="flex-1 bg-white border border-stone-200 rounded-2xl p-4 text-base font-mono text-stone-900 outline-none focus:border-[#A14E15] focus:ring-4 focus:ring-amber-500/10 transition-all"
                         required
                       />
                     </div>
@@ -681,7 +681,7 @@ export default function Home() {
                   {/* Date of Birth */}
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
-                      <Calendar className="w-3.5 h-3.5 text-[#B45309]" />
+                      <Calendar className="w-3.5 h-3.5 text-[#A14E15]" />
                       <span>{t.birthDateLabel}</span>
                     </label>
                     <Input
@@ -695,7 +695,7 @@ export default function Home() {
                   {/* Time of Birth */}
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5 text-[#B45309]" />
+                      <Clock className="w-3.5 h-3.5 text-[#A14E15]" />
                       <span>{t.birthTimeLabel}</span>
                     </label>
                     <Input
@@ -710,7 +710,7 @@ export default function Home() {
                   {/* Birth Place Search with English Locale */}
                   <div className="space-y-1.5 relative" ref={searchContainerRef}>
                     <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-[#B45309]" />
+                      <MapPin className="w-3.5 h-3.5 text-[#A14E15]" />
                       <span>{t.birthPlaceLabel}</span>
                     </label>
                     <input
@@ -721,12 +721,12 @@ export default function Home() {
                         setBirthDetails((prev) => ({ ...prev, place: '', lat: 0, lng: 0 }));
                       }}
                       placeholder="e.g. Surat, Gujarat, India"
-                      className="w-full bg-white border border-stone-200 rounded-2xl p-4 text-base text-stone-900 outline-none focus:border-[#B45309] focus:ring-4 focus:ring-amber-500/10 transition-all"
+                      className="w-full bg-white border border-stone-200 rounded-2xl p-4 text-base text-stone-900 outline-none focus:border-[#A14E15] focus:ring-4 focus:ring-amber-500/10 transition-all"
                       required
                     />
                     
                     {isSearching && (
-                      <span className="absolute right-4 top-11 text-xs text-[#B45309] font-semibold animate-pulse">
+                      <span className="absolute right-4 top-11 text-xs text-[#A14E15] font-semibold animate-pulse">
                         {t.searching}
                       </span>
                     )}
@@ -739,7 +739,7 @@ export default function Home() {
                             onClick={() => handleSelectPlace(item)}
                             className="p-4 hover:bg-amber-50/50 cursor-pointer text-xs font-medium text-stone-800 transition-colors flex items-center gap-2.5"
                           >
-                            <MapPin className="w-4 h-4 text-[#B45309] shrink-0" />
+                            <MapPin className="w-4 h-4 text-[#A14E15] shrink-0" />
                             <span className="truncate">{item.display_name}</span>
                           </li>
                         ))}
@@ -750,13 +750,13 @@ export default function Home() {
                   {/* Timezone Selector */}
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
-                      <ShieldCheck className="w-3.5 h-3.5 text-[#B45309]" />
+                      <ShieldCheck className="w-3.5 h-3.5 text-[#A14E15]" />
                       <span>{t.tzLabel}</span>
                     </label>
                     <select
                       value={birthDetails.tzOffset}
                       onChange={(e) => setBirthDetails((prev) => ({ ...prev, tzOffset: parseFloat(e.target.value) }))}
-                      className="w-full bg-white border border-stone-200 rounded-2xl p-4 text-base font-medium text-stone-900 outline-none focus:border-[#B45309] focus:ring-4 focus:ring-amber-500/10 cursor-pointer"
+                      className="w-full bg-white border border-stone-200 rounded-2xl p-4 text-base font-medium text-stone-900 outline-none focus:border-[#A14E15] focus:ring-4 focus:ring-amber-500/10 cursor-pointer"
                     >
                       <option value={5.5}>🇮🇳 India Standard Time (IST) — UTC +5:30 (Default)</option>
                       <option value={-5.0}>🇺🇸 US Eastern (EST/EDT) — UTC -5:00</option>

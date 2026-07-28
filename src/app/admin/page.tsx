@@ -19,13 +19,10 @@ import {
   updateDoc,
   deleteDoc,
 } from 'firebase/firestore';
-import {
-  Button,
-  Card,
-  Input,
-  Badge,
-  ErrorBanner,
-} from '../../components/ui/DesignSystem';
+import { Button } from '../../components/ui/shadcn/button';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../components/ui/shadcn/card';
+import { Input } from '../../components/ui/shadcn/input';
+import { Badge } from '../../components/ui/shadcn/badge';
 import {
   Sparkles,
   LogOut,
@@ -151,8 +148,8 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-[#FAF9F5] text-stone-900 gap-3">
-        <Sparkles className="w-8 h-8 text-[#B45309] animate-spin" />
+      <div className="flex flex-col items-center justify-center min-h-screen bg-[#FAF9F6] text-stone-900 gap-3">
+        <Sparkles className="w-8 h-8 text-[#A14E15] animate-spin" />
         <div className="text-sm font-bold text-stone-700">Loading Guruji Portal...</div>
       </div>
     );
@@ -161,22 +158,25 @@ export default function AdminDashboard() {
   // Render Login Card if not authenticated
   if (!user) {
     return (
-      <div className="flex flex-1 items-center justify-center min-h-screen bg-[#FAF9F5] p-4 sm:p-6">
+      <div className="flex flex-1 items-center justify-center min-h-screen bg-[#FAF9F6] p-4 sm:p-6">
         <Card className="w-full max-w-md space-y-6">
           <div className="text-center space-y-1.5">
-            <div className="w-12 h-12 rounded-2xl bg-amber-100/60 border border-amber-200 flex items-center justify-center text-[#B45309] mx-auto">
+            <div className="w-12 h-12 rounded-2xl bg-amber-100/70 border border-amber-200 flex items-center justify-center text-[#A14E15] mx-auto">
               <Sparkles className="w-6 h-6" />
             </div>
             <h2 className="text-xl font-bold text-stone-900">Guruji Portal Login</h2>
             <p className="text-stone-500 text-xs font-medium">Astro-Seva Administration Panel</p>
           </div>
 
-          {loginError && <ErrorBanner message={loginError} />}
+          {loginError && (
+            <div className="bg-red-50 border border-red-200 text-red-700 rounded-2xl p-4 text-xs font-semibold">
+              {loginError}
+            </div>
+          )}
 
           <form onSubmit={handleLogin} className="space-y-4">
             <Input
-              label="Email Address"
-              icon={<UserIcon className="w-3.5 h-3.5 text-[#B45309]" />}
+              icon={<UserIcon className="w-3.5 h-3.5 text-[#A14E15]" />}
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -185,8 +185,7 @@ export default function AdminDashboard() {
             />
 
             <Input
-              label="Password"
-              icon={<Lock className="w-3.5 h-3.5 text-[#B45309]" />}
+              icon={<Lock className="w-3.5 h-3.5 text-[#A14E15]" />}
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -196,10 +195,8 @@ export default function AdminDashboard() {
 
             <Button
               type="submit"
-              isLoading={isLoggingIn}
-              fullWidth
-              size="lg"
-              className="mt-2"
+              disabled={isLoggingIn}
+              className="w-full h-14 rounded-2xl text-base mt-2"
             >
               Sign In to Dashboard
             </Button>
@@ -213,12 +210,12 @@ export default function AdminDashboard() {
   const pendingCount = submissions.filter((s) => s.paymentStatus === 'pending').length;
 
   return (
-    <div className="flex flex-col flex-1 min-h-screen bg-[#FAF9F5] text-stone-900 font-sans">
+    <div className="flex flex-col flex-1 min-h-screen bg-[#FAF9F6] text-stone-900 font-sans">
       
       {/* Serene Admin Header */}
       <header className="w-full bg-white/80 backdrop-blur-md border-b border-stone-200/60 py-4 px-6 sm:px-10 flex justify-between items-center sticky top-0 z-30">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-2xl bg-amber-100/60 border border-amber-200 flex items-center justify-center text-[#B45309]">
+          <div className="w-9 h-9 rounded-2xl bg-amber-100/70 border border-amber-200 flex items-center justify-center text-[#A14E15]">
             <Sparkles className="w-4 h-4" />
           </div>
           <div>
@@ -261,9 +258,9 @@ export default function AdminDashboard() {
           <Card className="flex items-center justify-between p-5">
             <div>
               <span className="text-stone-400 text-xs font-bold uppercase tracking-wider block">Pending Approval</span>
-              <span className="text-2xl font-extrabold text-[#B45309] mt-1 block">{pendingCount}</span>
+              <span className="text-2xl font-extrabold text-[#A14E15] mt-1 block">{pendingCount}</span>
             </div>
-            <div className="p-3 bg-amber-50 text-[#B45309] rounded-2xl">
+            <div className="p-3 bg-amber-50 text-[#A14E15] rounded-2xl">
               <Hourglass className="w-5 h-5" />
             </div>
           </Card>
@@ -279,7 +276,7 @@ export default function AdminDashboard() {
               </h2>
               <p className="text-xs text-stone-500 font-medium mt-0.5">Real-time submissions from Astro-Seva website</p>
             </div>
-            <Badge variant="stone">
+            <Badge variant="secondary">
               Auto TTL: 30 Days
             </Badge>
           </div>
@@ -314,7 +311,7 @@ export default function AdminDashboard() {
                           </div>
                           {client.serviceSelected && (
                             <div className="mt-1.5">
-                              <Badge variant="amber">
+                              <Badge variant="default">
                                 {client.serviceSelected.title} (₹{client.serviceSelected.price})
                               </Badge>
                             </div>
@@ -324,15 +321,15 @@ export default function AdminDashboard() {
                         {/* Birth Details */}
                         <td className="p-4 text-xs space-y-1">
                           <div className="flex items-center gap-1.5 text-stone-800">
-                            <Calendar className="w-3.5 h-3.5 text-[#B45309]" />
+                            <Calendar className="w-3.5 h-3.5 text-[#A14E15]" />
                             <span className="font-bold">{client.birthDetails.date}</span>
                           </div>
                           <div className="flex items-center gap-1.5 text-stone-600">
-                            <Clock className="w-3.5 h-3.5 text-[#B45309]" />
+                            <Clock className="w-3.5 h-3.5 text-[#A14E15]" />
                             <span>{client.birthDetails.time} (IST +{client.birthDetails.tzOffset})</span>
                           </div>
                           <div className="flex items-center gap-1.5 text-stone-500">
-                            <MapPin className="w-3.5 h-3.5 text-[#B45309]" />
+                            <MapPin className="w-3.5 h-3.5 text-[#A14E15]" />
                             <span className="truncate max-w-[200px]" title={client.birthDetails.place}>
                               {client.birthDetails.place}
                             </span>
@@ -341,7 +338,7 @@ export default function AdminDashboard() {
 
                         {/* Payment Status */}
                         <td className="p-4 text-center">
-                          <Badge variant={client.paymentStatus === 'paid' ? 'green' : 'amber'}>
+                          <Badge variant={client.paymentStatus === 'paid' ? 'emerald' : 'default'}>
                             {client.paymentStatus === 'paid' ? 'Paid' : 'Pending'}
                           </Badge>
                         </td>
@@ -352,7 +349,7 @@ export default function AdminDashboard() {
                             {client.paymentStatus === 'pending' && (
                               <Button
                                 size="sm"
-                                variant="primary"
+                                variant="default"
                                 onClick={() => handleApprove(client.id)}
                               >
                                 <CheckCircle2 className="w-3.5 h-3.5" />
@@ -366,7 +363,7 @@ export default function AdminDashboard() {
                                   href={`/kundli/${client.id}`}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-1.5 bg-[#B45309] hover:bg-[#92400E] text-white font-bold py-2 px-3.5 rounded-2xl text-xs shadow-xs"
+                                  className="inline-flex items-center gap-1.5 bg-[#A14E15] hover:bg-[#853E0F] text-white font-bold py-2 px-3.5 rounded-2xl text-xs shadow-xs"
                                 >
                                   <ExternalLink className="w-3.5 h-3.5" />
                                   <span>View Kundli</span>
@@ -410,14 +407,14 @@ export default function AdminDashboard() {
                         </p>
                         {client.serviceSelected && (
                           <div className="mt-1">
-                            <Badge variant="amber">
+                            <Badge variant="default">
                               {client.serviceSelected.title} (₹{client.serviceSelected.price})
                             </Badge>
                           </div>
                         )}
                       </div>
 
-                      <Badge variant={client.paymentStatus === 'paid' ? 'green' : 'amber'} className="shrink-0">
+                      <Badge variant={client.paymentStatus === 'paid' ? 'emerald' : 'default'} className="shrink-0">
                         {client.paymentStatus === 'paid' ? 'Paid' : 'Pending'}
                       </Badge>
                     </div>
@@ -425,17 +422,17 @@ export default function AdminDashboard() {
                     <div className="bg-stone-50 rounded-2xl p-3.5 space-y-1.5 text-xs text-stone-700 border border-stone-200/60">
                       <div className="flex flex-wrap items-center gap-2 font-medium">
                         <div className="flex items-center gap-1">
-                          <Calendar className="w-3.5 h-3.5 text-[#B45309] shrink-0" />
+                          <Calendar className="w-3.5 h-3.5 text-[#A14E15] shrink-0" />
                           <span className="font-bold">{client.birthDetails.date}</span>
                         </div>
                         <span className="text-stone-300">|</span>
                         <div className="flex items-center gap-1">
-                          <Clock className="w-3.5 h-3.5 text-[#B45309] shrink-0" />
+                          <Clock className="w-3.5 h-3.5 text-[#A14E15] shrink-0" />
                           <span>{client.birthDetails.time}</span>
                         </div>
                       </div>
                       <div className="flex items-center gap-1.5 text-stone-600 min-w-0">
-                        <MapPin className="w-3.5 h-3.5 text-[#B45309] shrink-0" />
+                        <MapPin className="w-3.5 h-3.5 text-[#A14E15] shrink-0" />
                         <span className="truncate" title={client.birthDetails.place}>{client.birthDetails.place}</span>
                       </div>
                     </div>
@@ -444,8 +441,8 @@ export default function AdminDashboard() {
                     <div className="flex flex-wrap items-center gap-2 pt-1">
                       {client.paymentStatus === 'pending' && (
                         <Button
-                          size="md"
-                          fullWidth
+                          size="default"
+                          className="w-full"
                           onClick={() => handleApprove(client.id)}
                         >
                           <CheckCircle2 className="w-4 h-4 shrink-0" />
@@ -459,7 +456,7 @@ export default function AdminDashboard() {
                             href={`/kundli/${client.id}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex-1 bg-[#B45309] text-white font-bold py-3 px-3 rounded-2xl text-xs flex items-center justify-center gap-1.5 shadow-xs text-center min-w-[120px]"
+                            className="flex-1 bg-[#A14E15] text-white font-bold py-3 px-3 rounded-2xl text-xs flex items-center justify-center gap-1.5 shadow-xs text-center min-w-[120px]"
                           >
                             <ExternalLink className="w-4 h-4 shrink-0" />
                             <span className="truncate">View Kundli</span>

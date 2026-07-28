@@ -90,7 +90,7 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
               dominantBaseline="central"
               fontSize={fontSize}
               fontWeight="700"
-              fill={p.isRetro ? '#B91C1C' : '#1C1917'}
+              fill={p.isRetro ? '#B91C1C' : '#1F1E1B'}
             >
               {p.name}{p.isRetro ? '(R)' : ''}
             </text>
@@ -103,7 +103,7 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
   return (
     <div className={`flex flex-col items-center bg-white border border-stone-200/60 rounded-3xl p-6 sm:p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] w-full max-w-[540px] ${className}`}>
       {/* Title */}
-      <h3 className="text-base font-bold text-stone-900 mb-5 tracking-wide text-center uppercase tracking-wider text-xs">
+      <h3 className="text-xs font-bold text-stone-900 mb-5 uppercase tracking-wider text-center">
         {title}
       </h3>
 
@@ -111,14 +111,14 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
       <div className="w-full aspect-square relative">
         <svg viewBox="0 0 360 360" className="w-full h-full select-none">
           {/* Background fill */}
-          <rect x="0" y="0" width="360" height="360" fill="#FAF9F5" stroke="#B45309" strokeWidth="2" rx="12" />
+          <rect x="0" y="0" width="360" height="360" fill="#FAF9F6" stroke="#A14E15" strokeWidth="2" rx="12" />
 
           {/* Main Diagonals */}
-          <line x1="0" y1="0" x2="360" y2="360" stroke="#B45309" strokeWidth="1.25" opacity="0.75" />
-          <line x1="0" y1="360" x2="360" y2="0" stroke="#B45309" strokeWidth="1.25" opacity="0.75" />
+          <line x1="0" y1="0" x2="360" y2="360" stroke="#A14E15" strokeWidth="1.25" opacity="0.7" />
+          <line x1="0" y1="360" x2="360" y2="0" stroke="#A14E15" strokeWidth="1.25" opacity="0.7" />
 
           {/* Inner Diamond */}
-          <polygon points="180,0 0,180 180,360 360,180" fill="none" stroke="#B45309" strokeWidth="1.25" opacity="0.75" />
+          <polygon points="180,0 0,180 180,360 360,180" fill="none" stroke="#A14E15" strokeWidth="1.25" opacity="0.7" />
 
           {/* Render 12 House Sign Badges and Planets */}
           {([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] as const).map((h) => {
@@ -129,7 +129,7 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
             return (
               <g key={h}>
                 {/* House Sign Number Badge */}
-                <circle cx={cfg.sx} cy={cfg.sy} r="9" fill="#FFFBEB" stroke="#B45309" strokeWidth="0.75" />
+                <circle cx={cfg.sx} cy={cfg.sy} r="9" fill="#FFFBEB" stroke="#A14E15" strokeWidth="0.75" />
                 <text
                   x={cfg.sx}
                   y={cfg.sy}
@@ -137,7 +137,7 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
                   dominantBaseline="central"
                   fontSize="10"
                   fontWeight="bold"
-                  fill="#B45309"
+                  fill="#A14E15"
                 >
                   {signNum}
                 </text>

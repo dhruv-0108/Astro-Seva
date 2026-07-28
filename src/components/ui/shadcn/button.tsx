@@ -3,12 +3,12 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../../lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center rounded-2xl text-sm font-bold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/20 disabled:pointer-events-none disabled:opacity-50 cursor-pointer select-none active:scale-[0.98]',
+  'inline-flex items-center justify-center rounded-2xl text-sm font-bold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-600/20 disabled:pointer-events-none disabled:opacity-50 cursor-pointer select-none active:scale-[0.98]',
   {
     variants: {
       variant: {
         default:
-          'bg-[#B45309] text-white hover:bg-[#92400E] shadow-[0_4px_14px_rgba(180,83,9,0.25)]',
+          'bg-[#A14E15] text-white hover:bg-[#853E0F] shadow-[0_4px_16px_rgba(161,78,21,0.22)]',
         secondary:
           'bg-stone-100 text-stone-900 hover:bg-stone-200 border border-stone-200/60',
         outline:
@@ -16,7 +16,7 @@ const buttonVariants = cva(
         ghost:
           'bg-transparent text-stone-600 hover:bg-stone-100/80 hover:text-stone-900',
         amberLight:
-          'bg-amber-100/80 text-[#B45309] hover:bg-amber-200/80 border border-amber-200',
+          'bg-amber-50 text-[#A14E15] hover:bg-amber-100/80 border border-amber-200/80',
       },
       size: {
         default: 'h-12 px-5 py-3 gap-2',
