@@ -368,17 +368,17 @@ export default function AdminDashboard() {
               {/* MOBILE CARDS VIEW */}
               <div className="block md:hidden divide-y divide-gray-100">
                 {submissions.map((client) => (
-                  <div key={client.id} className="p-5 space-y-4 hover:bg-amber-50/20">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h3 className="font-bold text-lg text-gray-900">{client.name}</h3>
-                        <p className="text-sm font-mono text-gray-500 flex items-center gap-1 mt-0.5">
-                          <Phone className="w-3.5 h-3.5 text-gray-400" />
-                          <span>{client.phone}</span>
+                  <div key={client.id} className="p-4 sm:p-5 space-y-3.5 hover:bg-amber-50/20">
+                    <div className="flex justify-between items-start gap-2">
+                      <div className="min-w-0 flex-1">
+                        <h3 className="font-bold text-base text-gray-900 truncate">{client.name}</h3>
+                        <p className="text-xs font-mono text-gray-500 flex items-center gap-1.5 mt-1">
+                          <Phone className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+                          <span className="truncate">{client.phone}</span>
                         </p>
                       </div>
                       <span
-                        className={`text-xs font-bold px-3 py-1 rounded-full ${
+                        className={`text-[11px] font-bold px-2.5 py-1 rounded-full shrink-0 ${
                           client.paymentStatus === 'paid'
                             ? 'bg-green-100 text-green-700'
                             : 'bg-amber-100 text-amber-800'
@@ -388,29 +388,33 @@ export default function AdminDashboard() {
                       </span>
                     </div>
 
-                    <div className="bg-amber-50/60 rounded-xl p-3.5 space-y-1.5 text-xs text-gray-700 border border-amber-100/80">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-[#cc6600]" />
-                        <span className="font-bold">{client.birthDetails.date}</span>
-                        <span className="text-gray-400">|</span>
-                        <Clock className="w-4 h-4 text-[#cc6600]" />
-                        <span>{client.birthDetails.time}</span>
+                    <div className="bg-amber-50/60 rounded-xl p-3 space-y-1.5 text-xs text-gray-700 border border-amber-100/80">
+                      <div className="flex flex-wrap items-center gap-2 font-medium">
+                        <div className="flex items-center gap-1">
+                          <Calendar className="w-3.5 h-3.5 text-[#cc6600] shrink-0" />
+                          <span className="font-bold">{client.birthDetails.date}</span>
+                        </div>
+                        <span className="text-gray-300">|</span>
+                        <div className="flex items-center gap-1">
+                          <Clock className="w-3.5 h-3.5 text-[#cc6600] shrink-0" />
+                          <span>{client.birthDetails.time}</span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2 text-gray-600">
-                        <MapPin className="w-4 h-4 text-[#cc6600]" />
-                        <span className="truncate">{client.birthDetails.place}</span>
+                      <div className="flex items-center gap-1.5 text-gray-600 min-w-0">
+                        <MapPin className="w-3.5 h-3.5 text-[#cc6600] shrink-0" />
+                        <span className="truncate" title={client.birthDetails.place}>{client.birthDetails.place}</span>
                       </div>
                     </div>
 
                     {/* Mobile Action Buttons */}
-                    <div className="flex flex-wrap gap-2 pt-1">
+                    <div className="flex flex-wrap items-center gap-2 pt-1">
                       {client.paymentStatus === 'pending' && (
                         <button
                           onClick={() => handleApprove(client.id)}
-                          className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-sm"
+                          className="flex-1 bg-green-600 active:bg-green-700 text-white font-bold py-3 px-3 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-sm min-w-[140px]"
                         >
-                          <CheckCircle2 className="w-4 h-4" />
-                          <span>Approve Payment</span>
+                          <CheckCircle2 className="w-4 h-4 shrink-0" />
+                          <span className="truncate">Approve Payment</span>
                         </button>
                       )}
 
@@ -420,25 +424,26 @@ export default function AdminDashboard() {
                             href={`/kundli/${client.id}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex-1 bg-[#cc6600] text-white font-bold py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-sm"
+                            className="flex-1 bg-[#cc6600] active:bg-[#a65300] text-white font-bold py-3 px-3 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-sm text-center min-w-[120px]"
                           >
-                            <ExternalLink className="w-4 h-4" />
-                            <span>View Kundli</span>
+                            <ExternalLink className="w-4 h-4 shrink-0" />
+                            <span className="truncate">View Kundli</span>
                           </a>
 
                           <button
                             onClick={() => handleWhatsAppShare(client)}
-                            className="bg-[#25D366] text-white font-bold py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-sm"
+                            className="flex-1 bg-[#25D366] active:bg-[#128C7E] text-white font-bold py-3 px-3 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-sm min-w-[110px]"
                           >
-                            <MessageSquare className="w-4 h-4" />
-                            <span>WhatsApp</span>
+                            <MessageSquare className="w-4 h-4 shrink-0" />
+                            <span className="truncate">WhatsApp</span>
                           </button>
                         </>
                       )}
 
                       <button
                         onClick={() => handleDelete(client.id)}
-                        className="bg-red-50 text-red-600 font-bold p-3 rounded-xl text-xs flex items-center justify-center"
+                        className="bg-red-50 text-red-600 font-bold p-3 rounded-xl text-xs flex items-center justify-center shrink-0 border border-red-100"
+                        title="Delete Record"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -446,6 +451,7 @@ export default function AdminDashboard() {
                   </div>
                 ))}
               </div>
+
             </div>
           )}
         </div>

@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import NorthIndianChart from '../../../components/NorthIndianChart';
-import { Calendar, Clock, MapPin, Sparkles, Printer, ArrowLeft, RefreshCw } from 'lucide-react';
+import { Calendar, Clock, MapPin, Sparkles, Printer, ArrowLeft, RefreshCw, Compass, ShieldCheck, Award } from 'lucide-react';
 
 const RASHI_NAMES_EN = [
   'Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo', 'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces'
@@ -38,6 +38,7 @@ export default function KundliPage() {
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'dashas' | 'charts' | 'planets' | 'panchanga' | 'cusps' | 'transits' | 'remedies'>('dashas');
+  const [selectedChartType, setSelectedChartType] = useState<'lagna' | 'moon' | 'd9' | 'chalit' | 'all'>('lagna');
   const [kundliData, setKundliData] = useState<any>(null);
 
   useEffect(() => {
@@ -87,7 +88,6 @@ export default function KundliPage() {
   };
 
   const formatDegStr = (long: number) => {
-
     const localDeg = long % 30;
     return `${Math.floor(localDeg)}° ${Math.floor((localDeg % 1) * 60)}' ${Math.floor((((localDeg % 1) * 60) % 1) * 60)}"`;
   };
@@ -135,7 +135,7 @@ export default function KundliPage() {
         <div className="flex items-center gap-4">
           <button
             onClick={() => window.close()}
-            className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+            className="p-2 rounded-xl hover:bg-white/10 transition-colors"
             title="Close Tab"
           >
             <ArrowLeft className="w-5 h-5" />
@@ -156,41 +156,47 @@ export default function KundliPage() {
         </div>
       </header>
 
-      {/* Summary Bar */}
-      <div className="bg-amber-50/90 border-b border-[#e8e2d5] px-6 py-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-xs">
-        <div className="flex items-center gap-3">
-          <Calendar className="w-4 h-4 text-[#cc6600]" />
-          <div>
-            <span className="text-gray-400 block text-[10px] uppercase font-bold tracking-wider">Date of Birth</span>
-            <span className="font-bold text-sm text-gray-900">{client.birthDetails.date}</span>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <Clock className="w-4 h-4 text-[#cc6600]" />
-          <div>
-            <span className="text-gray-400 block text-[10px] uppercase font-bold tracking-wider">Time of Birth</span>
-            <span className="font-bold text-sm text-gray-900">{client.birthDetails.time} (IST +{client.birthDetails.tzOffset})</span>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <MapPin className="w-4 h-4 text-[#cc6600]" />
-          <div>
-            <span className="text-gray-400 block text-[10px] uppercase font-bold tracking-wider">Place of Birth</span>
-            <span className="font-bold text-sm text-gray-900 truncate max-w-[180px]" title={client.birthDetails.place}>
-              {client.birthDetails.place}
+      {/* Hero Summary Card */}
+      <div className="bg-gradient-to-r from-amber-600 via-orange-600 to-amber-700 text-white px-6 py-6 border-b border-amber-800 shadow-sm">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6 items-center">
+          <div className="md:col-span-2 space-y-2">
+            <span className="bg-amber-500/30 text-amber-100 text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full border border-amber-300/30">
+              Vedic Kundli Profile
             </span>
+            <h2 className="text-2xl font-extrabold text-white tracking-tight">{client.name}</h2>
+            <div className="flex flex-wrap items-center gap-4 text-xs text-amber-100 font-medium pt-1">
+              <div className="flex items-center gap-1.5">
+                <Calendar className="w-4 h-4 text-amber-200" />
+                <span>{client.birthDetails.date}</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Clock className="w-4 h-4 text-amber-200" />
+                <span>{client.birthDetails.time} (IST +{client.birthDetails.tzOffset})</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <MapPin className="w-4 h-4 text-amber-200" />
+                <span className="truncate max-w-[220px]" title={client.birthDetails.place}>{client.birthDetails.place}</span>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div className="flex items-center gap-3">
-          <Sparkles className="w-4 h-4 text-[#cc6600]" />
-          <div>
-            <span className="text-gray-400 block text-[10px] uppercase font-bold tracking-wider">Ascendant / Moon</span>
-            <span className="font-bold text-sm text-[#cc6600]">
-              {RASHI_NAMES_EN[kundliData.lagnaSignIndex]} / {RASHI_NAMES_EN[astro.planets.Moon.sign]}
-            </span>
+          <div className="md:col-span-2 flex flex-wrap gap-3 md:justify-end">
+            <div className="bg-white/15 backdrop-blur-md border border-white/20 rounded-2xl p-3.5 flex-1 min-w-[130px] max-w-[170px]">
+              <span className="text-[10px] uppercase font-bold tracking-wider text-amber-200 block">Ascendant (Lagna)</span>
+              <span className="text-base font-extrabold text-white mt-0.5 block">{RASHI_NAMES_EN[kundliData.lagnaSignIndex]}</span>
+            </div>
+
+            <div className="bg-white/15 backdrop-blur-md border border-white/20 rounded-2xl p-3.5 flex-1 min-w-[130px] max-w-[170px]">
+              <span className="text-[10px] uppercase font-bold tracking-wider text-amber-200 block">Moon Sign (Rashi)</span>
+              <span className="text-base font-extrabold text-white mt-0.5 block">{RASHI_NAMES_EN[astro.planets.Moon.sign]}</span>
+            </div>
+
+            <div className="bg-white/15 backdrop-blur-md border border-white/20 rounded-2xl p-3.5 flex-1 min-w-[130px] max-w-[170px]">
+              <span className="text-[10px] uppercase font-bold tracking-wider text-amber-200 block">Birth Nakshatra</span>
+              <span className="text-base font-extrabold text-white mt-0.5 block truncate">
+                {NAKSHATRA_NAMES[Math.floor((astro.planets.Moon.longitude % 360) / (360 / 27))]}
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -346,36 +352,71 @@ export default function KundliPage() {
           </div>
         )}
 
-        {/* TAB 2: STACKED LARGE KUNDLI CHARTS */}
+        {/* TAB 2: INTERACTIVE KUNDLI CHARTS WITH SUB-TOGGLE */}
         {activeTab === 'charts' && (
-          <div className="flex flex-col items-center gap-12 w-full">
-            {/* Lagna Chart */}
-            <NorthIndianChart
-              title="Lagna Chart (Birth Kundli)"
-              lagnaSign={kundliData.lagnaSignIndex}
-              planetsMap={astro.planets}
-            />
+          <div className="space-y-6 flex flex-col items-center w-full">
+            
+            {/* Interactive Chart Selector Sub-Tab */}
+            <div className="bg-white border border-[#e8e2d5] p-2 rounded-2xl shadow-sm flex flex-wrap justify-center gap-2 max-w-2xl w-full">
+              {[
+                { id: 'lagna', label: 'Lagna Chart' },
+                { id: 'moon', label: 'Chandra Kundli' },
+                { id: 'd9', label: 'Navamsha (D9)' },
+                { id: 'chalit', label: 'Cusp (Chalit)' },
+                { id: 'all', label: 'View All 4 Charts' },
+              ].map((c) => {
+                const isSelected = selectedChartType === c.id;
+                return (
+                  <button
+                    key={c.id}
+                    onClick={() => setSelectedChartType(c.id as any)}
+                    className={`py-2 px-4 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      isSelected
+                        ? 'bg-[#cc6600] text-white shadow-sm'
+                        : 'bg-transparent text-gray-600 hover:bg-amber-50'
+                    }`}
+                  >
+                    {c.label}
+                  </button>
+                );
+              })}
+            </div>
 
-            {/* Moon Chart */}
-            <NorthIndianChart
-              title="Chandra Kundli (Moon Chart)"
-              lagnaSign={astro.planets.Moon.sign}
-              planetsMap={astro.planets}
-            />
+            {/* Display Selected Chart */}
+            <div className="flex flex-col items-center gap-10 w-full max-w-2xl">
+              {(selectedChartType === 'lagna' || selectedChartType === 'all') && (
+                <NorthIndianChart
+                  title="Lagna Chart (Birth Kundli)"
+                  lagnaSign={kundliData.lagnaSignIndex}
+                  planetsMap={astro.planets}
+                />
+              )}
 
-            {/* Navamsha Chart (D9) */}
-            <NorthIndianChart
-              title="Navamsha Chart (D9)"
-              lagnaSign={kundliData.d9Lagna}
-              planetsMap={kundliData.d9Placements}
-            />
+              {(selectedChartType === 'moon' || selectedChartType === 'all') && (
+                <NorthIndianChart
+                  title="Chandra Kundli (Moon Chart)"
+                  lagnaSign={astro.planets.Moon.sign}
+                  planetsMap={astro.planets}
+                />
+              )}
 
-            {/* Chalit / Cusp Chart */}
-            <NorthIndianChart
-              title="KP House Cusp Chart (Chalit)"
-              lagnaSign={kundliData.lagnaSignIndex}
-              planetsMap={kundliData.cuspPlacements}
-            />
+              {(selectedChartType === 'd9' || selectedChartType === 'all') && (
+                <NorthIndianChart
+                  title="Navamsha Chart (D9)"
+                  lagnaSign={kundliData.d9Lagna}
+                  planetsMap={kundliData.d9Placements}
+                />
+              )}
+
+              {(selectedChartType === 'chalit' || selectedChartType === 'all') && (
+                <NorthIndianChart
+                  title="KP House Cusp Chart (Chalit)"
+                  lagnaSign={kundliData.lagnaSignIndex}
+                  planetsMap={kundliData.cuspPlacements}
+                />
+              )}
+            </div>
+
           </div>
         )}
 
@@ -404,9 +445,9 @@ export default function KundliPage() {
                       <td className="p-4 font-bold text-gray-900 text-sm">{pName}</td>
                       <td className="p-4">
                         {pObj.isRetrograde ? (
-                          <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded font-bold">Retrograde (R)</span>
+                          <span className="bg-red-100 text-red-700 px-2.5 py-1 rounded-full font-bold text-[11px]">Retrograde (R)</span>
                         ) : (
-                          <span className="bg-green-100 text-green-700 px-2 py-0.5 rounded font-bold">Direct</span>
+                          <span className="bg-green-100 text-green-700 px-2.5 py-1 rounded-full font-bold text-[11px]">Direct</span>
                         )}
                       </td>
                       <td className="p-4 font-semibold text-[#cc6600] text-sm">{RASHI_NAMES_EN[pObj.sign]}</td>
