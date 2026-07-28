@@ -1,18 +1,35 @@
 import { load, Constants } from '@fusionstrings/swiss-eph';
+import path from 'path';
+import fs from 'fs';
 
 let ephInstance: any = null;
 let initPromise: Promise<any> | null = null;
 
+
 export async function getSwisseph() {
   if (ephInstance) return wrapper;
   if (!initPromise) {
-    initPromise = load().then((instance) => {
+    initPromise = (async () => {
+      let wasmSource: Uint8Array | undefined;
+      try {
+        const cwdWasm = path.join(process.cwd(), 'node_modules', '@fusionstrings', 'swiss-eph', 'wasm', 'swiss_eph.wasm');
+        if (fs.existsSync(cwdWasm)) {
+          const buffer = await fs.promises.readFile(cwdWasm);
+          wasmSource = new Uint8Array(buffer);
+        }
+      } catch (e) {
+        console.warn('WASM direct filesystem load warning:', e);
+      }
+
+      const instance = await load(wasmSource ? { wasmSource } : {});
       ephInstance = instance;
       return wrapper;
-    });
+    })();
   }
   return initPromise;
 }
+
+
 
 // Synchronous wrapper functions that access the loaded instance
 export const wrapper = {
