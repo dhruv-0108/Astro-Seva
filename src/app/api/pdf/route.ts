@@ -6,6 +6,7 @@ import { calculateVimshottari, PLANET_SPANS } from '../../../lib/astrology/dasha
 import { calculatePanchanga, NAKSHATRA_NAMES } from '../../../lib/astrology/panchanga';
 import { calculateSaturnTransits } from '../../../lib/astrology/transits';
 import { calculateShubhashubh } from '../../../lib/astrology/shubhashubh';
+import { getSwisseph } from '../../../lib/astrology/swisseph';
 
 import { PDFDocument, rgb } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
@@ -208,7 +209,8 @@ export async function GET(request: Request) {
     const min = parseInt(timeParts[1]);
     const sec = timeParts[2] ? parseInt(timeParts[2]) : 0;
 
-    // 2. Execute Astrological calculations
+    // 2. Initialize swisseph and execute Astrological calculations
+    await getSwisseph();
     const astro = calculateAstrologicalData(year, month, day, hour, min, sec, lat, lng, tzOffset);
     const birthDateObj = new Date(year, month - 1, day, hour, min, sec);
     const lagnaSignIndex = Math.floor(astro.ascendant / 30);

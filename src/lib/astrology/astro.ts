@@ -1,5 +1,4 @@
-// Import swisseph using require to bypass TypeScript typing issues
-const swisseph = require('swisseph');
+import swisseph from './swisseph';
 
 export interface PlanetPosition {
   name: string;

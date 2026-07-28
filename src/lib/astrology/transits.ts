@@ -1,5 +1,4 @@
-// transits.ts: Calculates Saturn's transits, Sadesati/Panoti periods, and Paya (Metal of transit) over a 100-year lifespan
-const swisseph = require('swisseph');
+import swisseph from './swisseph';
 import { jdToLocalDate } from './panchanga';
 
 export interface SaturnTransit {

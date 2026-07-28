@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ['swisseph'],
+  serverExternalPackages: ['@fusionstrings/swiss-eph'],
 };
 
 export default nextConfig;

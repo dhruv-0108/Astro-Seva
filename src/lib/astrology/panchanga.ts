@@ -1,5 +1,4 @@
-// panchanga.ts: Calculates Tithi, Nakshatra, Yoga, Karana and their transition times
-const swisseph = require('swisseph');
+import swisseph from './swisseph';
 
 export interface PanchangaElement {
   name: string;
