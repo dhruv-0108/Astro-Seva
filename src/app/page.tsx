@@ -24,6 +24,7 @@ import {
   ChevronDown,
   MessageSquare,
   Check,
+  UserCheck,
 } from 'lucide-react';
 
 const FAQS = [
@@ -120,6 +121,20 @@ export default function Home() {
     setLang((prev) => (prev === 'GU' ? 'EN' : 'GU'));
   };
 
+  const renderServiceIcon = (iconName: string) => {
+    switch (iconName) {
+      case 'BookOpen':
+        return <BookOpen className="w-5 h-5 stroke-[1.75]" />;
+      case 'PhoneCall':
+        return <PhoneCall className="w-5 h-5 stroke-[1.75]" />;
+      case 'UserCheck':
+        return <UserCheck className="w-5 h-5 stroke-[1.75]" />;
+      case 'Sparkles':
+      default:
+        return <Sparkles className="w-5 h-5 stroke-[1.75]" />;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-[#1F1E1B] font-sans selection:bg-amber-100 antialiased">
       
@@ -141,7 +156,7 @@ export default function Home() {
         </Button>
       </header>
 
-      {/* 1. HERO SECTION — Focuses User directly on Consultation Selection */}
+      {/* 1. HERO SECTION */}
       <section className="bg-[#FAF8F5] pt-20 sm:pt-24 pb-24 px-6 text-center max-w-4xl mx-auto space-y-8">
         <div className="space-y-6">
           <Badge variant="default" className="mx-auto bg-amber-100/90 text-[#A14E15] border-amber-300 px-4 py-1.5 text-[12px] font-medium">
@@ -227,9 +242,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3. CONSULTATION PLANS SECTION — Focus target for "Consult Guru Ji" */}
+      {/* 3. CONSULTATION PLANS SECTION (4 Categories) */}
       <section ref={plansRef} id="plans" className="bg-white py-20 sm:py-24 border-y border-stone-200/50">
-        <div className="max-w-6xl mx-auto px-6 space-y-12">
+        <div className="max-w-7xl mx-auto px-6 space-y-12">
           
           {/* Asymmetric Header */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-stone-200/60 pb-6 text-left">
@@ -240,12 +255,12 @@ export default function Home() {
               </h3>
             </div>
             <p className="text-[14px] font-normal text-stone-500 max-w-[50ch]">
-              Select your consultation format to proceed with sacred dakshina offering & payment.
+              Select your consultation category to proceed with sacred dakshina offering & payment.
             </p>
           </div>
 
-          {/* Consultation Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Consultation Cards (4 Responsive Grid) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {GURU_SERVICES.map((s) => {
               return (
                 <Card
@@ -253,7 +268,7 @@ export default function Home() {
                   onClick={() => handleSelectService(s)}
                   className={`p-6 rounded-2xl transition-all duration-200 cursor-pointer relative flex flex-col justify-between bg-white text-left ${
                     s.popular
-                      ? 'shadow-md border-2 border-[#A14E15] md:-translate-y-1'
+                      ? 'shadow-md border-2 border-[#A14E15] lg:-translate-y-1'
                       : 'shadow-xs border border-stone-200/80 hover:border-stone-300 hover:shadow-sm'
                   }`}
                 >
@@ -266,26 +281,26 @@ export default function Home() {
                   <div className="space-y-4">
                     <div className="flex justify-between items-start">
                       <div className="p-3 bg-amber-50 rounded-2xl border border-amber-200/80 text-[#A14E15]">
-                        <Sparkles className="w-5 h-5 stroke-[1.75]" />
+                        {renderServiceIcon(s.iconName)}
                       </div>
-                      <span className="text-[24px] font-bold text-[#A14E15] font-mono">
-                        ₹{s.price}
+                      <span className="text-[22px] font-bold text-[#A14E15] font-mono">
+                        ₹{s.price.toLocaleString('en-IN')}
                       </span>
                     </div>
 
                     <div className="space-y-2">
-                      <h4 className="text-[20px] font-semibold text-[#1F1E1B]">
+                      <h4 className="text-[18px] sm:text-[20px] font-semibold text-[#1F1E1B]">
                         {lang === 'GU' ? s.titleGU : s.titleEN}
                       </h4>
-                      <p className="text-[14px] font-normal text-stone-600 leading-relaxed">
+                      <p className="text-[13px] sm:text-[14px] font-normal text-stone-600 leading-relaxed">
                         {lang === 'GU' ? s.descGU : s.descEN}
                       </p>
                     </div>
 
-                    <ul className="space-y-2 pt-2 border-t border-stone-100">
+                    <ul className="space-y-2 pt-3 border-t border-stone-100">
                       {(lang === 'GU' ? s.featuresGU : s.featuresEN).map((f, i) => (
-                        <li key={i} className="flex items-center gap-2 text-[13px] text-stone-600 font-normal">
-                          <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0 stroke-[2]" />
+                        <li key={i} className="flex items-start gap-2 text-[12px] sm:text-[13px] text-stone-600 font-normal">
+                          <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0 stroke-[2] mt-0.5" />
                           <span>{f}</span>
                         </li>
                       ))}
@@ -443,9 +458,10 @@ export default function Home() {
           <div className="sm:col-span-3 space-y-3 text-[14px]">
             <h5 className="font-semibold text-white uppercase tracking-wider text-[12px]">Consultations</h5>
             <ul className="space-y-2 text-stone-400 font-normal">
-              <li><button onClick={scrollToPlans} className="hover:text-amber-400 transition-colors">3 Questions Consultation</button></li>
-              <li><button onClick={scrollToPlans} className="hover:text-amber-400 transition-colors">5 Questions + Kundli</button></li>
-              <li><button onClick={scrollToPlans} className="hover:text-amber-400 transition-colors">30 Mins Live Phone Call</button></li>
+              <li><button onClick={scrollToPlans} className="hover:text-amber-400 transition-colors">Quick Question (₹2,500)</button></li>
+              <li><button onClick={scrollToPlans} className="hover:text-amber-400 transition-colors">Standard Full Reading (₹5,000)</button></li>
+              <li><button onClick={scrollToPlans} className="hover:text-amber-400 transition-colors">Detailed Life Analysis (₹10,000)</button></li>
+              <li><button onClick={scrollToPlans} className="hover:text-amber-400 transition-colors">In-Person Session (₹7,000)</button></li>
             </ul>
           </div>
 

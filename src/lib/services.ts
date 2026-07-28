@@ -1,5 +1,3 @@
-import { Sparkles, BookOpen, PhoneCall } from 'lucide-react';
-
 export interface ServiceItem {
   id: string;
   titleEN: string;
@@ -7,7 +5,7 @@ export interface ServiceItem {
   price: number;
   descEN: string;
   descGU: string;
-  iconName: 'Sparkles' | 'BookOpen' | 'PhoneCall';
+  iconName: 'Sparkles' | 'BookOpen' | 'PhoneCall' | 'UserCheck';
   popular: boolean;
   featuresEN: string[];
   featuresGU: string[];
@@ -15,67 +13,89 @@ export interface ServiceItem {
 
 export const GURU_SERVICES: ServiceItem[] = [
   {
-    id: '3-questions',
-    titleEN: '3 Questions Consultation',
-    titleGU: '૩ પ્રશ્નો પરામર્શ (3 Questions)',
-    price: 501,
-    descEN: 'Direct astrological answers to 3 specific life, career, or relationship questions based on BPHS calculations.',
-    descGU: 'તમારા ૩ ચોક્કસ જીવન, કારકિર્દી અથવા સંબંધોના પ્રશ્નોના બીપીએચએસ આધારિત સીધા જવાબો.',
+    id: 'quick-question',
+    titleEN: 'Quick Question / Single Issue',
+    titleGU: 'ઝડપી પ્રશ્ન / એક ચોક્કસ બાબત (15-20 Mins)',
+    price: 2500,
+    descEN: '15-20 min phone/video call for direct astrological guidance on one specific urgent life or career issue.',
+    descGU: '૧૫-૨૦ મિનિટ ફોન/વીડિયો કૉલ - એક ચોક્કસ મહત્વના પ્રશ્ન પર સીધું માર્ગદર્શન.',
     iconName: 'Sparkles',
     popular: false,
     featuresEN: [
-      '3 Specific Life/Career Questions',
-      'BPHS Planetary Dasha Analysis',
-      'Direct WhatsApp Delivery',
+      '15–20 Mins Direct Phone / Video Call',
+      'Single Urgent Question Analysis',
+      'Instant Clarity on Career/Marriage/Health',
     ],
     featuresGU: [
-      '૩ ચોક્કસ જીવન/કારકિર્દી પ્રશ્નો',
-      'બીપીએચએસ ગ્રહ દશા વિશ્લેષણ',
-      'વોટ્સએપ પર સીધો રિપોર્ટ',
+      '૧૫–૨૦ મિનિટ સીધો ફોન / વીડિયો કૉલ',
+      'એક ચોક્કસ મહત્વના પ્રશ્નનું વિશ્લેષણ',
+      'કારકિર્દી/લગ્ન/આરોગ્ય પર સીધી સ્પષ્ટતા',
     ],
   },
   {
-    id: '5-questions',
-    titleEN: '5 Questions + Full Kundli',
-    titleGU: '૫ પ્રશ્નો + કુંડળી વિશ્લેષણ',
-    price: 1100,
-    descEN: 'Comprehensive analysis for 5 life questions + complete digital Kundli report and remedy guidance.',
-    descGU: 'તમારા ૫ જીવન પ્રશ્નોનું વિગતવાર વિશ્લેષણ + સંપૂર્ણ ડીજિટલ કુંડળી રિપોર્ટ અને ઉપાય માર્ગદર્શન.',
-    iconName: 'BookOpen',
+    id: 'standard-consultation',
+    titleEN: 'Standard Full Consultation',
+    titleGU: 'સ્ટાન્ડર્ડ સંપૂર્ણ પરામર્શ (30-45 Mins)',
+    price: 5000,
+    descEN: '30-45 min full live reading covering planetary dasha, career, marriage & major life decisions.',
+    descGU: '૩૦-૪૫ મિનિટ સંપૂર્ણ લાઇવ રીડિંગ - ગ્રહ દશા, કારકિર્દી અને મહત્વના નિર્ણયોનું વિશ્લેષણ.',
+    iconName: 'PhoneCall',
     popular: true,
     featuresEN: [
-      '5 In-Depth Life/Career Questions',
-      'Full Kundli Digital Report',
-      'Vimshottari Dasha & Dosha Remedies',
-      '30-Day Digital Report Access',
+      '30–45 Mins Full Live Consultation',
+      'Comprehensive Birth Chart & Dasha Reading',
+      'Career, Relationship & Health Guidance',
+      'Vedic Remedy Recommendations',
     ],
     featuresGU: [
-      '૫ ઊંડાણપૂર્વકના જીવન પ્રશ્નો',
-      'સંપૂર્ણ ડીજિટલ કુંડળી રિપોર્ટ',
-      'વિંશોત્તરી દશા અને દોષ ઉપાયો',
-      '૩૦ દિવસ ડીજિટલ રિપોર્ટ એક્સેસ',
+      '૩૦–૪૫ મિનિટ સંપૂર્ણ લાઇવ પરામર્શ',
+      'સંપૂર્ણ જન્મ કુંડળી અને દશા રીડિંગ',
+      'કારકિર્દી, સંબંધો અને આરોગ્ય માર્ગદર્શન',
+      'વૈદિક ઉપાય માર્ગદર્શન',
     ],
   },
   {
-    id: '30-min-call',
-    titleEN: '30 Mins 1-on-1 Phone Call',
-    titleGU: '૩૦ મિનિટ ૧-ઓન-૧ ફોન પરામર્શ',
-    price: 2100,
-    descEN: 'Personal 1-on-1 30-minute phone call consultation directly with Guru Ji (Sri Vidya Sadhak, 30+ Yrs Exp).',
-    descGU: 'ગુરુજી (શ્રી વિદ્યા સાધક, ૩૦+ વર્ષનો અનુભવ) સાથે સીધો ૩૦ મિનિટનો ૧-ઓન-૧ ફોન કૉલ પરામર્શ.',
-    iconName: 'PhoneCall',
+    id: 'detailed-life-analysis',
+    titleEN: 'Detailed Life Analysis + Written Report',
+    titleGU: 'વિગતવાર જીવન વિશ્લેષણ + લિખિત રિપોર્ટ',
+    price: 10000,
+    descEN: 'Complete lifelong BPHS horoscope analysis, Vimshottari dasha, remedies, and full written Kundli digital report included.',
+    descGU: 'સંપૂર્ણ આજીવન બીપીએચએસ કુંડળી વિશ્લેષણ, વિંશોત્તરી દશા, ઉપાયો અને ડિજિટલ રિપોર્ટ સામેલ.',
+    iconName: 'BookOpen',
     popular: false,
     featuresEN: [
-      '30 Mins Direct Phone Call with Guruji',
-      'Personalized Q&A & Remedies',
-      'Full Kundli Digital Report Included',
-      'Priority Support',
+      'Full Written Kundli Digital Report Included',
+      'Lifelong BPHS Planetary & Dasha Analysis',
+      'Customized Vedic Remedies & Gemstone Guidance',
+      'Follow-up Q&A Session',
     ],
     featuresGU: [
-      'ગુરુજી સાથે ૩૦ મિનિટ સીધો ફોન કૉલ',
-      'વ્યક્તિગત પ્રશ્નોત્તરી અને ઉપાયો',
-      'સંપૂર્ણ કુંડળી રિપોર્ટ સામેલ',
-      'પ્રાથમિકતા સેવા',
+      'સંપૂર્ણ લિખિત કુંડળી ડિજિટલ રિપોર્ટ સામેલ',
+      'આજીવન ગ્રહ અને દશા વિશ્લેષણ',
+      'વ્યક્તિગત વૈદિક ઉપાયો અને રત્ન માર્ગદર્શન',
+      'ફોલો-અપ પ્રશ્નોત્તરી સત્ર',
+    ],
+  },
+  {
+    id: 'in-person-session',
+    titleEN: 'In-Person Personal Session',
+    titleGU: 'રૂબરૂ વ્યક્તિગત મુલાકાત (In-Person)',
+    price: 7000,
+    descEN: 'Personal face-to-face in-person consultation session with Guru Ji for higher-effort, non-scalable deep guidance.',
+    descGU: 'ગુરુજી સાથે સીધી રૂબરૂ વ્યક્તિગત મુલાકાત - ઊંડાણપૂર્વકનું આધ્યાત્મિક અને વૈદિક માર્ગદર્શન.',
+    iconName: 'UserCheck',
+    popular: false,
+    featuresEN: [
+      'Personal Face-to-Face Meeting with Guruji',
+      'In-Depth Prashna & Horoscope Verification',
+      'Private 1-on-1 Spiritual Guidance',
+      'Direct Prashna Chart Rectification',
+    ],
+    featuresGU: [
+      'ગુરુજી સાથે સીધી રૂબરૂ મુલાકાત',
+      'પ્રશ્ન કુંડળી અને જન્મ કુંડળી ચકાસણી',
+      'ખાનગી ૧-ઓન-૧ આધ્યાત્મિક માર્ગદર્શન',
+      'ચોક્કસ જન્મ સમય સુધારણા',
     ],
   },
 ];
