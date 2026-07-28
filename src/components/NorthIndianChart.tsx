@@ -26,7 +26,6 @@ const PLANET_SHORT_NAMES: Record<string, string> = {
   Ketu: 'Ke',
 };
 
-
 export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
   title,
   lagnaSign,
@@ -51,7 +50,7 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
     housePlanets[house].push({ name: displayName, isRetro: p.isRetrograde });
   }
 
-  // Exact centroids and sign badge positions in 360x360 SVG box
+  // Centroids & Sign Badge positions in 360x360 SVG box
   const houseConfig: Record<
     number,
     { sx: number; sy: number; cx: number; cy: number }
@@ -70,59 +69,26 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
     12: { sx: 270, sy: 20, cx: 270, cy: 52 },
   };
 
-  // Helper to render plain planet text (without card/pill rect background)
+  // Render plain planet text in a single clean vertical column inside house boundaries
   const renderHousePlanets = (houseNum: number, planets: { name: string; isRetro?: boolean }[]) => {
     if (!planets || planets.length === 0) return null;
     const cfg = houseConfig[houseNum];
-    const spacing = 14;
-
-    // 1 or 2 planets: vertical stack
-    if (planets.length <= 2) {
-      return (
-        <g>
-          {planets.map((p, idx) => {
-            const py = cfg.cy + (idx - (planets.length - 1) / 2) * spacing;
-            return (
-              <text
-                key={idx}
-                x={cfg.cx}
-                y={py}
-                textAnchor="middle"
-                dominantBaseline="central"
-                fontSize="11"
-                fontWeight="bold"
-                fill={p.isRetro ? '#b91c1c' : '#7c2d12'}
-              >
-                {p.name}{p.isRetro ? '(R)' : ''}
-              </text>
-            );
-          })}
-        </g>
-      );
-    }
-
-    // 3+ planets: 2-column compact grid
-    const cols = 2;
-    const colSpacing = 38;
-    const rowSpacing = 14;
-    const totalRows = Math.ceil(planets.length / cols);
+    const count = planets.length;
+    const spacing = count > 3 ? 13 : 15;
+    const fontSize = count > 3 ? 10 : 11;
 
     return (
       <g>
         {planets.map((p, idx) => {
-          const col = idx % cols;
-          const row = Math.floor(idx / cols);
-          const px = cfg.cx + (col - 0.5) * colSpacing;
-          const py = cfg.cy + (row - (totalRows - 1) / 2) * rowSpacing;
-
+          const py = cfg.cy + (idx - (count - 1) / 2) * spacing;
           return (
             <text
               key={idx}
-              x={px}
+              x={cfg.cx}
               y={py}
               textAnchor="middle"
               dominantBaseline="central"
-              fontSize="10"
+              fontSize={fontSize}
               fontWeight="bold"
               fill={p.isRetro ? '#b91c1c' : '#7c2d12'}
             >
@@ -135,14 +101,14 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
   };
 
   return (
-    <div className={`flex flex-col items-center bg-white border border-[#e8e2d5] rounded-2xl p-4 shadow-sm w-full ${className}`}>
+    <div className={`flex flex-col items-center bg-white border border-[#e8e2d5] rounded-2xl p-5 shadow-md w-full max-w-[540px] ${className}`}>
       {/* Title */}
       <h3 className="text-base font-bold text-[#cc6600] mb-3 tracking-wide text-center">
         {title}
       </h3>
 
-      {/* Large Responsive SVG Chart */}
-      <div className="w-full max-w-[500px] aspect-square relative">
+      {/* Large SVG Chart */}
+      <div className="w-full aspect-square relative">
         <svg viewBox="0 0 360 360" className="w-full h-full select-none">
           {/* Background fill */}
           <rect x="0" y="0" width="360" height="360" fill="#fffdfa" stroke="#d97706" strokeWidth="2.5" rx="8" />
@@ -181,7 +147,7 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
                   {signNum}
                 </text>
 
-                {/* Planets (Plain text, no background card rect) */}
+                {/* Planets (Single vertical column, zero line crossing) */}
                 {renderHousePlanets(h, planets)}
               </g>
             );
