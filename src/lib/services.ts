@@ -55,28 +55,6 @@ export const GURU_SERVICES: ServiceItem[] = [
     ],
   },
   {
-    id: 'detailed-life-analysis',
-    titleEN: 'Detailed Life Analysis + Written Report',
-    titleGU: 'વિગતવાર જીવન વિશ્લેષણ + લિખિત રિપોર્ટ',
-    price: 10000,
-    descEN: 'Complete lifelong BPHS horoscope analysis, Vimshottari dasha, remedies, and full written Kundli digital report included.',
-    descGU: 'સંપૂર્ણ આજીવન બીપીએચએસ કુંડળી વિશ્લેષણ, વિંશોત્તરી દશા, ઉપાયો અને ડિજિટલ રિપોર્ટ સામેલ.',
-    iconName: 'BookOpen',
-    popular: false,
-    featuresEN: [
-      'Full Written Kundli Digital Report Included',
-      'Lifelong BPHS Planetary & Dasha Analysis',
-      'Customized Vedic Remedies & Gemstone Guidance',
-      'Follow-up Q&A Session',
-    ],
-    featuresGU: [
-      'સંપૂર્ણ લિખિત કુંડળી ડિજિટલ રિપોર્ટ સામેલ',
-      'આજીવન ગ્રહ અને દશા વિશ્લેષણ',
-      'વ્યક્તિગત વૈદિક ઉપાયો અને રત્ન માર્ગદર્શન',
-      'ફોલો-અપ પ્રશ્નોત્તરી સત્ર',
-    ],
-  },
-  {
     id: 'in-person-session',
     titleEN: 'In-Person Personal Session',
     titleGU: 'રૂબરૂ વ્યક્તિગત મુલાકાત (In-Person)',
