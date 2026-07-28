@@ -55,67 +55,54 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
     number,
     { sx: number; sy: number; cx: number; cy: number }
   > = {
-    1: { sx: 180, sy: 35, cx: 180, cy: 105 },
-    2: { sx: 90, sy: 22, cx: 90, cy: 54 },
-    3: { sx: 25, sy: 90, cx: 55, cy: 90 },
+    1: { sx: 180, sy: 32, cx: 180, cy: 105 },
+    2: { sx: 90, sy: 20, cx: 90, cy: 52 },
+    3: { sx: 20, sy: 90, cx: 55, cy: 90 },
     4: { sx: 45, sy: 180, cx: 110, cy: 180 },
-    5: { sx: 25, sy: 270, cx: 55, cy: 270 },
-    6: { sx: 90, sy: 338, cx: 90, cy: 306 },
-    7: { sx: 180, sy: 325, cx: 180, cy: 255 },
-    8: { sx: 270, sy: 338, cx: 270, cy: 306 },
-    9: { sx: 335, sy: 270, cx: 305, cy: 270 },
+    5: { sx: 20, sy: 270, cx: 55, cy: 270 },
+    6: { sx: 90, sy: 340, cx: 90, cy: 308 },
+    7: { sx: 180, sy: 328, cx: 180, cy: 255 },
+    8: { sx: 270, sy: 340, cx: 270, cy: 308 },
+    9: { sx: 340, sy: 270, cx: 305, cy: 270 },
     10: { sx: 315, sy: 180, cx: 250, cy: 180 },
-    11: { sx: 335, sy: 90, cx: 305, cy: 90 },
-    12: { sx: 270, sy: 22, cx: 270, cy: 54 },
+    11: { sx: 340, sy: 90, cx: 305, cy: 90 },
+    12: { sx: 270, sy: 20, cx: 270, cy: 52 },
   };
 
-  // Helper to layout planet pill badges inside each house boundary
+  // Helper to render plain planet text (without card/pill rect background)
   const renderHousePlanets = (houseNum: number, planets: { name: string; isRetro?: boolean }[]) => {
     if (!planets || planets.length === 0) return null;
     const cfg = houseConfig[houseNum];
-    const pillW = 38;
-    const pillH = 13;
-    const spacing = 15;
+    const spacing = 14;
 
-    // Single or double planet vertical stack
+    // 1 or 2 planets: vertical stack
     if (planets.length <= 2) {
       return (
         <g>
           {planets.map((p, idx) => {
             const py = cfg.cy + (idx - (planets.length - 1) / 2) * spacing;
             return (
-              <g key={idx}>
-                <rect
-                  x={cfg.cx - pillW / 2}
-                  y={py - pillH / 2}
-                  width={pillW}
-                  height={pillH}
-                  rx="3"
-                  fill={p.isRetro ? '#fee2e2' : '#fffbeb'}
-                  stroke={p.isRetro ? '#ef4444' : '#d97706'}
-                  strokeWidth="0.75"
-                />
-                <text
-                  x={cfg.cx}
-                  y={py + 0.5}
-                  textAnchor="middle"
-                  dominantBaseline="central"
-                  fontSize="8.5"
-                  fontWeight="bold"
-                  fill={p.isRetro ? '#991b1b' : '#92400e'}
-                >
-                  {p.name}{p.isRetro ? '(R)' : ''}
-                </text>
-              </g>
+              <text
+                key={idx}
+                x={cfg.cx}
+                y={py}
+                textAnchor="middle"
+                dominantBaseline="central"
+                fontSize="11"
+                fontWeight="bold"
+                fill={p.isRetro ? '#b91c1c' : '#7c2d12'}
+              >
+                {p.name}{p.isRetro ? '(R)' : ''}
+              </text>
             );
           })}
         </g>
       );
     }
 
-    // 3 or 4 planets: 2-column compact grid
+    // 3+ planets: 2-column compact grid
     const cols = 2;
-    const colSpacing = 36;
+    const colSpacing = 38;
     const rowSpacing = 14;
     const totalRows = Math.ceil(planets.length / cols);
 
@@ -128,29 +115,18 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
           const py = cfg.cy + (row - (totalRows - 1) / 2) * rowSpacing;
 
           return (
-            <g key={idx}>
-              <rect
-                x={px - 17}
-                y={py - 6}
-                width="34"
-                height="12"
-                rx="3"
-                fill={p.isRetro ? '#fee2e2' : '#fffbeb'}
-                stroke={p.isRetro ? '#ef4444' : '#d97706'}
-                strokeWidth="0.75"
-              />
-              <text
-                x={px}
-                y={py + 0.5}
-                textAnchor="middle"
-                dominantBaseline="central"
-                fontSize="8"
-                fontWeight="bold"
-                fill={p.isRetro ? '#991b1b' : '#92400e'}
-              >
-                {p.name}{p.isRetro ? '®' : ''}
-              </text>
-            </g>
+            <text
+              key={idx}
+              x={px}
+              y={py}
+              textAnchor="middle"
+              dominantBaseline="central"
+              fontSize="10"
+              fontWeight="bold"
+              fill={p.isRetro ? '#b91c1c' : '#7c2d12'}
+            >
+              {p.name}{p.isRetro ? '(R)' : ''}
+            </text>
           );
         })}
       </g>
@@ -158,19 +134,19 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
   };
 
   return (
-    <div className={`flex flex-col items-center bg-white border border-[#e8e2d5] rounded-xl p-3 shadow-sm ${className}`}>
+    <div className={`flex flex-col items-center bg-white border border-[#e8e2d5] rounded-2xl p-4 shadow-sm w-full ${className}`}>
       {/* Title */}
-      <h3 className="text-sm font-bold text-[#cc6600] mb-2 tracking-wide text-center">
+      <h3 className="text-base font-bold text-[#cc6600] mb-3 tracking-wide text-center">
         {title}
       </h3>
 
-      {/* Responsive SVG Chart */}
-      <div className="w-full max-w-[340px] aspect-square relative">
+      {/* Large Responsive SVG Chart */}
+      <div className="w-full max-w-[500px] aspect-square relative">
         <svg viewBox="0 0 360 360" className="w-full h-full select-none">
           {/* Background fill */}
-          <rect x="0" y="0" width="360" height="360" fill="#fffdfa" stroke="#d97706" strokeWidth="2.5" rx="6" />
+          <rect x="0" y="0" width="360" height="360" fill="#fffdfa" stroke="#d97706" strokeWidth="2.5" rx="8" />
 
-          {/* Main Diagonal lines */}
+          {/* Main Diagonals */}
           <line x1="0" y1="0" x2="360" y2="360" stroke="#d97706" strokeWidth="1.5" opacity="0.85" />
           <line x1="0" y1="360" x2="360" y2="0" stroke="#d97706" strokeWidth="1.5" opacity="0.85" />
 
@@ -178,7 +154,7 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
           <polygon points="180,0 0,180 180,360 360,180" fill="none" stroke="#d97706" strokeWidth="1.5" opacity="0.85" />
 
           {/* Watermark Om Symbol */}
-          <text x="180" y="185" textAnchor="middle" dominantBaseline="middle" fill="#f59e0b" opacity="0.07" fontSize="64" fontWeight="bold">
+          <text x="180" y="185" textAnchor="middle" dominantBaseline="middle" fill="#f59e0b" opacity="0.06" fontSize="72" fontWeight="bold">
             🕉️
           </text>
 
@@ -191,20 +167,20 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
             return (
               <g key={h}>
                 {/* House Sign Number Badge */}
-                <circle cx={cfg.sx} cy={cfg.sy} r="8.5" fill="#fff0e0" stroke="#f97316" strokeWidth="0.75" />
+                <circle cx={cfg.sx} cy={cfg.sy} r="9" fill="#fff0e0" stroke="#f97316" strokeWidth="0.75" />
                 <text
                   x={cfg.sx}
                   y={cfg.sy}
                   textAnchor="middle"
                   dominantBaseline="central"
-                  fontSize="9.5"
+                  fontSize="10"
                   fontWeight="bold"
                   fill="#c2410c"
                 >
                   {signNum}
                 </text>
 
-                {/* Planets inside house boundary */}
+                {/* Planets (Plain text, no background card rect) */}
                 {renderHousePlanets(h, planets)}
               </g>
             );

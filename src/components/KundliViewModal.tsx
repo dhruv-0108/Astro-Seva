@@ -242,40 +242,37 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
               
               {/* TAB 1: CHARTS */}
               {activeTab === 'charts' && (
-                <div className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Lagna Chart */}
-                    <NorthIndianChart
-                      title="Lagna Chart (Birth Kundli)"
-                      lagnaSign={kundliData.lagnaSignIndex}
-                      planetsMap={kundliData.astro.planets}
-                    />
+                <div className="flex flex-col items-center gap-8 max-w-2xl mx-auto w-full">
+                  {/* Lagna Chart */}
+                  <NorthIndianChart
+                    title="Lagna Chart (Birth Kundli)"
+                    lagnaSign={kundliData.lagnaSignIndex}
+                    planetsMap={kundliData.astro.planets}
+                  />
 
-                    {/* Moon Chart */}
-                    <NorthIndianChart
-                      title="Chandra Kundli (Moon Chart)"
-                      lagnaSign={kundliData.astro.planets.Moon.sign}
-                      planetsMap={kundliData.astro.planets}
-                    />
-                  </div>
+                  {/* Moon Chart */}
+                  <NorthIndianChart
+                    title="Chandra Kundli (Moon Chart)"
+                    lagnaSign={kundliData.astro.planets.Moon.sign}
+                    planetsMap={kundliData.astro.planets}
+                  />
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Navamsha Chart (D9) */}
-                    <NorthIndianChart
-                      title="Navamsha Chart (D9)"
-                      lagnaSign={kundliData.d9Lagna}
-                      planetsMap={kundliData.d9Placements}
-                    />
+                  {/* Navamsha Chart (D9) */}
+                  <NorthIndianChart
+                    title="Navamsha Chart (D9)"
+                    lagnaSign={kundliData.d9Lagna}
+                    planetsMap={kundliData.d9Placements}
+                  />
 
-                    {/* Chalit / Cusp Chart */}
-                    <NorthIndianChart
-                      title="KP House Cusp Chart (Chalit)"
-                      lagnaSign={kundliData.lagnaSignIndex}
-                      planetsMap={kundliData.cuspPlacements}
-                    />
-                  </div>
+                  {/* Chalit / Cusp Chart */}
+                  <NorthIndianChart
+                    title="KP House Cusp Chart (Chalit)"
+                    lagnaSign={kundliData.lagnaSignIndex}
+                    planetsMap={kundliData.cuspPlacements}
+                  />
                 </div>
               )}
+
 
               {/* TAB 2: PANCHANGA */}
               {activeTab === 'panchanga' && (
@@ -403,9 +400,10 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
                   <div className="bg-gradient-to-r from-amber-500 to-orange-600 text-white p-4 rounded-xl shadow-md">
                     <span className="text-xs font-semibold opacity-90 block">Balance Dasha at Birth</span>
                     <h3 className="text-lg font-bold mt-1">
-                      {kundliData.dasha.bhogyaDasha.lord} Dasha ({kundliData.dasha.bhogyaDasha.remYears.toFixed(2)} years remaining)
+                      {kundliData?.dasha?.bhogyaDasha?.lord} Dasha ({kundliData?.dasha?.bhogyaDasha?.formatted || 'At Birth'})
                     </h3>
                   </div>
+
 
                   {/* Vimshottari Mahadashas List */}
                   <div className="bg-white border border-[#e8e2d5] rounded-xl overflow-hidden shadow-sm">
