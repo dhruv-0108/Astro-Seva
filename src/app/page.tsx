@@ -203,10 +203,9 @@ export default function Home() {
     offset: ['start start', 'end end'],
   });
 
-  const mandalaScale = useTransform(scrollYProgress, [0, 1], [1, 1.45]);
-  const mandalaRotate = useTransform(scrollYProgress, [0, 1], [0, 30]);
-  const mandalaY = useTransform(scrollYProgress, [0, 1], [0, -100]);
-  const mandalaOpacity = useTransform(scrollYProgress, [0, 0.4, 1], [0.22, 0.32, 0.20]);
+  const mandalaScale = useTransform(scrollYProgress, [0, 1], [1.05, 1.55]);
+  const mandalaRotate = useTransform(scrollYProgress, [0, 1], [0, 20]);
+  const mandalaY = useTransform(scrollYProgress, [0, 1], [0, -80]);
 
   // Close place suggestions dropdown when clicking outside
   useEffect(() => {
@@ -349,26 +348,25 @@ export default function Home() {
   return (
     <div ref={containerRef} className="flex flex-col flex-1 min-h-screen bg-[#FAF9F6] text-stone-900 font-sans relative overflow-hidden selection:bg-amber-100">
       
-      {/* SCROLL-ZOOM GOLDEN MANDALA BACKGROUND DESIGN */}
+      {/* VIBRANT SCROLL-ZOOM GOLDEN MANDALA BACKGROUND DESIGN */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden -z-20">
         <motion.div
           style={{
             scale: mandalaScale,
             rotate: mandalaRotate,
             y: mandalaY,
-            opacity: mandalaOpacity,
           }}
-          className="w-full h-full min-h-screen flex items-center justify-center"
+          className="w-full h-full min-h-screen flex items-center justify-center opacity-85"
         >
           <img
             src="/mandala-bg.jpg"
             alt="Golden Mandala Background"
-            className="w-full h-full object-cover object-center filter saturate-120"
+            className="w-full h-full object-cover object-center"
           />
         </motion.div>
         
-        {/* Soft Vignette Gradient Overlay so content remains 100% readable */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FAF9F6]/80 via-[#FAF9F6]/60 to-[#FAF9F6]/85 backdrop-blur-[2px]" />
+        {/* Soft Vignette Overlay to ensure text readability while leaving background fully visible */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FAF9F6]/40 via-[#FAF9F6]/30 to-[#FAF9F6]/60" />
       </div>
 
       {/* Serene Navigation Header */}
@@ -395,7 +393,7 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <Badge variant="default" className="mx-auto">
+          <Badge variant="default" className="mx-auto bg-amber-100/90 text-[#A14E15] border-amber-300">
             <HeartHandshake className="w-3.5 h-3.5" />
             <span>Personal Vedic Astrology Consultation</span>
           </Badge>
@@ -410,7 +408,7 @@ export default function Home() {
           <h2 className="text-3xl sm:text-4xl font-extrabold text-stone-900 tracking-tight leading-tight">
             {t.heroTagline}
           </h2>
-          <p className="text-base text-stone-600 leading-relaxed font-medium max-w-xl mx-auto">
+          <p className="text-base text-stone-700 leading-relaxed font-medium max-w-xl mx-auto">
             {t.heroSubtitle}
           </p>
         </motion.div>
@@ -429,7 +427,7 @@ export default function Home() {
 
       {/* 2. MEET GURU JI CREDIBILITY SECTION */}
       <section className="w-full max-w-3xl mx-auto py-8 px-6">
-        <Card className="p-8 sm:p-10 space-y-6 text-center bg-white/90 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
+        <Card className="p-8 sm:p-10 space-y-6 text-center bg-white/95 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-stone-200">
           <div className="space-y-2">
             <Badge variant="secondary" className="mx-auto">{t.meetRole}</Badge>
             <h3 className="text-2xl font-bold text-stone-900">{t.meetTitle}</h3>
@@ -454,7 +452,7 @@ export default function Home() {
               { icon: Users, title: '30+ Years', sub: 'Vedic Practice' },
               { icon: MessageCircle, title: 'Direct', sub: 'WhatsApp Guidance' },
             ].map((pillar, i) => (
-              <div key={i} className="bg-stone-50/80 border border-stone-200/60 rounded-2xl p-4 space-y-1">
+              <div key={i} className="bg-stone-50/90 border border-stone-200/60 rounded-2xl p-4 space-y-1">
                 <pillar.icon className="w-4 h-4 text-[#A14E15]" />
                 <div className="text-xs font-bold text-stone-900">{pillar.title}</div>
                 <div className="text-[10px] text-stone-500 font-medium">{pillar.sub}</div>
@@ -478,7 +476,7 @@ export default function Home() {
             { num: '03', title: t.howStep3, desc: t.howStep3Desc, icon: User },
             { num: '04', title: t.howStep4, desc: t.howStep4Desc, icon: Compass },
           ].map((item, idx) => (
-            <Card key={idx} className="p-6 flex items-start gap-4 bg-white/90 backdrop-blur-md">
+            <Card key={idx} className="p-6 flex items-start gap-4 bg-white/95 backdrop-blur-md shadow-xs border border-stone-200">
               <span className="text-base font-extrabold text-[#A14E15] font-mono bg-amber-50 border border-amber-200/80 px-2.5 py-1 rounded-xl shrink-0">
                 {item.num}
               </span>
@@ -521,7 +519,7 @@ export default function Home() {
         </div>
 
         {/* Step Card with Motion Transitions */}
-        <Card className="w-full relative bg-white/95 backdrop-blur-md">
+        <Card className="w-full relative bg-white/95 backdrop-blur-md shadow-xl border border-stone-200">
           <AnimatePresence mode="wait">
             
             {/* STEP 0: CHOOSE CONSULTATION FORMAT */}
@@ -552,7 +550,7 @@ export default function Home() {
                         onClick={() => setSelectedService(s)}
                         className={`p-5 rounded-2xl border transition-all duration-200 cursor-pointer relative flex items-start gap-4 ${
                           isSelected
-                            ? 'border-[#A14E15] bg-amber-50/40 ring-1 ring-[#A14E15]/30 shadow-xs'
+                            ? 'border-[#A14E15] bg-amber-50/60 ring-1 ring-[#A14E15]/30 shadow-xs'
                             : 'border-stone-200 bg-white hover:border-stone-300'
                         }`}
                       >
@@ -624,7 +622,7 @@ export default function Home() {
                 <div className="block sm:hidden">
                   <a
                     href={upiLink}
-                    className="w-full inline-flex items-center justify-center gap-2 bg-[#A14E15] text-[#A14E15] font-bold py-4 px-6 rounded-2xl text-base shadow-md"
+                    className="w-full inline-flex items-center justify-center gap-2 bg-[#A14E15] text-white font-bold py-4 px-6 rounded-2xl text-base shadow-md"
                   >
                     <CreditCard className="w-5 h-5" />
                     <span>Pay ₹{selectedService.price} via UPI App</span>
