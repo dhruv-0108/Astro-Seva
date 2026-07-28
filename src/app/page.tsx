@@ -197,15 +197,14 @@ export default function Home() {
   const bookingRef = useRef<HTMLDivElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
-  // Framer Motion Scroll Zoom & Parallax for Golden Mandala Background
+  // Buttery Smooth Scroll Zoom ONLY (No Rotation)
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   });
 
-  const mandalaScale = useTransform(scrollYProgress, [0, 1], [1.0, 1.45]);
-  const mandalaRotate = useTransform(scrollYProgress, [0, 1], [0, 25]);
-  const mandalaY = useTransform(scrollYProgress, [0, 1], [0, -60]);
+  const mandalaScale = useTransform(scrollYProgress, [0, 1], [1.0, 1.30]);
+  const mandalaY = useTransform(scrollYProgress, [0, 1], [0, -50]);
 
   // Close place suggestions dropdown when clicking outside
   useEffect(() => {
@@ -348,15 +347,14 @@ export default function Home() {
   return (
     <div ref={containerRef} className="flex flex-col flex-1 min-h-screen text-stone-900 font-sans relative overflow-hidden selection:bg-amber-100">
       
-      {/* DIRECTLY VISIBLE FIXED SCROLL-ZOOM MANDALA BACKGROUND (z-0) */}
+      {/* BUTTERY SMOOTH SCROLL ZOOM MANDALA BACKGROUND (NO ROTATION) */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         <motion.div
           style={{
             scale: mandalaScale,
-            rotate: mandalaRotate,
             y: mandalaY,
           }}
-          className="w-full h-full min-h-screen flex items-center justify-center"
+          className="w-full h-full min-h-screen flex items-center justify-center transform-gpu will-change-transform"
         >
           <img
             src="/mandala-bg.jpg"
@@ -365,7 +363,7 @@ export default function Home() {
           />
         </motion.div>
         
-        {/* Soft Transparent Warm Tint so mandala is 100% visible while preserving crisp text contrast */}
+        {/* Transparent Tint to preserve text contrast */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#FAF9F6]/40 via-[#FAF9F6]/25 to-[#FAF9F6]/50" />
       </div>
 
@@ -386,7 +384,7 @@ export default function Home() {
         </Button>
       </header>
 
-      {/* Content wrapper with z-10 floating over mandala background */}
+      {/* Content wrapper floating over smooth background */}
       <div className="relative z-10 flex flex-col flex-1">
         
         {/* 1. WELCOME & REASSURANCE HERO SECTION */}
