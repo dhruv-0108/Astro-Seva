@@ -15,16 +15,17 @@ interface NorthIndianChartProps {
 }
 
 const PLANET_SHORT_NAMES: Record<string, string> = {
-  Sun: 'Sun',
-  Moon: 'Moon',
-  Mars: 'Mars',
-  Mercury: 'Merc',
-  Jupiter: 'Jup',
-  Venus: 'Ven',
-  Saturn: 'Sat',
-  Rahu: 'Rahu',
-  Ketu: 'Ketu',
+  Sun: 'Su',
+  Moon: 'Mo',
+  Mars: 'Ma',
+  Mercury: 'Me',
+  Jupiter: 'Ju',
+  Venus: 'Ve',
+  Saturn: 'Sa',
+  Rahu: 'Ra',
+  Ketu: 'Ke',
 };
+
 
 export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
   title,

@@ -290,12 +290,14 @@ export default function AdminDashboard() {
 
                             {client.paymentStatus === 'paid' && (
                               <>
-                                <button
-                                  onClick={() => setSelectedClient(client)}
+                                <a
+                                  href={`/kundli/${client.id}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
                                   className="bg-[#cc6600] hover:bg-[#a65300] text-white font-bold py-2 px-3.5 rounded-lg text-xs text-center transition-all cursor-pointer shadow-sm flex items-center justify-center gap-1"
                                 >
                                   <span>🔮 View Kundli</span>
-                                </button>
+                                </a>
 
                                 <button
                                   onClick={() => handleWhatsAppShare(client)}

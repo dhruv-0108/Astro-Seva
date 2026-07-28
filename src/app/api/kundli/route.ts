@@ -2,12 +2,11 @@ import { NextResponse } from 'next/server';
 import { adminDb } from '../../../lib/firebase/admin';
 import { calculateAstrologicalData } from '../../../lib/astrology/astro';
 import { calculatePanchanga } from '../../../lib/astrology/panchanga';
-import { calculateVimshottari } from '../../../lib/astrology/dashas';
+import { calculateVimshottari, getCurrentDashaChain } from '../../../lib/astrology/dashas';
 import { calculateSaturnTransits } from '../../../lib/astrology/transits';
 import { calculateShubhashubh } from '../../../lib/astrology/shubhashubh';
 import { calculateVargaSign } from '../../../lib/astrology/vargas';
 import { getSwisseph } from '../../../lib/astrology/swisseph';
-
 
 export const dynamic = 'force-dynamic';
 
@@ -50,8 +49,10 @@ export async function GET(request: Request) {
 
     const panchanga = calculatePanchanga(astro.jd, tzOffset);
     const dasha = calculateVimshottari(astro.planets.Moon.longitude, birthDateObj);
+    const currentDashaChain = getCurrentDashaChain(astro.planets.Moon.longitude, birthDateObj, new Date());
     const transits = calculateSaturnTransits(astro.jd, astro.planets.Moon.sign, tzOffset);
     const shubha = calculateShubhashubh(birthDateObj, lagnaSignIndex);
+
 
     // Navamsha (D9) placements
     const d9Placements: Record<string, { sign: number; isRetrograde: boolean }> = {};
@@ -85,6 +86,7 @@ export async function GET(request: Request) {
       astro,
       panchanga,
       dasha,
+      currentDashaChain,
       transits,
       shubha,
       lagnaSignIndex,
@@ -93,6 +95,7 @@ export async function GET(request: Request) {
       cuspPlacements,
     });
   } catch (error: any) {
+
     console.error('Kundli API Calculation error:', error);
     return NextResponse.json({ error: error.message || 'Calculation failed' }, { status: 500 });
   }
