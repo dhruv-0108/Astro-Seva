@@ -3,7 +3,7 @@
 export const dynamic = 'force-dynamic';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { db } from '../lib/firebase/config';
 import { collection, addDoc } from 'firebase/firestore';
 import { Button } from '../components/ui/shadcn/button';
@@ -196,6 +196,13 @@ export default function Home() {
   const bookingRef = useRef<HTMLDivElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
+  // Apple-style Parallax Scroll Transforms
+  const { scrollY } = useScroll();
+  const orb1Y = useTransform(scrollY, [0, 1000], [0, -180]);
+  const orb2Y = useTransform(scrollY, [0, 1000], [0, 220]);
+  const orbScale = useTransform(scrollY, [0, 600], [1, 1.25]);
+  const ringRotate = useTransform(scrollY, [0, 1000], [0, 90]);
+
   // Close place suggestions dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -337,12 +344,29 @@ export default function Home() {
   return (
     <div className="flex flex-col flex-1 min-h-screen bg-[#FAF9F6] text-stone-900 font-sans relative overflow-hidden selection:bg-amber-100">
       
-      {/* Soothing Animated Background Glow Effects */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-amber-100/40 rounded-full blur-3xl pointer-events-none animate-ambient-float -z-10" />
-      <div className="absolute top-96 left-10 w-[400px] h-[400px] bg-amber-50/60 rounded-full blur-3xl pointer-events-none animate-ambient-float -z-10" style={{ animationDelay: '3s' }} />
+      {/* APPLE-STYLE PARALLAX AMBIENT BACKGROUND ORBS */}
+      <motion.div
+        style={{ y: orb1Y, scale: orbScale }}
+        className="absolute -top-20 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-gradient-to-tr from-amber-200/30 via-orange-100/40 to-amber-50/10 rounded-full blur-3xl pointer-events-none -z-10"
+      />
+
+      <motion.div
+        style={{ y: orb2Y }}
+        className="absolute top-[450px] -left-40 w-[550px] h-[550px] bg-gradient-to-br from-amber-100/40 via-yellow-100/30 to-amber-50/0 rounded-full blur-3xl pointer-events-none -z-10"
+      />
+
+      <motion.div
+        style={{ rotate: ringRotate }}
+        className="absolute top-40 right-[10%] w-[380px] h-[380px] rounded-full border border-amber-300/30 border-dashed pointer-events-none -z-10"
+      />
+
+      <motion.div
+        style={{ rotate: ringRotate }}
+        className="absolute top-[800px] left-[5%] w-[480px] h-[480px] rounded-full border border-stone-300/25 pointer-events-none -z-10"
+      />
 
       {/* Serene Navigation Header */}
-      <header className="w-full bg-white/80 backdrop-blur-md border-b border-stone-200/60 sticky top-0 z-30 px-6 sm:px-10 py-4 flex justify-between items-center">
+      <header className="w-full bg-white/80 backdrop-blur-md border-b border-stone-200/60 sticky top-0 z-30 px-6 sm:px-10 py-4 flex justify-between items-center shadow-xs">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-2xl bg-amber-100/70 border border-amber-200 flex items-center justify-center text-[#A14E15]">
             <Sparkles className="w-4 h-4" />
@@ -360,31 +384,46 @@ export default function Home() {
 
       {/* 1. WELCOME & REASSURANCE HERO SECTION */}
       <section className="w-full max-w-3xl mx-auto pt-16 pb-10 px-6 text-center space-y-6">
-        <Badge variant="default" className="mx-auto">
-          <HeartHandshake className="w-3.5 h-3.5" />
-          <span>Personal Vedic Astrology Consultation</span>
-        </Badge>
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Badge variant="default" className="mx-auto">
+            <HeartHandshake className="w-3.5 h-3.5" />
+            <span>Personal Vedic Astrology Consultation</span>
+          </Badge>
+        </motion.div>
 
-        <div className="space-y-4 max-w-2xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="space-y-4 max-w-2xl mx-auto"
+        >
           <h2 className="text-3xl sm:text-4xl font-extrabold text-stone-900 tracking-tight leading-tight">
             {t.heroTagline}
           </h2>
           <p className="text-base text-stone-600 leading-relaxed font-medium max-w-xl mx-auto">
             {t.heroSubtitle}
           </p>
-        </div>
+        </motion.div>
 
-        <div>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
           <Button size="lg" onClick={scrollToBooking} className="shadow-lg">
             <span>{t.heroCta}</span>
             <ArrowRight className="w-4 h-4" />
           </Button>
-        </div>
+        </motion.div>
       </section>
 
       {/* 2. MEET GURU JI CREDIBILITY SECTION */}
       <section className="w-full max-w-3xl mx-auto py-8 px-6">
-        <Card className="p-8 sm:p-10 space-y-6 text-center bg-white/90 backdrop-blur-xs">
+        <Card className="p-8 sm:p-10 space-y-6 text-center bg-white/90 backdrop-blur-md">
           <div className="space-y-2">
             <Badge variant="secondary" className="mx-auto">{t.meetRole}</Badge>
             <h3 className="text-2xl font-bold text-stone-900">{t.meetTitle}</h3>
@@ -733,7 +772,7 @@ export default function Home() {
                     />
                     
                     {isSearching && (
-                      <span className="absolute right-4 top-11 text-xs text-[#A14E15] font-semibold animate-pulse">
+                      <span className="absolute right-4 top-11 text-xs text-[#A14E15] font-[#A14E15] animate-pulse">
                         {t.searching}
                       </span>
                     )}
@@ -773,7 +812,7 @@ export default function Home() {
                       <option value={0.0}>🇬🇧 UK / London (GMT/BST) — UTC +0:00</option>
                       <option value={1.0}>🇪🇺 Central Europe (Paris/Berlin) — UTC +1:00</option>
                       <option value={4.0}>🇦🇪 UAE / Dubai (GST) — UTC +4:00</option>
-                      <option value={8.0}>🇸岗 Singapore (SGT) — UTC +8:00</option>
+                      <option value={8.0}>🇸🇬 Singapore (SGT) — UTC +8:00</option>
                       <option value={10.0}>🇦🇺 Australia / Sydney (AEST) — UTC +10:00</option>
                       <option value={5.75}>🇳🇵 Nepal (NPT) — UTC +5:45</option>
                     </select>
