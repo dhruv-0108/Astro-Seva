@@ -284,7 +284,7 @@ export default function AdminDashboard() {
                                 onClick={() => handleApprove(client.id)}
                                 className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-3 rounded-lg text-xs transition-colors cursor-pointer"
                               >
-                                ✔️ મંજૂર કરો (Approve)
+                                ✔️ Approve
                               </button>
                             )}
 
@@ -294,14 +294,14 @@ export default function AdminDashboard() {
                                   onClick={() => setSelectedClient(client)}
                                   className="bg-[#cc6600] hover:bg-[#a65300] text-white font-bold py-2 px-3.5 rounded-lg text-xs text-center transition-all cursor-pointer shadow-sm flex items-center justify-center gap-1"
                                 >
-                                  <span>🔮 કુંડળી ખોલો (View Kundli)</span>
+                                  <span>🔮 View Kundli</span>
                                 </button>
 
                                 <button
                                   onClick={() => handleWhatsAppShare(client)}
                                   className="bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-2 px-3 rounded-lg text-xs transition-colors cursor-pointer"
                                 >
-                                  💬 શેર કરો (WhatsApp)
+                                  💬 WhatsApp
                                 </button>
                               </>
                             )}
@@ -310,8 +310,9 @@ export default function AdminDashboard() {
                               onClick={() => handleDelete(client.id)}
                               className="text-red-500 hover:text-red-700 hover:bg-red-50 font-semibold py-1.5 px-2.5 rounded-lg text-xs transition-all cursor-pointer"
                             >
-                              કાઢી નાખો
+                              Delete
                             </button>
+
                           </div>
                         </td>
                       </tr>

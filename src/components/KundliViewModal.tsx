@@ -25,28 +25,8 @@ interface KundliViewModalProps {
   onClose: () => void;
 }
 
-const RASHI_NAMES_GU = [
-  'મેષ', 'વૃષભ', 'મિથુન', 'કર્ક', 'સિંહ', 'કન્યા', 'તુલા', 'વૃશ્ચિક', 'ધન', 'મકર', 'કુંભ', 'મીન'
-];
-
-const PLANET_NAMES_GU: Record<string, string> = {
-  Sun: 'સૂર્ય',
-  Moon: 'ચંદ્ર',
-  Mars: 'મંગળ',
-  Mercury: 'બુધ',
-  Jupiter: 'ગુરુ',
-  Venus: 'શુક્ર',
-  Saturn: 'શનિ',
-  Rahu: 'રાહુ',
-  Ketu: 'કેતુ',
-};
-
-const NAKSHATRA_NAMES = [
-  'અશ્વિની', 'ભરણી', 'કૃતિકા', 'રોહિણી', 'મૃગશીર્ષ', 'આર્દ્રા',
-  'પુનર્વસુ', 'પુષ્ય', 'આશ્લેષા', 'મઘા', 'પૂર્વા ફાલ્ગુની', 'ઉત્તરા ફાલ્ગુની',
-  'હસ્ત', 'ચિત્રા', 'સ્વાતિ', 'વિશાખા', 'અનુરાધા', 'જ્યેષ્ઠા',
-  'મૂળ', 'પૂર્વાષાઢા', 'ઉત્તરાષાઢા', 'શ્રવણ', 'ધનિષ્ઠા', 'શતભિષા',
-  'પૂર્વ ભાદ્રપદ', 'ઉત્તર ભાદ્રપદ', 'રેવતી'
+const RASHI_NAMES_EN = [
+  'Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo', 'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces'
 ];
 
 const PLANET_SPANS: Record<string, number> = {
@@ -82,7 +62,7 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
         setKundliData(json);
       } catch (err: any) {
         console.error('Error fetching Kundli data:', err);
-        setErrorMsg(err.message || 'કુંડળી ગણતરી માં ભૂલ આવી છે.');
+        setErrorMsg(err.message || 'Error calculating Kundli data.');
       } finally {
         setLoading(false);
       }
@@ -92,7 +72,7 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
   }, [client]);
 
   const handleWhatsAppShare = () => {
-    const message = `હરિ ઓમ, ${client.name}.\nગુરુજી દ્વારા તમારી કુંડળી વિગતો તૈયાર છે.\nજન્મ તારીખ: ${client.birthDetails.date}\nજન્મ સમય: ${client.birthDetails.time}\nજન્મ સ્થાન: ${client.birthDetails.place}`;
+    const message = `Hari Om, ${client.name}.\nYour Kundli report is prepared by Guruji.\nDOB: ${client.birthDetails.date}\nTOB: ${client.birthDetails.time}\nPOB: ${client.birthDetails.place}`;
     const cleanPhone = client.phone.replace(/[^\d+]/g, '');
     const waUrl = `https://api.whatsapp.com/send?phone=${encodeURIComponent(cleanPhone)}&text=${encodeURIComponent(message)}`;
     window.open(waUrl, '_blank');
@@ -121,8 +101,8 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
           <div className="flex items-center gap-3">
             <span className="text-2xl">🪐</span>
             <div>
-              <h2 className="text-lg font-bold tracking-wide">{client.name} ની કુંડળી</h2>
-              <p className="text-xs text-amber-100 font-medium">વૈદિક જ્યોતિષ રિપોર્ટ (Astro-Seva Guruji View)</p>
+              <h2 className="text-lg font-bold tracking-wide">{client.name}'s Kundli</h2>
+              <p className="text-xs text-amber-100 font-medium">Vedic Astrology Report (Guruji View)</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -131,7 +111,7 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
               className="bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-1.5 px-3 rounded-lg text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <Share2 className="w-3.5 h-3.5" />
-              <span>શેર કરો</span>
+              <span>Share WhatsApp</span>
             </button>
             <button
               onClick={onClose}
@@ -145,12 +125,12 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24 gap-3 text-[#cc6600]">
             <Sparkles className="w-8 h-8 animate-spin" />
-            <span className="font-bold text-base">કુંડળી ગણતરી થઈ રહી છે... (Calculating Kundli)</span>
+            <span className="font-bold text-base">Calculating Kundli Details...</span>
           </div>
         ) : errorMsg || !kundliData ? (
           <div className="flex flex-col items-center justify-center py-20 gap-3 text-red-600 p-6 text-center">
             <span className="text-3xl">⚠️</span>
-            <span className="font-bold text-base">{errorMsg || 'કુંડળી ગણતરી લોડ થઈ શકી નથી.'}</span>
+            <span className="font-bold text-base">{errorMsg || 'Could not load Kundli data.'}</span>
           </div>
         ) : (
           <div className="flex flex-col flex-1 overflow-y-auto">
@@ -159,7 +139,7 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
               <div className="flex items-center gap-2 text-gray-700">
                 <Calendar className="w-4 h-4 text-[#cc6600]" />
                 <div>
-                  <span className="text-gray-400 block text-[10px]">જન્મ તારીખ</span>
+                  <span className="text-gray-400 block text-[10px]">Date of Birth</span>
                   <span className="font-bold">{client.birthDetails.date}</span>
                 </div>
               </div>
@@ -167,15 +147,15 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
               <div className="flex items-center gap-2 text-gray-700">
                 <Clock className="w-4 h-4 text-[#cc6600]" />
                 <div>
-                  <span className="text-gray-400 block text-[10px]">જન્મ સમય</span>
-                  <span className="font-bold">{client.birthDetails.time} (IST {client.birthDetails.tzOffset})</span>
+                  <span className="text-gray-400 block text-[10px]">Time of Birth</span>
+                  <span className="font-bold">{client.birthDetails.time} (IST +{client.birthDetails.tzOffset})</span>
                 </div>
               </div>
 
               <div className="flex items-center gap-2 text-gray-700">
                 <MapPin className="w-4 h-4 text-[#cc6600]" />
                 <div>
-                  <span className="text-gray-400 block text-[10px]">જન્મ સ્થાન</span>
+                  <span className="text-gray-400 block text-[10px]">Place of Birth</span>
                   <span className="font-bold truncate max-w-[140px]" title={client.birthDetails.place}>
                     {client.birthDetails.place.split(',')[0]}
                   </span>
@@ -185,9 +165,9 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
               <div className="flex items-center gap-2 text-gray-700">
                 <Sparkles className="w-4 h-4 text-[#cc6600]" />
                 <div>
-                  <span className="text-gray-400 block text-[10px]">લગ્ન / ચંદ્ર રાશિ</span>
+                  <span className="text-gray-400 block text-[10px]">Ascendant / Moon Sign</span>
                   <span className="font-bold text-[#cc6600]">
-                    {RASHI_NAMES_GU[kundliData.lagnaSignIndex]} / {RASHI_NAMES_GU[kundliData.astro.planets.Moon.sign]}
+                    {RASHI_NAMES_EN[kundliData.lagnaSignIndex]} / {RASHI_NAMES_EN[kundliData.astro.planets.Moon.sign]}
                   </span>
                 </div>
               </div>
@@ -203,7 +183,7 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
                     : 'border-transparent text-gray-500 hover:text-gray-900'
                 }`}
               >
-                🗺️ કુંડળી નકશા (Charts)
+                🗺️ Kundli Charts
               </button>
               <button
                 onClick={() => setActiveTab('panchanga')}
@@ -213,7 +193,7 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
                     : 'border-transparent text-gray-500 hover:text-gray-900'
                 }`}
               >
-                🗓️ પંચાંગ (Panchanga)
+                🗓️ Panchanga
               </button>
               <button
                 onClick={() => setActiveTab('cusps')}
@@ -223,7 +203,7 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
                     : 'border-transparent text-gray-500 hover:text-gray-900'
                 }`}
               >
-                📐 ભાવ અંશ (Cusps)
+                📐 House Cusps
               </button>
               <button
                 onClick={() => setActiveTab('dashas')}
@@ -233,7 +213,7 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
                     : 'border-transparent text-gray-500 hover:text-gray-900'
                 }`}
               >
-                🔮 દશા (Vimshottari)
+                🔮 Vimshottari Dasha
               </button>
               <button
                 onClick={() => setActiveTab('transits')}
@@ -243,7 +223,7 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
                     : 'border-transparent text-gray-500 hover:text-gray-900'
                 }`}
               >
-                🪐 સાડાસાતી (Saturn)
+                🪐 Saturn Transits
               </button>
               <button
                 onClick={() => setActiveTab('remedies')}
@@ -253,7 +233,7 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
                     : 'border-transparent text-gray-500 hover:text-gray-900'
                 }`}
               >
-                🌺 શુભાશુભ (Remedies)
+                🌺 Auspicious Guide & Remedies
               </button>
             </div>
 
@@ -266,14 +246,14 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Lagna Chart */}
                     <NorthIndianChart
-                      title="જન્મ લગ્ન કુંડળી (Lagna Chart)"
+                      title="Lagna Chart (Birth Kundli)"
                       lagnaSign={kundliData.lagnaSignIndex}
                       planetsMap={kundliData.astro.planets}
                     />
 
                     {/* Moon Chart */}
                     <NorthIndianChart
-                      title="ચંદ્ર કુંડળી (Moon Chart)"
+                      title="Chandra Kundli (Moon Chart)"
                       lagnaSign={kundliData.astro.planets.Moon.sign}
                       planetsMap={kundliData.astro.planets}
                     />
@@ -282,14 +262,14 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Navamsha Chart (D9) */}
                     <NorthIndianChart
-                      title="નવમાંશ કુંડળી (Navamsha - D9)"
+                      title="Navamsha Chart (D9)"
                       lagnaSign={kundliData.d9Lagna}
                       planetsMap={kundliData.d9Placements}
                     />
 
                     {/* Chalit / Cusp Chart */}
                     <NorthIndianChart
-                      title="ભાવ ચલિત / કસ્પ કુંડળી (Cusp Chart)"
+                      title="KP House Cusp Chart (Chalit)"
                       lagnaSign={kundliData.lagnaSignIndex}
                       planetsMap={kundliData.cuspPlacements}
                     />
@@ -302,29 +282,29 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
                 <div className="space-y-6">
                   <div className="bg-white border border-[#e8e2d5] rounded-xl p-5 shadow-sm space-y-4">
                     <h3 className="text-base font-bold text-[#cc6600]">
-                      જન્મ સમય પંચાંગ (Panchanga at Birth)
+                      Birth Panchanga Details
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                       <div className="p-3 bg-amber-50/50 rounded-lg border border-amber-100">
-                        <span className="text-xs text-gray-500 font-semibold block">તિથિ (Tithi)</span>
-                        <span className="font-bold text-gray-900 text-base">{kundliData.panchanga.tithi.formatted}</span>
+                        <span className="text-xs text-gray-500 font-semibold block">Tithi</span>
+                        <span className="font-bold text-gray-900 text-base">{kundliData.panchanga.tithi.name} ({kundliData.panchanga.tithi.paksha})</span>
                       </div>
 
                       <div className="p-3 bg-amber-50/50 rounded-lg border border-amber-100">
-                        <span className="text-xs text-gray-500 font-semibold block">નક્ષત્ર (Nakshatra)</span>
+                        <span className="text-xs text-gray-500 font-semibold block">Nakshatra</span>
                         <span className="font-bold text-gray-900 text-base">
-                          {kundliData.panchanga.nakshatra.formatted} (ચરણ {Math.floor((kundliData.astro.planets.Moon.longitude % 13.333) / 3.333) + 1})
+                          {kundliData.panchanga.nakshatra.name} (Pada {Math.floor((kundliData.astro.planets.Moon.longitude % 13.333) / 3.333) + 1})
                         </span>
                       </div>
 
                       <div className="p-3 bg-amber-50/50 rounded-lg border border-amber-100">
-                        <span className="text-xs text-gray-500 font-semibold block">યોગ (Yoga)</span>
-                        <span className="font-bold text-gray-900 text-base">{kundliData.panchanga.yoga.formatted}</span>
+                        <span className="text-xs text-gray-500 font-semibold block">Yoga</span>
+                        <span className="font-bold text-gray-900 text-base">{kundliData.panchanga.yoga.name}</span>
                       </div>
 
                       <div className="p-3 bg-amber-50/50 rounded-lg border border-amber-100">
-                        <span className="text-xs text-gray-500 font-semibold block">કરણ (Karana)</span>
-                        <span className="font-bold text-gray-900 text-base">{kundliData.panchanga.karana.formatted}</span>
+                        <span className="text-xs text-gray-500 font-semibold block">Karana</span>
+                        <span className="font-bold text-gray-900 text-base">{kundliData.panchanga.karana.name}</span>
                       </div>
                     </div>
                   </div>
@@ -333,41 +313,41 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
                   <div className="bg-white border border-[#e8e2d5] rounded-xl overflow-hidden shadow-sm">
                     <div className="p-4 bg-amber-100/50 border-b border-[#e8e2d5]">
                       <h4 className="font-bold text-sm text-[#cc6600]">
-                        પંચાંગ પરિવર્તન સમય (Panchanga Transition Times)
+                        Panchanga Transition Times
                       </h4>
                     </div>
                     <div className="overflow-x-auto">
                       <table className="w-full text-xs text-left">
                         <thead className="bg-gray-50 text-gray-600 font-bold border-b border-gray-200">
                           <tr>
-                            <th className="p-3">તત્વ (Element)</th>
-                            <th className="p-3">સબમિટ વિગત (At Birth)</th>
-                            <th className="p-3">પ્રારંભ સમય (Start)</th>
-                            <th className="p-3">અંત સમય (End)</th>
+                            <th className="p-3">Element</th>
+                            <th className="p-3">At Birth</th>
+                            <th className="p-3">Start Time</th>
+                            <th className="p-3">End Time</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100 font-medium">
                           <tr>
-                            <td className="p-3 font-bold text-gray-900">તિથિ (Tithi)</td>
-                            <td className="p-3 text-amber-800 font-semibold">{kundliData.panchanga.tithi.formatted}</td>
+                            <td className="p-3 font-bold text-gray-900">Tithi</td>
+                            <td className="p-3 text-amber-800 font-semibold">{kundliData.panchanga.tithi.name} ({kundliData.panchanga.tithi.paksha})</td>
                             <td className="p-3 text-gray-600">{formatShortTime(kundliData.panchanga.tithi.startTime)}</td>
                             <td className="p-3 text-gray-600">{formatShortTime(kundliData.panchanga.tithi.endTime)}</td>
                           </tr>
                           <tr>
-                            <td className="p-3 font-bold text-gray-900">નક્ષત્ર (Nakshatra)</td>
-                            <td className="p-3 text-amber-800 font-semibold">{kundliData.panchanga.nakshatra.formatted}</td>
+                            <td className="p-3 font-bold text-gray-900">Nakshatra</td>
+                            <td className="p-3 text-amber-800 font-semibold">{kundliData.panchanga.nakshatra.name}</td>
                             <td className="p-3 text-gray-600">{formatShortTime(kundliData.panchanga.nakshatra.startTime)}</td>
                             <td className="p-3 text-gray-600">{formatShortTime(kundliData.panchanga.nakshatra.endTime)}</td>
                           </tr>
                           <tr>
-                            <td className="p-3 font-bold text-gray-900">યોગ (Yoga)</td>
-                            <td className="p-3 text-amber-800 font-semibold">{kundliData.panchanga.yoga.formatted}</td>
+                            <td className="p-3 font-bold text-gray-900">Yoga</td>
+                            <td className="p-3 text-amber-800 font-semibold">{kundliData.panchanga.yoga.name}</td>
                             <td className="p-3 text-gray-600">{formatShortTime(kundliData.panchanga.yoga.startTime)}</td>
                             <td className="p-3 text-gray-600">{formatShortTime(kundliData.panchanga.yoga.endTime)}</td>
                           </tr>
                           <tr>
-                            <td className="p-3 font-bold text-gray-900">કરણ (Karana)</td>
-                            <td className="p-3 text-amber-800 font-semibold">{kundliData.panchanga.karana.formatted}</td>
+                            <td className="p-3 font-bold text-gray-900">Karana</td>
+                            <td className="p-3 text-amber-800 font-semibold">{kundliData.panchanga.karana.name}</td>
                             <td className="p-3 text-gray-600">{formatShortTime(kundliData.panchanga.karana.startTime)}</td>
                             <td className="p-3 text-gray-600">{formatShortTime(kundliData.panchanga.karana.endTime)}</td>
                           </tr>
@@ -383,16 +363,16 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
                 <div className="bg-white border border-[#e8e2d5] rounded-xl overflow-hidden shadow-sm">
                   <div className="p-4 bg-amber-100/50 border-b border-[#e8e2d5]">
                     <h3 className="font-bold text-sm text-[#cc6600]">
-                      ભાવ અંશ અને રાશિ (House Cusps & Degrees)
+                      House Cusps & Exact Degrees
                     </h3>
                   </div>
                   <div className="overflow-x-auto">
                     <table className="w-full text-xs text-left">
                       <thead className="bg-gray-50 text-gray-600 font-bold border-b border-gray-200">
                         <tr>
-                          <th className="p-3">ભાવ (House)</th>
-                          <th className="p-3">સ્પષ્ટ અંશ (Degrees)</th>
-                          <th className="p-3">રાશિ નામ (Rashi Sign)</th>
+                          <th className="p-3">House</th>
+                          <th className="p-3">Exact Degrees</th>
+                          <th className="p-3">Zodiac Sign</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100 font-medium">
@@ -404,9 +384,9 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
 
                           return (
                             <tr key={houseNum} className="hover:bg-amber-50/40">
-                              <td className="p-3 font-bold text-gray-900">ભાવ {houseNum}</td>
+                              <td className="p-3 font-bold text-gray-900">House {houseNum}</td>
                               <td className="p-3 text-gray-700">{degStr}</td>
-                              <td className="p-3 font-semibold text-[#cc6600]">{RASHI_NAMES_GU[signIndex]}</td>
+                              <td className="p-3 font-semibold text-[#cc6600]">{RASHI_NAMES_EN[signIndex]}</td>
                             </tr>
                           );
                         })}
@@ -421,9 +401,9 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
                 <div className="space-y-6">
                   {/* Active dasha banner */}
                   <div className="bg-gradient-to-r from-amber-500 to-orange-600 text-white p-4 rounded-xl shadow-md">
-                    <span className="text-xs font-semibold opacity-90 block">જન્મ સમયે ભોગ્ય દશા (Dasha at Birth)</span>
+                    <span className="text-xs font-semibold opacity-90 block">Balance Dasha at Birth</span>
                     <h3 className="text-lg font-bold mt-1">
-                      {kundliData.dasha.bhogyaDasha.lord} ({kundliData.dasha.bhogyaDasha.formatted})
+                      {kundliData.dasha.bhogyaDasha.lord} Dasha ({kundliData.dasha.bhogyaDasha.remYears.toFixed(2)} years remaining)
                     </h3>
                   </div>
 
@@ -431,7 +411,7 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
                   <div className="bg-white border border-[#e8e2d5] rounded-xl overflow-hidden shadow-sm">
                     <div className="p-4 bg-amber-100/50 border-b border-[#e8e2d5]">
                       <h4 className="font-bold text-sm text-[#cc6600]">
-                        વિંશોત્તરી મહા દશા ચક્ર (Vimshottari Dasha Timeline)
+                        Vimshottari Dasha Timeline (120 Years)
                       </h4>
                     </div>
                     <div className="divide-y divide-gray-100 text-xs">
@@ -439,7 +419,7 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
                         <div key={idx} className="p-4 hover:bg-amber-50/30 transition-colors">
                           <div className="flex justify-between items-center mb-1">
                             <span className="font-bold text-sm text-gray-900">
-                              {PLANET_NAMES_GU[md.lord] || md.lord} Dasha ({PLANET_SPANS[md.lord]} વર્ષ)
+                              {md.lord} Dasha ({PLANET_SPANS[md.lord]} Years)
                             </span>
                             <span className="text-gray-500 font-semibold">
                               {formatDateShort(md.startDate)} — {formatDateShort(md.endDate)}
@@ -447,10 +427,10 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
                           </div>
                           {md.antardashas && (
                             <div className="mt-2 text-[11px] text-gray-500 flex flex-wrap gap-1.5">
-                              <span className="font-semibold text-gray-700">અંતર દશા:</span>
+                              <span className="font-semibold text-gray-700">Sub-Dashas:</span>
                               {md.antardashas.slice(0, 6).map((ad: any, adIdx: number) => (
                                 <span key={adIdx} className="bg-gray-100 px-2 py-0.5 rounded text-gray-700">
-                                  {PLANET_NAMES_GU[ad.lord] || ad.lord}
+                                  {ad.lord}
                                 </span>
                               ))}
                             </div>
@@ -467,18 +447,18 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
                 <div className="bg-white border border-[#e8e2d5] rounded-xl overflow-hidden shadow-sm">
                   <div className="p-4 bg-amber-100/50 border-b border-[#e8e2d5]">
                     <h3 className="font-bold text-sm text-[#cc6600]">
-                      સાડાસાતી & શનિ ગોચર (Lifetime Saturn Transits Table)
+                      Lifetime Saturn Transits & Sade Sati Phases
                     </h3>
                   </div>
                   <div className="overflow-x-auto">
                     <table className="w-full text-xs text-left">
                       <thead className="bg-gray-50 text-gray-600 font-bold border-b border-gray-200">
                         <tr>
-                          <th className="p-3">ગોચર પ્રકાર (Type)</th>
-                          <th className="p-3">શનિ રાશિ (Saturn)</th>
-                          <th className="p-3">પ્રારંભ તારીખ (Start)</th>
-                          <th className="p-3">અંત તારીખ (End)</th>
-                          <th className="p-3">પાયા (Metal)</th>
+                          <th className="p-3">Transit Type</th>
+                          <th className="p-3">Saturn Sign</th>
+                          <th className="p-3">Start Date</th>
+                          <th className="p-3">End Date</th>
+                          <th className="p-3">Paya (Metal)</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100 font-medium">
@@ -502,32 +482,32 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
                 <div className="bg-white border border-[#e8e2d5] rounded-xl overflow-hidden shadow-sm">
                   <div className="p-4 bg-amber-100/50 border-b border-[#e8e2d5]">
                     <h3 className="font-bold text-sm text-[#cc6600]">
-                      શુભાશુભ નું જ્ઞાન & ઉપાયો (Auspicious Remedies & Guide)
+                      Auspicious Guide & Astrological Remedies
                     </h3>
                   </div>
                   <div className="divide-y divide-gray-100 text-xs">
                     {[
-                      { k: 'મૂળાંક (Radical Number)', v: kundliData.shubha.mulank },
-                      { k: 'ભાગ્યાંક (Destiny Number)', v: kundliData.shubha.bhagyank },
-                      { k: 'મિત્રાંક (Friendly Numbers)', v: kundliData.shubha.friendlyNumbers },
-                      { k: 'શત્રુ અંક (Enemy Numbers)', v: kundliData.shubha.enemyNumbers },
-                      { k: 'શુભ વર્ષ (Auspicious Years)', v: kundliData.shubha.auspiciousYears },
-                      { k: 'શુભ વાર (Auspicious Days)', v: kundliData.shubha.auspiciousDays },
-                      { k: 'શુભ ગ્રહ (Auspicious Planets)', v: kundliData.shubha.auspiciousPlanets },
-                      { k: 'અશુભ ગ્રહ (Inauspicious Planets)', v: kundliData.shubha.inauspiciousPlanets },
-                      { k: 'મિત્ર રાશિ (Friendly Signs)', v: kundliData.shubha.friendlySigns },
-                      { k: 'મિત્ર લગ્ન (Friendly Lagnas)', v: kundliData.shubha.friendlyLagnas },
-                      { k: 'શુભ રત્ન (Auspicious Gemstone)', v: kundliData.shubha.gemstone },
-                      { k: 'શુભ ઉપરત્ન (Auspicious Sub-gemstone)', v: kundliData.shubha.subGemstone },
-                      { k: 'ભાગ્ય રત્ન (Destiny Gemstone)', v: kundliData.shubha.fortuneGemstone },
-                      { k: 'અનુકૂળ દેવતા (Auspicious Deity)', v: kundliData.shubha.deity },
-                      { k: 'શુભ ધાતુ (Auspicious Metal)', v: kundliData.shubha.metal },
-                      { k: 'શુભ રંગ (Auspicious Color)', v: kundliData.shubha.color },
-                      { k: 'દિશા (Direction)', v: kundliData.shubha.direction },
-                      { k: 'સમય (Auspicious Time)', v: kundliData.shubha.timeOfDay },
-                      { k: 'પદાર્થ (Offering Substances)', v: kundliData.shubha.offerings },
-                      { k: 'અન્ન (Auspicious Food)', v: kundliData.shubha.food },
-                      { k: 'દ્રવ્ય (Liquids/Ghee)', v: kundliData.shubha.liquid },
+                      { k: 'Radical Number (Mulank)', v: kundliData.shubha.mulank },
+                      { k: 'Destiny Number (Bhagyank)', v: kundliData.shubha.bhagyank },
+                      { k: 'Friendly Numbers', v: kundliData.shubha.friendlyNumbers },
+                      { k: 'Enemy Numbers', v: kundliData.shubha.enemyNumbers },
+                      { k: 'Auspicious Years', v: kundliData.shubha.auspiciousYears },
+                      { k: 'Auspicious Days', v: kundliData.shubha.auspiciousDays },
+                      { k: 'Auspicious Planets', v: kundliData.shubha.auspiciousPlanets },
+                      { k: 'Inauspicious Planets', v: kundliData.shubha.inauspiciousPlanets },
+                      { k: 'Friendly Signs', v: kundliData.shubha.friendlySigns },
+                      { k: 'Friendly Ascendants', v: kundliData.shubha.friendlyLagnas },
+                      { k: 'Auspicious Gemstone', v: kundliData.shubha.gemstone },
+                      { k: 'Sub-gemstone', v: kundliData.shubha.subGemstone },
+                      { k: 'Fortune Gemstone', v: kundliData.shubha.fortuneGemstone },
+                      { k: 'Auspicious Deity', v: kundliData.shubha.deity },
+                      { k: 'Auspicious Metal', v: kundliData.shubha.metal },
+                      { k: 'Auspicious Color', v: kundliData.shubha.color },
+                      { k: 'Auspicious Direction', v: kundliData.shubha.direction },
+                      { k: 'Auspicious Time of Day', v: kundliData.shubha.timeOfDay },
+                      { k: 'Offering Substances', v: kundliData.shubha.offerings },
+                      { k: 'Auspicious Food', v: kundliData.shubha.food },
+                      { k: 'Auspicious Liquid', v: kundliData.shubha.liquid },
                     ].map((item, idx) => (
                       <div key={idx} className="p-3.5 flex justify-between items-center hover:bg-amber-50/40">
                         <span className="font-semibold text-gray-500">{item.k}</span>

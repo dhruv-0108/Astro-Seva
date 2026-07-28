@@ -14,16 +14,16 @@ interface NorthIndianChartProps {
   className?: string;
 }
 
-const PLANET_NAMES_GU: Record<string, string> = {
-  Sun: 'સૂર્ય',
-  Moon: 'ચંદ્ર',
-  Mars: 'મંગળ',
-  Mercury: 'બુધ',
-  Jupiter: 'ગુરુ',
-  Venus: 'શુક્ર',
-  Saturn: 'શનિ',
-  Rahu: 'રાહુ',
-  Ketu: 'કેતુ',
+const PLANET_SHORT_NAMES: Record<string, string> = {
+  Sun: 'Sun',
+  Moon: 'Moon',
+  Mars: 'Mars',
+  Mercury: 'Merc',
+  Jupiter: 'Jup',
+  Venus: 'Ven',
+  Saturn: 'Sat',
+  Rahu: 'Rahu',
+  Ketu: 'Ketu',
 };
 
 export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
@@ -46,12 +46,11 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
     if (!p) continue;
     const pSignIndex = p.sign;
     const house = ((pSignIndex - lagnaSign + 12) % 12) + 1;
-    const displayName = PLANET_NAMES_GU[name] || name;
+    const displayName = PLANET_SHORT_NAMES[name] || name;
     housePlanets[house].push({ name: displayName, isRetro: p.isRetrograde });
   }
 
   // SVG Coordinates for 360x360 box
-  // Center is (180, 180)
   const housePositions: Record<
     number,
     { sx: number; sy: number; px: number; py: number; textAnchor: 'start' | 'middle' | 'end' }
@@ -90,7 +89,7 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
           {/* Diamond */}
           <polygon points="180,0 0,180 180,360 360,180" fill="none" stroke="#d97706" strokeWidth="1.5" opacity="0.85" />
 
-          {/* Center Auspicious Om / Swastik watermark */}
+          {/* Center Om watermark */}
           <text x="180" y="185" textAnchor="middle" dominantBaseline="middle" fill="#f59e0b" opacity="0.08" fontSize="64" fontWeight="bold">
             🕉️
           </text>
@@ -142,7 +141,7 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
                         fontWeight="bold"
                         fill={p.isRetro ? '#991b1b' : '#78350f'}
                       >
-                        {p.name}{p.isRetro ? '(વ)' : ''}
+                        {p.name}{p.isRetro ? '(R)' : ''}
                       </text>
                     </g>
                   );
