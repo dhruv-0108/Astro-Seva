@@ -55,6 +55,28 @@ export const GURU_SERVICES: ServiceItem[] = [
     ],
   },
   {
+    id: 'detailed-life-analysis',
+    titleEN: 'Detailed Life Analysis',
+    titleGU: 'વિગતવાર જીવન વિશ્લેષણ',
+    price: 10000,
+    descEN: 'Complete lifelong BPHS horoscope analysis, Vimshottari dasha, customized remedies and gemstone guidance.',
+    descGU: 'સંપૂર્ણ આજીવન બીપીએચએસ કુંડળી વિશ્લેષણ, વિંશોત્તરી દશા, ઉપાયો અને રત્ન માર્ગદર્શન.',
+    iconName: 'BookOpen',
+    popular: false,
+    featuresEN: [
+      'Lifelong BPHS Planetary & Dasha Analysis',
+      'Customized Vedic Remedies & Gemstone Guidance',
+      'Career, Marriage & Health Deep Dive',
+      'Follow-up Q&A Session',
+    ],
+    featuresGU: [
+      'આજીવન ગ્રહ અને દશા વિશ્લેષણ',
+      'વ્યક્તિગત વૈદિક ઉપાયો અને રત્ન માર્ગદર્શન',
+      'કારકિર્દી, લગ્ન અને આરોગ્ય ઊંડાણપૂર્વક',
+      'ફોલો-અપ પ્રશ્નોત્તરી સત્ર',
+    ],
+  },
+  {
     id: 'in-person-session',
     titleEN: 'In-Person Personal Session',
     titleGU: 'રૂબરૂ વ્યક્તિગત મુલાકાત (In-Person)',
