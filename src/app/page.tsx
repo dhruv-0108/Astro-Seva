@@ -193,15 +193,20 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const t = TRANSLATIONS[lang];
+  const containerRef = useRef<HTMLDivElement>(null);
   const bookingRef = useRef<HTMLDivElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
-  // Apple-style Parallax Scroll Transforms
-  const { scrollY } = useScroll();
-  const orb1Y = useTransform(scrollY, [0, 1000], [0, -180]);
-  const orb2Y = useTransform(scrollY, [0, 1000], [0, 220]);
-  const orbScale = useTransform(scrollY, [0, 600], [1, 1.25]);
-  const ringRotate = useTransform(scrollY, [0, 1000], [0, 90]);
+  // Framer Motion Scroll Zoom & Parallax for Golden Mandala Background
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end'],
+  });
+
+  const mandalaScale = useTransform(scrollYProgress, [0, 1], [1, 1.45]);
+  const mandalaRotate = useTransform(scrollYProgress, [0, 1], [0, 30]);
+  const mandalaY = useTransform(scrollYProgress, [0, 1], [0, -100]);
+  const mandalaOpacity = useTransform(scrollYProgress, [0, 0.4, 1], [0.22, 0.32, 0.20]);
 
   // Close place suggestions dropdown when clicking outside
   useEffect(() => {
@@ -342,31 +347,32 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col flex-1 min-h-screen bg-[#FAF9F6] text-stone-900 font-sans relative overflow-hidden selection:bg-amber-100">
+    <div ref={containerRef} className="flex flex-col flex-1 min-h-screen bg-[#FAF9F6] text-stone-900 font-sans relative overflow-hidden selection:bg-amber-100">
       
-      {/* APPLE-STYLE PARALLAX AMBIENT BACKGROUND ORBS */}
-      <motion.div
-        style={{ y: orb1Y, scale: orbScale }}
-        className="absolute -top-20 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-gradient-to-tr from-amber-200/30 via-orange-100/40 to-amber-50/10 rounded-full blur-3xl pointer-events-none -z-10"
-      />
-
-      <motion.div
-        style={{ y: orb2Y }}
-        className="absolute top-[450px] -left-40 w-[550px] h-[550px] bg-gradient-to-br from-amber-100/40 via-yellow-100/30 to-amber-50/0 rounded-full blur-3xl pointer-events-none -z-10"
-      />
-
-      <motion.div
-        style={{ rotate: ringRotate }}
-        className="absolute top-40 right-[10%] w-[380px] h-[380px] rounded-full border border-amber-300/30 border-dashed pointer-events-none -z-10"
-      />
-
-      <motion.div
-        style={{ rotate: ringRotate }}
-        className="absolute top-[800px] left-[5%] w-[480px] h-[480px] rounded-full border border-stone-300/25 pointer-events-none -z-10"
-      />
+      {/* SCROLL-ZOOM GOLDEN MANDALA BACKGROUND DESIGN */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden -z-20">
+        <motion.div
+          style={{
+            scale: mandalaScale,
+            rotate: mandalaRotate,
+            y: mandalaY,
+            opacity: mandalaOpacity,
+          }}
+          className="w-full h-full min-h-screen flex items-center justify-center"
+        >
+          <img
+            src="/mandala-bg.jpg"
+            alt="Golden Mandala Background"
+            className="w-full h-full object-cover object-center filter saturate-120"
+          />
+        </motion.div>
+        
+        {/* Soft Vignette Gradient Overlay so content remains 100% readable */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FAF9F6]/80 via-[#FAF9F6]/60 to-[#FAF9F6]/85 backdrop-blur-[2px]" />
+      </div>
 
       {/* Serene Navigation Header */}
-      <header className="w-full bg-white/80 backdrop-blur-md border-b border-stone-200/60 sticky top-0 z-30 px-6 sm:px-10 py-4 flex justify-between items-center shadow-xs">
+      <header className="w-full bg-white/85 backdrop-blur-md border-b border-stone-200/60 sticky top-0 z-30 px-6 sm:px-10 py-4 flex justify-between items-center shadow-xs">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-2xl bg-amber-100/70 border border-amber-200 flex items-center justify-center text-[#A14E15]">
             <Sparkles className="w-4 h-4" />
@@ -423,7 +429,7 @@ export default function Home() {
 
       {/* 2. MEET GURU JI CREDIBILITY SECTION */}
       <section className="w-full max-w-3xl mx-auto py-8 px-6">
-        <Card className="p-8 sm:p-10 space-y-6 text-center bg-white/90 backdrop-blur-md">
+        <Card className="p-8 sm:p-10 space-y-6 text-center bg-white/90 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
           <div className="space-y-2">
             <Badge variant="secondary" className="mx-auto">{t.meetRole}</Badge>
             <h3 className="text-2xl font-bold text-stone-900">{t.meetTitle}</h3>
@@ -472,7 +478,7 @@ export default function Home() {
             { num: '03', title: t.howStep3, desc: t.howStep3Desc, icon: User },
             { num: '04', title: t.howStep4, desc: t.howStep4Desc, icon: Compass },
           ].map((item, idx) => (
-            <Card key={idx} className="p-6 flex items-start gap-4 bg-white/90 backdrop-blur-xs">
+            <Card key={idx} className="p-6 flex items-start gap-4 bg-white/90 backdrop-blur-md">
               <span className="text-base font-extrabold text-[#A14E15] font-mono bg-amber-50 border border-amber-200/80 px-2.5 py-1 rounded-xl shrink-0">
                 {item.num}
               </span>
@@ -618,7 +624,7 @@ export default function Home() {
                 <div className="block sm:hidden">
                   <a
                     href={upiLink}
-                    className="w-full inline-flex items-center justify-center gap-2 bg-[#A14E15] text-white font-bold py-4 px-6 rounded-2xl text-base shadow-md"
+                    className="w-full inline-flex items-center justify-center gap-2 bg-[#A14E15] text-[#A14E15] font-bold py-4 px-6 rounded-2xl text-base shadow-md"
                   >
                     <CreditCard className="w-5 h-5" />
                     <span>Pay ₹{selectedService.price} via UPI App</span>
@@ -772,7 +778,7 @@ export default function Home() {
                     />
                     
                     {isSearching && (
-                      <span className="absolute right-4 top-11 text-xs text-[#A14E15] font-[#A14E15] animate-pulse">
+                      <span className="absolute right-4 top-11 text-xs text-[#A14E15] font-semibold animate-pulse">
                         {t.searching}
                       </span>
                     )}
