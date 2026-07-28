@@ -250,7 +250,7 @@ export default function DedicatedIntakePage({ params }: { params: Promise<{ serv
               <div className="bg-amber-50/70 border border-amber-200/80 rounded-2xl p-3.5 flex justify-between items-center">
                 <span className="text-[12px] text-stone-600 font-medium">Selected Plan:</span>
                 <span className="text-[14px] font-bold text-[#A14E15]">
-                  {service.titleEN} — ₹{service.price}
+                  {service.titleEN} — ₹{service.price.toLocaleString('en-IN')}
                 </span>
               </div>
 

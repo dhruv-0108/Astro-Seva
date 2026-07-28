@@ -86,7 +86,7 @@ export default function DedicatedPayPage({ params }: { params: Promise<{ service
               <h3 className="text-[20px] font-bold text-[#1F1E1B] mt-0.5">{service.titleEN}</h3>
             </div>
             <span className="text-[26px] font-bold text-[#A14E15] font-mono shrink-0">
-              ₹{service.price}
+              ₹{service.price.toLocaleString('en-IN')}
             </span>
           </div>
 
@@ -114,7 +114,7 @@ export default function DedicatedPayPage({ params }: { params: Promise<{ service
               className="w-full inline-flex items-center justify-center gap-2.5 bg-[#A14E15] text-white font-semibold py-4 px-6 rounded-2xl text-base shadow-md hover:bg-[#883E0F] transition-all"
             >
               <CreditCard className="w-5 h-5 stroke-[1.75]" />
-              <span>Pay ₹{service.price} via UPI App</span>
+              <span>Pay ₹{service.price.toLocaleString('en-IN')} via UPI App</span>
             </a>
           </div>
 
