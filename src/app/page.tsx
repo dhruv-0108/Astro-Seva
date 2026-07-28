@@ -3,7 +3,7 @@
 export const dynamic = 'force-dynamic';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { db } from '../lib/firebase/config';
 import { collection, addDoc } from 'firebase/firestore';
 import { Button } from '../components/ui/shadcn/button';
@@ -32,7 +32,6 @@ import {
   Compass,
   AlertCircle,
   ChevronDown,
-  Lock,
   MessageSquare,
 } from 'lucide-react';
 
@@ -202,9 +201,6 @@ export default function Home() {
   const [lang, setLang] = useState<'EN' | 'GU'>('GU');
   const [step, setStep] = useState<number>(0);
   const [selectedService, setSelectedService] = useState<typeof SERVICES[0]>(SERVICES[1]);
-
-  // Background Theme: 'purple-studio'
-  const [bgChoice] = useState<'purple-studio' | 'mandala'>('purple-studio');
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   const [name, setName] = useState<string>('');
@@ -227,18 +223,8 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const t = TRANSLATIONS[lang];
-  const containerRef = useRef<HTMLDivElement>(null);
   const bookingRef = useRef<HTMLDivElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
-
-  // Buttery Smooth Scroll Zoom ONLY
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end end'],
-  });
-
-  const bgScale = useTransform(scrollYProgress, [0, 1], [1.0, 1.25]);
-  const bgY = useTransform(scrollYProgress, [0, 1], [0, -40]);
 
   // Close place suggestions dropdown when clicking outside
   useEffect(() => {
@@ -379,36 +365,16 @@ export default function Home() {
   };
 
   return (
-    <div ref={containerRef} className="flex flex-col flex-1 min-h-screen text-stone-900 font-sans relative overflow-hidden selection:bg-amber-100">
+    <div className="min-h-screen bg-[#FAF8F5] text-[#1F1E1B] font-sans selection:bg-amber-100">
       
-      {/* BUTTERY SMOOTH GPU SCROLL ZOOM BACKGROUND LAYER */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <motion.div
-          style={{
-            scale: bgScale,
-            y: bgY,
-          }}
-          className="w-full h-full min-h-screen flex items-center justify-center transform-gpu will-change-transform"
-        >
-          <img
-            src="/bg-purple-studio.jpg"
-            alt="Purple Studio Background"
-            className="w-full h-full object-cover object-center"
-          />
-        </motion.div>
-        
-        {/* Soft Ambient Vignette Tint */}
-        <div className="absolute inset-0 bg-gradient-to-b from-purple-950/20 via-transparent to-stone-900/40" />
-      </div>
-
-      {/* Serene Navigation Header */}
-      <header className="w-full bg-white/85 backdrop-blur-md border-b border-stone-200/60 sticky top-0 z-30 px-6 sm:px-12 py-4 flex justify-between items-center shadow-xs">
+      {/* Serene Navigation Header (Background: #FAF8F5) */}
+      <header className="w-full bg-[#FAF8F5]/90 backdrop-blur-md border-b border-stone-200/50 sticky top-0 z-30 px-6 sm:px-12 py-4 flex justify-between items-center">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-2xl bg-amber-100/70 border border-amber-200 flex items-center justify-center text-[#A14E15]">
             <Sparkles className="w-4 h-4" />
           </div>
           <div>
-            <h1 className="text-base font-bold tracking-tight text-stone-900">{t.title}</h1>
+            <h1 className="text-base font-bold tracking-tight text-[#1F1E1B]">{t.title}</h1>
             <p className="text-xs text-stone-500 font-medium">{t.subtitle}</p>
           </div>
         </div>
@@ -419,125 +385,110 @@ export default function Home() {
         </Button>
       </header>
 
-      {/* RHYTHMIC MAGAZINE LAYOUT CONTENT WRAPPER */}
-      <div className="relative z-10 flex flex-col flex-1 divide-y-0">
-        
-        {/* SECTION 1: HERO [CENTER ALIGNED FOCUS - max-w-4xl] */}
-        <section className="w-full max-w-4xl mx-auto pt-16 sm:pt-24 pb-16 px-6 text-center space-y-6">
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <Badge variant="default" className="mx-auto bg-amber-100/90 text-[#A14E15] border-amber-300 px-4 py-1.5 text-xs">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Sri Vidya Consultation • Traditional BPHS Astrology</span>
-            </Badge>
-          </motion.div>
+      {/* 1. HERO SECTION (Background: #FAF8F5 — CENTER ALIGNED — NO CARD WRAPPER) */}
+      <section className="bg-[#FAF8F5] py-20 sm:py-28 px-6 text-center max-w-4xl mx-auto space-y-8">
+        <div className="space-y-4">
+          <Badge variant="default" className="mx-auto bg-amber-100/90 text-[#A14E15] border-amber-300 px-4 py-1.5 text-xs">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Sri Vidya Consultation • Traditional BPHS Astrology</span>
+          </Badge>
 
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="space-y-4 max-w-3xl mx-auto"
-          >
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-[1.15] drop-shadow-md">
-              {t.heroTagline}
-            </h2>
-            <p className="text-base sm:text-lg text-purple-100 leading-relaxed font-medium max-w-2xl mx-auto drop-shadow-sm">
-              {t.heroSubtitle}
-            </p>
-          </motion.div>
+          <h2 className="text-3xl sm:text-5xl font-extrabold text-[#1F1E1B] tracking-tight leading-[1.15]">
+            {t.heroTagline}
+          </h2>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="pt-2"
-          >
-            <Button size="lg" onClick={scrollToBooking} className="h-14 px-8 text-base shadow-xl rounded-2xl">
-              <span>{t.heroCta}</span>
-              <ArrowRight className="w-4 h-4" />
-            </Button>
-          </motion.div>
-        </section>
+          <p className="text-base sm:text-lg text-stone-600 leading-relaxed font-medium max-w-2xl mx-auto">
+            {t.heroSubtitle}
+          </p>
+        </div>
 
-        {/* SECTION 2: WHY CHOOSE GURU JI [LEFT + RIGHT SPLIT - max-w-6xl] */}
-        <section className="w-full max-w-6xl mx-auto py-16 px-6">
-          <Card className="p-8 sm:p-12 bg-white/94 backdrop-blur-md shadow-2xl border border-stone-200/80 rounded-3xl">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-              
-              {/* Left Column: Title & Trust Checklist */}
-              <div className="md:col-span-7 space-y-6">
-                <div className="space-y-2">
-                  <span className="text-xs font-bold text-[#A14E15] uppercase tracking-wider block font-mono">
-                    Authentic Vedic Foundation
-                  </span>
-                  <h3 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight leading-snug">
-                    Why Thousands Trust Guru Ji
-                  </h3>
-                  <p className="text-sm text-stone-600 font-medium leading-relaxed">
-                    Consultations are strictly based on Brihat Parashara Hora Shastra principles and genuine spiritual discipline, without fear-based tactics or unnecessary ritual costs.
-                  </p>
-                </div>
+        <div className="pt-2">
+          <Button size="lg" onClick={scrollToBooking} className="h-14 px-8 text-base shadow-md rounded-2xl">
+            <span>{t.heroCta}</span>
+            <ArrowRight className="w-4 h-4" />
+          </Button>
+        </div>
+      </section>
 
-                <div className="space-y-3.5 pt-2">
-                  {[
-                    { title: '30+ Years Dedicated Experience', desc: 'Over three decades of precision horoscope calculation and client guidance.' },
-                    { title: 'BPHS Principles & Math', desc: 'Calculations adhere strictly to ancient Brihat Parashara Hora Shastra rules.' },
-                    { title: 'Sri Vidya Sadhak Discipline', desc: 'Spiritual grounding ensures calm, trustworthy, and sacred life insights.' },
-                  ].map((item, idx) => (
-                    <div key={idx} className="flex items-start gap-3.5">
-                      <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5 font-bold">
-                        ✓
-                      </div>
-                      <div>
-                        <h4 className="text-sm font-bold text-stone-900">{item.title}</h4>
-                        <p className="text-xs text-stone-500 font-medium">{item.desc}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Right Column: Visual Composition Box */}
-              <div className="md:col-span-5">
-                <div className="bg-gradient-to-br from-amber-50 to-orange-50/50 border border-amber-200/70 rounded-2xl p-6 sm:p-8 space-y-4 text-center">
-                  <div className="w-16 h-16 rounded-2xl bg-white border border-amber-200 flex items-center justify-center text-[#A14E15] mx-auto shadow-xs">
-                    <Award className="w-8 h-8" />
-                  </div>
-                  <h4 className="text-lg font-bold text-stone-900">Direct & Confidential</h4>
-                  <p className="text-xs text-stone-600 font-medium leading-relaxed">
-                    Your birth charts are personally analyzed by Guru Ji. Reports are delivered directly to your WhatsApp with complete privacy.
-                  </p>
-                  <div className="inline-flex items-center gap-2 text-xs font-bold text-[#A14E15] bg-white border border-amber-200 px-3.5 py-1.5 rounded-xl shadow-xs">
-                    <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                    <span>30-Day Auto Privacy Purge</span>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </Card>
-        </section>
-
-        {/* SECTION 3: CONSULTATION SERVICES [ASYMMETRIC HEADER + GRID - max-w-6xl] */}
-        <section className="w-full max-w-6xl mx-auto py-16 px-6 space-y-8">
+      {/* 2. TRUST SECTION (Background: #FAF8F5 — LEFT ALIGNED WITH STATISTICS — NO CARD WRAPPER) */}
+      <section className="bg-[#FAF8F5] py-20 sm:py-24 px-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
           
-          {/* Asymmetric Header: Left Title, Right Subtitle */}
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-white/20 pb-6">
+          {/* Left Column: Left-aligned title + Checklist */}
+          <div className="md:col-span-7 space-y-6 text-left">
+            <div className="space-y-2">
+              <span className="text-xs font-bold text-[#A14E15] uppercase tracking-wider font-mono">
+                Authentic Vedic Foundation
+              </span>
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-[#1F1E1B] tracking-tight leading-snug">
+                Why Thousands Trust Guru Ji
+              </h3>
+              <p className="text-sm text-stone-600 font-medium leading-relaxed max-w-xl">
+                Consultations are strictly based on Brihat Parashara Hora Shastra principles and genuine spiritual discipline, without fear-based tactics or unnecessary ritual costs.
+              </p>
+            </div>
+
+            <div className="space-y-4 pt-2">
+              {[
+                { title: '30+ Years Dedicated Experience', desc: 'Over three decades of precision horoscope calculation and client guidance.' },
+                { title: 'BPHS Principles & Math', desc: 'Calculations adhere strictly to ancient Brihat Parashara Hora Shastra rules.' },
+                { title: 'Sri Vidya Sadhak Discipline', desc: 'Spiritual grounding ensures calm, trustworthy, and sacred life insights.' },
+              ].map((item, idx) => (
+                <div key={idx} className="flex items-start gap-4">
+                  <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs">
+                    ✓
+                  </div>
+                  <div className="space-y-0.5">
+                    <h4 className="text-sm font-bold text-[#1F1E1B]">{item.title}</h4>
+                    <p className="text-xs text-stone-500 font-medium">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right Column: Statistics & Confidentiality Info (No Card wrapper) */}
+          <div className="md:col-span-5 space-y-6 text-left border-l-0 md:border-l border-stone-200/80 md:pl-10">
+            <div className="space-y-2">
+              <div className="text-4xl sm:text-5xl font-extrabold text-[#A14E15] font-mono">30+</div>
+              <div className="text-sm font-bold text-[#1F1E1B]">Years Dedicated Sadhana</div>
+              <p className="text-xs text-stone-500 font-medium leading-relaxed">
+                Authentic calculation of planetary dasha periods and divisional charts.
+              </p>
+            </div>
+
+            <div className="pt-4 border-t border-stone-200/60 space-y-2">
+              <div className="flex items-center gap-2 text-xs font-bold text-emerald-800">
+                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <span>Direct WhatsApp Delivery & Privacy Guarantee</span>
+              </div>
+              <p className="text-xs text-stone-500 font-medium leading-relaxed">
+                Your birth charts are personally analyzed by Guru Ji. Records are automatically purged after 30 days.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* 3. CONSULTATION PLANS (Background: ONLY #FFFFFF — RESPONSIVE GRID — CARDS ALLOWED HERE ONLY) */}
+      <section className="bg-white py-24 sm:py-28 border-y border-stone-200/50">
+        <div className="max-w-6xl mx-auto px-6 space-y-12">
+          
+          {/* Asymmetric Header (Left-aligned) */}
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-stone-200/60 pb-6 text-left">
             <div className="space-y-1">
-              <span className="text-xs font-bold text-amber-300 uppercase tracking-wider font-mono">Select Consultation</span>
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              <span className="text-xs font-bold text-[#A14E15] uppercase tracking-wider font-mono">Transparent Offerings</span>
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-[#1F1E1B] tracking-tight">
                 {t.step0Title}
               </h3>
             </div>
-            <p className="text-xs sm:text-sm text-purple-100 max-w-md font-medium">
+            <p className="text-xs sm:text-sm text-stone-500 max-w-md font-medium">
               Choose the format that fits your current questions. Every option includes authentic BPHS planetary calculations.
             </p>
           </div>
 
-          {/* Dynamic 3-Card Grid */}
+          {/* Cards allowed ONLY for Consultation Plan Items */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {SERVICES.map((s) => {
               const isSelected = selectedService.id === s.id;
@@ -546,19 +497,19 @@ export default function Home() {
                 <Card
                   key={s.id}
                   onClick={() => setSelectedService(s)}
-                  className={`p-6 sm:p-7 rounded-3xl transition-all duration-300 cursor-pointer relative flex flex-col justify-between ${
+                  className={`p-7 rounded-3xl transition-all duration-300 cursor-pointer relative flex flex-col justify-between bg-white text-left ${
                     s.popular
-                      ? 'bg-white shadow-2xl border-2 border-[#A14E15] md:-translate-y-2'
-                      : 'bg-white/94 backdrop-blur-md shadow-xl border border-stone-200 hover:border-stone-300'
+                      ? 'shadow-xl border-2 border-[#A14E15] md:-translate-y-2'
+                      : 'shadow-sm border border-stone-200 hover:border-stone-300'
                   }`}
                 >
                   {s.popular && (
-                    <span className="absolute -top-3.5 left-6 bg-[#A14E15] text-white text-[10px] font-bold uppercase tracking-wider px-3.5 py-1 rounded-full shadow-md">
+                    <span className="absolute -top-3.5 left-6 bg-[#A14E15] text-white text-[10px] font-bold uppercase tracking-wider px-3.5 py-1 rounded-full shadow-xs">
                       Most Popular Choice
                     </span>
                   )}
                   
-                  <div className="space-y-4">
+                  <div className="space-y-5">
                     <div className="flex justify-between items-start">
                       <div className="p-3 bg-amber-50 rounded-2xl border border-amber-200/80 text-[#A14E15]">
                         <IconComponent className="w-6 h-6" />
@@ -568,8 +519,8 @@ export default function Home() {
                       </span>
                     </div>
 
-                    <div className="space-y-1.5">
-                      <h4 className="font-extrabold text-base text-stone-900">
+                    <div className="space-y-2">
+                      <h4 className="font-extrabold text-base text-[#1F1E1B]">
                         {lang === 'GU' ? s.titleGU : s.titleEN}
                       </h4>
                       <p className="text-xs text-stone-600 leading-relaxed font-medium">
@@ -578,7 +529,7 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="pt-6">
+                  <div className="pt-8">
                     <Button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -586,7 +537,7 @@ export default function Home() {
                         scrollToBooking();
                       }}
                       variant={isSelected ? 'default' : 'outline'}
-                      className="w-full rounded-2xl h-11 text-xs font-bold"
+                      className="w-full rounded-2xl h-12 text-xs font-bold"
                     >
                       <span>Select & Proceed</span>
                       <ArrowRight className="w-3.5 h-3.5" />
@@ -596,553 +547,550 @@ export default function Home() {
               );
             })}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* SECTION 4: HOW IT WORKS [HORIZONTAL TIMELINE - max-w-5xl] */}
-        <section className="w-full max-w-5xl mx-auto py-16 px-6 space-y-10">
-          <div className="text-center space-y-2">
-            <Badge variant="secondary" className="mx-auto">Simple 4-Step Process</Badge>
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">{t.howTitle}</h3>
-          </div>
+      {/* 4. HOW IT WORKS (Background: #FAF8F5 — TIMELINE LAYOUT — NO CARD WRAPPERS) */}
+      <section className="bg-[#FAF8F5] py-24 sm:py-28 px-6 max-w-5xl mx-auto space-y-12">
+        <div className="text-left space-y-2 border-b border-stone-200/60 pb-6">
+          <span className="text-xs font-bold text-[#A14E15] uppercase tracking-wider font-mono">Simple Steps</span>
+          <h3 className="text-2xl sm:text-3xl font-extrabold text-[#1F1E1B] tracking-tight">{t.howTitle}</h3>
+        </div>
 
-          {/* Desktop Horizontal Timeline / Mobile Vertical Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { num: '01', title: t.howStep1, desc: t.howStep1Desc, icon: Sparkles },
-              { num: '02', title: t.howStep2, desc: t.howStep2Desc, icon: CreditCard },
-              { num: '03', title: t.howStep3, desc: t.howStep3Desc, icon: User },
-              { num: '04', title: t.howStep4, desc: t.howStep4Desc, icon: Compass },
-            ].map((item, idx) => (
-              <Card key={idx} className="p-5 flex flex-col justify-between bg-white/94 backdrop-blur-md shadow-lg border border-stone-200 rounded-2xl space-y-4">
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs font-extrabold text-[#A14E15] font-mono bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-xl">
-                      {item.num}
-                    </span>
-                    <item.icon className="w-4 h-4 text-stone-400" />
-                  </div>
-                  <h4 className="font-bold text-sm text-stone-900">{item.title}</h4>
-                  <p className="text-xs text-stone-500 font-medium leading-relaxed">{item.desc}</p>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </section>
-
-        {/* SECTION 5: ABOUT GURU JI [PHOTO LEFT | STORY RIGHT - max-w-5xl] */}
-        <section className="w-full max-w-5xl mx-auto py-16 px-6">
-          <Card className="p-8 sm:p-12 bg-white/96 backdrop-blur-md shadow-2xl border border-stone-200 rounded-3xl">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-              
-              {/* Left Column: Photo Frame / Avatar */}
-              <div className="md:col-span-4 flex justify-center">
-                <div className="relative w-44 h-44 sm:w-52 sm:h-52 rounded-3xl bg-gradient-to-b from-amber-50 to-stone-100 border-4 border-amber-200/90 shadow-xl flex items-center justify-center overflow-hidden">
-                  <div className="flex flex-col items-center justify-center text-amber-800/70 gap-2">
-                    <User className="w-16 h-16 stroke-[1.5]" />
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-amber-900/80">Guru Ji</span>
-                  </div>
-                </div>
+        {/* Clean Timeline Layout without card wrappers */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-left">
+          {[
+            { num: '01', title: t.howStep1, desc: t.howStep1Desc, icon: Sparkles },
+            { num: '02', title: t.howStep2, desc: t.howStep2Desc, icon: CreditCard },
+            { num: '03', title: t.howStep3, desc: t.howStep3Desc, icon: User },
+            { num: '04', title: t.howStep4, desc: t.howStep4Desc, icon: Compass },
+          ].map((item, idx) => (
+            <div key={idx} className="space-y-3 relative">
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-extrabold text-[#A14E15] font-mono bg-amber-100/80 border border-amber-200 px-3 py-1 rounded-xl">
+                  {item.num}
+                </span>
+                <item.icon className="w-4 h-4 text-stone-400" />
               </div>
-
-              {/* Right Column: Story & Credentials */}
-              <div className="md:col-span-8 space-y-5">
-                <div className="space-y-1.5">
-                  <Badge variant="secondary">{t.meetRole}</Badge>
-                  <h3 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">
-                    {t.meetTitle}
-                  </h3>
-                </div>
-
-                <p className="text-sm text-stone-600 font-medium leading-relaxed">
-                  {t.meetBio}
-                </p>
-
-                <div className="grid grid-cols-2 gap-3 pt-2">
-                  <div className="bg-stone-50 border border-stone-200/60 rounded-2xl p-3.5 space-y-0.5">
-                    <div className="text-xs font-bold text-stone-900">Sri Vidya Sadhana</div>
-                    <div className="text-[11px] text-stone-500 font-medium">Traditional Discipline</div>
-                  </div>
-                  <div className="bg-stone-50 border border-stone-200/60 rounded-2xl p-3.5 space-y-0.5">
-                    <div className="text-xs font-bold text-stone-900">BPHS Precision</div>
-                    <div className="text-[11px] text-stone-500 font-medium">Authentic Math</div>
-                  </div>
-                </div>
-
-                <div className="pt-2">
-                  <Button onClick={scrollToBooking} size="default" className="rounded-2xl px-6">
-                    <span>Book Consultation with Guruji</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-
+              <h4 className="font-bold text-sm text-[#1F1E1B] pt-1">{item.title}</h4>
+              <p className="text-xs text-stone-500 font-medium leading-relaxed">{item.desc}</p>
             </div>
-          </Card>
-        </section>
+          ))}
+        </div>
+      </section>
 
-        {/* SECTION 6: INTERACTIVE CONSULTATION INTAKE FORM [max-w-xl] */}
-        <main ref={bookingRef} className="w-full max-w-xl mx-auto py-16 px-4 sm:px-6">
+      {/* 5. ABOUT GURU JI (Background: #FAF8F5 — EDITORIAL SPLIT — NO CARD WRAPPER) */}
+      <section className="bg-[#FAF8F5] py-20 sm:py-24 px-6 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-center text-left">
           
-          {/* Step Indicator */}
-          <div className="flex justify-center items-center gap-3 mb-8">
-            {[0, 1, 2].map((i) => (
-              <div key={i} className="flex items-center gap-2">
-                <div
-                  className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs transition-all duration-300 ${
-                    step === i
-                      ? 'bg-[#A14E15] text-white ring-4 ring-amber-100 shadow-md scale-110'
-                      : step > i
-                      ? 'bg-amber-900 text-white'
-                      : 'bg-stone-200 text-stone-500'
-                  }`}
-                >
-                  {step > i ? '✓' : i + 1}
-                </div>
-                {i < 2 && (
-                  <div
-                    className={`w-12 sm:w-16 h-1 rounded-full transition-all duration-300 ${
-                      step > i ? 'bg-[#A14E15]' : 'bg-stone-200'
-                    }`}
-                  />
-                )}
+          {/* Left Column: Photo Frame / Avatar */}
+          <div className="md:col-span-4 flex justify-center md:justify-start">
+            <div className="relative w-44 h-44 sm:w-52 sm:h-52 rounded-3xl bg-gradient-to-b from-amber-50 to-stone-100 border-2 border-amber-200/80 shadow-md flex items-center justify-center overflow-hidden">
+              <div className="flex flex-col items-center justify-center text-amber-800/70 gap-2">
+                <User className="w-16 h-16 stroke-[1.5]" />
+                <span className="text-[11px] font-bold uppercase tracking-wider text-amber-900/80">Guru Ji</span>
               </div>
-            ))}
+            </div>
           </div>
 
-          {/* Step Card with Motion Transitions */}
-          <Card className="w-full relative bg-white/96 backdrop-blur-md shadow-2xl border border-stone-200 rounded-3xl p-6 sm:p-8">
-            <AnimatePresence mode="wait">
-              
-              {/* STEP 0: CHOOSE CONSULTATION FORMAT */}
-              {step === 0 && (
-                <motion.div
-                  key="step-0"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.2 }}
-                  className="space-y-6"
-                >
-                  <div className="text-center space-y-1.5">
-                    <span className="inline-block p-3 rounded-2xl bg-amber-50 text-[#A14E15] mb-1">
-                      <Sparkles className="w-5 h-5" />
-                    </span>
-                    <h3 className="text-xl font-bold text-stone-900">{t.step0Title}</h3>
-                    <p className="text-xs text-stone-500 font-medium">Select the consultation format that fits your questions</p>
-                  </div>
+          {/* Right Column: Story & Credentials */}
+          <div className="md:col-span-8 space-y-6">
+            <div className="space-y-2">
+              <Badge variant="secondary">{t.meetRole}</Badge>
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-[#1F1E1B] tracking-tight">
+                {t.meetTitle}
+              </h3>
+            </div>
 
-                  <div className="space-y-3.5">
-                    {SERVICES.map((s) => {
-                      const isSelected = selectedService.id === s.id;
-                      const IconComponent = s.icon;
-                      return (
-                        <div
-                          key={s.id}
-                          onClick={() => setSelectedService(s)}
-                          className={`p-5 rounded-2xl border transition-all duration-200 cursor-pointer relative flex items-start gap-4 ${
-                            isSelected
-                              ? 'border-[#A14E15] bg-amber-50/60 ring-1 ring-[#A14E15]/30 shadow-xs'
-                              : 'border-stone-200 bg-white hover:border-stone-300'
-                          }`}
-                        >
-                          {s.popular && (
-                            <span className="absolute -top-3 right-4 bg-[#A14E15] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-0.5 rounded-full shadow-xs">
-                              Most Popular
-                            </span>
-                          )}
-                          
-                          <div className="p-2.5 bg-white rounded-xl border border-stone-200 text-[#A14E15] shrink-0">
-                            <IconComponent className="w-5 h-5" />
-                          </div>
+            <p className="text-sm text-stone-600 font-medium leading-relaxed">
+              {t.meetBio}
+            </p>
 
-                          <div className="flex-1 min-w-0">
-                            <div className="flex justify-between items-center gap-2">
-                              <h4 className="font-bold text-base text-stone-900 truncate">
-                                {lang === 'GU' ? s.titleGU : s.titleEN}
-                              </h4>
-                              <span className="text-base font-extrabold text-[#A14E15] shrink-0">
-                                ₹{s.price}
-                              </span>
-                            </div>
-                            <p className="text-xs text-stone-600 mt-1 leading-relaxed font-medium">
-                              {lang === 'GU' ? s.descGU : s.descEN}
-                            </p>
-                          </div>
+            <div className="grid grid-cols-2 gap-4 pt-2">
+              <div className="border-l-2 border-[#A14E15] pl-3.5 space-y-0.5">
+                <div className="text-xs font-bold text-[#1F1E1B]">Sri Vidya Sadhana</div>
+                <div className="text-[11px] text-stone-500 font-medium">Traditional Discipline</div>
+              </div>
+              <div className="border-l-2 border-[#A14E15] pl-3.5 space-y-0.5">
+                <div className="text-xs font-bold text-[#1F1E1B]">BPHS Precision</div>
+                <div className="text-[11px] text-stone-500 font-medium">Authentic Math</div>
+              </div>
+            </div>
 
-                          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-1 transition-all ${
-                            isSelected ? 'border-[#A14E15] bg-[#A14E15] text-white' : 'border-stone-300'
-                          }`}>
-                            {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
+            <div className="pt-2">
+              <Button onClick={scrollToBooking} size="default" className="rounded-2xl px-6">
+                <span>Book Consultation with Guruji</span>
+                <ArrowRight className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
 
-                  <Button onClick={() => setStep(1)} className="w-full h-14 rounded-2xl text-base">
-                    <span>Proceed to Pay ₹{selectedService.price}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Button>
-                </motion.div>
+        </div>
+      </section>
+
+      {/* 6. INTERACTIVE INTAKE FORM (Background: #FAF8F5 — max-w-xl — NO SECTION CARD WRAPPER) */}
+      <main ref={bookingRef} className="bg-[#FAF8F5] py-20 sm:py-24 px-4 sm:px-6 max-w-xl mx-auto">
+        
+        {/* Step Indicator */}
+        <div className="flex justify-center items-center gap-3 mb-8">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="flex items-center gap-2">
+              <div
+                className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs transition-all duration-300 ${
+                  step === i
+                    ? 'bg-[#A14E15] text-white ring-4 ring-amber-100 shadow-md scale-110'
+                    : step > i
+                    ? 'bg-amber-900 text-white'
+                    : 'bg-stone-200 text-stone-500'
+                }`}
+              >
+                {step > i ? '✓' : i + 1}
+              </div>
+              {i < 2 && (
+                <div
+                  className={`w-12 sm:w-16 h-1 rounded-full transition-all duration-300 ${
+                    step > i ? 'bg-[#A14E15]' : 'bg-stone-200'
+                  }`}
+                />
               )}
+            </div>
+          ))}
+        </div>
 
-              {/* STEP 1: DAKSHINA OFFERING */}
-              {step === 1 && (
-                <motion.div
-                  key="step-1"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.2 }}
-                  className="space-y-6 text-center"
-                >
-                  <div className="space-y-2">
-                    <span className="inline-block p-3 rounded-2xl bg-amber-50 text-[#A14E15] mb-1">
-                      <CreditCard className="w-5 h-5" />
+        {/* Clean Form Container */}
+        <div className="w-full bg-white border border-stone-200/80 rounded-3xl p-6 sm:p-8 shadow-sm">
+          <AnimatePresence mode="wait">
+            
+            {/* STEP 0: CHOOSE CONSULTATION FORMAT */}
+            {step === 0 && (
+              <motion.div
+                key="step-0"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-6"
+              >
+                <div className="text-center space-y-1.5">
+                  <span className="inline-block p-3 rounded-2xl bg-amber-50 text-[#A14E15] mb-1">
+                    <Sparkles className="w-5 h-5" />
+                  </span>
+                  <h3 className="text-xl font-bold text-[#1F1E1B]">{t.step0Title}</h3>
+                  <p className="text-xs text-stone-500 font-medium">Select the consultation format that fits your questions</p>
+                </div>
+
+                <div className="space-y-3.5">
+                  {SERVICES.map((s) => {
+                    const isSelected = selectedService.id === s.id;
+                    const IconComponent = s.icon;
+                    return (
+                      <div
+                        key={s.id}
+                        onClick={() => setSelectedService(s)}
+                        className={`p-5 rounded-2xl border transition-all duration-200 cursor-pointer relative flex items-start gap-4 ${
+                          isSelected
+                            ? 'border-[#A14E15] bg-amber-50/60 ring-1 ring-[#A14E15]/30'
+                            : 'border-stone-200 bg-white hover:border-stone-300'
+                        }`}
+                      >
+                        {s.popular && (
+                          <span className="absolute -top-3 right-4 bg-[#A14E15] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-0.5 rounded-full">
+                            Most Popular
+                          </span>
+                        )}
+                        
+                        <div className="p-2.5 bg-white rounded-xl border border-stone-200 text-[#A14E15] shrink-0">
+                          <IconComponent className="w-5 h-5" />
+                        </div>
+
+                        <div className="flex-1 min-w-0">
+                          <div className="flex justify-between items-center gap-2">
+                            <h4 className="font-bold text-base text-[#1F1E1B] truncate">
+                              {lang === 'GU' ? s.titleGU : s.titleEN}
+                            </h4>
+                            <span className="text-base font-extrabold text-[#A14E15] shrink-0">
+                              ₹{s.price}
+                            </span>
+                          </div>
+                          <p className="text-xs text-stone-600 mt-1 leading-relaxed font-medium">
+                            {lang === 'GU' ? s.descGU : s.descEN}
+                          </p>
+                        </div>
+
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-1 transition-all ${
+                          isSelected ? 'border-[#A14E15] bg-[#A14E15] text-white' : 'border-stone-300'
+                        }`}>
+                          {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <Button onClick={() => setStep(1)} className="w-full h-14 rounded-2xl text-base">
+                  <span>Proceed to Pay ₹{selectedService.price}</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </motion.div>
+            )}
+
+            {/* STEP 1: DAKSHINA OFFERING */}
+            {step === 1 && (
+              <motion.div
+                key="step-1"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-6 text-center"
+              >
+                <div className="space-y-2">
+                  <span className="inline-block p-3 rounded-2xl bg-amber-50 text-[#A14E15] mb-1">
+                    <CreditCard className="w-5 h-5" />
+                  </span>
+                  <h3 className="text-xl font-bold text-[#1F1E1B]">{t.step1Title}</h3>
+                  <div className="mt-2 bg-amber-50/70 border border-amber-200/80 rounded-2xl p-3.5 inline-block">
+                    <span className="text-xs text-stone-600 block font-medium">Selected Format:</span>
+                    <span className="text-base font-bold text-[#A14E15]">
+                      {lang === 'GU' ? selectedService.titleGU : selectedService.titleEN} — ₹{selectedService.price}
                     </span>
-                    <h3 className="text-xl font-bold text-stone-900">{t.step1Title}</h3>
-                    <div className="mt-2 bg-amber-50/70 border border-amber-200/80 rounded-2xl p-3.5 inline-block">
-                      <span className="text-xs text-stone-600 block font-medium">Selected Format:</span>
-                      <span className="text-base font-bold text-[#A14E15]">
-                        {lang === 'GU' ? selectedService.titleGU : selectedService.titleEN} — ₹{selectedService.price}
-                      </span>
+                  </div>
+                </div>
+
+                {/* Mobile UPI Intent Button */}
+                <div className="block sm:hidden">
+                  <a
+                    href={upiLink}
+                    className="w-full inline-flex items-center justify-center gap-2 bg-[#A14E15] text-white font-bold py-4 px-6 rounded-2xl text-base shadow-md"
+                  >
+                    <CreditCard className="w-5 h-5" />
+                    <span>Pay ₹{selectedService.price} via UPI App</span>
+                  </a>
+                </div>
+
+                {/* Desktop QR Code */}
+                <div className="flex flex-col items-center gap-3">
+                  <p className="text-xs text-stone-500 font-semibold sm:block hidden">
+                    {t.qrDesktopText}
+                  </p>
+                  <div className="border-4 border-amber-200 rounded-3xl p-2.5 bg-white shadow-xs">
+                    <img
+                      src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(
+                        upiLink
+                      )}`}
+                      alt="UPI QR Code"
+                      className="w-44 h-44"
+                    />
+                  </div>
+                  <Badge variant="secondary" className="font-mono text-xs">
+                    UPI ID: {GURU_UPI_ID} (Amount: ₹{selectedService.price})
+                  </Badge>
+                </div>
+
+                <Button onClick={() => setStep(2)} className="w-full h-14 rounded-2xl text-base">
+                  {t.paidBtn}
+                </Button>
+              </motion.div>
+            )}
+
+            {/* STEP 2: TELL US ABOUT YOURSELF */}
+            {step === 2 && (
+              <motion.div
+                key="step-2"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+              >
+                <form onSubmit={handleSubmitDetails} className="space-y-5 text-left">
+                  <div className="text-center space-y-1">
+                    <span className="inline-block p-3 rounded-2xl bg-amber-50 text-[#A14E15] mb-1">
+                      <User className="w-5 h-5" />
+                    </span>
+                    <h3 className="text-xl font-bold text-[#1F1E1B]">{t.step2Title}</h3>
+                    <p className="text-xs text-stone-500 font-medium">Provide exact birth details so Guruji can calculate your chart</p>
+                  </div>
+
+                  {formError && (
+                    <div className="bg-red-50 border border-red-200 text-red-700 rounded-2xl p-4 text-xs font-semibold flex items-center gap-2">
+                      <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
+                      <span>{formError}</span>
                     </div>
+                  )}
+
+                  {/* Full Name */}
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
+                      <User className="w-3.5 h-3.5 text-[#A14E15]" />
+                      <span>{t.nameLabel}</span>
+                    </label>
+                    <Input
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="e.g. Vijaysinh Varachhiya"
+                      required
+                    />
                   </div>
 
-                  {/* Mobile UPI Intent Button */}
-                  <div className="block sm:hidden">
-                    <a
-                      href={upiLink}
-                      className="w-full inline-flex items-center justify-center gap-2 bg-[#A14E15] text-white font-bold py-4 px-6 rounded-2xl text-base shadow-md"
-                    >
-                      <CreditCard className="w-5 h-5" />
-                      <span>Pay ₹{selectedService.price} via UPI App</span>
-                    </a>
-                  </div>
+                  {/* WhatsApp Number with Country Code Dropdown */}
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
+                      <Phone className="w-3.5 h-3.5 text-[#A14E15]" />
+                      <span>{t.phoneLabel}</span>
+                    </label>
+                    <div className="flex gap-2.5">
+                      <select
+                        value={countryCode}
+                        onChange={(e) => setCountryCode(e.target.value)}
+                        className="border border-stone-200 bg-stone-50 rounded-2xl px-3.5 py-4 text-sm font-bold text-stone-800 outline-none focus:border-[#A14E15] cursor-pointer"
+                      >
+                        {COUNTRY_CODES.map((c) => (
+                          <option key={c.code} value={c.code}>
+                            {c.flag} {c.code}
+                          </option>
+                        ))}
+                      </select>
 
-                  {/* Desktop QR Code */}
-                  <div className="flex flex-col items-center gap-3">
-                    <p className="text-xs text-stone-500 font-semibold sm:block hidden">
-                      {t.qrDesktopText}
-                    </p>
-                    <div className="border-4 border-amber-200 rounded-3xl p-2.5 bg-white shadow-xs">
-                      <img
-                        src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(
-                          upiLink
-                        )}`}
-                        alt="UPI QR Code"
-                        className="w-44 h-44"
+                      <input
+                        type="tel"
+                        value={phoneRaw}
+                        onChange={(e) => setPhoneRaw(e.target.value.replace(/[^\d\s-]/g, ''))}
+                        placeholder="98765 43210"
+                        className="flex-1 bg-white border border-stone-200 rounded-2xl p-4 text-base font-mono text-stone-900 outline-none focus:border-[#A14E15] focus:ring-4 focus:ring-amber-500/10 transition-all"
+                        required
                       />
                     </div>
-                    <Badge variant="secondary" className="font-mono text-xs">
-                      UPI ID: {GURU_UPI_ID} (Amount: ₹{selectedService.price})
-                    </Badge>
                   </div>
 
-                  <Button onClick={() => setStep(2)} className="w-full h-14 rounded-2xl text-base">
-                    {t.paidBtn}
-                  </Button>
-                </motion.div>
-              )}
+                  {/* Date of Birth — Click anywhere to open date picker */}
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
+                      <Calendar className="w-3.5 h-3.5 text-[#A14E15]" />
+                      <span>{t.birthDateLabel}</span>
+                    </label>
+                    <Input
+                      type="date"
+                      value={birthDetails.date}
+                      onClick={(e) => (e.currentTarget as any).showPicker?.()}
+                      onChange={(e) => setBirthDetails((prev) => ({ ...prev, date: e.target.value }))}
+                      className="cursor-pointer"
+                      required
+                    />
+                  </div>
 
-              {/* STEP 2: TELL US ABOUT YOURSELF */}
-              {step === 2 && (
-                <motion.div
-                  key="step-2"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <form onSubmit={handleSubmitDetails} className="space-y-5">
-                    <div className="text-center space-y-1">
-                      <span className="inline-block p-3 rounded-2xl bg-amber-50 text-[#A14E15] mb-1">
-                        <User className="w-5 h-5" />
+                  {/* Time of Birth — Click anywhere to open time picker */}
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5 text-[#A14E15]" />
+                      <span>{t.birthTimeLabel}</span>
+                    </label>
+                    <Input
+                      type="time"
+                      step="1"
+                      value={birthDetails.time}
+                      onClick={(e) => (e.currentTarget as any).showPicker?.()}
+                      onChange={(e) => setBirthDetails((prev) => ({ ...prev, time: e.target.value }))}
+                      className="cursor-pointer"
+                      required
+                    />
+                  </div>
+
+                  {/* Birth Place Search with English Locale */}
+                  <div className="space-y-1.5 relative" ref={searchContainerRef}>
+                    <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
+                      <MapPin className="w-3.5 h-3.5 text-[#A14E15]" />
+                      <span>{t.birthPlaceLabel}</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={placeSearch}
+                      onChange={(e) => {
+                        setPlaceSearch(e.target.value);
+                        setBirthDetails((prev) => ({ ...prev, place: '', lat: 0, lng: 0 }));
+                      }}
+                      placeholder="e.g. Surat, Gujarat, India"
+                      className="w-full bg-white border border-stone-200 rounded-2xl p-4 text-base text-stone-900 outline-none focus:border-[#A14E15] focus:ring-4 focus:ring-amber-500/10 transition-all"
+                      required
+                    />
+                    
+                    {isSearching && (
+                      <span className="absolute right-4 top-11 text-xs text-[#A14E15] font-semibold animate-pulse">
+                        {t.searching}
                       </span>
-                      <h3 className="text-xl font-bold text-stone-900">{t.step2Title}</h3>
-                      <p className="text-xs text-stone-500 font-medium">Provide exact birth details so Guruji can calculate your chart</p>
-                    </div>
-
-                    {formError && (
-                      <div className="bg-red-50 border border-red-200 text-red-700 rounded-2xl p-4 text-xs font-semibold flex items-center gap-2">
-                        <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
-                        <span>{formError}</span>
-                      </div>
                     )}
 
-                    {/* Full Name */}
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
-                        <User className="w-3.5 h-3.5 text-[#A14E15]" />
-                        <span>{t.nameLabel}</span>
-                      </label>
-                      <Input
-                        type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder="e.g. Vijaysinh Varachhiya"
-                        required
-                      />
-                    </div>
+                    {placeSuggestions.length > 0 && (
+                      <ul className="absolute z-30 top-[82px] left-0 w-full bg-white border border-stone-200 rounded-2xl shadow-xl max-h-56 overflow-y-auto divide-y divide-stone-100">
+                        {placeSuggestions.map((item, idx) => (
+                          <li
+                            key={idx}
+                            onClick={() => handleSelectPlace(item)}
+                            className="p-4 hover:bg-amber-50/50 cursor-pointer text-xs font-medium text-stone-800 transition-colors flex items-center gap-2.5"
+                          >
+                            <MapPin className="w-4 h-4 text-[#A14E15] shrink-0" />
+                            <span className="truncate">{item.display_name}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
 
-                    {/* WhatsApp Number with Country Code Dropdown */}
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
-                        <Phone className="w-3.5 h-3.5 text-[#A14E15]" />
-                        <span>{t.phoneLabel}</span>
-                      </label>
-                      <div className="flex gap-2.5">
-                        <select
-                          value={countryCode}
-                          onChange={(e) => setCountryCode(e.target.value)}
-                          className="border border-stone-200 bg-stone-50 rounded-2xl px-3.5 py-4 text-sm font-bold text-stone-800 outline-none focus:border-[#A14E15] cursor-pointer"
-                        >
-                          {COUNTRY_CODES.map((c) => (
-                            <option key={c.code} value={c.code}>
-                              {c.flag} {c.code}
-                            </option>
-                          ))}
-                        </select>
-
-                        <input
-                          type="tel"
-                          value={phoneRaw}
-                          onChange={(e) => setPhoneRaw(e.target.value.replace(/[^\d\s-]/g, ''))}
-                          placeholder="98765 43210"
-                          className="flex-1 bg-white border border-stone-200 rounded-2xl p-4 text-base font-mono text-stone-900 outline-none focus:border-[#A14E15] focus:ring-4 focus:ring-amber-500/10 transition-all"
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    {/* Date of Birth — Click anywhere to open date picker */}
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
-                        <Calendar className="w-3.5 h-3.5 text-[#A14E15]" />
-                        <span>{t.birthDateLabel}</span>
-                      </label>
-                      <Input
-                        type="date"
-                        value={birthDetails.date}
-                        onClick={(e) => (e.currentTarget as any).showPicker?.()}
-                        onChange={(e) => setBirthDetails((prev) => ({ ...prev, date: e.target.value }))}
-                        className="cursor-pointer"
-                        required
-                      />
-                    </div>
-
-                    {/* Time of Birth — Click anywhere to open time picker */}
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
-                        <Clock className="w-3.5 h-3.5 text-[#A14E15]" />
-                        <span>{t.birthTimeLabel}</span>
-                      </label>
-                      <Input
-                        type="time"
-                        step="1"
-                        value={birthDetails.time}
-                        onClick={(e) => (e.currentTarget as any).showPicker?.()}
-                        onChange={(e) => setBirthDetails((prev) => ({ ...prev, time: e.target.value }))}
-                        className="cursor-pointer"
-                        required
-                      />
-                    </div>
-
-                    {/* Birth Place Search with English Locale */}
-                    <div className="space-y-1.5 relative" ref={searchContainerRef}>
-                      <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
-                        <MapPin className="w-3.5 h-3.5 text-[#A14E15]" />
-                        <span>{t.birthPlaceLabel}</span>
-                      </label>
-                      <input
-                        type="text"
-                        value={placeSearch}
-                        onChange={(e) => {
-                          setPlaceSearch(e.target.value);
-                          setBirthDetails((prev) => ({ ...prev, place: '', lat: 0, lng: 0 }));
-                        }}
-                        placeholder="e.g. Surat, Gujarat, India"
-                        className="w-full bg-white border border-stone-200 rounded-2xl p-4 text-base text-stone-900 outline-none focus:border-[#A14E15] focus:ring-4 focus:ring-amber-500/10 transition-all"
-                        required
-                      />
-                      
-                      {isSearching && (
-                        <span className="absolute right-4 top-11 text-xs text-[#A14E15] font-semibold animate-pulse">
-                          {t.searching}
-                        </span>
-                      )}
-
-                      {placeSuggestions.length > 0 && (
-                        <ul className="absolute z-30 top-[82px] left-0 w-full bg-white border border-stone-200 rounded-2xl shadow-xl max-h-56 overflow-y-auto divide-y divide-stone-100">
-                          {placeSuggestions.map((item, idx) => (
-                            <li
-                              key={idx}
-                              onClick={() => handleSelectPlace(item)}
-                              className="p-4 hover:bg-amber-50/50 cursor-pointer text-xs font-medium text-stone-800 transition-colors flex items-center gap-2.5"
-                            >
-                              <MapPin className="w-4 h-4 text-[#A14E15] shrink-0" />
-                              <span className="truncate">{item.display_name}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-
-                    {/* Timezone Selector */}
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
-                        <ShieldCheck className="w-3.5 h-3.5 text-[#A14E15]" />
-                        <span>{t.tzLabel}</span>
-                      </label>
-                      <select
-                        value={birthDetails.tzOffset}
-                        onChange={(e) => setBirthDetails((prev) => ({ ...prev, tzOffset: parseFloat(e.target.value) }))}
-                        className="w-full bg-white border border-stone-200 rounded-2xl p-4 text-base font-medium text-stone-900 outline-none focus:border-[#A14E15] focus:ring-4 focus:ring-amber-500/10 cursor-pointer"
-                      >
-                        <option value={5.5}>🇮🇳 India Standard Time (IST) — UTC +5:30 (Default)</option>
-                        <option value={-5.0}>🇺🇸 US Eastern (EST/EDT) — UTC -5:00</option>
-                        <option value={-6.0}>🇺🇸 US Central (CST/CDT) — UTC -6:00</option>
-                        <option value={-7.0}>🇺🇸 US Mountain (MST/MDT) — UTC -7:00</option>
-                        <option value={-8.0}>🇺🇸 US Pacific (PST/PDT) — UTC -8:00</option>
-                        <option value={0.0}>🇬🇧 UK / London (GMT/BST) — UTC +0:00</option>
-                        <option value={1.0}>🇪🇺 Central Europe (Paris/Berlin) — UTC +1:00</option>
-                        <option value={4.0}>🇦🇪 UAE / Dubai (GST) — UTC +4:00</option>
-                        <option value={8.0}>🇸🇬 Singapore (SGT) — UTC +8:00</option>
-                        <option value={10.0}>🇦🇺 Australia / Sydney (AEST) — UTC +10:00</option>
-                        <option value={5.75}>🇳🇵 Nepal (NPT) — UTC +5:45</option>
-                      </select>
-                    </div>
-
-                    <Button
-                      type="submit"
-                      disabled={isSubmitting || !birthDetails.place}
-                      className="w-full h-14 rounded-2xl text-base mt-2"
+                  {/* Timezone Selector */}
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
+                      <ShieldCheck className="w-3.5 h-3.5 text-[#A14E15]" />
+                      <span>{t.tzLabel}</span>
+                    </label>
+                    <select
+                      value={birthDetails.tzOffset}
+                      onChange={(e) => setBirthDetails((prev) => ({ ...prev, tzOffset: parseFloat(e.target.value) }))}
+                      className="w-full bg-white border border-stone-200 rounded-2xl p-4 text-base font-medium text-stone-900 outline-none focus:border-[#A14E15] focus:ring-4 focus:ring-amber-500/10 cursor-pointer"
                     >
-                      {isSubmitting ? t.loading : t.submitBtn}
-                    </Button>
-                  </form>
-                </motion.div>
-              )}
-
-              {/* STEP 3: SUBMISSION CONFIRMED */}
-              {step === 3 && (
-                <motion.div
-                  key="step-3"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3 }}
-                  className="space-y-6 text-center py-6"
-                >
-                  <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center mx-auto shadow-xs">
-                    <CheckCircle2 className="w-10 h-10 stroke-[2]" />
+                      <option value={5.5}>🇮🇳 India Standard Time (IST) — UTC +5:30 (Default)</option>
+                      <option value={-5.0}>🇺🇸 US Eastern (EST/EDT) — UTC -5:00</option>
+                      <option value={-6.0}>🇺🇸 US Central (CST/CDT) — UTC -6:00</option>
+                      <option value={-7.0}>🇺🇸 US Mountain (MST/MDT) — UTC -7:00</option>
+                      <option value={-8.0}>🇺🇸 US Pacific (PST/PDT) — UTC -8:00</option>
+                      <option value={0.0}>🇬🇧 UK / London (GMT/BST) — UTC +0:00</option>
+                      <option value={1.0}>🇪🇺 Central Europe (Paris/Berlin) — UTC +1:00</option>
+                      <option value={4.0}>🇦🇪 UAE / Dubai (GST) — UTC +4:00</option>
+                      <option value={8.0}>🇸🇬 Singapore (SGT) — UTC +8:00</option>
+                      <option value={10.0}>🇦🇺 Australia / Sydney (AEST) — UTC +10:00</option>
+                      <option value={5.75}>🇳🇵 Nepal (NPT) — UTC +5:45</option>
+                    </select>
                   </div>
-                  <div className="space-y-2">
-                    <h3 className="text-2xl font-bold text-stone-900">{t.step3Title}</h3>
-                    <p className="text-stone-800 text-base font-semibold leading-relaxed max-w-md mx-auto">
-                      {t.successMsg}
-                    </p>
-                    <p className="text-stone-500 text-xs leading-relaxed max-w-sm mx-auto font-medium">
-                      {t.successSub}
-                    </p>
-                  </div>
-                </motion.div>
-              )}
 
-            </AnimatePresence>
-          </Card>
-        </main>
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting || !birthDetails.place}
+                    className="w-full h-14 rounded-2xl text-base mt-2"
+                  >
+                    {isSubmitting ? t.loading : t.submitBtn}
+                  </Button>
+                </form>
+              </motion.div>
+            )}
 
-        {/* SECTION 7: FREQUENTLY ASKED QUESTIONS [LEFT ALIGNED ACCORDION - max-w-4xl] */}
-        <section className="w-full max-w-4xl mx-auto py-16 px-6 text-left space-y-8">
-          <div className="space-y-1.5 text-left border-b border-white/20 pb-6">
-            <span className="text-xs font-bold text-amber-300 uppercase tracking-wider font-mono">Clarifications</span>
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              Frequently Asked Questions
-            </h3>
-            <p className="text-xs sm:text-sm text-purple-100 font-medium max-w-lg">
-              Everything you need to know about preparing your birth details and receiving your consultation.
+            {/* STEP 3: SUBMISSION CONFIRMED */}
+            {step === 3 && (
+              <motion.div
+                key="step-3"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-6 text-center py-6"
+              >
+                <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center mx-auto shadow-xs">
+                  <CheckCircle2 className="w-10 h-10 stroke-[2]" />
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-2xl font-bold text-[#1F1E1B]">{t.step3Title}</h3>
+                  <p className="text-stone-800 text-base font-semibold leading-relaxed max-w-md mx-auto">
+                    {t.successMsg}
+                  </p>
+                  <p className="text-stone-500 text-xs leading-relaxed max-w-sm mx-auto font-medium">
+                    {t.successSub}
+                  </p>
+                </div>
+              </motion.div>
+            )}
+
+          </AnimatePresence>
+        </div>
+      </main>
+
+      {/* 7. FREQUENTLY ASKED QUESTIONS (Background: #FAF8F5 — LEFT ALIGNED ACCORDION — NO CARD WRAPPERS) */}
+      <section className="bg-[#FAF8F5] py-20 sm:py-24 px-6 max-w-4xl mx-auto text-left space-y-8">
+        <div className="space-y-2 text-left border-b border-stone-200/60 pb-6">
+          <span className="text-xs font-bold text-[#A14E15] uppercase tracking-wider font-mono">Clarifications</span>
+          <h3 className="text-2xl sm:text-3xl font-extrabold text-[#1F1E1B] tracking-tight">
+            Frequently Asked Questions
+          </h3>
+          <p className="text-xs sm:text-sm text-stone-500 font-medium max-w-lg">
+            Everything you need to know about preparing your birth details and receiving your consultation.
+          </p>
+        </div>
+
+        {/* Accordion items without card wrappers — clean borders on canvas */}
+        <div className="divide-y divide-stone-200/80">
+          {FAQS.map((faq, idx) => {
+            const isOpen = openFaq === idx;
+            return (
+              <div
+                key={idx}
+                onClick={() => setOpenFaq(isOpen ? null : idx)}
+                className="py-5 cursor-pointer text-left group"
+              >
+                <div className="flex justify-between items-center gap-4">
+                  <h4 className="font-bold text-base text-[#1F1E1B] group-hover:text-[#A14E15] transition-colors">
+                    {lang === 'GU' ? faq.qGU : faq.qEN}
+                  </h4>
+                  <ChevronDown className={`w-4 h-4 text-stone-500 shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180 text-[#A14E15]' : ''}`} />
+                </div>
+                {isOpen && (
+                  <p className="text-xs sm:text-sm text-stone-600 mt-3 leading-relaxed font-medium">
+                    {lang === 'GU' ? faq.aGU : faq.aEN}
+                  </p>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* 8. FOOTER (Background: ONLY #1D1D1F — MULTI-COLUMN LAYOUT) */}
+      <footer className="bg-[#1D1D1F] text-stone-300 py-16 px-6 sm:px-12 text-left">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-12 gap-10 pb-12 border-b border-stone-800">
+          
+          {/* Col 1: Brand & Sacred Mission */}
+          <div className="sm:col-span-5 space-y-4">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl bg-amber-900/50 border border-amber-700/60 flex items-center justify-center text-amber-400">
+                <Sparkles className="w-4 h-4" />
+              </div>
+              <span className="text-base font-bold text-white tracking-tight">{t.title}</span>
+            </div>
+            <p className="text-xs text-stone-400 font-medium leading-relaxed max-w-sm">
+              Authentic Vedic astrology consultation & Sri Vidya spiritual guidance based on Brihat Parashara Hora Shastra principles.
             </p>
           </div>
 
-          <div className="space-y-3">
-            {FAQS.map((faq, idx) => {
-              const isOpen = openFaq === idx;
-              return (
-                <Card
-                  key={idx}
-                  onClick={() => setOpenFaq(isOpen ? null : idx)}
-                  className="p-5 bg-white/94 backdrop-blur-md shadow-md border border-stone-200 rounded-2xl cursor-pointer transition-all duration-200 text-left"
-                >
-                  <div className="flex justify-between items-center gap-4">
-                    <h4 className="font-bold text-sm sm:text-base text-stone-900">
-                      {lang === 'GU' ? faq.qGU : faq.qEN}
-                    </h4>
-                    <ChevronDown className={`w-4 h-4 text-stone-500 shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180 text-[#A14E15]' : ''}`} />
-                  </div>
-                  {isOpen && (
-                    <p className="text-xs sm:text-sm text-stone-600 mt-3 pt-3 border-t border-stone-100 leading-relaxed font-medium">
-                      {lang === 'GU' ? faq.aGU : faq.aEN}
-                    </p>
-                  )}
-                </Card>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* SECTION 8: STRUCTURED MULTI-COLUMN FOOTER [max-w-6xl] */}
-        <footer className="w-full bg-stone-950 text-stone-300 py-12 px-6 sm:px-12 border-t border-stone-800 text-left">
-          <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-12 gap-8 pb-10 border-b border-stone-800">
-            
-            {/* Col 1: Brand & Sacred Mission */}
-            <div className="sm:col-span-5 space-y-3">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-amber-900/50 border border-amber-700/60 flex items-center justify-center text-amber-400">
-                  <Sparkles className="w-4 h-4" />
-                </div>
-                <span className="text-base font-bold text-white tracking-tight">{t.title}</span>
-              </div>
-              <p className="text-xs text-stone-400 font-medium leading-relaxed max-w-sm">
-                Authentic Vedic astrology consultation & Sri Vidya spiritual guidance based on Brihat Parashara Hora Shastra principles.
-              </p>
-            </div>
-
-            {/* Col 2: Quick Links */}
-            <div className="sm:col-span-3 space-y-2 text-xs">
-              <h5 className="font-bold text-white uppercase tracking-wider text-[11px]">Consultations</h5>
-              <ul className="space-y-1.5 text-stone-400 font-medium">
-                <li><button onClick={scrollToBooking} className="hover:text-amber-400 transition-colors">3 Questions Consultation</button></li>
-                <li><button onClick={scrollToBooking} className="hover:text-amber-400 transition-colors">5 Questions + Kundli</button></li>
-                <li><button onClick={scrollToBooking} className="hover:text-amber-400 transition-colors">30 Mins Live Phone Call</button></li>
-              </ul>
-            </div>
-
-            {/* Col 3: Contact & Privacy */}
-            <div className="sm:col-span-4 space-y-2 text-xs">
-              <h5 className="font-bold text-white uppercase tracking-wider text-[11px]">Direct Contact & Support</h5>
-              <p className="text-stone-400 font-medium flex items-center gap-1.5">
-                <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
-                <span>WhatsApp Delivery & Verification</span>
-              </p>
-              <p className="text-stone-500 text-[11px] font-mono">
-                Data Security: 30-Day Auto Purge Policy
-              </p>
-            </div>
-
+          {/* Col 2: Quick Links */}
+          <div className="sm:col-span-3 space-y-3 text-xs">
+            <h5 className="font-bold text-white uppercase tracking-wider text-[11px]">Consultations</h5>
+            <ul className="space-y-2 text-stone-400 font-medium">
+              <li><button onClick={scrollToBooking} className="hover:text-amber-400 transition-colors">3 Questions Consultation</button></li>
+              <li><button onClick={scrollToBooking} className="hover:text-amber-400 transition-colors">5 Questions + Kundli</button></li>
+              <li><button onClick={scrollToBooking} className="hover:text-amber-400 transition-colors">30 Mins Live Phone Call</button></li>
+            </ul>
           </div>
 
-          <div className="max-w-6xl mx-auto pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-stone-500 font-medium">
-            <p>© {new Date().getFullYear()} Astro-Seva. All rights reserved.</p>
-            <div className="flex items-center gap-4 text-stone-400">
-              <button onClick={toggleLanguage} className="hover:text-white transition-colors flex items-center gap-1">
-                <Globe className="w-3.5 h-3.5" />
-                <span>{t.language}</span>
-              </button>
-            </div>
+          {/* Col 3: Contact & Privacy */}
+          <div className="sm:col-span-4 space-y-3 text-xs">
+            <h5 className="font-bold text-white uppercase tracking-wider text-[11px]">Direct Contact & Support</h5>
+            <p className="text-stone-400 font-medium flex items-center gap-2">
+              <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
+              <span>WhatsApp Delivery & Verification</span>
+            </p>
+            <p className="text-stone-500 text-[11px] font-mono">
+              Data Security: 30-Day Auto Purge Policy
+            </p>
           </div>
-        </footer>
 
-      </div>
+        </div>
+
+        <div className="max-w-6xl mx-auto pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-stone-500 font-medium">
+          <p>© {new Date().getFullYear()} Astro-Seva. All rights reserved.</p>
+          <div className="flex items-center gap-4 text-stone-400">
+            <button onClick={toggleLanguage} className="hover:text-white transition-colors flex items-center gap-1">
+              <Globe className="w-3.5 h-3.5" />
+              <span>{t.language}</span>
+            </button>
+          </div>
+        </div>
+      </footer>
+
     </div>
   );
 }
