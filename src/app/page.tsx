@@ -581,15 +581,14 @@ export default function Home() {
                 )}
               </div>
 
-              {/* Timezone Offset */}
+              {/* Timezone Offset Selector */}
               <div className="flex flex-col gap-2">
                 <label className="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
                   <ShieldCheck className="w-3.5 h-3.5 text-[#cc6600]" />
-                  <span>{t.tzLabel}</span>
+                  <span>Timezone (Default: IST +5.5 India)</span>
                 </label>
-                <input
-                  type="number"
-                  step="0.5"
+
+                <select
                   value={birthDetails.tzOffset}
                   onChange={(e) =>
                     setBirthDetails((prev) => ({
@@ -597,10 +596,22 @@ export default function Home() {
                       tzOffset: parseFloat(e.target.value),
                     }))
                   }
-                  className="border border-[#e8e2d5] rounded-xl p-3.5 outline-none focus:border-[#cc6600] focus:ring-2 focus:ring-amber-200 text-base w-full transition-all"
-                  required
-                />
+                  className="border border-[#e8e2d5] bg-white rounded-xl p-3.5 text-sm font-bold text-gray-800 outline-none focus:border-[#cc6600] focus:ring-2 focus:ring-amber-200 cursor-pointer w-full transition-all"
+                >
+                  <option value={5.5}>🇮🇳 India Standard Time (IST) — UTC +5:30 (Default)</option>
+                  <option value={-5.0}>🇺🇸 US Eastern (EST/EDT) — UTC -5:00</option>
+                  <option value={-6.0}>🇺🇸 US Central (CST/CDT) — UTC -6:00</option>
+                  <option value={-7.0}>🇺🇸 US Mountain (MST/MDT) — UTC -7:00</option>
+                  <option value={-8.0}>🇺🇸 US Pacific (PST/PDT) — UTC -8:00</option>
+                  <option value={0.0}>🇬🇧 UK / London (GMT/BST) — UTC +0:00</option>
+                  <option value={1.0}>🇪🇺 Central Europe (Paris/Berlin) — UTC +1:00</option>
+                  <option value={4.0}>🇦🇪 UAE / Dubai (GST) — UTC +4:00</option>
+                  <option value={8.0}>🇸🇬 Singapore (SGT) — UTC +8:00</option>
+                  <option value={10.0}>🇦🇺 Australia / Sydney (AEST) — UTC +10:00</option>
+                  <option value={5.75}>🇳🇵 Nepal (NPT) — UTC +5:45</option>
+                </select>
               </div>
+
 
               <button
                 type="submit"
