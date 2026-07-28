@@ -5,7 +5,34 @@ export const dynamic = 'force-dynamic';
 import React, { useState, useEffect, useRef } from 'react';
 import { db } from '../lib/firebase/config';
 import { collection, addDoc } from 'firebase/firestore';
-import { Sparkles, Calendar, Clock, MapPin, Phone, User, CheckCircle2, ArrowRight, ShieldCheck, Globe, CreditCard, PhoneCall, HelpCircle, Check } from 'lucide-react';
+import {
+  Button,
+  Card,
+  Input,
+  Select,
+  Badge,
+  ProgressSteps,
+  ErrorBanner,
+} from '../components/ui/DesignSystem';
+import {
+  Globe,
+  Sparkles,
+  Calendar,
+  Clock,
+  MapPin,
+  Phone,
+  User,
+  CheckCircle2,
+  ArrowRight,
+  ShieldCheck,
+  CreditCard,
+  PhoneCall,
+  Check,
+  Award,
+  BookOpen,
+  Users,
+  MessageCircle,
+} from 'lucide-react';
 
 interface BirthDetails {
   date: string;
@@ -32,9 +59,9 @@ const SERVICES = [
     titleEN: '3 Questions Consultation',
     titleGU: '૩ પ્રશ્નો પરામર્શ (3 Questions)',
     price: 251,
-    descEN: 'Get detailed astrological answers to your 3 specific life questions.',
-    descGU: 'તમારા ૩ ચોક્કસ પ્રશ્નોના વિગતવાર વૈદિક જ્યોતિષીય જવાબો મેળવો.',
-    icon: '🔮',
+    descEN: 'Clear astrological guidance for 3 specific life questions.',
+    descGU: 'તમારા ૩ ચોક્કસ જીવન પ્રશ્નો માટે સ્પષ્ટ જ્યોતિષીય માર્ગદર્શન.',
+    icon: Sparkles,
     popular: false,
   },
   {
@@ -42,9 +69,9 @@ const SERVICES = [
     titleEN: '5 Questions Consultation',
     titleGU: '૫ પ્રશ્નો પરામર્શ (5 Questions)',
     price: 501,
-    descEN: 'Comprehensive analysis for 5 questions + Kundli overview.',
+    descEN: 'Detailed analysis for 5 questions + Kundli overview.',
     descGU: 'તમારા ૫ જીવન પ્રશ્નોનું વિગતવાર વિશ્લેષણ અને કુંડળી વિહંગાવલોકન.',
-    icon: '✨',
+    icon: BookOpen,
     popular: true,
   },
   {
@@ -54,7 +81,7 @@ const SERVICES = [
     price: 999,
     descEN: 'Direct 1-on-1 30-minute phone call consultation with Guruji.',
     descGU: 'ગુરુજી સાથે સીધો ૩૦ મિનિટનો ૧-ઓન-૧ ફોન કૉલ પરામર્શ.',
-    icon: '📞',
+    icon: PhoneCall,
     popular: false,
   },
 ];
@@ -62,51 +89,55 @@ const SERVICES = [
 const TRANSLATIONS = {
   EN: {
     title: 'Astro-Seva',
-    subtitle: 'Get your authentic Vedic Kundli report & guidance from Guruji',
-    step0Title: 'Step 1: Select Your Service',
-    step1Title: 'Step 2: Pay Dakshina',
-    step2Title: 'Step 3: Enter Your Complete Details',
-    step3Title: 'Submission Successful!',
-    selectServiceBtn: 'Select Service & Proceed to Pay',
+    subtitle: 'Vedic Astrology Consultation & Kundli Guidance',
+    heroRole: 'Sri Vidya Sadhak',
+    heroExp: '30+ Years Dedicated Practice',
+    heroTagline: 'Authentic Vedic Astrology & Spiritual Guidance',
+    step0Title: 'Select Your Consultation Service',
+    step1Title: 'Dakshina Offering',
+    step2Title: 'Enter Your Birth Details',
+    step3Title: 'Submission Confirmed',
+    selectServiceBtn: 'Proceed with Selected Service',
     nameLabel: 'Full Name',
     phoneLabel: 'WhatsApp Number',
-    payBtn: 'Open UPI App to Pay',
-    qrDesktopText: 'Or scan this QR code using GPay / PhonePe / Paytm:',
+    payBtn: 'Open UPI App to Offer Dakshina',
+    qrDesktopText: 'Or scan using GPay / PhonePe / Paytm:',
     paidBtn: 'I Have Completed Payment',
     birthDateLabel: 'Date of Birth',
     birthTimeLabel: 'Exact Time of Birth',
     birthPlaceLabel: 'Place of Birth (City / Town)',
-    tzLabel: 'Timezone Offset (Hours)',
-    submitBtn: 'Submit Complete Details to Guruji',
+    tzLabel: 'Timezone (Default: IST +5.5 India)',
+    submitBtn: 'Submit Consultation Details',
     successMsg: 'Hari Om. Your birth details & payment notification have been submitted to Guruji.',
-    successSub: 'Guruji will verify the payment and send your complete Kundli report directly to your WhatsApp.',
+    successSub: 'Guruji will verify the payment and share your complete Kundli report directly to your WhatsApp.',
     searching: 'Searching location...',
-    selectPlace: 'Select Birth Location',
     loading: 'Submitting...',
     language: 'ગુજરાતી',
   },
   GU: {
     title: 'એસ્ટ્રો-સેવા',
-    subtitle: 'ગુરુજી પાસેથી તમારી ઓથેન્ટિક વૈદિક કુંડળી અને માર્ગદર્શન મેળવો',
-    step0Title: 'પગલું ૧: સેવાની પસંદગી કરો',
-    step1Title: 'પગલું ૨: દક્ષિણા ચુકવણી કરો',
-    step2Title: 'પગલું ૩: તમારી સંપૂર્ણ વિગતો દાખલ કરો',
-    step3Title: 'સફળતાપૂર્વક સબમિટ થયેલ!',
+    subtitle: 'વૈદિક જ્યોતિષ પરામર્શ અને કુંડળી માર્ગદર્શન',
+    heroRole: 'શ્રી વિદ્યા સાધક',
+    heroExp: '૩૦+ વર્ષનો સમર્પિત અનુભવ',
+    heroTagline: 'પ્રામાણિક વૈદિક જ્યોતિષ અને આધ્યાત્મિક માર્ગદર્શન',
+    step0Title: 'તમારી સેવા પસંદ કરો',
+    step1Title: 'દક્ષિણા અર્પણ',
+    step2Title: 'તમારી જન્મ વિગતો દાખલ કરો',
+    step3Title: 'સફળતાપૂર્વક સબમિટ થયેલ',
     selectServiceBtn: 'સેવા પસંદ કરો અને આગળ વધો',
     nameLabel: 'આખું નામ',
     phoneLabel: 'વોટ્સએપ નંબર',
     payBtn: 'ચુકવણી કરવા માટે યુપીઆઈ એપ ખોલો',
     qrDesktopText: 'અથવા જીપે/ફોનપે/પેટીએમ વડે આ ક્યુઆર કોડ સ્કેન કરો:',
-    paidBtn: 'મેં ચુકવણી પૂર્ણ કરી દીધી છે',
+    paidBtn: 'મેં દક્ષિણા અર્પણ કરી દીધી છે',
     birthDateLabel: 'જન્મ તારીખ',
     birthTimeLabel: 'ચોક્કસ જન્મ સમય',
     birthPlaceLabel: 'જન્મ સ્થળ (શહેર/ગામ)',
-    tzLabel: 'ટાઇમઝોન તફાવત (કલાકો)',
+    tzLabel: 'ટાઇમઝોન (Default: IST +5.5 India)',
     submitBtn: 'સંપૂર્ણ વિગતો ગુરુજીને સબમિટ કરો',
     successMsg: 'હરિ ઓમ. તમારી જન્મ વિગતો અને ચુકવણી નોટિફિકેશન ગુરુજીને મોકલી દેવાયા છે.',
     successSub: 'ગુરુજી ચુકવણીની ખાતરી કરીને ટૂંક સમયમાં તમારા વોટ્સએપ પર કુંડળી મોકલશે.',
     searching: 'સ્થળ શોધી રહ્યા છીએ...',
-    selectPlace: 'જન્મ સ્થળ પસંદ કરો',
     loading: 'મોકલી રહ્યા છીએ...',
     language: 'English',
   }
@@ -152,7 +183,7 @@ export default function Home() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Geocoding Search using OpenStreetMap Nominatim with English locale constraint
+  // Geocoding Search using OpenStreetMap Nominatim with English locale
   useEffect(() => {
     if (placeSearch.length < 3) {
       setPlaceSuggestions([]);
@@ -220,7 +251,7 @@ export default function Home() {
       return;
     }
     if (!birthDetails.place || birthDetails.lat === 0) {
-      setFormError('Please select a valid birth place location from the dropdown suggestions.');
+      setFormError('Please select a valid birth place location from the suggestions dropdown.');
       return;
     }
 
@@ -274,111 +305,131 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col flex-1 items-center min-h-screen bg-[#fdfbf7] text-gray-900 font-sans">
+    <div className="flex flex-col flex-1 min-h-screen bg-[#FAF9F5] text-stone-900 font-sans selection:bg-amber-100">
       
-      {/* Saffron Top Bar with Language Toggle */}
-      <header className="w-full bg-[#cc6600] text-white py-4 px-6 md:px-10 flex justify-between items-center shadow-md sticky top-0 z-30">
+      {/* Calm Elegant Header */}
+      <header className="w-full bg-white/80 backdrop-blur-md border-b border-stone-200/60 sticky top-0 z-30 px-6 sm:px-10 py-4 flex justify-between items-center">
         <div className="flex items-center gap-3">
-          <span className="text-2xl">🪐</span>
+          <div className="w-9 h-9 rounded-2xl bg-amber-100/60 border border-amber-200 flex items-center justify-center text-[#B45309]">
+            <Sparkles className="w-4 h-4" />
+          </div>
           <div>
-            <h1 className="text-xl font-bold tracking-wide">{t.title}</h1>
-            <p className="text-xs text-amber-100 font-medium">{t.subtitle}</p>
+            <h1 className="text-base font-bold tracking-tight text-stone-900">{t.title}</h1>
+            <p className="text-xs text-stone-500 font-medium">{t.subtitle}</p>
           </div>
         </div>
         <button
           onClick={toggleLanguage}
-          className="border border-white/40 bg-white/10 hover:bg-white hover:text-[#cc6600] transition-all py-1.5 px-4 rounded-full text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-sm"
+          className="border border-stone-300 bg-white hover:bg-stone-50 active:bg-stone-100 transition-all py-2 px-4 rounded-full text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
         >
-          <Globe className="w-3.5 h-3.5" />
+          <Globe className="w-3.5 h-3.5 text-stone-600" />
           <span>{t.language}</span>
         </button>
       </header>
 
-      <main className="w-full max-w-xl flex flex-col flex-1 py-8 px-4 sm:px-6">
-        
-        {/* Progress Step Bar */}
-        <div className="flex justify-center items-center gap-3 mb-8">
-          {[0, 1, 2].map((i) => (
-            <div key={i} className="flex items-center gap-2">
-              <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-all duration-300 ${
-                  step === i
-                    ? 'bg-[#cc6600] text-white ring-4 ring-amber-200 shadow-md scale-110'
-                    : step > i
-                    ? 'bg-amber-600 text-white'
-                    : 'bg-gray-200 text-gray-500'
-                }`}
-              >
-                {step > i ? '✓' : i + 1}
-              </div>
-              {i < 2 && (
-                <div
-                  className={`w-10 sm:w-16 h-1 rounded-full transition-all duration-300 ${
-                    step > i ? 'bg-[#cc6600]' : 'bg-gray-200'
-                  }`}
-                />
-              )}
+      {/* Hero & Credibility Section */}
+      <section className="w-full max-w-2xl mx-auto pt-10 px-6 text-center space-y-6">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100/60 border border-amber-200/80 text-[#B45309] text-xs font-bold">
+          <Award className="w-3.5 h-3.5" />
+          <span>{t.heroRole} • {t.heroExp}</span>
+        </div>
+
+        {/* Guruji Photo Placeholder Container (ready for Guruji's photo) */}
+        <div className="relative mx-auto w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-b from-amber-50 to-stone-100 border-2 border-amber-200/80 shadow-[0_8px_25px_rgba(0,0,0,0.04)] flex items-center justify-center overflow-hidden">
+          <div className="flex flex-col items-center justify-center text-amber-800/80 gap-1">
+            <User className="w-10 h-10 stroke-[1.5]" />
+          </div>
+        </div>
+
+        <div className="space-y-2 max-w-lg mx-auto">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight leading-snug">
+            {t.heroTagline}
+          </h2>
+          <p className="text-sm text-stone-600 leading-relaxed font-medium">
+            Receive personalized, authentic astrological consultations based on traditional Brihat Parashara Hora Shastra principles.
+          </p>
+        </div>
+
+        {/* 4 Trust Pillars Architecture Cards */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+          {[
+            { icon: Award, title: 'Sri Vidya', sub: 'Traditional Sadhana' },
+            { icon: BookOpen, title: 'BPHS Logic', sub: 'Authentic Calculations' },
+            { icon: Users, title: '30+ Years', sub: 'Vedic Experience' },
+            { icon: MessageCircle, title: 'Direct', sub: 'Personal Guidance' },
+          ].map((pillar, i) => (
+            <div key={i} className="bg-white border border-stone-200/60 rounded-2xl p-3.5 text-center shadow-[0_2px_10px_rgba(0,0,0,0.02)] space-y-1">
+              <pillar.icon className="w-4 h-4 text-[#B45309] mx-auto" />
+              <div className="text-xs font-bold text-stone-900">{pillar.title}</div>
+              <div className="text-[10px] text-stone-500 font-medium">{pillar.sub}</div>
             </div>
           ))}
         </div>
+      </section>
 
-        {/* Step Card */}
-        <div className="bg-white border border-[#e8e2d5] rounded-3xl p-6 sm:p-8 shadow-md w-full relative overflow-hidden">
+      {/* Interactive Booking Container */}
+      <main className="w-full max-w-xl mx-auto py-10 px-4 sm:px-6">
+        
+        {/* Progress Step Bar */}
+        <ProgressSteps currentStep={step} totalSteps={3} />
+
+        {/* Step Container Card */}
+        <Card className="w-full relative">
           
-          {formError && (
-            <div className="mb-6 bg-red-50 border border-red-200 text-red-700 rounded-2xl p-4 text-xs font-semibold flex items-center gap-2">
-              <span className="text-base">⚠️</span>
-              <span>{formError}</span>
-            </div>
-          )}
+          {formError && <div className="mb-6"><ErrorBanner message={formError} /></div>}
 
           {/* STEP 0: SELECT SERVICE */}
           {step === 0 && (
-            <div className="flex flex-col gap-6">
-              <div className="text-center">
-                <span className="p-3 bg-amber-50 text-[#cc6600] rounded-2xl inline-block text-2xl mb-2">🔮</span>
-                <h2 className="text-xl font-bold text-gray-900">{t.step0Title}</h2>
-                <p className="text-gray-500 text-xs mt-1">{t.subtitle}</p>
+            <div className="space-y-6">
+              <div className="text-center space-y-1.5">
+                <span className="inline-block p-3 rounded-2xl bg-amber-50 text-[#B45309] mb-1">
+                  <Sparkles className="w-5 h-5" />
+                </span>
+                <h3 className="text-xl font-bold text-stone-900">{t.step0Title}</h3>
+                <p className="text-xs text-stone-500 font-medium">Select the consultation service that fits your requirements</p>
               </div>
 
-              {/* 3 Service Options Cards */}
-              <div className="space-y-4">
+              {/* Service Cards */}
+              <div className="space-y-3.5">
                 {SERVICES.map((s) => {
                   const isSelected = selectedService.id === s.id;
+                  const IconComponent = s.icon;
                   return (
                     <div
                       key={s.id}
                       onClick={() => setSelectedService(s)}
-                      className={`p-5 rounded-2xl border-2 transition-all cursor-pointer relative flex items-start gap-4 ${
+                      className={`p-5 rounded-2xl border transition-all duration-200 cursor-pointer relative flex items-start gap-4 ${
                         isSelected
-                          ? 'border-[#cc6600] bg-amber-50/60 shadow-md'
-                          : 'border-[#e8e2d5] bg-white hover:border-amber-300'
+                          ? 'border-[#B45309] bg-amber-50/40 ring-1 ring-[#B45309]/30 shadow-sm'
+                          : 'border-stone-200 bg-white hover:border-stone-300'
                       }`}
                     >
                       {s.popular && (
-                        <span className="absolute -top-3 right-4 bg-[#cc6600] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-0.5 rounded-full shadow-sm">
+                        <span className="absolute -top-3 right-4 bg-[#B45309] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-0.5 rounded-full shadow-xs">
                           Most Popular
                         </span>
                       )}
                       
-                      <span className="text-3xl p-2 bg-white rounded-xl shadow-xs border border-amber-100">{s.icon}</span>
+                      <div className="p-2.5 bg-white rounded-xl border border-stone-200 text-[#B45309] shrink-0">
+                        <IconComponent className="w-5 h-5" />
+                      </div>
 
                       <div className="flex-1 min-w-0">
                         <div className="flex justify-between items-center gap-2">
-                          <h3 className="font-bold text-base text-gray-900 truncate">
+                          <h4 className="font-bold text-base text-stone-900 truncate">
                             {lang === 'GU' ? s.titleGU : s.titleEN}
-                          </h3>
-                          <span className="text-lg font-extrabold text-[#cc6600] shrink-0">
+                          </h4>
+                          <span className="text-base font-extrabold text-[#B45309] shrink-0">
                             ₹{s.price}
                           </span>
                         </div>
-                        <p className="text-xs text-gray-600 mt-1 leading-relaxed">
+                        <p className="text-xs text-stone-600 mt-1 leading-relaxed font-medium">
                           {lang === 'GU' ? s.descGU : s.descEN}
                         </p>
                       </div>
 
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-1 ${
-                        isSelected ? 'border-[#cc6600] bg-[#cc6600] text-white' : 'border-gray-300'
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-1 transition-all ${
+                        isSelected ? 'border-[#B45309] bg-[#B45309] text-white' : 'border-stone-300'
                       }`}>
                         {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
                       </div>
@@ -387,47 +438,51 @@ export default function Home() {
                 })}
               </div>
 
-              <button
+              <Button
                 onClick={() => setStep(1)}
-                className="bg-[#cc6600] text-white font-bold py-4 px-6 rounded-xl hover:bg-[#a65300] transition-all w-full mt-2 cursor-pointer shadow-md flex items-center justify-center gap-2 text-base"
+                fullWidth
+                size="lg"
+                className="mt-2"
               >
                 <span>Proceed to Pay ₹{selectedService.price}</span>
                 <ArrowRight className="w-4 h-4" />
-              </button>
+              </Button>
             </div>
           )}
 
-          {/* STEP 1: DAKSHINA PAYMENT (DYNAMIC FOR SELECTED SERVICE) */}
+          {/* STEP 1: DAKSHINA PAYMENT */}
           {step === 1 && (
-            <div className="flex flex-col gap-6 text-center">
-              <div>
-                <span className="p-3 bg-amber-50 text-[#cc6600] rounded-2xl inline-block text-2xl mb-2">🙏</span>
-                <h2 className="text-xl font-bold text-gray-900">{t.step1Title}</h2>
-                <div className="mt-2 bg-amber-50 border border-amber-200 rounded-xl p-3 inline-block">
-                  <span className="text-xs text-gray-600 block">Selected Service:</span>
-                  <span className="text-base font-bold text-[#cc6600]">
+            <div className="space-y-6 text-center">
+              <div className="space-y-2">
+                <span className="inline-block p-3 rounded-2xl bg-amber-50 text-[#B45309] mb-1">
+                  <CreditCard className="w-5 h-5" />
+                </span>
+                <h3 className="text-xl font-bold text-stone-900">{t.step1Title}</h3>
+                <div className="mt-2 bg-amber-50/70 border border-amber-200/80 rounded-2xl p-3.5 inline-block">
+                  <span className="text-xs text-stone-600 block font-medium">Selected Service:</span>
+                  <span className="text-base font-bold text-[#B45309]">
                     {lang === 'GU' ? selectedService.titleGU : selectedService.titleEN} — ₹{selectedService.price}
                   </span>
                 </div>
               </div>
 
               {/* UPI Intent Button for Mobile */}
-              <div className="block md:hidden">
+              <div className="block sm:hidden">
                 <a
                   href={upiLink}
-                  className="inline-flex items-center justify-center gap-2 bg-[#cc6600] text-white text-base font-bold py-4 px-6 rounded-xl hover:bg-[#a65300] transition-all w-full shadow-md"
+                  className="w-full inline-flex items-center justify-center gap-2 bg-[#B45309] text-white font-bold py-4 px-6 rounded-2xl text-base shadow-md"
                 >
                   <CreditCard className="w-5 h-5" />
                   <span>Pay ₹{selectedService.price} via UPI App</span>
                 </a>
               </div>
 
-              {/* UPI QR Code for Desktop (Dynamically generated with exact price) */}
+              {/* UPI QR Code for Desktop */}
               <div className="flex flex-col items-center gap-3">
-                <p className="text-xs text-gray-500 font-semibold md:block hidden">
+                <p className="text-xs text-stone-500 font-semibold sm:block hidden">
                   {t.qrDesktopText}
                 </p>
-                <div className="border-4 border-[#cc6600] rounded-2xl p-2 bg-white shadow-md">
+                <div className="border-4 border-amber-200 rounded-3xl p-2.5 bg-white shadow-sm">
                   <img
                     src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(
                       upiLink
@@ -436,57 +491,55 @@ export default function Home() {
                     className="w-44 h-44"
                   />
                 </div>
-                <span className="text-xs text-gray-400 font-mono font-bold bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
+                <Badge variant="stone" className="font-mono text-xs">
                   UPI ID: {GURU_UPI_ID} (Amount: ₹{selectedService.price})
-                </span>
+                </Badge>
               </div>
 
-              <button
+              <Button
                 onClick={() => setStep(2)}
-                className="bg-[#cc6600] text-white font-bold py-4 px-6 rounded-xl hover:bg-[#a65300] transition-all w-full mt-2 cursor-pointer shadow-md text-base"
+                fullWidth
+                size="lg"
+                className="mt-2"
               >
                 {t.paidBtn}
-              </button>
+              </Button>
             </div>
           )}
 
-          {/* STEP 2: COMPLETE DETAILS ENTRY (NAME + PHONE + DOB + TOB + POB ALL TOGETHER) */}
+          {/* STEP 2: COMPLETE DETAILS ENTRY */}
           {step === 2 && (
-            <form onSubmit={handleSubmitDetails} className="flex flex-col gap-5">
-              <div className="text-center">
-                <span className="p-3 bg-amber-50 text-[#cc6600] rounded-2xl inline-block text-2xl mb-2">📋</span>
-                <h2 className="text-xl font-bold text-gray-900">{t.step2Title}</h2>
-                <p className="text-xs text-gray-500 mt-1">Please fill your details below so Guruji can prepare your Kundli</p>
+            <form onSubmit={handleSubmitDetails} className="space-y-5">
+              <div className="text-center space-y-1">
+                <span className="inline-block p-3 rounded-2xl bg-amber-50 text-[#B45309] mb-1">
+                  <Calendar className="w-5 h-5" />
+                </span>
+                <h3 className="text-xl font-bold text-stone-900">{t.step2Title}</h3>
+                <p className="text-xs text-stone-500 font-medium">Please enter complete birth details for accurate calculations</p>
               </div>
 
               {/* Full Name */}
-              <div className="flex flex-col gap-2">
-                <label className="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
-                  <User className="w-3.5 h-3.5 text-[#cc6600]" />
-                  <span>{t.nameLabel}</span>
-                </label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. Vijaysinh Varachhiya"
-                  className="border border-[#e8e2d5] rounded-xl p-3.5 outline-none focus:border-[#cc6600] focus:ring-2 focus:ring-amber-200 text-base w-full transition-all"
-                  required
-                />
-              </div>
+              <Input
+                label={t.nameLabel}
+                icon={<User className="w-3.5 h-3.5 text-[#B45309]" />}
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="e.g. Vijaysinh Varachhiya"
+                required
+              />
 
-              {/* WhatsApp Number with Country Code Dropdown */}
-              <div className="flex flex-col gap-2">
-                <label className="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
-                  <Phone className="w-3.5 h-3.5 text-[#cc6600]" />
+              {/* Phone with Country Code Selector */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
+                  <Phone className="w-3.5 h-3.5 text-[#B45309]" />
                   <span>{t.phoneLabel}</span>
                 </label>
-
-                <div className="flex gap-2">
+                <div className="flex gap-2.5">
                   <select
                     value={countryCode}
                     onChange={(e) => setCountryCode(e.target.value)}
-                    className="border border-[#e8e2d5] bg-gray-50 rounded-xl px-3 py-3.5 text-sm font-bold text-gray-800 outline-none focus:border-[#cc6600] cursor-pointer"
+                    className="border border-stone-200 bg-stone-50 rounded-2xl px-3.5 py-4 text-sm font-bold text-stone-800 outline-none focus:border-[#B45309] cursor-pointer"
                   >
                     {COUNTRY_CODES.map((c) => (
                       <option key={c.code} value={c.code}>
@@ -500,51 +553,37 @@ export default function Home() {
                     value={phoneRaw}
                     onChange={(e) => setPhoneRaw(e.target.value.replace(/[^\d\s-]/g, ''))}
                     placeholder="98765 43210"
-                    className="border border-[#e8e2d5] rounded-xl p-3.5 outline-none focus:border-[#cc6600] focus:ring-2 focus:ring-amber-200 text-base flex-1 transition-all font-mono"
+                    className="flex-1 bg-white border border-stone-200 rounded-2xl p-4 text-base font-mono text-stone-900 outline-none focus:border-[#B45309] focus:ring-4 focus:ring-amber-500/10 transition-all"
                     required
                   />
                 </div>
               </div>
 
               {/* Date of Birth */}
-              <div className="flex flex-col gap-2">
-                <label className="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-[#cc6600]" />
-                  <span>{t.birthDateLabel}</span>
-                </label>
-                <input
-                  type="date"
-                  value={birthDetails.date}
-                  onChange={(e) =>
-                    setBirthDetails((prev) => ({ ...prev, date: e.target.value }))
-                  }
-                  className="border border-[#e8e2d5] rounded-xl p-3.5 outline-none focus:border-[#cc6600] focus:ring-2 focus:ring-amber-200 text-base w-full transition-all"
-                  required
-                />
-              </div>
+              <Input
+                label={t.birthDateLabel}
+                icon={<Calendar className="w-3.5 h-3.5 text-[#B45309]" />}
+                type="date"
+                value={birthDetails.date}
+                onChange={(e) => setBirthDetails((prev) => ({ ...prev, date: e.target.value }))}
+                required
+              />
 
               {/* Time of Birth */}
-              <div className="flex flex-col gap-2">
-                <label className="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-[#cc6600]" />
-                  <span>{t.birthTimeLabel}</span>
-                </label>
-                <input
-                  type="time"
-                  step="1"
-                  value={birthDetails.time}
-                  onChange={(e) =>
-                    setBirthDetails((prev) => ({ ...prev, time: e.target.value }))
-                  }
-                  className="border border-[#e8e2d5] rounded-xl p-3.5 outline-none focus:border-[#cc6600] focus:ring-2 focus:ring-amber-200 text-base w-full transition-all"
-                  required
-                />
-              </div>
+              <Input
+                label={t.birthTimeLabel}
+                icon={<Clock className="w-3.5 h-3.5 text-[#B45309]" />}
+                type="time"
+                step="1"
+                value={birthDetails.time}
+                onChange={(e) => setBirthDetails((prev) => ({ ...prev, time: e.target.value }))}
+                required
+              />
 
-              {/* Birth Place Autocomplete Search with English Locale */}
-              <div className="flex flex-col gap-2 relative" ref={searchContainerRef}>
-                <label className="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-[#cc6600]" />
+              {/* Birth Place Search with English Locale */}
+              <div className="flex flex-col gap-1.5 relative" ref={searchContainerRef}>
+                <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-[#B45309]" />
                   <span>{t.birthPlaceLabel}</span>
                 </label>
                 <input
@@ -555,25 +594,25 @@ export default function Home() {
                     setBirthDetails((prev) => ({ ...prev, place: '', lat: 0, lng: 0 }));
                   }}
                   placeholder="e.g. Surat, Gujarat, India"
-                  className="border border-[#e8e2d5] rounded-xl p-3.5 outline-none focus:border-[#cc6600] focus:ring-2 focus:ring-amber-200 text-base w-full transition-all"
+                  className="w-full bg-white border border-stone-200 rounded-2xl p-4 text-base text-stone-900 outline-none focus:border-[#B45309] focus:ring-4 focus:ring-amber-500/10 transition-all"
                   required
                 />
                 
                 {isSearching && (
-                  <span className="absolute right-3.5 top-10 text-xs text-[#cc6600] font-semibold animate-pulse">
+                  <span className="absolute right-4 top-11 text-xs text-[#B45309] font-semibold animate-pulse">
                     {t.searching}
                   </span>
                 )}
 
                 {placeSuggestions.length > 0 && (
-                  <ul className="absolute z-30 top-[74px] left-0 w-full bg-white border border-[#e8e2d5] rounded-2xl shadow-xl max-h-56 overflow-y-auto divide-y divide-gray-100">
+                  <ul className="absolute z-30 top-[82px] left-0 w-full bg-white border border-stone-200 rounded-2xl shadow-xl max-h-56 overflow-y-auto divide-y divide-stone-100">
                     {placeSuggestions.map((item, idx) => (
                       <li
                         key={idx}
                         onClick={() => handleSelectPlace(item)}
-                        className="p-3.5 hover:bg-amber-50 cursor-pointer text-xs font-medium text-gray-800 transition-colors flex items-center gap-2"
+                        className="p-4 hover:bg-amber-50/50 cursor-pointer text-xs font-medium text-stone-800 transition-colors flex items-center gap-2.5"
                       >
-                        <MapPin className="w-4 h-4 text-[#cc6600] shrink-0" />
+                        <MapPin className="w-4 h-4 text-[#B45309] shrink-0" />
                         <span className="truncate">{item.display_name}</span>
                       </li>
                     ))}
@@ -581,68 +620,58 @@ export default function Home() {
                 )}
               </div>
 
-              {/* Timezone Offset Selector */}
-              <div className="flex flex-col gap-2">
-                <label className="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
-                  <ShieldCheck className="w-3.5 h-3.5 text-[#cc6600]" />
-                  <span>Timezone (Default: IST +5.5 India)</span>
-                </label>
-
-                <select
-                  value={birthDetails.tzOffset}
-                  onChange={(e) =>
-                    setBirthDetails((prev) => ({
-                      ...prev,
-                      tzOffset: parseFloat(e.target.value),
-                    }))
-                  }
-                  className="border border-[#e8e2d5] bg-white rounded-xl p-3.5 text-sm font-bold text-gray-800 outline-none focus:border-[#cc6600] focus:ring-2 focus:ring-amber-200 cursor-pointer w-full transition-all"
-                >
-                  <option value={5.5}>🇮🇳 India Standard Time (IST) — UTC +5:30 (Default)</option>
-                  <option value={-5.0}>🇺🇸 US Eastern (EST/EDT) — UTC -5:00</option>
-                  <option value={-6.0}>🇺🇸 US Central (CST/CDT) — UTC -6:00</option>
-                  <option value={-7.0}>🇺🇸 US Mountain (MST/MDT) — UTC -7:00</option>
-                  <option value={-8.0}>🇺🇸 US Pacific (PST/PDT) — UTC -8:00</option>
-                  <option value={0.0}>🇬🇧 UK / London (GMT/BST) — UTC +0:00</option>
-                  <option value={1.0}>🇪🇺 Central Europe (Paris/Berlin) — UTC +1:00</option>
-                  <option value={4.0}>🇦🇪 UAE / Dubai (GST) — UTC +4:00</option>
-                  <option value={8.0}>🇸🇬 Singapore (SGT) — UTC +8:00</option>
-                  <option value={10.0}>🇦🇺 Australia / Sydney (AEST) — UTC +10:00</option>
-                  <option value={5.75}>🇳🇵 Nepal (NPT) — UTC +5:45</option>
-                </select>
-              </div>
-
-
-              <button
-                type="submit"
-                disabled={isSubmitting || !birthDetails.place}
-                className="bg-[#cc6600] text-white font-bold py-4 px-6 rounded-xl hover:bg-[#a65300] transition-all w-full mt-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md text-base"
+              {/* Timezone Selector */}
+              <Select
+                label={t.tzLabel}
+                icon={<ShieldCheck className="w-3.5 h-3.5 text-[#B45309]" />}
+                value={birthDetails.tzOffset}
+                onChange={(e) => setBirthDetails((prev) => ({ ...prev, tzOffset: parseFloat(e.target.value) }))}
               >
-                {isSubmitting ? t.loading : t.submitBtn}
-              </button>
+                <option value={5.5}>🇮🇳 India Standard Time (IST) — UTC +5:30 (Default)</option>
+                <option value={-5.0}>🇺🇸 US Eastern (EST/EDT) — UTC -5:00</option>
+                <option value={-6.0}>🇺🇸 US Central (CST/CDT) — UTC -6:00</option>
+                <option value={-7.0}>🇺🇸 US Mountain (MST/MDT) — UTC -7:00</option>
+                <option value={-8.0}>🇺🇸 US Pacific (PST/PDT) — UTC -8:00</option>
+                <option value={0.0}>🇬🇧 UK / London (GMT/BST) — UTC +0:00</option>
+                <option value={1.0}>🇪🇺 Central Europe (Paris/Berlin) — UTC +1:00</option>
+                <option value={4.0}>🇦🇪 UAE / Dubai (GST) — UTC +4:00</option>
+                <option value={8.0}>🇸🇬 Singapore (SGT) — UTC +8:00</option>
+                <option value={10.0}>🇦🇺 Australia / Sydney (AEST) — UTC +10:00</option>
+                <option value={5.75}>🇳🇵 Nepal (NPT) — UTC +5:45</option>
+              </Select>
+
+              <Button
+                type="submit"
+                isLoading={isSubmitting}
+                disabled={!birthDetails.place}
+                fullWidth
+                size="lg"
+                className="mt-3"
+              >
+                {t.submitBtn}
+              </Button>
             </form>
           )}
 
           {/* STEP 3: SUCCESS CONFIRMATION */}
           {step === 3 && (
-            <div className="flex flex-col gap-6 text-center py-6">
-              <div className="flex justify-center">
-                <CheckCircle2 className="w-16 h-16 text-[#cc6600] animate-bounce" />
+            <div className="space-y-6 text-center py-6">
+              <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center mx-auto shadow-xs">
+                <CheckCircle2 className="w-10 h-10 stroke-[2]" />
               </div>
-              <div className="space-y-3">
-                <h2 className="text-2xl font-bold text-[#cc6600]">{t.step3Title}</h2>
-                <p className="text-gray-800 text-base font-semibold leading-relaxed">
+              <div className="space-y-2">
+                <h3 className="text-2xl font-bold text-stone-900">{t.step3Title}</h3>
+                <p className="text-stone-800 text-base font-semibold leading-relaxed max-w-md mx-auto">
                   {t.successMsg}
                 </p>
-                <p className="text-gray-500 text-xs leading-relaxed">
+                <p className="text-stone-500 text-xs leading-relaxed max-w-sm mx-auto font-medium">
                   {t.successSub}
                 </p>
               </div>
             </div>
           )}
 
-
-        </div>
+        </Card>
       </main>
     </div>
   );

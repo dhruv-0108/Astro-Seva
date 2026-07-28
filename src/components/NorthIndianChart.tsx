@@ -89,8 +89,8 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
               textAnchor="middle"
               dominantBaseline="central"
               fontSize={fontSize}
-              fontWeight="bold"
-              fill={p.isRetro ? '#b91c1c' : '#7c2d12'}
+              fontWeight="700"
+              fill={p.isRetro ? '#B91C1C' : '#1C1917'}
             >
               {p.name}{p.isRetro ? '(R)' : ''}
             </text>
@@ -101,29 +101,24 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
   };
 
   return (
-    <div className={`flex flex-col items-center bg-white border border-[#e8e2d5] rounded-2xl p-5 shadow-md w-full max-w-[540px] ${className}`}>
+    <div className={`flex flex-col items-center bg-white border border-stone-200/60 rounded-3xl p-6 sm:p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] w-full max-w-[540px] ${className}`}>
       {/* Title */}
-      <h3 className="text-base font-bold text-[#cc6600] mb-3 tracking-wide text-center">
+      <h3 className="text-base font-bold text-stone-900 mb-5 tracking-wide text-center uppercase tracking-wider text-xs">
         {title}
       </h3>
 
-      {/* Large SVG Chart */}
+      {/* SVG Chart */}
       <div className="w-full aspect-square relative">
         <svg viewBox="0 0 360 360" className="w-full h-full select-none">
           {/* Background fill */}
-          <rect x="0" y="0" width="360" height="360" fill="#fffdfa" stroke="#d97706" strokeWidth="2.5" rx="8" />
+          <rect x="0" y="0" width="360" height="360" fill="#FAF9F5" stroke="#B45309" strokeWidth="2" rx="12" />
 
           {/* Main Diagonals */}
-          <line x1="0" y1="0" x2="360" y2="360" stroke="#d97706" strokeWidth="1.5" opacity="0.85" />
-          <line x1="0" y1="360" x2="360" y2="0" stroke="#d97706" strokeWidth="1.5" opacity="0.85" />
+          <line x1="0" y1="0" x2="360" y2="360" stroke="#B45309" strokeWidth="1.25" opacity="0.75" />
+          <line x1="0" y1="360" x2="360" y2="0" stroke="#B45309" strokeWidth="1.25" opacity="0.75" />
 
           {/* Inner Diamond */}
-          <polygon points="180,0 0,180 180,360 360,180" fill="none" stroke="#d97706" strokeWidth="1.5" opacity="0.85" />
-
-          {/* Watermark Om Symbol */}
-          <text x="180" y="185" textAnchor="middle" dominantBaseline="middle" fill="#f59e0b" opacity="0.06" fontSize="72" fontWeight="bold">
-            🕉️
-          </text>
+          <polygon points="180,0 0,180 180,360 360,180" fill="none" stroke="#B45309" strokeWidth="1.25" opacity="0.75" />
 
           {/* Render 12 House Sign Badges and Planets */}
           {([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] as const).map((h) => {
@@ -134,7 +129,7 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
             return (
               <g key={h}>
                 {/* House Sign Number Badge */}
-                <circle cx={cfg.sx} cy={cfg.sy} r="9" fill="#fff0e0" stroke="#f97316" strokeWidth="0.75" />
+                <circle cx={cfg.sx} cy={cfg.sy} r="9" fill="#FFFBEB" stroke="#B45309" strokeWidth="0.75" />
                 <text
                   x={cfg.sx}
                   y={cfg.sy}
@@ -142,12 +137,12 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
                   dominantBaseline="central"
                   fontSize="10"
                   fontWeight="bold"
-                  fill="#c2410c"
+                  fill="#B45309"
                 >
                   {signNum}
                 </text>
 
-                {/* Planets (Single vertical column, zero line crossing) */}
+                {/* Planets */}
                 {renderHousePlanets(h, planets)}
               </g>
             );
