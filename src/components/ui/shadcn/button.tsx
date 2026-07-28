@@ -3,26 +3,24 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../../lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center rounded-2xl text-sm font-bold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-600/20 disabled:pointer-events-none disabled:opacity-50 cursor-pointer select-none active:scale-[0.98]',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-2xl text-base font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/20 disabled:pointer-events-none disabled:opacity-50 cursor-pointer',
   {
     variants: {
       variant: {
         default:
-          'bg-[#A14E15] text-white hover:bg-[#853E0F] shadow-[0_4px_16px_rgba(161,78,21,0.22)]',
+          'bg-[#A14E15] text-white hover:bg-[#883E0F] shadow-md hover:-translate-y-0.5 active:translate-y-0',
         secondary:
-          'bg-stone-100 text-stone-900 hover:bg-stone-200 border border-stone-200/60',
+          'bg-white border border-stone-300 text-[#1F1E1B] hover:bg-stone-50 shadow-xs hover:-translate-y-0.5 active:translate-y-0',
         outline:
-          'border border-stone-300 bg-white text-stone-800 hover:bg-stone-50 shadow-xs',
-        ghost:
-          'bg-transparent text-stone-600 hover:bg-stone-100/80 hover:text-stone-900',
-        amberLight:
-          'bg-amber-50 text-[#A14E15] hover:bg-amber-100/80 border border-amber-200/80',
+          'bg-white border border-stone-300 text-[#1F1E1B] hover:bg-stone-50 shadow-xs hover:-translate-y-0.5 active:translate-y-0',
+        ghost: 'bg-transparent text-[#1F1E1B] hover:underline shadow-none',
+        link: 'text-[#A14E15] underline-offset-4 hover:underline',
       },
       size: {
-        default: 'h-12 px-5 py-3 gap-2',
-        sm: 'h-9 rounded-xl px-3.5 text-xs gap-1.5',
-        lg: 'h-14 rounded-2xl px-6 py-4 text-base gap-2.5',
-        icon: 'h-10 w-10 p-0',
+        default: 'h-[56px] px-6 py-4 text-base',
+        sm: 'h-10 px-4 text-sm rounded-xl',
+        lg: 'h-[56px] px-8 text-base rounded-2xl',
+        icon: 'h-[56px] w-[56px]',
       },
     },
     defaultVariants: {
@@ -34,9 +32,7 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
-}
+    VariantProps<typeof buttonVariants> {}
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, ...props }, ref) => {
