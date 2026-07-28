@@ -333,23 +333,30 @@ export default function Home() {
           <h3 className="text-[28px] sm:text-[36px] font-bold text-[#1F1E1B] tracking-tight">{t.howTitle}</h3>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-left">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-7 gap-y-8 text-left items-start">
           {[
             { num: '01', title: t.howStep1, desc: t.howStep1Desc, icon: Sparkles },
             { num: '02', title: t.howStep2, desc: t.howStep2Desc, icon: CreditCard },
             { num: '03', title: t.howStep3, desc: t.howStep3Desc, icon: User },
             { num: '04', title: t.howStep4, desc: t.howStep4Desc, icon: Compass },
           ].map((item, idx) => (
-            <div key={idx} className="space-y-3 relative">
-              <div className="flex justify-between items-center">
-                <span className="text-[12px] font-bold text-[#A14E15] font-mono bg-amber-100/80 border border-amber-200 px-3 py-1 rounded-xl">
-                  {item.num}
-                </span>
-                <item.icon className="w-5 h-5 stroke-[1.75] text-stone-400" />
+            <React.Fragment key={idx}>
+              <div className={`space-y-3 relative ${idx < 3 ? 'md:col-span-1' : 'md:col-span-1'}`}>
+                <div className="flex justify-between items-center">
+                  <span className="text-[12px] font-bold text-[#A14E15] font-mono bg-amber-100/80 border border-amber-200 px-3 py-1 rounded-xl">
+                    {item.num}
+                  </span>
+                  <item.icon className="w-5 h-5 stroke-[1.75] text-stone-400" />
+                </div>
+                <h4 className="text-[16px] font-semibold text-[#1F1E1B] pt-1">{item.title}</h4>
+                <p className="text-[14px] font-normal text-stone-500 leading-relaxed">{item.desc}</p>
               </div>
-              <h4 className="text-[16px] font-semibold text-[#1F1E1B] pt-1">{item.title}</h4>
-              <p className="text-[14px] font-normal text-stone-500 leading-relaxed">{item.desc}</p>
-            </div>
+              {idx < 3 && (
+                <div className="hidden md:flex items-center justify-center pt-4">
+                  <ArrowRight className="w-5 h-5 text-[#A14E15] stroke-[2]" />
+                </div>
+              )}
+            </React.Fragment>
           ))}
         </div>
       </section>
