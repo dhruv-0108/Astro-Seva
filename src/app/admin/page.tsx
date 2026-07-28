@@ -20,6 +20,8 @@ import {
   deleteDoc,
 } from 'firebase/firestore';
 
+import { KundliViewModal } from '../../components/KundliViewModal';
+
 interface ClientSubmission {
   id: string;
   name: string;
@@ -44,6 +46,8 @@ export default function AdminDashboard() {
   const [submissions, setSubmissions] = useState<ClientSubmission[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
+  const [selectedClient, setSelectedClient] = useState<ClientSubmission | null>(null);
+
 
   // Check auth state
   useEffect(() => {
@@ -286,14 +290,12 @@ export default function AdminDashboard() {
 
                             {client.paymentStatus === 'paid' && (
                               <>
-                                <a
-                                  href={`/api/pdf?id=${client.id}`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="bg-[#FF9933] hover:bg-[#cc6600] text-white font-bold py-2 px-3 rounded-lg text-xs text-center transition-colors"
+                                <button
+                                  onClick={() => setSelectedClient(client)}
+                                  className="bg-[#cc6600] hover:bg-[#a65300] text-white font-bold py-2 px-3.5 rounded-lg text-xs text-center transition-all cursor-pointer shadow-sm flex items-center justify-center gap-1"
                                 >
-                                  📄 કુંડળી જુઓ (View)
-                                </a>
+                                  <span>🔮 કુંડળી ખોલો (View Kundli)</span>
+                                </button>
 
                                 <button
                                   onClick={() => handleWhatsAppShare(client)}
@@ -321,6 +323,15 @@ export default function AdminDashboard() {
           )}
         </div>
       </main>
+
+      {/* Interactive Web Kundli Modal */}
+      {selectedClient && (
+        <KundliViewModal
+          client={selectedClient}
+          onClose={() => setSelectedClient(null)}
+        />
+      )}
     </div>
   );
 }
+
