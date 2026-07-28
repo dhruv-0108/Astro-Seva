@@ -1,39 +1,12 @@
-/* Astro-Seva Design System - Traditional Vedic Theme */
 @import "tailwindcss";
 
-:root {
-  --saffron-primary: #FF9933;
-  --saffron-dark: #cc6600;
-  --saffron-light: #fff0e0;
-  --gold-accent: #D4AF37;
-  --charcoal-text: #2c2c2c;
-  --off-white-bg: #fdfbf7;
-  --grid-border: #e8e2d5;
-}
-
-@theme inline {
-  --color-saffron: var(--saffron-primary);
-  --color-saffron-dark: var(--saffron-dark);
-  --color-saffron-light: var(--saffron-light);
-  --color-gold: var(--gold-accent);
-  --color-charcoal: var(--charcoal-text);
-  --color-off-white: var(--off-white-bg);
-  --color-grid-border: var(--grid-border);
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  background-color: var(--off-white-bg);
-  color: var(--charcoal-text);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+@layer base {
+  body {
+    font-family: var(--font-inter), var(--font-gujarati), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #FAF9F6;
+    color: #1F1E1B;
+    min-height: 100vh;
+  }
 }
 
 /* Custom Scrollbars */
@@ -42,61 +15,9 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--off-white-bg);
+  background: #FAF9F6;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--saffron-primary);
+  background: #A14E15;
   border-radius: 3px;
-}
-
-/* Full Width Utility */
-.full-width-container {
-  width: 100%;
-  max-width: 100%;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-
-/* Responsive Table Styles */
-.responsive-table-container {
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-.responsive-table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
-}
-
-.responsive-table th,
-.responsive-table td {
-  padding: 12px 8px;
-  border-bottom: 1px solid var(--grid-border);
-  font-size: 14px;
-}
-
-.responsive-table th {
-  background-color: var(--saffron-light);
-  color: var(--saffron-dark);
-  font-weight: 600;
-}
-
-/* SVG Chart Scaling */
-.chart-svg {
-  width: 100%;
-  height: auto;
-  max-width: 500px;
-  margin: 0 auto;
-  display: block;
-}
-
-/* Mobile optimizations: Zero gaps or margins on sides */
-@media (max-width: 640px) {
-  .mobile-edge-to-edge {
-    padding-left: 8px !important;
-    padding-right: 8px !important;
-    border-radius: 0 !important;
-  }
 }
