@@ -80,7 +80,7 @@ export const GURU_SERVICES: ServiceItem[] = [
     id: 'in-person-session',
     titleEN: 'In-Person Personal Session',
     titleGU: 'રૂબરૂ વ્યક્તિગત મુલાકાત (In-Person)',
-    price: 7000,
+    price: 20000,
     descEN: 'Personal face-to-face in-person consultation session with Guru Ji for higher-effort, non-scalable deep guidance.',
     descGU: 'ગુરુજી સાથે સીધી રૂબરૂ વ્યક્તિગત મુલાકાત - ઊંડાણપૂર્વકનું આધ્યાત્મિક અને વૈદિક માર્ગદર્શન.',
     iconName: 'UserCheck',
