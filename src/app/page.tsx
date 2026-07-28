@@ -31,7 +31,9 @@ import {
   HeartHandshake,
   Compass,
   AlertCircle,
-  Image as ImageIcon,
+  ChevronDown,
+  Lock,
+  MessageSquare,
 } from 'lucide-react';
 
 interface BirthDetails {
@@ -59,8 +61,8 @@ const SERVICES = [
     titleEN: '3 Questions Consultation',
     titleGU: '૩ પ્રશ્નો પરામર્શ (3 Questions)',
     price: 251,
-    descEN: 'Direct astrological answers to 3 specific life or career questions.',
-    descGU: 'તમારા ૩ ચોક્કસ જીવન અથવા કારકિર્દીના પ્રશ્નોના જવાબો.',
+    descEN: 'Direct astrological answers to 3 specific life, career, or relationship questions.',
+    descGU: 'તમારા ૩ ચોક્કસ જીવન, કારકિર્દી અથવા સંબંધોના પ્રશ્નોના સીધા જવાબો.',
     icon: Sparkles,
     popular: false,
   },
@@ -69,7 +71,7 @@ const SERVICES = [
     titleEN: '5 Questions Consultation',
     titleGU: '૫ પ્રશ્નો પરામર્શ (5 Questions)',
     price: 501,
-    descEN: 'Comprehensive analysis for 5 life questions + Kundli overview.',
+    descEN: 'Comprehensive analysis for 5 life questions + complete Kundli overview.',
     descGU: 'તમારા ૫ જીવન પ્રશ્નોનું વિગતવાર વિશ્લેષણ અને કુંડળી વિહંગાવલોકન.',
     icon: BookOpen,
     popular: true,
@@ -79,10 +81,37 @@ const SERVICES = [
     titleEN: '30 Mins Live Call Consultation',
     titleGU: '૩૦ મિનિટ લાઇવ કૉલ (30 Mins Call)',
     price: 999,
-    descEN: 'Personal 1-on-1 30-minute phone call consultation with Guruji.',
+    descEN: 'Personal 1-on-1 30-minute direct phone call consultation with Guruji.',
     descGU: 'ગુરુજી સાથે સીધો ૩૦ મિનિટનો ૧-ઓન-૧ ફોન કૉલ પરામર્શ.',
     icon: PhoneCall,
     popular: false,
+  },
+];
+
+const FAQS = [
+  {
+    qEN: 'What birth details are required for consultation?',
+    qGU: 'પરામર્શ માટે કઈ જન્મ વિગતો જરૂરી છે?',
+    aEN: 'You need to provide your Full Name, Date of Birth, Exact Time of Birth, and Birth Place (City/Town). These parameters are required for precise BPHS planetary calculations.',
+    aGU: 'તમારે તમારું આખું નામ, જન્મ તારીખ, ચોક્કસ જન્મ સમય અને જન્મ સ્થળ (શહેર/ગામ) આપવાની જરૂર છે. બૃહત્ પરાશર ગણતરીઓ માટે આ જરૂરી છે.',
+  },
+  {
+    qEN: 'How will I receive my consultation report?',
+    qGU: 'મને મારો પરામર્શ રિપોર્ટ કેવી રીતે મળશે?',
+    aEN: 'Once Guruji verifies your dakshina and calculates your birth chart, your complete Kundli digital report link will be sent directly to your WhatsApp number.',
+    aGU: 'ગુરુજી તમારી દક્ષિણા ચકાસીને જન્મ કુંડળી તૈયાર કરશે પછી, તમારો કુંડળી રિપોર્ટ સીધો તમારા વોટ્સએપ નંબર પર મોકલવામાં આવશે.',
+  },
+  {
+    qEN: 'What if I do not know my exact birth time?',
+    qGU: 'જો મને મારો ચોક્કસ જન્મ સમય ખબર ન હોય તો?',
+    aEN: 'If exact time is unknown, provide your approximate time window. Guruji utilizes Prashna (Horary) chart calculations to provide guidance.',
+    aGU: 'જો ચોક્કસ સમય ખબર ન હોય તો આશરે સમય જણાવો. ગુરુજી પ્રશ્ન કુંડળી ગણતરીનો ઉપયોગ કરીને તમને માર્ગદર્શન આપશે.',
+  },
+  {
+    qEN: 'Is my birth data and phone number secure?',
+    qGU: 'શું મારી જન્મ વિગતો અને ફોન નંબર સુરક્ષિત છે?',
+    aEN: 'Absolutely. All client records are strictly confidential, protected against public access, and automatically purged after 30 days.',
+    aGU: 'ચોક્કસ. તમામ ગ્રાહક માહિતી ગોપનીય રહે છે, સુરક્ષિત છે અને ૩૦ દિવસ પછી આપમેળે દૂર થઈ જાય છે.',
   },
 ];
 
@@ -90,7 +119,7 @@ const TRANSLATIONS = {
   EN: {
     title: 'Astro-Seva',
     subtitle: 'Vedic Consultation & Life Guidance',
-    heroTagline: 'Seeking clarity in career, marriage, or life decisions?',
+    heroTagline: 'Seeking Clarity in Career, Marriage, or Life Decisions?',
     heroSubtitle: 'Receive calm, authentic Vedic guidance rooted in Brihat Parashara Hora Shastra principles from a dedicated Sri Vidya practitioner.',
     heroCta: 'Consult Guru Ji',
     meetTitle: 'Meet Guru Ji',
@@ -174,8 +203,9 @@ export default function Home() {
   const [step, setStep] = useState<number>(0);
   const [selectedService, setSelectedService] = useState<typeof SERVICES[0]>(SERVICES[1]);
 
-  // Background Theme Selector: 'mandala' | 'purple-studio' | 'purple-plain'
-  const [bgChoice, setBgChoice] = useState<'mandala' | 'purple-studio' | 'purple-plain'>('purple-studio');
+  // Background Theme: 'purple-studio'
+  const [bgChoice] = useState<'purple-studio' | 'mandala'>('purple-studio');
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   const [name, setName] = useState<string>('');
   const [countryCode, setCountryCode] = useState<string>('+91');
@@ -207,8 +237,8 @@ export default function Home() {
     offset: ['start start', 'end end'],
   });
 
-  const mandalaScale = useTransform(scrollYProgress, [0, 1], [1.0, 1.25]);
-  const mandalaY = useTransform(scrollYProgress, [0, 1], [0, -40]);
+  const bgScale = useTransform(scrollYProgress, [0, 1], [1.0, 1.25]);
+  const bgY = useTransform(scrollYProgress, [0, 1], [0, -40]);
 
   // Close place suggestions dropdown when clicking outside
   useEffect(() => {
@@ -348,48 +378,31 @@ export default function Home() {
     setLang((prev) => (prev === 'GU' ? 'EN' : 'GU'));
   };
 
-  const getBgImagePath = () => {
-    switch (bgChoice) {
-      case 'purple-studio':
-        return '/bg-purple-studio.jpg';
-      case 'purple-plain':
-        return '/bg-purple-plain.jpg';
-      case 'mandala':
-      default:
-        return '/mandala-bg.jpg';
-    }
-  };
-
   return (
     <div ref={containerRef} className="flex flex-col flex-1 min-h-screen text-stone-900 font-sans relative overflow-hidden selection:bg-amber-100">
       
-      {/* BUTTERY SMOOTH SCROLL ZOOM BACKGROUND LAYER */}
+      {/* BUTTERY SMOOTH GPU SCROLL ZOOM BACKGROUND LAYER */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         <motion.div
           style={{
-            scale: mandalaScale,
-            y: mandalaY,
+            scale: bgScale,
+            y: bgY,
           }}
           className="w-full h-full min-h-screen flex items-center justify-center transform-gpu will-change-transform"
         >
           <img
-            key={bgChoice}
-            src={getBgImagePath()}
-            alt="Background Design"
-            className="w-full h-full object-cover object-center transition-all duration-700"
+            src="/bg-purple-studio.jpg"
+            alt="Purple Studio Background"
+            className="w-full h-full object-cover object-center"
           />
         </motion.div>
         
-        {/* Soft Vignette Overlay depending on theme */}
-        <div className={`absolute inset-0 transition-all duration-500 ${
-          bgChoice === 'mandala' 
-            ? 'bg-gradient-to-b from-[#FAF9F6]/40 via-[#FAF9F6]/25 to-[#FAF9F6]/50'
-            : 'bg-gradient-to-b from-purple-950/20 via-transparent to-stone-900/40'
-        }`} />
+        {/* Soft Ambient Vignette Tint */}
+        <div className="absolute inset-0 bg-gradient-to-b from-purple-950/20 via-transparent to-stone-900/40" />
       </div>
 
       {/* Serene Navigation Header */}
-      <header className="w-full bg-white/85 backdrop-blur-md border-b border-stone-200/60 sticky top-0 z-30 px-6 sm:px-10 py-4 flex justify-between items-center shadow-xs">
+      <header className="w-full bg-white/85 backdrop-blur-md border-b border-stone-200/60 sticky top-0 z-30 px-6 sm:px-12 py-4 flex justify-between items-center shadow-xs">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-2xl bg-amber-100/70 border border-amber-200 flex items-center justify-center text-[#A14E15]">
             <Sparkles className="w-4 h-4" />
@@ -400,49 +413,25 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          {/* Quick Background Theme Tester Switcher */}
-          <div className="hidden sm:flex items-center gap-1 bg-stone-100/80 p-1 rounded-2xl border border-stone-200 text-xs font-bold">
-            <button
-              onClick={() => setBgChoice('purple-studio')}
-              className={`px-2.5 py-1 rounded-xl transition-all ${bgChoice === 'purple-studio' ? 'bg-[#A14E15] text-white shadow-xs' : 'text-stone-600 hover:text-stone-900'}`}
-            >
-              Purple Ambient
-            </button>
-            <button
-              onClick={() => setBgChoice('purple-plain')}
-              className={`px-2.5 py-1 rounded-xl transition-all ${bgChoice === 'purple-plain' ? 'bg-[#A14E15] text-white shadow-xs' : 'text-stone-600 hover:text-stone-900'}`}
-            >
-              Purple Plain
-            </button>
-            <button
-              onClick={() => setBgChoice('mandala')}
-              className={`px-2.5 py-1 rounded-xl transition-all ${bgChoice === 'mandala' ? 'bg-[#A14E15] text-white shadow-xs' : 'text-stone-600 hover:text-stone-900'}`}
-            >
-              Golden Mandala
-            </button>
-          </div>
-
-          <Button variant="outline" size="sm" onClick={toggleLanguage}>
-            <Globe className="w-3.5 h-3.5 text-stone-600" />
-            <span>{t.language}</span>
-          </Button>
-        </div>
+        <Button variant="outline" size="sm" onClick={toggleLanguage}>
+          <Globe className="w-3.5 h-3.5 text-stone-600" />
+          <span>{t.language}</span>
+        </Button>
       </header>
 
-      {/* Content wrapper floating over smooth background */}
-      <div className="relative z-10 flex flex-col flex-1">
+      {/* RHYTHMIC MAGAZINE LAYOUT CONTENT WRAPPER */}
+      <div className="relative z-10 flex flex-col flex-1 divide-y-0">
         
-        {/* 1. WELCOME & REASSURANCE HERO SECTION */}
-        <section className="w-full max-w-3xl mx-auto pt-16 pb-10 px-6 text-center space-y-6">
+        {/* SECTION 1: HERO [CENTER ALIGNED FOCUS - max-w-4xl] */}
+        <section className="w-full max-w-4xl mx-auto pt-16 sm:pt-24 pb-16 px-6 text-center space-y-6">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <Badge variant="default" className="mx-auto bg-amber-100/90 text-[#A14E15] border-amber-300">
-              <HeartHandshake className="w-3.5 h-3.5" />
-              <span>Personal Vedic Astrology Consultation</span>
+            <Badge variant="default" className="mx-auto bg-amber-100/90 text-[#A14E15] border-amber-300 px-4 py-1.5 text-xs">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Sri Vidya Consultation • Traditional BPHS Astrology</span>
             </Badge>
           </motion.div>
 
@@ -450,12 +439,12 @@ export default function Home() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="space-y-4 max-w-2xl mx-auto"
+            className="space-y-4 max-w-3xl mx-auto"
           >
-            <h2 className={`text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight drop-shadow-sm ${bgChoice.startsWith('purple') ? 'text-white' : 'text-stone-900'}`}>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-[1.15] drop-shadow-md">
               {t.heroTagline}
             </h2>
-            <p className={`text-base leading-relaxed font-semibold max-w-xl mx-auto drop-shadow-sm ${bgChoice.startsWith('purple') ? 'text-purple-100' : 'text-stone-800'}`}>
+            <p className="text-base sm:text-lg text-purple-100 leading-relaxed font-medium max-w-2xl mx-auto drop-shadow-sm">
               {t.heroSubtitle}
             </p>
           </motion.div>
@@ -464,70 +453,174 @@ export default function Home() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
+            className="pt-2"
           >
-            <Button size="lg" onClick={scrollToBooking} className="shadow-lg">
+            <Button size="lg" onClick={scrollToBooking} className="h-14 px-8 text-base shadow-xl rounded-2xl">
               <span>{t.heroCta}</span>
               <ArrowRight className="w-4 h-4" />
             </Button>
           </motion.div>
         </section>
 
-        {/* 2. MEET GURU JI CREDIBILITY SECTION */}
-        <section className="w-full max-w-3xl mx-auto py-8 px-6">
-          <Card className="p-8 sm:p-10 space-y-6 text-center bg-white/94 backdrop-blur-md shadow-xl border border-stone-200">
-            <div className="space-y-2">
-              <Badge variant="secondary" className="mx-auto">{t.meetRole}</Badge>
-              <h3 className="text-2xl font-bold text-stone-900">{t.meetTitle}</h3>
-            </div>
-
-            {/* Photo Placeholder Container (ready for Guruji's photo when shared) */}
-            <div className="relative mx-auto w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-gradient-to-b from-amber-50 to-stone-100 border-2 border-amber-200/80 shadow-[0_8px_30px_rgba(0,0,0,0.04)] flex items-center justify-center overflow-hidden">
-              <div className="flex flex-col items-center justify-center text-amber-800/70 gap-1">
-                <User className="w-12 h-12 stroke-[1.5]" />
-              </div>
-            </div>
-
-            <p className="text-sm text-stone-600 font-medium leading-relaxed max-w-xl mx-auto">
-              {t.meetBio}
-            </p>
-
-            {/* 4 Trust Pillars Architecture Cards */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 text-left">
-              {[
-                { icon: Award, title: 'Sri Vidya', sub: 'Traditional Sadhana' },
-                { icon: BookOpen, title: 'BPHS Logic', sub: 'Authentic Principles' },
-                { icon: Users, title: '30+ Years', sub: 'Vedic Practice' },
-                { icon: MessageCircle, title: 'Direct', sub: 'WhatsApp Guidance' },
-              ].map((pillar, i) => (
-                <div key={i} className="bg-stone-50/90 border border-stone-200/60 rounded-2xl p-4 space-y-1">
-                  <pillar.icon className="w-4 h-4 text-[#A14E15]" />
-                  <div className="text-xs font-bold text-stone-900">{pillar.title}</div>
-                  <div className="text-[10px] text-stone-500 font-medium">{pillar.sub}</div>
+        {/* SECTION 2: WHY CHOOSE GURU JI [LEFT + RIGHT SPLIT - max-w-6xl] */}
+        <section className="w-full max-w-6xl mx-auto py-16 px-6">
+          <Card className="p-8 sm:p-12 bg-white/94 backdrop-blur-md shadow-2xl border border-stone-200/80 rounded-3xl">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+              
+              {/* Left Column: Title & Trust Checklist */}
+              <div className="md:col-span-7 space-y-6">
+                <div className="space-y-2">
+                  <span className="text-xs font-bold text-[#A14E15] uppercase tracking-wider block font-mono">
+                    Authentic Vedic Foundation
+                  </span>
+                  <h3 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight leading-snug">
+                    Why Thousands Trust Guru Ji
+                  </h3>
+                  <p className="text-sm text-stone-600 font-medium leading-relaxed">
+                    Consultations are strictly based on Brihat Parashara Hora Shastra principles and genuine spiritual discipline, without fear-based tactics or unnecessary ritual costs.
+                  </p>
                 </div>
-              ))}
+
+                <div className="space-y-3.5 pt-2">
+                  {[
+                    { title: '30+ Years Dedicated Experience', desc: 'Over three decades of precision horoscope calculation and client guidance.' },
+                    { title: 'BPHS Principles & Math', desc: 'Calculations adhere strictly to ancient Brihat Parashara Hora Shastra rules.' },
+                    { title: 'Sri Vidya Sadhak Discipline', desc: 'Spiritual grounding ensures calm, trustworthy, and sacred life insights.' },
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex items-start gap-3.5">
+                      <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5 font-bold">
+                        ✓
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-bold text-stone-900">{item.title}</h4>
+                        <p className="text-xs text-stone-500 font-medium">{item.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Right Column: Visual Composition Box */}
+              <div className="md:col-span-5">
+                <div className="bg-gradient-to-br from-amber-50 to-orange-50/50 border border-amber-200/70 rounded-2xl p-6 sm:p-8 space-y-4 text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-white border border-amber-200 flex items-center justify-center text-[#A14E15] mx-auto shadow-xs">
+                    <Award className="w-8 h-8" />
+                  </div>
+                  <h4 className="text-lg font-bold text-stone-900">Direct & Confidential</h4>
+                  <p className="text-xs text-stone-600 font-medium leading-relaxed">
+                    Your birth charts are personally analyzed by Guru Ji. Reports are delivered directly to your WhatsApp with complete privacy.
+                  </p>
+                  <div className="inline-flex items-center gap-2 text-xs font-bold text-[#A14E15] bg-white border border-amber-200 px-3.5 py-1.5 rounded-xl shadow-xs">
+                    <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                    <span>30-Day Auto Privacy Purge</span>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </Card>
         </section>
 
-        {/* 3. HOW CONSULTATION WORKS SECTION */}
-        <section className="w-full max-w-3xl mx-auto py-8 px-6 space-y-6">
-          <div className="text-center space-y-1">
-            <Badge variant="secondary" className="mx-auto">Simple Process</Badge>
-            <h3 className={`text-xl font-bold ${bgChoice.startsWith('purple') ? 'text-white' : 'text-stone-900'}`}>{t.howTitle}</h3>
+        {/* SECTION 3: CONSULTATION SERVICES [ASYMMETRIC HEADER + GRID - max-w-6xl] */}
+        <section className="w-full max-w-6xl mx-auto py-16 px-6 space-y-8">
+          
+          {/* Asymmetric Header: Left Title, Right Subtitle */}
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-white/20 pb-6">
+            <div className="space-y-1">
+              <span className="text-xs font-bold text-amber-300 uppercase tracking-wider font-mono">Select Consultation</span>
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                {t.step0Title}
+              </h3>
+            </div>
+            <p className="text-xs sm:text-sm text-purple-100 max-w-md font-medium">
+              Choose the format that fits your current questions. Every option includes authentic BPHS planetary calculations.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Dynamic 3-Card Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {SERVICES.map((s) => {
+              const isSelected = selectedService.id === s.id;
+              const IconComponent = s.icon;
+              return (
+                <Card
+                  key={s.id}
+                  onClick={() => setSelectedService(s)}
+                  className={`p-6 sm:p-7 rounded-3xl transition-all duration-300 cursor-pointer relative flex flex-col justify-between ${
+                    s.popular
+                      ? 'bg-white shadow-2xl border-2 border-[#A14E15] md:-translate-y-2'
+                      : 'bg-white/94 backdrop-blur-md shadow-xl border border-stone-200 hover:border-stone-300'
+                  }`}
+                >
+                  {s.popular && (
+                    <span className="absolute -top-3.5 left-6 bg-[#A14E15] text-white text-[10px] font-bold uppercase tracking-wider px-3.5 py-1 rounded-full shadow-md">
+                      Most Popular Choice
+                    </span>
+                  )}
+                  
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-start">
+                      <div className="p-3 bg-amber-50 rounded-2xl border border-amber-200/80 text-[#A14E15]">
+                        <IconComponent className="w-6 h-6" />
+                      </div>
+                      <span className="text-2xl font-extrabold text-[#A14E15] font-mono">
+                        ₹{s.price}
+                      </span>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <h4 className="font-extrabold text-base text-stone-900">
+                        {lang === 'GU' ? s.titleGU : s.titleEN}
+                      </h4>
+                      <p className="text-xs text-stone-600 leading-relaxed font-medium">
+                        {lang === 'GU' ? s.descGU : s.descEN}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="pt-6">
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedService(s);
+                        scrollToBooking();
+                      }}
+                      variant={isSelected ? 'default' : 'outline'}
+                      className="w-full rounded-2xl h-11 text-xs font-bold"
+                    >
+                      <span>Select & Proceed</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Button>
+                  </div>
+                </Card>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* SECTION 4: HOW IT WORKS [HORIZONTAL TIMELINE - max-w-5xl] */}
+        <section className="w-full max-w-5xl mx-auto py-16 px-6 space-y-10">
+          <div className="text-center space-y-2">
+            <Badge variant="secondary" className="mx-auto">Simple 4-Step Process</Badge>
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">{t.howTitle}</h3>
+          </div>
+
+          {/* Desktop Horizontal Timeline / Mobile Vertical Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             {[
               { num: '01', title: t.howStep1, desc: t.howStep1Desc, icon: Sparkles },
               { num: '02', title: t.howStep2, desc: t.howStep2Desc, icon: CreditCard },
               { num: '03', title: t.howStep3, desc: t.howStep3Desc, icon: User },
               { num: '04', title: t.howStep4, desc: t.howStep4Desc, icon: Compass },
             ].map((item, idx) => (
-              <Card key={idx} className="p-6 flex items-start gap-4 bg-white/94 backdrop-blur-md shadow-md border border-stone-200">
-                <span className="text-base font-extrabold text-[#A14E15] font-mono bg-amber-50 border border-amber-200/80 px-2.5 py-1 rounded-xl shrink-0">
-                  {item.num}
-                </span>
-                <div className="space-y-1">
+              <Card key={idx} className="p-5 flex flex-col justify-between bg-white/94 backdrop-blur-md shadow-lg border border-stone-200 rounded-2xl space-y-4">
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-extrabold text-[#A14E15] font-mono bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-xl">
+                      {item.num}
+                    </span>
+                    <item.icon className="w-4 h-4 text-stone-400" />
+                  </div>
                   <h4 className="font-bold text-sm text-stone-900">{item.title}</h4>
                   <p className="text-xs text-stone-500 font-medium leading-relaxed">{item.desc}</p>
                 </div>
@@ -536,8 +629,59 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 4. INTERACTIVE CONSULTATION WORKFLOW */}
-        <main ref={bookingRef} className="w-full max-w-xl mx-auto py-10 px-4 sm:px-6">
+        {/* SECTION 5: ABOUT GURU JI [PHOTO LEFT | STORY RIGHT - max-w-5xl] */}
+        <section className="w-full max-w-5xl mx-auto py-16 px-6">
+          <Card className="p-8 sm:p-12 bg-white/96 backdrop-blur-md shadow-2xl border border-stone-200 rounded-3xl">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+              
+              {/* Left Column: Photo Frame / Avatar */}
+              <div className="md:col-span-4 flex justify-center">
+                <div className="relative w-44 h-44 sm:w-52 sm:h-52 rounded-3xl bg-gradient-to-b from-amber-50 to-stone-100 border-4 border-amber-200/90 shadow-xl flex items-center justify-center overflow-hidden">
+                  <div className="flex flex-col items-center justify-center text-amber-800/70 gap-2">
+                    <User className="w-16 h-16 stroke-[1.5]" />
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-amber-900/80">Guru Ji</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: Story & Credentials */}
+              <div className="md:col-span-8 space-y-5">
+                <div className="space-y-1.5">
+                  <Badge variant="secondary">{t.meetRole}</Badge>
+                  <h3 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">
+                    {t.meetTitle}
+                  </h3>
+                </div>
+
+                <p className="text-sm text-stone-600 font-medium leading-relaxed">
+                  {t.meetBio}
+                </p>
+
+                <div className="grid grid-cols-2 gap-3 pt-2">
+                  <div className="bg-stone-50 border border-stone-200/60 rounded-2xl p-3.5 space-y-0.5">
+                    <div className="text-xs font-bold text-stone-900">Sri Vidya Sadhana</div>
+                    <div className="text-[11px] text-stone-500 font-medium">Traditional Discipline</div>
+                  </div>
+                  <div className="bg-stone-50 border border-stone-200/60 rounded-2xl p-3.5 space-y-0.5">
+                    <div className="text-xs font-bold text-stone-900">BPHS Precision</div>
+                    <div className="text-[11px] text-stone-500 font-medium">Authentic Math</div>
+                  </div>
+                </div>
+
+                <div className="pt-2">
+                  <Button onClick={scrollToBooking} size="default" className="rounded-2xl px-6">
+                    <span>Book Consultation with Guruji</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+
+            </div>
+          </Card>
+        </section>
+
+        {/* SECTION 6: INTERACTIVE CONSULTATION INTAKE FORM [max-w-xl] */}
+        <main ref={bookingRef} className="w-full max-w-xl mx-auto py-16 px-4 sm:px-6">
           
           {/* Step Indicator */}
           <div className="flex justify-center items-center gap-3 mb-8">
@@ -566,7 +710,7 @@ export default function Home() {
           </div>
 
           {/* Step Card with Motion Transitions */}
-          <Card className="w-full relative bg-white/96 backdrop-blur-md shadow-2xl border border-stone-200">
+          <Card className="w-full relative bg-white/96 backdrop-blur-md shadow-2xl border border-stone-200 rounded-3xl p-6 sm:p-8">
             <AnimatePresence mode="wait">
               
               {/* STEP 0: CHOOSE CONSULTATION FORMAT */}
@@ -907,6 +1051,96 @@ export default function Home() {
             </AnimatePresence>
           </Card>
         </main>
+
+        {/* SECTION 7: FREQUENTLY ASKED QUESTIONS [LEFT ALIGNED ACCORDION - max-w-4xl] */}
+        <section className="w-full max-w-4xl mx-auto py-16 px-6 text-left space-y-8">
+          <div className="space-y-1.5 text-left border-b border-white/20 pb-6">
+            <span className="text-xs font-bold text-amber-300 uppercase tracking-wider font-mono">Clarifications</span>
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              Frequently Asked Questions
+            </h3>
+            <p className="text-xs sm:text-sm text-purple-100 font-medium max-w-lg">
+              Everything you need to know about preparing your birth details and receiving your consultation.
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            {FAQS.map((faq, idx) => {
+              const isOpen = openFaq === idx;
+              return (
+                <Card
+                  key={idx}
+                  onClick={() => setOpenFaq(isOpen ? null : idx)}
+                  className="p-5 bg-white/94 backdrop-blur-md shadow-md border border-stone-200 rounded-2xl cursor-pointer transition-all duration-200 text-left"
+                >
+                  <div className="flex justify-between items-center gap-4">
+                    <h4 className="font-bold text-sm sm:text-base text-stone-900">
+                      {lang === 'GU' ? faq.qGU : faq.qEN}
+                    </h4>
+                    <ChevronDown className={`w-4 h-4 text-stone-500 shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180 text-[#A14E15]' : ''}`} />
+                  </div>
+                  {isOpen && (
+                    <p className="text-xs sm:text-sm text-stone-600 mt-3 pt-3 border-t border-stone-100 leading-relaxed font-medium">
+                      {lang === 'GU' ? faq.aGU : faq.aEN}
+                    </p>
+                  )}
+                </Card>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* SECTION 8: STRUCTURED MULTI-COLUMN FOOTER [max-w-6xl] */}
+        <footer className="w-full bg-stone-950 text-stone-300 py-12 px-6 sm:px-12 border-t border-stone-800 text-left">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-12 gap-8 pb-10 border-b border-stone-800">
+            
+            {/* Col 1: Brand & Sacred Mission */}
+            <div className="sm:col-span-5 space-y-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-amber-900/50 border border-amber-700/60 flex items-center justify-center text-amber-400">
+                  <Sparkles className="w-4 h-4" />
+                </div>
+                <span className="text-base font-bold text-white tracking-tight">{t.title}</span>
+              </div>
+              <p className="text-xs text-stone-400 font-medium leading-relaxed max-w-sm">
+                Authentic Vedic astrology consultation & Sri Vidya spiritual guidance based on Brihat Parashara Hora Shastra principles.
+              </p>
+            </div>
+
+            {/* Col 2: Quick Links */}
+            <div className="sm:col-span-3 space-y-2 text-xs">
+              <h5 className="font-bold text-white uppercase tracking-wider text-[11px]">Consultations</h5>
+              <ul className="space-y-1.5 text-stone-400 font-medium">
+                <li><button onClick={scrollToBooking} className="hover:text-amber-400 transition-colors">3 Questions Consultation</button></li>
+                <li><button onClick={scrollToBooking} className="hover:text-amber-400 transition-colors">5 Questions + Kundli</button></li>
+                <li><button onClick={scrollToBooking} className="hover:text-amber-400 transition-colors">30 Mins Live Phone Call</button></li>
+              </ul>
+            </div>
+
+            {/* Col 3: Contact & Privacy */}
+            <div className="sm:col-span-4 space-y-2 text-xs">
+              <h5 className="font-bold text-white uppercase tracking-wider text-[11px]">Direct Contact & Support</h5>
+              <p className="text-stone-400 font-medium flex items-center gap-1.5">
+                <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
+                <span>WhatsApp Delivery & Verification</span>
+              </p>
+              <p className="text-stone-500 text-[11px] font-mono">
+                Data Security: 30-Day Auto Purge Policy
+              </p>
+            </div>
+
+          </div>
+
+          <div className="max-w-6xl mx-auto pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-stone-500 font-medium">
+            <p>© {new Date().getFullYear()} Astro-Seva. All rights reserved.</p>
+            <div className="flex items-center gap-4 text-stone-400">
+              <button onClick={toggleLanguage} className="hover:text-white transition-colors flex items-center gap-1">
+                <Globe className="w-3.5 h-3.5" />
+                <span>{t.language}</span>
+              </button>
+            </div>
+          </div>
+        </footer>
 
       </div>
     </div>
