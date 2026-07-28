@@ -352,73 +352,39 @@ export default function KundliPage() {
           </div>
         )}
 
-        {/* TAB 2: INTERACTIVE KUNDLI CHARTS WITH SUB-TOGGLE */}
+        {/* TAB 2: ALL 4 KUNDLI CHARTS IN SINGLE SCROLLABLE COLUMN */}
         {activeTab === 'charts' && (
-          <div className="space-y-6 flex flex-col items-center w-full">
-            
-            {/* Interactive Chart Selector Sub-Tab */}
-            <div className="bg-white border border-[#e8e2d5] p-2 rounded-2xl shadow-sm flex flex-wrap justify-center gap-2 max-w-2xl w-full">
-              {[
-                { id: 'lagna', label: 'Lagna Chart' },
-                { id: 'moon', label: 'Chandra Kundli' },
-                { id: 'd9', label: 'Navamsha (D9)' },
-                { id: 'chalit', label: 'Cusp (Chalit)' },
-                { id: 'all', label: 'View All 4 Charts' },
-              ].map((c) => {
-                const isSelected = selectedChartType === c.id;
-                return (
-                  <button
-                    key={c.id}
-                    onClick={() => setSelectedChartType(c.id as any)}
-                    className={`py-2 px-4 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                      isSelected
-                        ? 'bg-[#cc6600] text-white shadow-sm'
-                        : 'bg-transparent text-gray-600 hover:bg-amber-50'
-                    }`}
-                  >
-                    {c.label}
-                  </button>
-                );
-              })}
-            </div>
+          <div className="flex flex-col items-center gap-12 w-full max-w-2xl mx-auto">
+            {/* Lagna Chart */}
+            <NorthIndianChart
+              title="Lagna Chart (Birth Kundli)"
+              lagnaSign={kundliData.lagnaSignIndex}
+              planetsMap={astro.planets}
+            />
 
-            {/* Display Selected Chart */}
-            <div className="flex flex-col items-center gap-10 w-full max-w-2xl">
-              {(selectedChartType === 'lagna' || selectedChartType === 'all') && (
-                <NorthIndianChart
-                  title="Lagna Chart (Birth Kundli)"
-                  lagnaSign={kundliData.lagnaSignIndex}
-                  planetsMap={astro.planets}
-                />
-              )}
+            {/* Moon Chart */}
+            <NorthIndianChart
+              title="Chandra Kundli (Moon Chart)"
+              lagnaSign={astro.planets.Moon.sign}
+              planetsMap={astro.planets}
+            />
 
-              {(selectedChartType === 'moon' || selectedChartType === 'all') && (
-                <NorthIndianChart
-                  title="Chandra Kundli (Moon Chart)"
-                  lagnaSign={astro.planets.Moon.sign}
-                  planetsMap={astro.planets}
-                />
-              )}
+            {/* Navamsha Chart (D9) */}
+            <NorthIndianChart
+              title="Navamsha Chart (D9)"
+              lagnaSign={kundliData.d9Lagna}
+              planetsMap={kundliData.d9Placements}
+            />
 
-              {(selectedChartType === 'd9' || selectedChartType === 'all') && (
-                <NorthIndianChart
-                  title="Navamsha Chart (D9)"
-                  lagnaSign={kundliData.d9Lagna}
-                  planetsMap={kundliData.d9Placements}
-                />
-              )}
-
-              {(selectedChartType === 'chalit' || selectedChartType === 'all') && (
-                <NorthIndianChart
-                  title="KP House Cusp Chart (Chalit)"
-                  lagnaSign={kundliData.lagnaSignIndex}
-                  planetsMap={kundliData.cuspPlacements}
-                />
-              )}
-            </div>
-
+            {/* KP House Cusp Chart (Chalit) */}
+            <NorthIndianChart
+              title="KP House Cusp Chart (Chalit)"
+              lagnaSign={kundliData.lagnaSignIndex}
+              planetsMap={kundliData.cuspPlacements}
+            />
           </div>
         )}
+
 
         {/* TAB 3: PLANETARY POSITIONS */}
         {activeTab === 'planets' && (
