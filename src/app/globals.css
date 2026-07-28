@@ -9,6 +9,35 @@
   }
 }
 
+/* Ambient Floating Animation for Background */
+@keyframes ambient-float {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(-20px) scale(1.05);
+    opacity: 0.7;
+  }
+}
+
+.animate-ambient-float {
+  animation: ambient-float 12s ease-in-out infinite;
+}
+
+/* Safari Native Date & Time Picker Customization */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(30%) sepia(85%) saturate(800%) hue-rotate(345deg);
+  opacity: 0.8;
+  padding: 4px;
+}
+input[type="date"]::-webkit-calendar-picker-indicator:hover,
+input[type="time"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
 /* Custom Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
@@ -20,4 +49,33 @@
 ::-webkit-scrollbar-thumb {
   background: #A14E15;
   border-radius: 3px;
+}
+
+/* PRINT STYLES: Show everything in print mode */
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+  
+  .print\:hidden {
+    display: none !important;
+  }
+
+  .print\:block {
+    display: block !important;
+  }
+
+  .print\:space-y-8 > * + * {
+    margin-top: 2rem !important;
+  }
+
+  .print\:break-before-page {
+    break-before: page !important;
+  }
+
+  /* Force print all tab content blocks */
+  .print-show-all-sections {
+    display: block !important;
+  }
 }

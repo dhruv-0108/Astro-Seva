@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { db } from '../lib/firebase/config';
 import { collection, addDoc } from 'firebase/firestore';
 import { Button } from '../components/ui/shadcn/button';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/shadcn/card';
+import { Card } from '../components/ui/shadcn/card';
 import { Input } from '../components/ui/shadcn/input';
 import { Badge } from '../components/ui/shadcn/badge';
 import {
@@ -31,7 +31,6 @@ import {
   HeartHandshake,
   Compass,
   AlertCircle,
-  ChevronDown,
 } from 'lucide-react';
 
 interface BirthDetails {
@@ -336,8 +335,12 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col flex-1 min-h-screen bg-[#FAF9F6] text-stone-900 font-sans selection:bg-amber-100">
+    <div className="flex flex-col flex-1 min-h-screen bg-[#FAF9F6] text-stone-900 font-sans relative overflow-hidden selection:bg-amber-100">
       
+      {/* Soothing Animated Background Glow Effects */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-amber-100/40 rounded-full blur-3xl pointer-events-none animate-ambient-float -z-10" />
+      <div className="absolute top-96 left-10 w-[400px] h-[400px] bg-amber-50/60 rounded-full blur-3xl pointer-events-none animate-ambient-float -z-10" style={{ animationDelay: '3s' }} />
+
       {/* Serene Navigation Header */}
       <header className="w-full bg-white/80 backdrop-blur-md border-b border-stone-200/60 sticky top-0 z-30 px-6 sm:px-10 py-4 flex justify-between items-center">
         <div className="flex items-center gap-3">
@@ -381,7 +384,7 @@ export default function Home() {
 
       {/* 2. MEET GURU JI CREDIBILITY SECTION */}
       <section className="w-full max-w-3xl mx-auto py-8 px-6">
-        <Card className="p-8 sm:p-10 space-y-6 text-center">
+        <Card className="p-8 sm:p-10 space-y-6 text-center bg-white/90 backdrop-blur-xs">
           <div className="space-y-2">
             <Badge variant="secondary" className="mx-auto">{t.meetRole}</Badge>
             <h3 className="text-2xl font-bold text-stone-900">{t.meetTitle}</h3>
@@ -430,7 +433,7 @@ export default function Home() {
             { num: '03', title: t.howStep3, desc: t.howStep3Desc, icon: User },
             { num: '04', title: t.howStep4, desc: t.howStep4Desc, icon: Compass },
           ].map((item, idx) => (
-            <Card key={idx} className="p-6 flex items-start gap-4">
+            <Card key={idx} className="p-6 flex items-start gap-4 bg-white/90 backdrop-blur-xs">
               <span className="text-base font-extrabold text-[#A14E15] font-mono bg-amber-50 border border-amber-200/80 px-2.5 py-1 rounded-xl shrink-0">
                 {item.num}
               </span>
@@ -473,7 +476,7 @@ export default function Home() {
         </div>
 
         {/* Step Card with Motion Transitions */}
-        <Card className="w-full relative">
+        <Card className="w-full relative bg-white/95 backdrop-blur-md">
           <AnimatePresence mode="wait">
             
             {/* STEP 0: CHOOSE CONSULTATION FORMAT */}
@@ -678,7 +681,7 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* Date of Birth */}
+                  {/* Date of Birth — Click anywhere to open date picker */}
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
                       <Calendar className="w-3.5 h-3.5 text-[#A14E15]" />
@@ -687,12 +690,14 @@ export default function Home() {
                     <Input
                       type="date"
                       value={birthDetails.date}
+                      onClick={(e) => (e.currentTarget as any).showPicker?.()}
                       onChange={(e) => setBirthDetails((prev) => ({ ...prev, date: e.target.value }))}
+                      className="cursor-pointer"
                       required
                     />
                   </div>
 
-                  {/* Time of Birth */}
+                  {/* Time of Birth — Click anywhere to open time picker */}
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
                       <Clock className="w-3.5 h-3.5 text-[#A14E15]" />
@@ -702,7 +707,9 @@ export default function Home() {
                       type="time"
                       step="1"
                       value={birthDetails.time}
+                      onClick={(e) => (e.currentTarget as any).showPicker?.()}
                       onChange={(e) => setBirthDetails((prev) => ({ ...prev, time: e.target.value }))}
+                      className="cursor-pointer"
                       required
                     />
                   </div>
@@ -766,7 +773,7 @@ export default function Home() {
                       <option value={0.0}>🇬🇧 UK / London (GMT/BST) — UTC +0:00</option>
                       <option value={1.0}>🇪🇺 Central Europe (Paris/Berlin) — UTC +1:00</option>
                       <option value={4.0}>🇦🇪 UAE / Dubai (GST) — UTC +4:00</option>
-                      <option value={8.0}>🇸🇬 Singapore (SGT) — UTC +8:00</option>
+                      <option value={8.0}>🇸岗 Singapore (SGT) — UTC +8:00</option>
                       <option value={10.0}>🇦🇺 Australia / Sydney (AEST) — UTC +10:00</option>
                       <option value={5.75}>🇳🇵 Nepal (NPT) — UTC +5:45</option>
                     </select>
