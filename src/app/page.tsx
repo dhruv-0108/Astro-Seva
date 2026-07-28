@@ -203,9 +203,9 @@ export default function Home() {
     offset: ['start start', 'end end'],
   });
 
-  const mandalaScale = useTransform(scrollYProgress, [0, 1], [1.05, 1.55]);
-  const mandalaRotate = useTransform(scrollYProgress, [0, 1], [0, 20]);
-  const mandalaY = useTransform(scrollYProgress, [0, 1], [0, -80]);
+  const mandalaScale = useTransform(scrollYProgress, [0, 1], [1.0, 1.45]);
+  const mandalaRotate = useTransform(scrollYProgress, [0, 1], [0, 25]);
+  const mandalaY = useTransform(scrollYProgress, [0, 1], [0, -60]);
 
   // Close place suggestions dropdown when clicking outside
   useEffect(() => {
@@ -346,17 +346,17 @@ export default function Home() {
   };
 
   return (
-    <div ref={containerRef} className="flex flex-col flex-1 min-h-screen bg-[#FAF9F6] text-stone-900 font-sans relative overflow-hidden selection:bg-amber-100">
+    <div ref={containerRef} className="flex flex-col flex-1 min-h-screen text-stone-900 font-sans relative overflow-hidden selection:bg-amber-100">
       
-      {/* VIBRANT SCROLL-ZOOM GOLDEN MANDALA BACKGROUND DESIGN */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden -z-20">
+      {/* DIRECTLY VISIBLE FIXED SCROLL-ZOOM MANDALA BACKGROUND (z-0) */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         <motion.div
           style={{
             scale: mandalaScale,
             rotate: mandalaRotate,
             y: mandalaY,
           }}
-          className="w-full h-full min-h-screen flex items-center justify-center opacity-85"
+          className="w-full h-full min-h-screen flex items-center justify-center"
         >
           <img
             src="/mandala-bg.jpg"
@@ -365,8 +365,8 @@ export default function Home() {
           />
         </motion.div>
         
-        {/* Soft Vignette Overlay to ensure text readability while leaving background fully visible */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FAF9F6]/40 via-[#FAF9F6]/30 to-[#FAF9F6]/60" />
+        {/* Soft Transparent Warm Tint so mandala is 100% visible while preserving crisp text contrast */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FAF9F6]/40 via-[#FAF9F6]/25 to-[#FAF9F6]/50" />
       </div>
 
       {/* Serene Navigation Header */}
@@ -386,480 +386,485 @@ export default function Home() {
         </Button>
       </header>
 
-      {/* 1. WELCOME & REASSURANCE HERO SECTION */}
-      <section className="w-full max-w-3xl mx-auto pt-16 pb-10 px-6 text-center space-y-6">
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <Badge variant="default" className="mx-auto bg-amber-100/90 text-[#A14E15] border-amber-300">
-            <HeartHandshake className="w-3.5 h-3.5" />
-            <span>Personal Vedic Astrology Consultation</span>
-          </Badge>
-        </motion.div>
+      {/* Content wrapper with z-10 floating over mandala background */}
+      <div className="relative z-10 flex flex-col flex-1">
+        
+        {/* 1. WELCOME & REASSURANCE HERO SECTION */}
+        <section className="w-full max-w-3xl mx-auto pt-16 pb-10 px-6 text-center space-y-6">
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Badge variant="default" className="mx-auto bg-amber-100/90 text-[#A14E15] border-amber-300">
+              <HeartHandshake className="w-3.5 h-3.5" />
+              <span>Personal Vedic Astrology Consultation</span>
+            </Badge>
+          </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="space-y-4 max-w-2xl mx-auto"
-        >
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-stone-900 tracking-tight leading-tight">
-            {t.heroTagline}
-          </h2>
-          <p className="text-base text-stone-700 leading-relaxed font-medium max-w-xl mx-auto">
-            {t.heroSubtitle}
-          </p>
-        </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="space-y-4 max-w-2xl mx-auto"
+          >
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-stone-900 tracking-tight leading-tight drop-shadow-xs">
+              {t.heroTagline}
+            </h2>
+            <p className="text-base text-stone-800 leading-relaxed font-semibold max-w-xl mx-auto drop-shadow-xs">
+              {t.heroSubtitle}
+            </p>
+          </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <Button size="lg" onClick={scrollToBooking} className="shadow-lg">
-            <span>{t.heroCta}</span>
-            <ArrowRight className="w-4 h-4" />
-          </Button>
-        </motion.div>
-      </section>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <Button size="lg" onClick={scrollToBooking} className="shadow-lg">
+              <span>{t.heroCta}</span>
+              <ArrowRight className="w-4 h-4" />
+            </Button>
+          </motion.div>
+        </section>
 
-      {/* 2. MEET GURU JI CREDIBILITY SECTION */}
-      <section className="w-full max-w-3xl mx-auto py-8 px-6">
-        <Card className="p-8 sm:p-10 space-y-6 text-center bg-white/95 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-stone-200">
-          <div className="space-y-2">
-            <Badge variant="secondary" className="mx-auto">{t.meetRole}</Badge>
-            <h3 className="text-2xl font-bold text-stone-900">{t.meetTitle}</h3>
-          </div>
-
-          {/* Photo Placeholder Container (ready for Guruji's photo when shared) */}
-          <div className="relative mx-auto w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-gradient-to-b from-amber-50 to-stone-100 border-2 border-amber-200/80 shadow-[0_8px_30px_rgba(0,0,0,0.04)] flex items-center justify-center overflow-hidden">
-            <div className="flex flex-col items-center justify-center text-amber-800/70 gap-1">
-              <User className="w-12 h-12 stroke-[1.5]" />
+        {/* 2. MEET GURU JI CREDIBILITY SECTION */}
+        <section className="w-full max-w-3xl mx-auto py-8 px-6">
+          <Card className="p-8 sm:p-10 space-y-6 text-center bg-white/92 backdrop-blur-md shadow-xl border border-stone-200">
+            <div className="space-y-2">
+              <Badge variant="secondary" className="mx-auto">{t.meetRole}</Badge>
+              <h3 className="text-2xl font-bold text-stone-900">{t.meetTitle}</h3>
             </div>
+
+            {/* Photo Placeholder Container (ready for Guruji's photo when shared) */}
+            <div className="relative mx-auto w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-gradient-to-b from-amber-50 to-stone-100 border-2 border-amber-200/80 shadow-[0_8px_30px_rgba(0,0,0,0.04)] flex items-center justify-center overflow-hidden">
+              <div className="flex flex-col items-center justify-center text-amber-800/70 gap-1">
+                <User className="w-12 h-12 stroke-[1.5]" />
+              </div>
+            </div>
+
+            <p className="text-sm text-stone-600 font-medium leading-relaxed max-w-xl mx-auto">
+              {t.meetBio}
+            </p>
+
+            {/* 4 Trust Pillars Architecture Cards */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 text-left">
+              {[
+                { icon: Award, title: 'Sri Vidya', sub: 'Traditional Sadhana' },
+                { icon: BookOpen, title: 'BPHS Logic', sub: 'Authentic Principles' },
+                { icon: Users, title: '30+ Years', sub: 'Vedic Practice' },
+                { icon: MessageCircle, title: 'Direct', sub: 'WhatsApp Guidance' },
+              ].map((pillar, i) => (
+                <div key={i} className="bg-stone-50/90 border border-stone-200/60 rounded-2xl p-4 space-y-1">
+                  <pillar.icon className="w-4 h-4 text-[#A14E15]" />
+                  <div className="text-xs font-bold text-stone-900">{pillar.title}</div>
+                  <div className="text-[10px] text-stone-500 font-medium">{pillar.sub}</div>
+                </div>
+              ))}
+            </div>
+          </Card>
+        </section>
+
+        {/* 3. HOW CONSULTATION WORKS SECTION */}
+        <section className="w-full max-w-3xl mx-auto py-8 px-6 space-y-6">
+          <div className="text-center space-y-1">
+            <Badge variant="secondary" className="mx-auto">Simple Process</Badge>
+            <h3 className="text-xl font-bold text-stone-900">{t.howTitle}</h3>
           </div>
 
-          <p className="text-sm text-stone-600 font-medium leading-relaxed max-w-xl mx-auto">
-            {t.meetBio}
-          </p>
-
-          {/* 4 Trust Pillars Architecture Cards */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 text-left">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[
-              { icon: Award, title: 'Sri Vidya', sub: 'Traditional Sadhana' },
-              { icon: BookOpen, title: 'BPHS Logic', sub: 'Authentic Principles' },
-              { icon: Users, title: '30+ Years', sub: 'Vedic Practice' },
-              { icon: MessageCircle, title: 'Direct', sub: 'WhatsApp Guidance' },
-            ].map((pillar, i) => (
-              <div key={i} className="bg-stone-50/90 border border-stone-200/60 rounded-2xl p-4 space-y-1">
-                <pillar.icon className="w-4 h-4 text-[#A14E15]" />
-                <div className="text-xs font-bold text-stone-900">{pillar.title}</div>
-                <div className="text-[10px] text-stone-500 font-medium">{pillar.sub}</div>
+              { num: '01', title: t.howStep1, desc: t.howStep1Desc, icon: Sparkles },
+              { num: '02', title: t.howStep2, desc: t.howStep2Desc, icon: CreditCard },
+              { num: '03', title: t.howStep3, desc: t.howStep3Desc, icon: User },
+              { num: '04', title: t.howStep4, desc: t.howStep4Desc, icon: Compass },
+            ].map((item, idx) => (
+              <Card key={idx} className="p-6 flex items-start gap-4 bg-white/92 backdrop-blur-md shadow-md border border-stone-200">
+                <span className="text-base font-extrabold text-[#A14E15] font-mono bg-amber-50 border border-amber-200/80 px-2.5 py-1 rounded-xl shrink-0">
+                  {item.num}
+                </span>
+                <div className="space-y-1">
+                  <h4 className="font-bold text-sm text-stone-900">{item.title}</h4>
+                  <p className="text-xs text-stone-500 font-medium leading-relaxed">{item.desc}</p>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </section>
+
+        {/* 4. INTERACTIVE CONSULTATION WORKFLOW */}
+        <main ref={bookingRef} className="w-full max-w-xl mx-auto py-10 px-4 sm:px-6">
+          
+          {/* Step Indicator */}
+          <div className="flex justify-center items-center gap-3 mb-8">
+            {[0, 1, 2].map((i) => (
+              <div key={i} className="flex items-center gap-2">
+                <div
+                  className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs transition-all duration-300 ${
+                    step === i
+                      ? 'bg-[#A14E15] text-white ring-4 ring-amber-100 shadow-md scale-110'
+                      : step > i
+                      ? 'bg-amber-900 text-white'
+                      : 'bg-stone-200 text-stone-500'
+                  }`}
+                >
+                  {step > i ? '✓' : i + 1}
+                </div>
+                {i < 2 && (
+                  <div
+                    className={`w-12 sm:w-16 h-1 rounded-full transition-all duration-300 ${
+                      step > i ? 'bg-[#A14E15]' : 'bg-stone-200'
+                    }`}
+                  />
+                )}
               </div>
             ))}
           </div>
-        </Card>
-      </section>
 
-      {/* 3. HOW CONSULTATION WORKS SECTION */}
-      <section className="w-full max-w-3xl mx-auto py-8 px-6 space-y-6">
-        <div className="text-center space-y-1">
-          <Badge variant="secondary" className="mx-auto">Simple Process</Badge>
-          <h3 className="text-xl font-bold text-stone-900">{t.howTitle}</h3>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {[
-            { num: '01', title: t.howStep1, desc: t.howStep1Desc, icon: Sparkles },
-            { num: '02', title: t.howStep2, desc: t.howStep2Desc, icon: CreditCard },
-            { num: '03', title: t.howStep3, desc: t.howStep3Desc, icon: User },
-            { num: '04', title: t.howStep4, desc: t.howStep4Desc, icon: Compass },
-          ].map((item, idx) => (
-            <Card key={idx} className="p-6 flex items-start gap-4 bg-white/95 backdrop-blur-md shadow-xs border border-stone-200">
-              <span className="text-base font-extrabold text-[#A14E15] font-mono bg-amber-50 border border-amber-200/80 px-2.5 py-1 rounded-xl shrink-0">
-                {item.num}
-              </span>
-              <div className="space-y-1">
-                <h4 className="font-bold text-sm text-stone-900">{item.title}</h4>
-                <p className="text-xs text-stone-500 font-medium leading-relaxed">{item.desc}</p>
-              </div>
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      {/* 4. INTERACTIVE CONSULTATION WORKFLOW */}
-      <main ref={bookingRef} className="w-full max-w-xl mx-auto py-10 px-4 sm:px-6">
-        
-        {/* Step Indicator */}
-        <div className="flex justify-center items-center gap-3 mb-8">
-          {[0, 1, 2].map((i) => (
-            <div key={i} className="flex items-center gap-2">
-              <div
-                className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs transition-all duration-300 ${
-                  step === i
-                    ? 'bg-[#A14E15] text-white ring-4 ring-amber-100 shadow-md scale-110'
-                    : step > i
-                    ? 'bg-amber-900 text-white'
-                    : 'bg-stone-200 text-stone-500'
-                }`}
-              >
-                {step > i ? '✓' : i + 1}
-              </div>
-              {i < 2 && (
-                <div
-                  className={`w-12 sm:w-16 h-1 rounded-full transition-all duration-300 ${
-                    step > i ? 'bg-[#A14E15]' : 'bg-stone-200'
-                  }`}
-                />
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* Step Card with Motion Transitions */}
-        <Card className="w-full relative bg-white/95 backdrop-blur-md shadow-xl border border-stone-200">
-          <AnimatePresence mode="wait">
-            
-            {/* STEP 0: CHOOSE CONSULTATION FORMAT */}
-            {step === 0 && (
-              <motion.div
-                key="step-0"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-                className="space-y-6"
-              >
-                <div className="text-center space-y-1.5">
-                  <span className="inline-block p-3 rounded-2xl bg-amber-50 text-[#A14E15] mb-1">
-                    <Sparkles className="w-5 h-5" />
-                  </span>
-                  <h3 className="text-xl font-bold text-stone-900">{t.step0Title}</h3>
-                  <p className="text-xs text-stone-500 font-medium">Select the consultation format that fits your questions</p>
-                </div>
-
-                <div className="space-y-3.5">
-                  {SERVICES.map((s) => {
-                    const isSelected = selectedService.id === s.id;
-                    const IconComponent = s.icon;
-                    return (
-                      <div
-                        key={s.id}
-                        onClick={() => setSelectedService(s)}
-                        className={`p-5 rounded-2xl border transition-all duration-200 cursor-pointer relative flex items-start gap-4 ${
-                          isSelected
-                            ? 'border-[#A14E15] bg-amber-50/60 ring-1 ring-[#A14E15]/30 shadow-xs'
-                            : 'border-stone-200 bg-white hover:border-stone-300'
-                        }`}
-                      >
-                        {s.popular && (
-                          <span className="absolute -top-3 right-4 bg-[#A14E15] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-0.5 rounded-full shadow-xs">
-                            Most Popular
-                          </span>
-                        )}
-                        
-                        <div className="p-2.5 bg-white rounded-xl border border-stone-200 text-[#A14E15] shrink-0">
-                          <IconComponent className="w-5 h-5" />
-                        </div>
-
-                        <div className="flex-1 min-w-0">
-                          <div className="flex justify-between items-center gap-2">
-                            <h4 className="font-bold text-base text-stone-900 truncate">
-                              {lang === 'GU' ? s.titleGU : s.titleEN}
-                            </h4>
-                            <span className="text-base font-extrabold text-[#A14E15] shrink-0">
-                              ₹{s.price}
-                            </span>
-                          </div>
-                          <p className="text-xs text-stone-600 mt-1 leading-relaxed font-medium">
-                            {lang === 'GU' ? s.descGU : s.descEN}
-                          </p>
-                        </div>
-
-                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-1 transition-all ${
-                          isSelected ? 'border-[#A14E15] bg-[#A14E15] text-white' : 'border-stone-300'
-                        }`}>
-                          {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                <Button onClick={() => setStep(1)} className="w-full h-14 rounded-2xl text-base">
-                  <span>Proceed to Pay ₹{selectedService.price}</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
-              </motion.div>
-            )}
-
-            {/* STEP 1: DAKSHINA OFFERING */}
-            {step === 1 && (
-              <motion.div
-                key="step-1"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-                className="space-y-6 text-center"
-              >
-                <div className="space-y-2">
-                  <span className="inline-block p-3 rounded-2xl bg-amber-50 text-[#A14E15] mb-1">
-                    <CreditCard className="w-5 h-5" />
-                  </span>
-                  <h3 className="text-xl font-bold text-stone-900">{t.step1Title}</h3>
-                  <div className="mt-2 bg-amber-50/70 border border-amber-200/80 rounded-2xl p-3.5 inline-block">
-                    <span className="text-xs text-stone-600 block font-medium">Selected Format:</span>
-                    <span className="text-base font-bold text-[#A14E15]">
-                      {lang === 'GU' ? selectedService.titleGU : selectedService.titleEN} — ₹{selectedService.price}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Mobile UPI Intent Button */}
-                <div className="block sm:hidden">
-                  <a
-                    href={upiLink}
-                    className="w-full inline-flex items-center justify-center gap-2 bg-[#A14E15] text-white font-bold py-4 px-6 rounded-2xl text-base shadow-md"
-                  >
-                    <CreditCard className="w-5 h-5" />
-                    <span>Pay ₹{selectedService.price} via UPI App</span>
-                  </a>
-                </div>
-
-                {/* Desktop QR Code */}
-                <div className="flex flex-col items-center gap-3">
-                  <p className="text-xs text-stone-500 font-semibold sm:block hidden">
-                    {t.qrDesktopText}
-                  </p>
-                  <div className="border-4 border-amber-200 rounded-3xl p-2.5 bg-white shadow-xs">
-                    <img
-                      src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(
-                        upiLink
-                      )}`}
-                      alt="UPI QR Code"
-                      className="w-44 h-44"
-                    />
-                  </div>
-                  <Badge variant="secondary" className="font-mono text-xs">
-                    UPI ID: {GURU_UPI_ID} (Amount: ₹{selectedService.price})
-                  </Badge>
-                </div>
-
-                <Button onClick={() => setStep(2)} className="w-full h-14 rounded-2xl text-base">
-                  {t.paidBtn}
-                </Button>
-              </motion.div>
-            )}
-
-            {/* STEP 2: TELL US ABOUT YOURSELF */}
-            {step === 2 && (
-              <motion.div
-                key="step-2"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-              >
-                <form onSubmit={handleSubmitDetails} className="space-y-5">
-                  <div className="text-center space-y-1">
+          {/* Step Card with Motion Transitions */}
+          <Card className="w-full relative bg-white/95 backdrop-blur-md shadow-2xl border border-stone-200">
+            <AnimatePresence mode="wait">
+              
+              {/* STEP 0: CHOOSE CONSULTATION FORMAT */}
+              {step === 0 && (
+                <motion.div
+                  key="step-0"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className="space-y-6"
+                >
+                  <div className="text-center space-y-1.5">
                     <span className="inline-block p-3 rounded-2xl bg-amber-50 text-[#A14E15] mb-1">
-                      <User className="w-5 h-5" />
+                      <Sparkles className="w-5 h-5" />
                     </span>
-                    <h3 className="text-xl font-bold text-stone-900">{t.step2Title}</h3>
-                    <p className="text-xs text-stone-500 font-medium">Provide exact birth details so Guruji can calculate your chart</p>
+                    <h3 className="text-xl font-bold text-stone-900">{t.step0Title}</h3>
+                    <p className="text-xs text-stone-500 font-medium">Select the consultation format that fits your questions</p>
                   </div>
 
-                  {formError && (
-                    <div className="bg-red-50 border border-red-200 text-red-700 rounded-2xl p-4 text-xs font-semibold flex items-center gap-2">
-                      <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
-                      <span>{formError}</span>
+                  <div className="space-y-3.5">
+                    {SERVICES.map((s) => {
+                      const isSelected = selectedService.id === s.id;
+                      const IconComponent = s.icon;
+                      return (
+                        <div
+                          key={s.id}
+                          onClick={() => setSelectedService(s)}
+                          className={`p-5 rounded-2xl border transition-all duration-200 cursor-pointer relative flex items-start gap-4 ${
+                            isSelected
+                              ? 'border-[#A14E15] bg-amber-50/60 ring-1 ring-[#A14E15]/30 shadow-xs'
+                              : 'border-stone-200 bg-white hover:border-stone-300'
+                          }`}
+                        >
+                          {s.popular && (
+                            <span className="absolute -top-3 right-4 bg-[#A14E15] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-0.5 rounded-full shadow-xs">
+                              Most Popular
+                            </span>
+                          )}
+                          
+                          <div className="p-2.5 bg-white rounded-xl border border-stone-200 text-[#A14E15] shrink-0">
+                            <IconComponent className="w-5 h-5" />
+                          </div>
+
+                          <div className="flex-1 min-w-0">
+                            <div className="flex justify-between items-center gap-2">
+                              <h4 className="font-bold text-base text-stone-900 truncate">
+                                {lang === 'GU' ? s.titleGU : s.titleEN}
+                              </h4>
+                              <span className="text-base font-extrabold text-[#A14E15] shrink-0">
+                                ₹{s.price}
+                              </span>
+                            </div>
+                            <p className="text-xs text-stone-600 mt-1 leading-relaxed font-medium">
+                              {lang === 'GU' ? s.descGU : s.descEN}
+                            </p>
+                          </div>
+
+                          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-1 transition-all ${
+                            isSelected ? 'border-[#A14E15] bg-[#A14E15] text-white' : 'border-stone-300'
+                          }`}>
+                            {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <Button onClick={() => setStep(1)} className="w-full h-14 rounded-2xl text-base">
+                    <span>Proceed to Pay ₹{selectedService.price}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </motion.div>
+              )}
+
+              {/* STEP 1: DAKSHINA OFFERING */}
+              {step === 1 && (
+                <motion.div
+                  key="step-1"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className="space-y-6 text-center"
+                >
+                  <div className="space-y-2">
+                    <span className="inline-block p-3 rounded-2xl bg-amber-50 text-[#A14E15] mb-1">
+                      <CreditCard className="w-5 h-5" />
+                    </span>
+                    <h3 className="text-xl font-bold text-stone-900">{t.step1Title}</h3>
+                    <div className="mt-2 bg-amber-50/70 border border-amber-200/80 rounded-2xl p-3.5 inline-block">
+                      <span className="text-xs text-stone-600 block font-medium">Selected Format:</span>
+                      <span className="text-base font-bold text-[#A14E15]">
+                        {lang === 'GU' ? selectedService.titleGU : selectedService.titleEN} — ₹{selectedService.price}
+                      </span>
                     </div>
-                  )}
-
-                  {/* Full Name */}
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
-                      <User className="w-3.5 h-3.5 text-[#A14E15]" />
-                      <span>{t.nameLabel}</span>
-                    </label>
-                    <Input
-                      type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      placeholder="e.g. Vijaysinh Varachhiya"
-                      required
-                    />
                   </div>
 
-                  {/* WhatsApp Number with Country Code Dropdown */}
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
-                      <Phone className="w-3.5 h-3.5 text-[#A14E15]" />
-                      <span>{t.phoneLabel}</span>
-                    </label>
-                    <div className="flex gap-2.5">
-                      <select
-                        value={countryCode}
-                        onChange={(e) => setCountryCode(e.target.value)}
-                        className="border border-stone-200 bg-stone-50 rounded-2xl px-3.5 py-4 text-sm font-bold text-stone-800 outline-none focus:border-[#A14E15] cursor-pointer"
-                      >
-                        {COUNTRY_CODES.map((c) => (
-                          <option key={c.code} value={c.code}>
-                            {c.flag} {c.code}
-                          </option>
-                        ))}
-                      </select>
+                  {/* Mobile UPI Intent Button */}
+                  <div className="block sm:hidden">
+                    <a
+                      href={upiLink}
+                      className="w-full inline-flex items-center justify-center gap-2 bg-[#A14E15] text-white font-bold py-4 px-6 rounded-2xl text-base shadow-md"
+                    >
+                      <CreditCard className="w-5 h-5" />
+                      <span>Pay ₹{selectedService.price} via UPI App</span>
+                    </a>
+                  </div>
 
-                      <input
-                        type="tel"
-                        value={phoneRaw}
-                        onChange={(e) => setPhoneRaw(e.target.value.replace(/[^\d\s-]/g, ''))}
-                        placeholder="98765 43210"
-                        className="flex-1 bg-white border border-stone-200 rounded-2xl p-4 text-base font-mono text-stone-900 outline-none focus:border-[#A14E15] focus:ring-4 focus:ring-amber-500/10 transition-all"
+                  {/* Desktop QR Code */}
+                  <div className="flex flex-col items-center gap-3">
+                    <p className="text-xs text-stone-500 font-semibold sm:block hidden">
+                      {t.qrDesktopText}
+                    </p>
+                    <div className="border-4 border-amber-200 rounded-3xl p-2.5 bg-white shadow-xs">
+                      <img
+                        src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(
+                          upiLink
+                        )}`}
+                        alt="UPI QR Code"
+                        className="w-44 h-44"
+                      />
+                    </div>
+                    <Badge variant="secondary" className="font-mono text-xs">
+                      UPI ID: {GURU_UPI_ID} (Amount: ₹{selectedService.price})
+                    </Badge>
+                  </div>
+
+                  <Button onClick={() => setStep(2)} className="w-full h-14 rounded-2xl text-base">
+                    {t.paidBtn}
+                  </Button>
+                </motion.div>
+              )}
+
+              {/* STEP 2: TELL US ABOUT YOURSELF */}
+              {step === 2 && (
+                <motion.div
+                  key="step-2"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <form onSubmit={handleSubmitDetails} className="space-y-5">
+                    <div className="text-center space-y-1">
+                      <span className="inline-block p-3 rounded-2xl bg-amber-50 text-[#A14E15] mb-1">
+                        <User className="w-5 h-5" />
+                      </span>
+                      <h3 className="text-xl font-bold text-stone-900">{t.step2Title}</h3>
+                      <p className="text-xs text-stone-500 font-medium">Provide exact birth details so Guruji can calculate your chart</p>
+                    </div>
+
+                    {formError && (
+                      <div className="bg-red-50 border border-red-200 text-red-700 rounded-2xl p-4 text-xs font-semibold flex items-center gap-2">
+                        <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
+                        <span>{formError}</span>
+                      </div>
+                    )}
+
+                    {/* Full Name */}
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
+                        <User className="w-3.5 h-3.5 text-[#A14E15]" />
+                        <span>{t.nameLabel}</span>
+                      </label>
+                      <Input
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="e.g. Vijaysinh Varachhiya"
                         required
                       />
                     </div>
-                  </div>
 
-                  {/* Date of Birth — Click anywhere to open date picker */}
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
-                      <Calendar className="w-3.5 h-3.5 text-[#A14E15]" />
-                      <span>{t.birthDateLabel}</span>
-                    </label>
-                    <Input
-                      type="date"
-                      value={birthDetails.date}
-                      onClick={(e) => (e.currentTarget as any).showPicker?.()}
-                      onChange={(e) => setBirthDetails((prev) => ({ ...prev, date: e.target.value }))}
-                      className="cursor-pointer"
-                      required
-                    />
-                  </div>
+                    {/* WhatsApp Number with Country Code Dropdown */}
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
+                        <Phone className="w-3.5 h-3.5 text-[#A14E15]" />
+                        <span>{t.phoneLabel}</span>
+                      </label>
+                      <div className="flex gap-2.5">
+                        <select
+                          value={countryCode}
+                          onChange={(e) => setCountryCode(e.target.value)}
+                          className="border border-stone-200 bg-stone-50 rounded-2xl px-3.5 py-4 text-sm font-bold text-stone-800 outline-none focus:border-[#A14E15] cursor-pointer"
+                        >
+                          {COUNTRY_CODES.map((c) => (
+                            <option key={c.code} value={c.code}>
+                              {c.flag} {c.code}
+                            </option>
+                          ))}
+                        </select>
 
-                  {/* Time of Birth — Click anywhere to open time picker */}
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5 text-[#A14E15]" />
-                      <span>{t.birthTimeLabel}</span>
-                    </label>
-                    <Input
-                      type="time"
-                      step="1"
-                      value={birthDetails.time}
-                      onClick={(e) => (e.currentTarget as any).showPicker?.()}
-                      onChange={(e) => setBirthDetails((prev) => ({ ...prev, time: e.target.value }))}
-                      className="cursor-pointer"
-                      required
-                    />
-                  </div>
+                        <input
+                          type="tel"
+                          value={phoneRaw}
+                          onChange={(e) => setPhoneRaw(e.target.value.replace(/[^\d\s-]/g, ''))}
+                          placeholder="98765 43210"
+                          className="flex-1 bg-white border border-stone-200 rounded-2xl p-4 text-base font-mono text-stone-900 outline-none focus:border-[#A14E15] focus:ring-4 focus:ring-amber-500/10 transition-all"
+                          required
+                        />
+                      </div>
+                    </div>
 
-                  {/* Birth Place Search with English Locale */}
-                  <div className="space-y-1.5 relative" ref={searchContainerRef}>
-                    <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-[#A14E15]" />
-                      <span>{t.birthPlaceLabel}</span>
-                    </label>
-                    <input
-                      type="text"
-                      value={placeSearch}
-                      onChange={(e) => {
-                        setPlaceSearch(e.target.value);
-                        setBirthDetails((prev) => ({ ...prev, place: '', lat: 0, lng: 0 }));
-                      }}
-                      placeholder="e.g. Surat, Gujarat, India"
-                      className="w-full bg-white border border-stone-200 rounded-2xl p-4 text-base text-stone-900 outline-none focus:border-[#A14E15] focus:ring-4 focus:ring-amber-500/10 transition-all"
-                      required
-                    />
-                    
-                    {isSearching && (
-                      <span className="absolute right-4 top-11 text-xs text-[#A14E15] font-semibold animate-pulse">
-                        {t.searching}
-                      </span>
-                    )}
+                    {/* Date of Birth — Click anywhere to open date picker */}
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
+                        <Calendar className="w-3.5 h-3.5 text-[#A14E15]" />
+                        <span>{t.birthDateLabel}</span>
+                      </label>
+                      <Input
+                        type="date"
+                        value={birthDetails.date}
+                        onClick={(e) => (e.currentTarget as any).showPicker?.()}
+                        onChange={(e) => setBirthDetails((prev) => ({ ...prev, date: e.target.value }))}
+                        className="cursor-pointer"
+                        required
+                      />
+                    </div>
 
-                    {placeSuggestions.length > 0 && (
-                      <ul className="absolute z-30 top-[82px] left-0 w-full bg-white border border-stone-200 rounded-2xl shadow-xl max-h-56 overflow-y-auto divide-y divide-stone-100">
-                        {placeSuggestions.map((item, idx) => (
-                          <li
-                            key={idx}
-                            onClick={() => handleSelectPlace(item)}
-                            className="p-4 hover:bg-amber-50/50 cursor-pointer text-xs font-medium text-stone-800 transition-colors flex items-center gap-2.5"
-                          >
-                            <MapPin className="w-4 h-4 text-[#A14E15] shrink-0" />
-                            <span className="truncate">{item.display_name}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
+                    {/* Time of Birth — Click anywhere to open time picker */}
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
+                        <Clock className="w-3.5 h-3.5 text-[#A14E15]" />
+                        <span>{t.birthTimeLabel}</span>
+                      </label>
+                      <Input
+                        type="time"
+                        step="1"
+                        value={birthDetails.time}
+                        onClick={(e) => (e.currentTarget as any).showPicker?.()}
+                        onChange={(e) => setBirthDetails((prev) => ({ ...prev, time: e.target.value }))}
+                        className="cursor-pointer"
+                        required
+                      />
+                    </div>
 
-                  {/* Timezone Selector */}
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
-                      <ShieldCheck className="w-3.5 h-3.5 text-[#A14E15]" />
-                      <span>{t.tzLabel}</span>
-                    </label>
-                    <select
-                      value={birthDetails.tzOffset}
-                      onChange={(e) => setBirthDetails((prev) => ({ ...prev, tzOffset: parseFloat(e.target.value) }))}
-                      className="w-full bg-white border border-stone-200 rounded-2xl p-4 text-base font-medium text-stone-900 outline-none focus:border-[#A14E15] focus:ring-4 focus:ring-amber-500/10 cursor-pointer"
+                    {/* Birth Place Search with English Locale */}
+                    <div className="space-y-1.5 relative" ref={searchContainerRef}>
+                      <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
+                        <MapPin className="w-3.5 h-3.5 text-[#A14E15]" />
+                        <span>{t.birthPlaceLabel}</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={placeSearch}
+                        onChange={(e) => {
+                          setPlaceSearch(e.target.value);
+                          setBirthDetails((prev) => ({ ...prev, place: '', lat: 0, lng: 0 }));
+                        }}
+                        placeholder="e.g. Surat, Gujarat, India"
+                        className="w-full bg-white border border-stone-200 rounded-2xl p-4 text-base text-stone-900 outline-none focus:border-[#A14E15] focus:ring-4 focus:ring-amber-500/10 transition-all"
+                        required
+                      />
+                      
+                      {isSearching && (
+                        <span className="absolute right-4 top-11 text-xs text-[#A14E15] font-semibold animate-pulse">
+                          {t.searching}
+                        </span>
+                      )}
+
+                      {placeSuggestions.length > 0 && (
+                        <ul className="absolute z-30 top-[82px] left-0 w-full bg-white border border-stone-200 rounded-2xl shadow-xl max-h-56 overflow-y-auto divide-y divide-stone-100">
+                          {placeSuggestions.map((item, idx) => (
+                            <li
+                              key={idx}
+                              onClick={() => handleSelectPlace(item)}
+                              className="p-4 hover:bg-amber-50/50 cursor-pointer text-xs font-medium text-stone-800 transition-colors flex items-center gap-2.5"
+                            >
+                              <MapPin className="w-4 h-4 text-[#A14E15] shrink-0" />
+                              <span className="truncate">{item.display_name}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+
+                    {/* Timezone Selector */}
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
+                        <ShieldCheck className="w-3.5 h-3.5 text-[#A14E15]" />
+                        <span>{t.tzLabel}</span>
+                      </label>
+                      <select
+                        value={birthDetails.tzOffset}
+                        onChange={(e) => setBirthDetails((prev) => ({ ...prev, tzOffset: parseFloat(e.target.value) }))}
+                        className="w-full bg-white border border-stone-200 rounded-2xl p-4 text-base font-medium text-stone-900 outline-none focus:border-[#A14E15] focus:ring-4 focus:ring-amber-500/10 cursor-pointer"
+                      >
+                        <option value={5.5}>🇮🇳 India Standard Time (IST) — UTC +5:30 (Default)</option>
+                        <option value={-5.0}>🇺🇸 US Eastern (EST/EDT) — UTC -5:00</option>
+                        <option value={-6.0}>🇺🇸 US Central (CST/CDT) — UTC -6:00</option>
+                        <option value={-7.0}>🇺🇸 US Mountain (MST/MDT) — UTC -7:00</option>
+                        <option value={-8.0}>🇺🇸 US Pacific (PST/PDT) — UTC -8:00</option>
+                        <option value={0.0}>🇬🇧 UK / London (GMT/BST) — UTC +0:00</option>
+                        <option value={1.0}>🇪🇺 Central Europe (Paris/Berlin) — UTC +1:00</option>
+                        <option value={4.0}>🇦🇪 UAE / Dubai (GST) — UTC +4:00</option>
+                        <option value={8.0}>🇸🇬 Singapore (SGT) — UTC +8:00</option>
+                        <option value={10.0}>🇦🇺 Australia / Sydney (AEST) — UTC +10:00</option>
+                        <option value={5.75}>🇳🇵 Nepal (NPT) — UTC +5:45</option>
+                      </select>
+                    </div>
+
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting || !birthDetails.place}
+                      className="w-full h-14 rounded-2xl text-base mt-2"
                     >
-                      <option value={5.5}>🇮🇳 India Standard Time (IST) — UTC +5:30 (Default)</option>
-                      <option value={-5.0}>🇺🇸 US Eastern (EST/EDT) — UTC -5:00</option>
-                      <option value={-6.0}>🇺🇸 US Central (CST/CDT) — UTC -6:00</option>
-                      <option value={-7.0}>🇺🇸 US Mountain (MST/MDT) — UTC -7:00</option>
-                      <option value={-8.0}>🇺🇸 US Pacific (PST/PDT) — UTC -8:00</option>
-                      <option value={0.0}>🇬🇧 UK / London (GMT/BST) — UTC +0:00</option>
-                      <option value={1.0}>🇪🇺 Central Europe (Paris/Berlin) — UTC +1:00</option>
-                      <option value={4.0}>🇦🇪 UAE / Dubai (GST) — UTC +4:00</option>
-                      <option value={8.0}>🇸🇬 Singapore (SGT) — UTC +8:00</option>
-                      <option value={10.0}>🇦🇺 Australia / Sydney (AEST) — UTC +10:00</option>
-                      <option value={5.75}>🇳🇵 Nepal (NPT) — UTC +5:45</option>
-                    </select>
+                      {isSubmitting ? t.loading : t.submitBtn}
+                    </Button>
+                  </form>
+                </motion.div>
+              )}
+
+              {/* STEP 3: SUBMISSION CONFIRMED */}
+              {step === 3 && (
+                <motion.div
+                  key="step-3"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-6 text-center py-6"
+                >
+                  <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center mx-auto shadow-xs">
+                    <CheckCircle2 className="w-10 h-10 stroke-[2]" />
                   </div>
+                  <div className="space-y-2">
+                    <h3 className="text-2xl font-bold text-stone-900">{t.step3Title}</h3>
+                    <p className="text-stone-800 text-base font-semibold leading-relaxed max-w-md mx-auto">
+                      {t.successMsg}
+                    </p>
+                    <p className="text-stone-500 text-xs leading-relaxed max-w-sm mx-auto font-medium">
+                      {t.successSub}
+                    </p>
+                  </div>
+                </motion.div>
+              )}
 
-                  <Button
-                    type="submit"
-                    disabled={isSubmitting || !birthDetails.place}
-                    className="w-full h-14 rounded-2xl text-base mt-2"
-                  >
-                    {isSubmitting ? t.loading : t.submitBtn}
-                  </Button>
-                </form>
-              </motion.div>
-            )}
+            </AnimatePresence>
+          </Card>
+        </main>
 
-            {/* STEP 3: SUBMISSION CONFIRMED */}
-            {step === 3 && (
-              <motion.div
-                key="step-3"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3 }}
-                className="space-y-6 text-center py-6"
-              >
-                <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center mx-auto shadow-xs">
-                  <CheckCircle2 className="w-10 h-10 stroke-[2]" />
-                </div>
-                <div className="space-y-2">
-                  <h3 className="text-2xl font-bold text-stone-900">{t.step3Title}</h3>
-                  <p className="text-stone-800 text-base font-semibold leading-relaxed max-w-md mx-auto">
-                    {t.successMsg}
-                  </p>
-                  <p className="text-stone-500 text-xs leading-relaxed max-w-sm mx-auto font-medium">
-                    {t.successSub}
-                  </p>
-                </div>
-              </motion.div>
-            )}
-
-          </AnimatePresence>
-        </Card>
-      </main>
+      </div>
     </div>
   );
 }
