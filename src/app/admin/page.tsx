@@ -20,7 +20,7 @@ import {
   deleteDoc,
 } from 'firebase/firestore';
 import { Button } from '../../components/ui/shadcn/button';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../components/ui/shadcn/card';
+import { Card } from '../../components/ui/shadcn/card';
 import { Input } from '../../components/ui/shadcn/input';
 import { Badge } from '../../components/ui/shadcn/badge';
 import {
@@ -136,6 +136,7 @@ export default function AdminDashboard() {
     }
   };
 
+  // WhatsApp Share with strict tab & opener isolation
   const handleWhatsAppShare = (client: ClientSubmission) => {
     const liveOrigin = typeof window !== 'undefined' ? window.location.origin : 'https://astro-seva-mocha.vercel.app';
     const kundliUrl = `${liveOrigin}/kundli/${client.id}`;
@@ -143,7 +144,9 @@ export default function AdminDashboard() {
     
     const cleanPhone = client.phone.replace(/[^\d+]/g, '');
     const waUrl = `https://api.whatsapp.com/send?phone=${encodeURIComponent(cleanPhone)}&text=${encodeURIComponent(message)}`;
-    window.open(waUrl, '_blank');
+    
+    // Enforce noopener, noreferrer to prevent referrer/opener leakage
+    window.open(waUrl, '_blank', 'noopener,noreferrer');
   };
 
   if (loading) {

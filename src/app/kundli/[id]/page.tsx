@@ -3,7 +3,7 @@
 export const dynamic = 'force-dynamic';
 
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import NorthIndianChart from '../../../components/NorthIndianChart';
 import { Button } from '../../../components/ui/shadcn/button';
 import { Card } from '../../../components/ui/shadcn/card';
@@ -25,7 +25,7 @@ import {
   ShieldCheck,
   Zap,
   AlertTriangle,
-  CheckCircle2,
+  Home,
 } from 'lucide-react';
 
 const RASHI_NAMES_EN = [
@@ -54,6 +54,7 @@ const PLANET_SPANS: Record<string, number> = {
 
 export default function KundliPage() {
   const params = useParams();
+  const router = useRouter();
   const id = params?.id as string;
 
   const [loading, setLoading] = useState(true);
@@ -119,6 +120,11 @@ export default function KundliPage() {
     return `${NAKSHATRA_NAMES[nakIdx] || 'Nakshatra'} (Pada ${pada})`;
   };
 
+  // Safe navigation back to public home page (never to admin)
+  const handleHomeClick = () => {
+    window.location.href = '/';
+  };
+
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-[#FAF9F6] text-[#A14E15] gap-3 p-6">
@@ -151,15 +157,16 @@ export default function KundliPage() {
   return (
     <div className="min-h-screen bg-[#FAF9F6] text-stone-900 font-sans flex flex-col">
       
-      {/* Navigation Header */}
+      {/* Navigation Header - Secured so Back button goes to Public Home Page */}
       <header className="bg-white border-b border-stone-200/60 px-6 py-3.5 flex justify-between items-center shadow-xs print:hidden">
         <div className="flex items-center gap-3">
           <button
-            onClick={() => window.close()}
-            className="p-2 rounded-2xl hover:bg-stone-100 transition-colors cursor-pointer text-stone-600"
-            title="Close Tab"
+            onClick={handleHomeClick}
+            className="p-2 rounded-2xl hover:bg-stone-100 transition-colors cursor-pointer text-stone-600 flex items-center gap-1.5 text-xs font-bold"
+            title="Go to Home Page"
           >
-            <ArrowLeft className="w-5 h-5" />
+            <Home className="w-4 h-4 text-[#A14E15]" />
+            <span>Home</span>
           </button>
           <div>
             <h1 className="text-base font-bold tracking-tight text-stone-900">{client.name}'s Kundli Report</h1>
