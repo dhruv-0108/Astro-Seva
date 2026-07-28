@@ -1,0 +1,30 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default rule: reject everything
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Submissions collection rules
+    match /submissions/{submissionId} {
+      // Clients can create new submissions
+      allow create: if 
+        // Type and existence checks
+        request.resource.data.name is string &&
+        request.resource.data.name.size() > 0 &&
+        request.resource.data.name.size() < 100 &&
+        request.resource.data.phone is string &&
+        request.resource.data.phone.size() > 0 &&
+        request.resource.data.phone.size() < 20 &&
+        request.resource.data.birthDetails is map &&
+        request.resource.data.paymentStatus in ['pending', 'paid'] &&
+        request.resource.data.createdAt is timestamp &&
+        request.resource.data.deleteAt is timestamp;
+
+      // Only Guruji (authenticated admin) can read, update, or delete submissions
+      allow read, update, delete: if request.auth != null && request.auth.token.email_verified == true;
+    }
+  }
+}
