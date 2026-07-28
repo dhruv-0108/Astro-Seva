@@ -1,6 +1,15 @@
+// @ts-ignore
+import regeneratorRuntime from 'regenerator-runtime';
+if (typeof globalThis !== 'undefined') {
+  (globalThis as any).regeneratorRuntime = regeneratorRuntime;
+}
+
+
 import { load, Constants } from '@fusionstrings/swiss-eph';
+
 import path from 'path';
 import fs from 'fs';
+
 
 let ephInstance: any = null;
 let initPromise: Promise<any> | null = null;

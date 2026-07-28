@@ -1,5 +1,14 @@
+// @ts-ignore
+import regeneratorRuntime from 'regenerator-runtime';
+if (typeof globalThis !== 'undefined') {
+  (globalThis as any).regeneratorRuntime = regeneratorRuntime;
+}
+
+
 import { NextResponse } from 'next/server';
 import { adminDb } from '../../../lib/firebase/admin';
+
+
 import { calculateAstrologicalData } from '../../../lib/astrology/astro';
 import { calculateAllVargas, calculateVargaSign, VargaName } from '../../../lib/astrology/vargas';
 import { calculateVimshottari, PLANET_SPANS } from '../../../lib/astrology/dashas';
@@ -29,7 +38,37 @@ const PLANET_NAMES_GU: Record<string, string> = {
   Ketu: 'કેતુ',
 };
 
-// Draw North Indian Style chart in PDF
+function drawTextSafe(page: any, text: any, options: any) {
+  if (text === null || text === undefined) return;
+  let str = String(text);
+  if (!str) return;
+
+  // Fix fontkit GPOS anchor issue with Gujarati Anusvara on 'અ'
+  str = str.replace(/અં/g, 'અન્');
+
+  try {
+    page.drawText(str, options);
+  } catch (e: any) {
+    try {
+      // Secondary fallback
+      const fallback = str.replace(/\u0A82/g, 'ં');
+      page.drawText(fallback, options);
+    } catch (e2) {
+      console.warn(`drawTextSafe warning for "${str}":`, e2);
+    }
+  }
+}
+
+
+function pageBorderLine(page: any, y: number) {
+  page.drawLine({
+    start: { x: 50, y },
+    end: { x: 545, y },
+    color: rgb(0.92, 0.92, 0.92),
+    width: 0.5,
+  });
+}
+
 function drawNorthIndianChart(
   page: any,
   font: any,
@@ -37,9 +76,10 @@ function drawNorthIndianChart(
   y: number,
   size: number,
   title: string,
-  lagnaSign: number, // 0 to 11
+  lagnaSign: number,
   planetsMap: Record<string, { sign: number; isRetrograde: boolean }>
 ) {
+
   // Draw outline square
   page.drawRectangle({
     x,
@@ -65,7 +105,7 @@ function drawNorthIndianChart(
   page.drawLine({ start: { x: x + size, y: cy }, end: { x: cx, y }, color: rgb(0.83, 0.68, 0.21), width: 1 });
 
   // Draw Title
-  page.drawText(title, {
+  drawTextSafe(page, title, {
     x: x + 10,
     y: y + size - 18,
     size: 11,
@@ -74,7 +114,6 @@ function drawNorthIndianChart(
   });
 
   // Calculate sign numbers for each of the 12 houses (1-indexed house positions in chart)
-  // House 1 (top center) has lagnaSign + 1. House 2 has lagnaSign + 2...
   const houseSigns: Record<number, number> = {};
   for (let h = 1; h <= 12; h++) {
     houseSigns[h] = ((lagnaSign + h - 1) % 12) + 1; // 1 to 12 display number
@@ -92,7 +131,6 @@ function drawNorthIndianChart(
   }
 
   // Geometrical coordinates for house sign numbers and planet names
-  // Format: [ houseNumber ]: { signCoords: [dx, dy], planetCoords: [dx, dy] }
   const positions: Record<number, { sx: number; sy: number; px: number; py: number }> = {
     1: { sx: cx - 4, sy: y + size * 0.70, px: cx - 20, py: y + size * 0.58 },
     2: { sx: x + size * 0.25, sy: y + size * 0.82, px: x + size * 0.12, py: y + size * 0.72 },
@@ -112,7 +150,7 @@ function drawNorthIndianChart(
   for (let h = 1; h <= 12; h++) {
     const pos = positions[h];
     // Sign number
-    page.drawText(houseSigns[h].toString(), {
+    drawTextSafe(page, houseSigns[h].toString(), {
       x: pos.sx,
       y: pos.sy,
       size: 8,
@@ -125,7 +163,7 @@ function drawNorthIndianChart(
     if (plist.length > 0) {
       // Draw first two planets, stack others
       plist.slice(0, 3).forEach((pstr, idx) => {
-        page.drawText(pstr, {
+        drawTextSafe(page, pstr, {
           x: pos.px,
           y: pos.py - idx * 8,
           size: 7,
@@ -138,7 +176,7 @@ function drawNorthIndianChart(
 }
 
 // Center title helper
-function drawHeader(page: any, font: any, title: string, subtitle: string = '') {
+function drawHeader(page: any, font: any, title: string, subtitle?: string) {
   // Saffron header line
   page.drawLine({
     start: { x: 50, y: 795 },
@@ -147,11 +185,11 @@ function drawHeader(page: any, font: any, title: string, subtitle: string = '') 
     width: 2,
   });
 
-  page.drawText('ૐ', { x: 50, y: 805, size: 24, font, color: rgb(0.8, 0.4, 0) });
-  page.drawText(title, { x: 80, y: 808, size: 14, font, color: rgb(0.8, 0.4, 0) });
+  drawTextSafe(page, 'ૐ', { x: 50, y: 805, size: 24, font, color: rgb(0.8, 0.4, 0) });
+  drawTextSafe(page, title, { x: 80, y: 808, size: 14, font, color: rgb(0.8, 0.4, 0) });
   
   if (subtitle) {
-    page.drawText(subtitle, { x: 80, y: 799, size: 8, font, color: rgb(0.5, 0.5, 0.5) });
+    drawTextSafe(page, subtitle, { x: 80, y: 799, size: 8, font, color: rgb(0.5, 0.5, 0.5) });
   }
 
   // Footer page number
@@ -161,7 +199,7 @@ function drawHeader(page: any, font: any, title: string, subtitle: string = '') 
     color: rgb(0.9, 0.9, 0.9),
     width: 1,
   });
-  page.drawText('એસ્ટ્રો-સેવા કુંડળી રિપોર્ટ — ગુરુજીના આશીર્વાદ સાથે', {
+  drawTextSafe(page, 'એસ્ટ્રો-સેવા કુંડળી રિપોર્ટ — ગુરુજીના આશીર્વાદ સાથે', {
     x: 50,
     y: 28,
     size: 7,
@@ -248,8 +286,8 @@ export async function GET(request: Request) {
       { k: 'અયનાંશ (Ayanamsa)', v: `${Math.floor(astro.ayanamsa)}°${Math.floor((astro.ayanamsa % 1) * 60)}' ${Math.floor((((astro.ayanamsa % 1) * 60) % 1) * 60)}"` },
     ];
     p1Left.forEach((item, idx) => {
-      p1.drawText(item.k, { x: 60, y: 740 - idx * 30, size: 9, font, color: rgb(0.5, 0.5, 0.5) });
-      p1.drawText(item.v, { x: 60, y: 728 - idx * 30, size: 10, font, color: rgb(0.1, 0.1, 0.1) });
+      drawTextSafe(p1, item.k, { x: 60, y: 740 - idx * 30, size: 9, font, color: rgb(0.5, 0.5, 0.5) });
+      drawTextSafe(p1, item.v, { x: 60, y: 728 - idx * 30, size: 10, font, color: rgb(0.1, 0.1, 0.1) });
     });
 
     // Right Column Box
@@ -260,25 +298,25 @@ export async function GET(request: Request) {
       { k: 'નક્ષત્ર (Nakshatra)', v: `${panchanga.nakshatra.formatted} (${(astro.planets.Moon.longitude % 13.333 > 10) ? 4 : Math.floor((astro.planets.Moon.longitude % 13.333)/3.333)+1} ચરણ)` },
       { k: 'યોગ (Yoga)', v: panchanga.yoga.formatted },
       { k: 'કરણ (Karana)', v: panchanga.karana.formatted },
-      { k: 'મૂળાંક (Mulank)', v: shubha.mulank.toString() },
-      { k: 'ભાગ્યાંક (Bhagyank)', v: shubha.bhagyank.toString() },
+      { k: 'મૂળાંક (Mulank)', v: shubha.mulank ? shubha.mulank.toString() : '-' },
+      { k: 'ભાગ્યાંક (Bhagyank)', v: shubha.bhagyank ? shubha.bhagyank.toString() : '-' },
       { k: 'ભોગ્ય દશા (Dasha at Birth)', v: `${dasha.bhogyaDasha.lord} (${dasha.bhogyaDasha.formatted})` },
     ];
     p1Right.forEach((item, idx) => {
-      p1.drawText(item.k, { x: 310, y: 740 - idx * 30, size: 9, font, color: rgb(0.5, 0.5, 0.5) });
-      p1.drawText(item.v, { x: 310, y: 728 - idx * 30, size: 10, font, color: rgb(0.1, 0.1, 0.1) });
+      drawTextSafe(p1, item.k, { x: 310, y: 740 - idx * 30, size: 9, font, color: rgb(0.5, 0.5, 0.5) });
+      drawTextSafe(p1, item.v, { x: 310, y: 728 - idx * 30, size: 10, font, color: rgb(0.1, 0.1, 0.1) });
     });
 
     // Transition Times Table
-    p1.drawText('પંચાંગ પરિવર્તન સમય (Panchanga Transition Times)', { x: 50, y: 430, size: 12, font, color: rgb(0.8, 0.4, 0) });
+    drawTextSafe(p1, 'પંચાંગ પરિવર્તન સમય (Panchanga Transition Times)', { x: 50, y: 430, size: 12, font, color: rgb(0.8, 0.4, 0) });
     p1.drawRectangle({ x: 50, y: 90, width: 495, height: 320, color: rgb(1, 1, 1), borderColor: rgb(0.9, 0.9, 0.9), borderWidth: 1 });
     
     // Headers
     p1.drawRectangle({ x: 50, y: 380, width: 495, height: 30, color: rgb(0.99, 0.94, 0.88) });
-    p1.drawText('તત્વ (Element)', { x: 60, y: 390, size: 9, font, color: rgb(0.6, 0.3, 0) });
-    p1.drawText('સબમિટ વિગત (At Birth)', { x: 160, y: 390, size: 9, font, color: rgb(0.6, 0.3, 0) });
-    p1.drawText('પ્રારંભ સમય (Start Time)', { x: 280, y: 390, size: 9, font, color: rgb(0.6, 0.3, 0) });
-    p1.drawText('અંત સમય (End Time)', { x: 420, y: 390, size: 9, font, color: rgb(0.6, 0.3, 0) });
+    drawTextSafe(p1, 'તત્વ (Element)', { x: 60, y: 390, size: 9, font, color: rgb(0.6, 0.3, 0) });
+    drawTextSafe(p1, 'સબમિટ વિગત (At Birth)', { x: 160, y: 390, size: 9, font, color: rgb(0.6, 0.3, 0) });
+    drawTextSafe(p1, 'પ્રારંભ સમય (Start Time)', { x: 280, y: 390, size: 9, font, color: rgb(0.6, 0.3, 0) });
+    drawTextSafe(p1, 'અંત સમય (End Time)', { x: 420, y: 390, size: 9, font, color: rgb(0.6, 0.3, 0) });
 
     const p1Trans = [
       { label: 'તિથિ (Tithi)', val: panchanga.tithi.formatted, s: panchanga.tithi.startTime, e: panchanga.tithi.endTime },
@@ -288,16 +326,22 @@ export async function GET(request: Request) {
       { label: 'ચંદ્ર રાશિ (Rashi)', val: panchanga.rashi.formatted, s: panchanga.rashi.startTime, e: panchanga.rashi.endTime },
     ];
 
-    const formatShortTime = (d: Date) => `${d.getDate()}/${d.getMonth()+1} ${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
+    const formatShortTime = (d: any) => {
+      if (!d) return '-';
+      const date = d instanceof Date ? d : new Date(d);
+      if (isNaN(date.getTime())) return '-';
+      return `${date.getDate()}/${date.getMonth() + 1} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+    };
 
     p1Trans.forEach((row, idx) => {
       const yOffset = 345 - idx * 55;
       pageBorderLine(p1, 90 + yOffset);
-      p1.drawText(row.label, { x: 60, y: yOffset + 15, size: 10, font, color: rgb(0.1, 0.1, 0.1) });
-      p1.drawText(row.val, { x: 160, y: yOffset + 15, size: 10, font, color: rgb(0.1, 0.1, 0.1) });
-      p1.drawText(formatShortTime(row.s), { x: 280, y: yOffset + 15, size: 9, font, color: rgb(0.3, 0.3, 0.3) });
-      p1.drawText(formatShortTime(row.e), { x: 420, y: yOffset + 15, size: 9, font, color: rgb(0.3, 0.3, 0.3) });
+      drawTextSafe(p1, row.label, { x: 60, y: yOffset + 15, size: 10, font, color: rgb(0.1, 0.1, 0.1) });
+      drawTextSafe(p1, row.val, { x: 160, y: yOffset + 15, size: 10, font, color: rgb(0.1, 0.1, 0.1) });
+      drawTextSafe(p1, formatShortTime(row.s), { x: 280, y: yOffset + 15, size: 9, font, color: rgb(0.3, 0.3, 0.3) });
+      drawTextSafe(p1, formatShortTime(row.e), { x: 420, y: yOffset + 15, size: 9, font, color: rgb(0.3, 0.3, 0.3) });
     });
+
 
     // Helper line drawer
     function pageBorderLine(pageObj: any, yval: number) {
@@ -335,13 +379,13 @@ export async function GET(request: Request) {
     drawNorthIndianChart(p2, font, 310, 480, 235, 'કસ્પ કુંડળી (KP Cusp Chart)', lagnaSignIndex, cuspPlacements);
 
     // Chalit / Cusp Table
-    p2.drawText('કસ્પ અંશ વિગતો (Cusp Degree Table)', { x: 50, y: 430, size: 12, font, color: rgb(0.8, 0.4, 0) });
+    drawTextSafe(p2, 'કસ્પ અંશ વિગતો (Cusp Degree Table)', { x: 50, y: 430, size: 12, font, color: rgb(0.8, 0.4, 0) });
     p2.drawRectangle({ x: 50, y: 90, width: 495, height: 320, color: rgb(1, 1, 1), borderColor: rgb(0.9, 0.9, 0.9), borderWidth: 1 });
 
     p2.drawRectangle({ x: 50, y: 380, width: 495, height: 30, color: rgb(0.99, 0.94, 0.88) });
-    p2.drawText('ભાવ (House)', { x: 60, y: 390, size: 9, font, color: rgb(0.6, 0.3, 0) });
-    p2.drawText('સ્પષ્ટ અંશ (Degrees)', { x: 180, y: 390, size: 9, font, color: rgb(0.6, 0.3, 0) });
-    p2.drawText('રાશિ નામ (Rashi Sign)', { x: 340, y: 390, size: 9, font, color: rgb(0.6, 0.3, 0) });
+    drawTextSafe(p2, 'ભાવ (House)', { x: 60, y: 390, size: 9, font, color: rgb(0.6, 0.3, 0) });
+    drawTextSafe(p2, 'સ્પષ્ટ અંશ (Degrees)', { x: 180, y: 390, size: 9, font, color: rgb(0.6, 0.3, 0) });
+    drawTextSafe(p2, 'રાશિ નામ (Rashi Sign)', { x: 340, y: 390, size: 9, font, color: rgb(0.6, 0.3, 0) });
 
     for (let h = 1; h <= 12; h++) {
       const yOffset = 380 - h * 24;
@@ -352,9 +396,9 @@ export async function GET(request: Request) {
       
       const degStr = `${Math.floor(localDeg)}° ${Math.floor((localDeg % 1) * 60)}' ${Math.floor((((localDeg % 1) * 60) % 1) * 60)}"`;
 
-      p2.drawText(`ભાવ ${h}`, { x: 60, y: yOffset + 6, size: 9, font, color: rgb(0.1, 0.1, 0.1) });
-      p2.drawText(degStr, { x: 180, y: yOffset + 6, size: 9, font, color: rgb(0.2, 0.2, 0.2) });
-      p2.drawText(RASHI_NAMES_GU[signIndex], { x: 340, y: yOffset + 6, size: 9, font, color: rgb(0.2, 0.2, 0.2) });
+      drawTextSafe(p2, `ભાવ ${h}`, { x: 60, y: yOffset + 6, size: 9, font, color: rgb(0.1, 0.1, 0.1) });
+      drawTextSafe(p2, degStr, { x: 180, y: yOffset + 6, size: 9, font, color: rgb(0.2, 0.2, 0.2) });
+      drawTextSafe(p2, RASHI_NAMES_GU[signIndex], { x: 340, y: yOffset + 6, size: 9, font, color: rgb(0.2, 0.2, 0.2) });
     }
 
     // =========================================================================
@@ -364,7 +408,7 @@ export async function GET(request: Request) {
     drawHeader(p3, font, 'તારા ચક્ર અને મુખ્ય વર્ગો (Tara Chakra & Charts)', name);
 
     // Tara Chakra grid drawing
-    p3.drawText('તારા ચક્ર (Nakshatra Tara Chakra)', { x: 50, y: 740, size: 12, font, color: rgb(0.8, 0.4, 0) });
+    drawTextSafe(p3, 'તારા ચક્ર (Nakshatra Tara Chakra)', { x: 50, y: 740, size: 12, font, color: rgb(0.8, 0.4, 0) });
     p3.drawRectangle({ x: 50, y: 480, width: 495, height: 240, color: rgb(1, 1, 1), borderColor: rgb(0.9, 0.9, 0.9), borderWidth: 1 });
 
     p3.drawRectangle({ x: 50, y: 690, width: 495, height: 30, color: rgb(0.99, 0.94, 0.88) });
@@ -372,7 +416,7 @@ export async function GET(request: Request) {
     
     // Draw columns headers
     tarasGu.forEach((tName, colIdx) => {
-      p3.drawText(tName, { x: 58 + colIdx * 54, y: 700, size: 8, font, color: rgb(0.6, 0.3, 0) });
+      drawTextSafe(p3, tName, { x: 58 + colIdx * 54, y: 700, size: 8, font, color: rgb(0.6, 0.3, 0) });
     });
 
     // Populate Tara nakshatras
@@ -386,7 +430,7 @@ export async function GET(request: Request) {
         const nakNumber = (moonNakIdx + tIdx + cycle * 9) % 27;
         const nakName = NAKSHATRA_NAMES[nakNumber];
         
-        p3.drawText(nakName.slice(0, 6), {
+        drawTextSafe(p3, nakName ? nakName.slice(0, 6) : '', {
           x: 58 + tIdx * 54,
           y: yOffset + 24,
           size: 7,
@@ -412,12 +456,15 @@ export async function GET(request: Request) {
     // Active Dasha Chain text at bottom
     p3.drawRectangle({ x: 50, y: 90, width: 495, height: 80, color: rgb(0.99, 0.98, 0.96), borderColor: rgb(0.9, 0.9, 0.9), borderWidth: 1 });
     const runningMd = dasha.mahadashas.find(md => md.startDate <= birthDateObj && md.endDate >= birthDateObj) || dasha.mahadashas[0];
-    const runningAd = runningMd?.antardashas.find(ad => ad.startDate <= birthDateObj && ad.endDate >= birthDateObj) || runningMd?.antardashas[0];
-    const runningPd = runningAd?.pratyantardashas.find(pd => pd.startDate <= birthDateObj && pd.endDate >= birthDateObj) || runningAd?.pratyantardashas[0];
+    const runningAd = runningMd?.antardashas?.find(ad => ad.startDate <= birthDateObj && ad.endDate >= birthDateObj) || runningMd?.antardashas?.[0];
+    const runningPd = runningAd?.pratyantardashas?.find(pd => pd.startDate <= birthDateObj && pd.endDate >= birthDateObj) || runningAd?.pratyantardashas?.[0];
 
-    p3.drawText('જન્મ સમયે સક્રિય દશા શૃંખલા (Active Dasha Chain at Birth)', { x: 60, y: 145, size: 10, font, color: rgb(0.8, 0.4, 0) });
-    p3.drawText(
-      `મહા દશા: ${PLANET_NAMES_GU[runningMd.lord]}  >>  અંતર દશા: ${PLANET_NAMES_GU[runningAd.lord]}  >>  પ્રત્યંતર દશા: ${PLANET_NAMES_GU[runningPd.lord]}`,
+    drawTextSafe(p3, 'જન્મ સમયે સક્રિય દશા શૃંખલા (Active Dasha Chain at Birth)', { x: 60, y: 145, size: 10, font, color: rgb(0.8, 0.4, 0) });
+    const mdLordName = runningMd ? (PLANET_NAMES_GU[runningMd.lord] || runningMd.lord) : '-';
+    const adLordName = runningAd ? (PLANET_NAMES_GU[runningAd.lord] || runningAd.lord) : '-';
+    const pdLordName = runningPd ? (PLANET_NAMES_GU[runningPd.lord] || runningPd.lord) : '-';
+    drawTextSafe(p3, 
+      `મહા દશા: ${mdLordName}  >>  અંતર દશા: ${adLordName}  >>  પ્રત્યંતર દશા: ${pdLordName}`,
       { x: 60, y: 115, size: 12, font, color: rgb(0.1, 0.1, 0.1) }
     );
 
@@ -427,28 +474,33 @@ export async function GET(request: Request) {
     const p4 = pdfDoc.addPage([595, 842]);
     drawHeader(p4, font, 'સાડાસાતી વિચાર (Lifetime Saturn Transits)', name);
 
-    p4.drawText('શનિ ગોચર અને સાડાસાતી કોષ્ટક (Saturn Transit Table)', { x: 50, y: 740, size: 12, font, color: rgb(0.8, 0.4, 0) });
+    drawTextSafe(p4, 'શનિ ગોચર અને સાડાસાતી કોષ્ટક (Saturn Transit Table)', { x: 50, y: 740, size: 12, font, color: rgb(0.8, 0.4, 0) });
     p4.drawRectangle({ x: 50, y: 90, width: 495, height: 630, color: rgb(1, 1, 1), borderColor: rgb(0.9, 0.9, 0.9), borderWidth: 1 });
 
     p4.drawRectangle({ x: 50, y: 690, width: 495, height: 30, color: rgb(0.99, 0.94, 0.88) });
-    p4.drawText('ગોચર પ્રકાર (Type)', { x: 60, y: 700, size: 9, font, color: rgb(0.6, 0.3, 0) });
-    p4.drawText('શનિ રાશિ (Saturn)', { x: 160, y: 700, size: 9, font, color: rgb(0.6, 0.3, 0) });
-    p4.drawText('પ્રારંભ તારીખ (Start)', { x: 260, y: 700, size: 9, font, color: rgb(0.6, 0.3, 0) });
-    p4.drawText('અંત તારીખ (End)', { x: 370, y: 700, size: 9, font, color: rgb(0.6, 0.3, 0) });
-    p4.drawText('પાયા (Metal)', { x: 480, y: 700, size: 9, font, color: rgb(0.6, 0.3, 0) });
+    drawTextSafe(p4, 'ગોચર પ્રકાર (Type)', { x: 60, y: 700, size: 9, font, color: rgb(0.6, 0.3, 0) });
+    drawTextSafe(p4, 'શનિ રાશિ (Saturn)', { x: 160, y: 700, size: 9, font, color: rgb(0.6, 0.3, 0) });
+    drawTextSafe(p4, 'પ્રારંભ તારીખ (Start)', { x: 260, y: 700, size: 9, font, color: rgb(0.6, 0.3, 0) });
+    drawTextSafe(p4, 'અંત તારીખ (End)', { x: 370, y: 700, size: 9, font, color: rgb(0.6, 0.3, 0) });
+    drawTextSafe(p4, 'પાયા (Metal)', { x: 480, y: 700, size: 9, font, color: rgb(0.6, 0.3, 0) });
 
-    const formatDateShort = (d: Date) => `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()}`;
+    const formatDateShort = (d: any) => {
+      if (!d) return '-';
+      const date = d instanceof Date ? d : new Date(d);
+      if (isNaN(date.getTime())) return '-';
+      return `${date.getDate().toString().padStart(2,'0')}/${(date.getMonth()+1).toString().padStart(2,'0')}/${date.getFullYear()}`;
+    };
 
     // Render up to 23 transit records (which fits in 600px height at 25px per row)
     transits.slice(0, 23).forEach((tRow, idx) => {
       const yOffset = 690 - (idx + 1) * 25;
       pageBorderLine(p4, yOffset);
 
-      p4.drawText(tRow.type, { x: 60, y: yOffset + 8, size: 9, font, color: rgb(0.1, 0.1, 0.1) });
-      p4.drawText(tRow.saturnSignFormatted, { x: 160, y: yOffset + 8, size: 9, font, color: rgb(0.2, 0.2, 0.2) });
-      p4.drawText(formatDateShort(tRow.startDate), { x: 260, y: yOffset + 8, size: 9, font, color: rgb(0.3, 0.3, 0.3) });
-      p4.drawText(formatDateShort(tRow.endDate), { x: 370, y: yOffset + 8, size: 9, font, color: rgb(0.3, 0.3, 0.3) });
-      p4.drawText(tRow.paya, { x: 480, y: yOffset + 8, size: 9, font, color: rgb(0.1, 0.5, 0.1) });
+      drawTextSafe(p4, tRow.type, { x: 60, y: yOffset + 8, size: 9, font, color: rgb(0.1, 0.1, 0.1) });
+      drawTextSafe(p4, tRow.saturnSignFormatted, { x: 160, y: yOffset + 8, size: 9, font, color: rgb(0.2, 0.2, 0.2) });
+      drawTextSafe(p4, formatDateShort(tRow.startDate), { x: 260, y: yOffset + 8, size: 9, font, color: rgb(0.3, 0.3, 0.3) });
+      drawTextSafe(p4, formatDateShort(tRow.endDate), { x: 370, y: yOffset + 8, size: 9, font, color: rgb(0.3, 0.3, 0.3) });
+      drawTextSafe(p4, tRow.paya, { x: 480, y: yOffset + 8, size: 9, font, color: rgb(0.1, 0.5, 0.1) });
     });
 
     // =========================================================================
@@ -457,12 +509,12 @@ export async function GET(request: Request) {
     const p5 = pdfDoc.addPage([595, 842]);
     drawHeader(p5, font, 'શુભાશુભ નું જ્ઞાન (Auspicious Guide & Remedies)', name);
 
-    p5.drawText('અનુકૂળતા માર્ગદર્શિકા (Personalized Auspicious Guide)', { x: 50, y: 740, size: 12, font, color: rgb(0.8, 0.4, 0) });
+    drawTextSafe(p5, 'અનુકૂળતા માર્ગદર્શિકા (Personalized Auspicious Guide)', { x: 50, y: 740, size: 12, font, color: rgb(0.8, 0.4, 0) });
     p5.drawRectangle({ x: 50, y: 90, width: 495, height: 630, color: rgb(1, 1, 1), borderColor: rgb(0.9, 0.9, 0.9), borderWidth: 1 });
 
     const remedies = [
-      { k: 'મૂળાંક (Radical Number)', v: shubha.mulank.toString() },
-      { k: 'ભાગ્યાંક (Destiny Number)', v: shubha.bhagyank.toString() },
+      { k: 'મૂળાંક (Radical Number)', v: shubha.mulank ? shubha.mulank.toString() : '-' },
+      { k: 'ભાગ્યાંક (Destiny Number)', v: shubha.bhagyank ? shubha.bhagyank.toString() : '-' },
       { k: 'મિત્રાંક (Friendly Numbers)', v: shubha.friendlyNumbers },
       { k: 'શત્રુ અંક (Enemy Numbers)', v: shubha.enemyNumbers },
       { k: 'શુભ વર્ષ (Auspicious Years)', v: shubha.auspiciousYears },
@@ -488,8 +540,8 @@ export async function GET(request: Request) {
       const yOffset = 680 - idx * 28;
       pageBorderLine(p5, yOffset);
 
-      p5.drawText(row.k, { x: 60, y: yOffset + 8, size: 10, font, color: rgb(0.5, 0.5, 0.5) });
-      p5.drawText(row.v, { x: 280, y: yOffset + 8, size: 10, font, color: rgb(0.1, 0.1, 0.1) });
+      drawTextSafe(p5, row.k, { x: 60, y: yOffset + 8, size: 10, font, color: rgb(0.5, 0.5, 0.5) });
+      drawTextSafe(p5, row.v, { x: 280, y: yOffset + 8, size: 10, font, color: rgb(0.1, 0.1, 0.1) });
     });
 
     // =========================================================================
@@ -498,31 +550,31 @@ export async function GET(request: Request) {
     const p6 = pdfDoc.addPage([595, 842]);
     drawHeader(p6, font, 'વિંશોત્તરી મહા દશા (Vimshottari Dasha Spans)', name);
 
-    p6.drawText('વિંશોત્તરી મહા દશા ચક્ર (Vimshottari Dasha Timeline)', { x: 50, y: 740, size: 12, font, color: rgb(0.8, 0.4, 0) });
+    drawTextSafe(p6, 'વિંશોત્તરી મહા દશા ચક્ર (Vimshottari Dasha Timeline)', { x: 50, y: 740, size: 12, font, color: rgb(0.8, 0.4, 0) });
     p6.drawRectangle({ x: 50, y: 90, width: 495, height: 630, color: rgb(1, 1, 1), borderColor: rgb(0.9, 0.9, 0.9), borderWidth: 1 });
 
     p6.drawRectangle({ x: 50, y: 690, width: 495, height: 30, color: rgb(0.99, 0.94, 0.88) });
-    p6.drawText('ગ્રહ (Planet Lord)', { x: 60, y: 700, size: 9, font, color: rgb(0.6, 0.3, 0) });
-    p6.drawText('પ્રારંભ તારીખ (Start Date)', { x: 200, y: 700, size: 9, font, color: rgb(0.6, 0.3, 0) });
-    p6.drawText('અંત તારીખ (End Date)', { x: 380, y: 700, size: 9, font, color: rgb(0.6, 0.3, 0) });
+    drawTextSafe(p6, 'ગ્રહ (Planet Lord)', { x: 60, y: 700, size: 9, font, color: rgb(0.6, 0.3, 0) });
+    drawTextSafe(p6, 'પ્રારંભ તારીખ (Start Date)', { x: 200, y: 700, size: 9, font, color: rgb(0.6, 0.3, 0) });
+    drawTextSafe(p6, 'અંત તારીખ (End Date)', { x: 380, y: 700, size: 9, font, color: rgb(0.6, 0.3, 0) });
 
     dasha.mahadashas.forEach((mdRow, idx) => {
       const yOffset = 690 - (idx + 1) * 60;
       pageBorderLine(p6, yOffset);
 
-      p6.drawText(`${PLANET_NAMES_GU[mdRow.lord] || mdRow.lord} Dasha (${PLANET_SPANS[mdRow.lord]} વર્ષ)`, {
+      drawTextSafe(p6, `${PLANET_NAMES_GU[mdRow.lord] || mdRow.lord} Dasha (${PLANET_SPANS[mdRow.lord]} વર્ષ)`, {
         x: 60,
         y: yOffset + 24,
         size: 11,
         font,
         color: rgb(0.1, 0.1, 0.1),
       });
-      p6.drawText(formatDateShort(mdRow.startDate), { x: 200, y: yOffset + 24, size: 10, font, color: rgb(0.3, 0.3, 0.3) });
-      p6.drawText(formatDateShort(mdRow.endDate), { x: 380, y: yOffset + 24, size: 10, font, color: rgb(0.3, 0.3, 0.3) });
+      drawTextSafe(p6, formatDateShort(mdRow.startDate), { x: 200, y: yOffset + 24, size: 10, font, color: rgb(0.3, 0.3, 0.3) });
+      drawTextSafe(p6, formatDateShort(mdRow.endDate), { x: 380, y: yOffset + 24, size: 10, font, color: rgb(0.3, 0.3, 0.3) });
 
       // Sub-AD preview text below main line
-      const adPreview = mdRow.antardashas.slice(0, 5).map(ad => `${PLANET_NAMES_GU[ad.lord] || ad.lord}`).join(', ');
-      p6.drawText(`અંતર દશા: ${adPreview}...`, {
+      const adPreview = mdRow.antardashas ? mdRow.antardashas.slice(0, 5).map(ad => `${PLANET_NAMES_GU[ad.lord] || ad.lord}`).join(', ') : '';
+      drawTextSafe(p6, `અંતર દશા: ${adPreview}...`, {
         x: 60,
         y: yOffset + 8,
         size: 8,
@@ -530,6 +582,7 @@ export async function GET(request: Request) {
         color: rgb(0.5, 0.5, 0.5),
       });
     });
+
 
     // 4. Save and return PDF as stream
     const pdfBytes = await pdfDoc.save();
