@@ -72,10 +72,17 @@ export const KundliViewModal: React.FC<KundliViewModalProps> = ({ client, onClos
   }, [client]);
 
   const handleWhatsAppShare = () => {
-    const message = `Hari Om, ${client.name}.\nYour Kundli report is prepared by Guruji.\nDOB: ${client.birthDetails.date}\nTOB: ${client.birthDetails.time}\nPOB: ${client.birthDetails.place}`;
-    const cleanPhone = client.phone.replace(/[^\d+]/g, '');
-    const waUrl = `https://api.whatsapp.com/send?phone=${encodeURIComponent(cleanPhone)}&text=${encodeURIComponent(message)}`;
-    window.open(waUrl, '_blank');
+    const liveOrigin = typeof window !== 'undefined' ? window.location.origin : 'https://astro-seva-mocha.vercel.app';
+    const kundliUrl = `${liveOrigin}/kundli/${client.id}`;
+    const message = `Hari Om, ${client.name}.\nYour Kundli report prepared by Guruji is ready.\nClick here to view your complete Kundli:\n${kundliUrl}`;
+    
+    let cleanDigits = client.phone.replace(/\D/g, '');
+    if (cleanDigits.length === 10) {
+      cleanDigits = `91${cleanDigits}`;
+    }
+    
+    const waUrl = `https://wa.me/${cleanDigits}?text=${encodeURIComponent(message)}`;
+    window.open(waUrl, '_blank', 'noopener,noreferrer');
   };
 
   const formatDateShort = (d: any) => {

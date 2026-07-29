@@ -142,8 +142,13 @@ export default function AdminDashboard() {
     const kundliUrl = `${liveOrigin}/kundli/${client.id}`;
     const message = `Hari Om, ${client.name}.\nYour Kundli report prepared by Guruji is ready.\nClick here to view your complete Kundli:\n${kundliUrl}`;
     
-    const cleanPhone = client.phone.replace(/[^\d+]/g, '');
-    const waUrl = `https://api.whatsapp.com/send?phone=${encodeURIComponent(cleanPhone)}&text=${encodeURIComponent(message)}`;
+    // Clean phone to digits only (no '+' or spaces) for official wa.me click-to-chat format
+    let cleanDigits = client.phone.replace(/\D/g, '');
+    if (cleanDigits.length === 10) {
+      cleanDigits = `91${cleanDigits}`;
+    }
+    
+    const waUrl = `https://wa.me/${cleanDigits}?text=${encodeURIComponent(message)}`;
     
     // Enforce noopener, noreferrer to prevent referrer/opener leakage
     window.open(waUrl, '_blank', 'noopener,noreferrer');
