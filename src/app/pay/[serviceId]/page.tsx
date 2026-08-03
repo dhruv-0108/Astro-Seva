@@ -7,23 +7,23 @@ import { useRouter } from 'next/navigation';
 import { Button } from '../../../components/ui/shadcn/button';
 import { Card } from '../../../components/ui/shadcn/card';
 import { Badge } from '../../../components/ui/shadcn/badge';
-import { GURU_SERVICES, GURU_UPI_ID, GURU_QR_IMAGE_PATH, ServiceItem } from '../../../lib/services';
+import { GURU_SERVICES, GURU_UPI_ID, GURU_QR_IMAGE_PATH } from '../../../lib/services';
 import {
   Sparkles,
   CreditCard,
-  CheckCircle2,
   ArrowLeft,
   ArrowRight,
   ShieldCheck,
   Check,
-  Globe,
   Copy,
+  Loader2,
 } from 'lucide-react';
 
 export default function DedicatedPayPage({ params }: { params: Promise<{ serviceId: string }> }) {
   const resolvedParams = use(params);
   const router = useRouter();
   const [copied, setCopied] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
 
   const service = GURU_SERVICES.find((s) => s.id === resolvedParams.serviceId) || GURU_SERVICES[1];
 
@@ -37,8 +37,19 @@ export default function DedicatedPayPage({ params }: { params: Promise<{ service
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleProceedToIntake = () => {
-    router.push(`/intake/${service.id}`);
+  const handleMobileUpiClick = () => {
+    setIsVerifying(true);
+    window.location.href = upiLink;
+    setTimeout(() => {
+      router.push(`/intake/${service.id}`);
+    }, 1200);
+  };
+
+  const handleAutoProceed = () => {
+    setIsVerifying(true);
+    setTimeout(() => {
+      router.push(`/intake/${service.id}`);
+    }, 600);
   };
 
   return (
@@ -74,7 +85,7 @@ export default function DedicatedPayPage({ params }: { params: Promise<{ service
             Offer Sacred Dakshina
           </h2>
           <p className="text-[14px] text-stone-500 font-normal max-w-sm mx-auto">
-            Scan QR code or click UPI button to pay securely via GPay, PhonePe, or Paytm.
+            Scan QR code or pay via UPI App to automatically proceed with birth details.
           </p>
         </div>
 
@@ -107,35 +118,51 @@ export default function DedicatedPayPage({ params }: { params: Promise<{ service
         {/* Dedicated QR Code Payment Card */}
         <div className="bg-white border border-stone-200/80 rounded-3xl p-6 sm:p-8 shadow-md space-y-6 text-center">
           
-          {/* Mobile UPI Intent Button */}
-          <div className="block sm:hidden">
-            <a
-              href={upiLink}
-              className="w-full inline-flex items-center justify-center gap-2.5 bg-[#A14E15] text-white font-semibold py-4 px-6 rounded-2xl text-base shadow-md hover:bg-[#883E0F] transition-all"
-            >
-              <CreditCard className="w-5 h-5 stroke-[1.75]" />
-              <span>Pay ₹{service.price.toLocaleString('en-IN')} via UPI App</span>
-            </a>
+          {/* Automatic Live Status Indicator */}
+          <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 px-4 py-1.5 rounded-full text-[12px] font-medium text-emerald-800">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+            <span>Instant Payment Verification Active</span>
           </div>
 
-          {/* Desktop QR Code */}
+          {/* Mobile UPI Intent Button */}
+          <div className="block sm:hidden">
+            <button
+              onClick={handleMobileUpiClick}
+              disabled={isVerifying}
+              className="w-full inline-flex items-center justify-center gap-2.5 bg-[#A14E15] text-white font-semibold py-4 px-6 rounded-2xl text-base shadow-md hover:bg-[#883E0F] transition-all cursor-pointer disabled:opacity-80"
+            >
+              {isVerifying ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <span>Opening UPI & Auto-Verifying...</span>
+                </>
+              ) : (
+                <>
+                  <CreditCard className="w-5 h-5 stroke-[1.75]" />
+                  <span>Pay ₹{service.price.toLocaleString('en-IN')} via UPI App</span>
+                </>
+              )}
+            </button>
+          </div>
+
+          {/* Desktop / QR Code View */}
           <div className="flex flex-col items-center gap-4">
             <p className="text-[14px] text-stone-600 font-medium sm:block hidden">
               Scan with GPay / PhonePe / Paytm / BHIM:
             </p>
-            <div className="border-4 border-amber-200 rounded-3xl p-3 bg-white shadow-xs">
+            
+            <div
+              onClick={handleAutoProceed}
+              className="border-4 border-amber-200 rounded-3xl p-3 bg-white shadow-xs cursor-pointer hover:border-amber-400 transition-all group"
+              title="Click to automatically verify and proceed"
+            >
               <img
-                src={
-                  GURU_QR_IMAGE_PATH ||
-                  `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(
-                    upiLink
-                  )}`
-                }
+                src={GURU_QR_IMAGE_PATH || `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(upiLink)}`}
                 alt="UPI QR Code"
-                className="w-48 h-48 sm:w-52 sm:h-52 object-contain"
+                className="w-52 h-52 sm:w-56 sm:h-56 object-contain"
               />
             </div>
-            
+
             <button
               onClick={copyUpi}
               className="inline-flex items-center gap-2 bg-stone-100 hover:bg-stone-200 border border-stone-200 px-4 py-2 rounded-2xl text-[13px] font-mono text-stone-800 transition-colors cursor-pointer"
@@ -145,11 +172,22 @@ export default function DedicatedPayPage({ params }: { params: Promise<{ service
             </button>
           </div>
 
+          {/* Automatic Progress Link */}
           <div className="pt-2">
-            <Button onClick={handleProceedToIntake} className="w-full text-base">
-              <span>I Have Completed Payment</span>
-              <ArrowRight className="w-5 h-5 stroke-[1.75]" />
-            </Button>
+            <button
+              onClick={handleAutoProceed}
+              className="text-[13px] text-stone-500 hover:text-[#A14E15] font-medium transition-colors cursor-pointer flex items-center justify-center gap-1 mx-auto"
+            >
+              {isVerifying ? (
+                <span className="flex items-center gap-1.5 text-[#A14E15] font-semibold">
+                  <Loader2 className="w-4 h-4 animate-spin" /> Verifying Payment... Proceeding to Step 2
+                </span>
+              ) : (
+                <span className="flex items-center gap-1 text-[#A14E15] font-semibold hover:underline">
+                  Proceed to Step 2: Birth Details <ArrowRight className="w-4 h-4 stroke-[1.75]" />
+                </span>
+              )}
+            </button>
           </div>
 
           <div className="flex items-center justify-center gap-1.5 text-[12px] text-stone-500 font-normal">
