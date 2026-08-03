@@ -39,6 +39,7 @@ import {
   ListFilter,
   Check,
   Hourglass,
+  Globe,
 } from 'lucide-react';
 
 interface ClientSubmission {
@@ -62,14 +63,117 @@ interface ClientSubmission {
   createdAt: any;
 }
 
+type Language = 'EN' | 'GU' | 'HI';
+
+const ADMIN_TRANSLATIONS: Record<Language, {
+  portalTitle: string;
+  portalSubtitle: string;
+  loginTitle: string;
+  loginSubtitle: string;
+  loginButton: string;
+  logoutButton: string;
+  totalSubmissions: string;
+  paidApproved: string;
+  pendingApproval: string;
+  sectionTitle: string;
+  sectionSubtitle: string;
+  noSubmissions: string;
+  clientInfo: string;
+  birthDetails: string;
+  paymentStatus: string;
+  actions: string;
+  approve: string;
+  viewKundli: string;
+  whatsapp: string;
+  deleteConfirm: string;
+  paidBadge: string;
+  pendingBadge: string;
+}> = {
+  EN: {
+    portalTitle: 'Guruji Dashboard',
+    portalSubtitle: 'Astro-Seva Management Panel',
+    loginTitle: 'Guruji Portal Login',
+    loginSubtitle: 'Astro-Seva Administration Panel',
+    loginButton: 'Sign In to Dashboard',
+    logoutButton: 'Log Out',
+    totalSubmissions: 'Total Submissions',
+    paidApproved: 'Paid / Approved',
+    pendingApproval: 'Pending Approval',
+    sectionTitle: 'Client Submissions & Requests',
+    sectionSubtitle: 'Real-time submissions from Astro-Seva website',
+    noSubmissions: 'No client submissions found yet.',
+    clientInfo: 'Client Info',
+    birthDetails: 'Birth Details',
+    paymentStatus: 'Payment Status',
+    actions: 'Actions',
+    approve: 'Approve',
+    viewKundli: 'View Kundli',
+    whatsapp: 'WhatsApp',
+    deleteConfirm: 'Are you sure you want to delete this submission record?',
+    paidBadge: 'Paid',
+    pendingBadge: 'Pending',
+  },
+  GU: {
+    portalTitle: 'ગુરુજી ડેશબોર્ડ',
+    portalSubtitle: 'શ્રી ગણેશામ્બિકા જ્યોતિષ સંચાલન પેનલ',
+    loginTitle: 'ગુરુજી પોર્ટલ લૉગિન',
+    loginSubtitle: 'શ્રી ગણેશામ્બિકા જ્યોતિષ એડમિનિસ્ટ્રેશન',
+    loginButton: 'ડેશબોર્ડમાં પ્રવેશ કરો',
+    logoutButton: 'લૉગ આઉટ',
+    totalSubmissions: 'કુલ અરજીઓ',
+    paidApproved: 'મંજૂર / ચૂકવેલ',
+    pendingApproval: 'મંજૂરી બાકી',
+    sectionTitle: 'ગ્રાહક અરજીઓ અને વિનંતીઓ',
+    sectionSubtitle: 'વેબસાઇટ પરથી રીયલ-ટાઇમમાં મળેલી અરજીઓ',
+    noSubmissions: 'હજી સુધી કોઈ ગ્રાહક અરજી મળી નથી.',
+    clientInfo: 'ગ્રાહક માહિતી',
+    birthDetails: 'જન્મ વિગત',
+    paymentStatus: 'ચૂકવણી સ્થિતિ',
+    actions: 'ક્રિયાઓ',
+    approve: 'મંજૂર કરો',
+    viewKundli: 'કુંડળી જુઓ',
+    whatsapp: 'વોટ્સએપ',
+    deleteConfirm: 'શું તમે ખરેખર આ ગ્રાહકનો રેકોર્ડ રદ કરવા માંગો છો?',
+    paidBadge: 'ચૂકવેલ',
+    pendingBadge: 'બાકી',
+  },
+  HI: {
+    portalTitle: 'गुरुजी डैशबोर्ड',
+    portalSubtitle: 'श्री गणेशाम्बिका ज्योतिष प्रबंधन पैनल',
+    loginTitle: 'गुरुजी पोर्टल लॉगिन',
+    loginSubtitle: 'श्री गणेशाम्बिका ज्योतिष एडमिनिस्ट्रेशन',
+    loginButton: 'डैशबोर्ड में प्रवेश करें',
+    logoutButton: 'लॉग आउट',
+    totalSubmissions: 'कुल आवेदन',
+    paidApproved: 'स्वीकृत / भुगतान पूर्ण',
+    pendingApproval: 'स्वीकृति लंबित',
+    sectionTitle: 'ग्राहक आवेदन एवं अनुरोध',
+    sectionSubtitle: 'वेबसाइट से रियल-टाइम में प्राप्त आवेदन',
+    noSubmissions: 'अभी तक कोई ग्राहक आवेदन प्राप्त नहीं हुआ है।',
+    clientInfo: 'ग्राहक जानकारी',
+    birthDetails: 'जन्म विवरण',
+    paymentStatus: 'भुगतान स्थिति',
+    actions: 'कार्रवाई',
+    approve: 'स्वीकार करें',
+    viewKundli: 'कुंडली देखें',
+    whatsapp: 'व्हाट्सएप',
+    deleteConfirm: 'क्या आप वास्तव में इस ग्राहक रिकॉर्ड को हटाना चाहते हैं?',
+    paidBadge: 'भुगतान पूर्ण',
+    pendingBadge: 'लंबित',
+  },
+};
+
 export default function AdminDashboard() {
   const [user, setUser] = useState<User | null>(null);
+  const [lang, setLang] = useState<Language>('GU');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [loginError, setLoginError] = useState<string>('');
   const [submissions, setSubmissions] = useState<ClientSubmission[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
+
+  const t = ADMIN_TRANSLATIONS[lang];
 
   // Check auth state
   useEffect(() => {
@@ -127,7 +231,7 @@ export default function AdminDashboard() {
   };
 
   const handleDelete = async (id: string) => {
-    if (window.confirm('Are you sure you want to delete this submission record?')) {
+    if (window.confirm(t.deleteConfirm)) {
       try {
         await deleteDoc(doc(db, 'submissions', id));
       } catch (err) {
@@ -140,7 +244,7 @@ export default function AdminDashboard() {
   const handleWhatsAppShare = (client: ClientSubmission) => {
     const liveOrigin = typeof window !== 'undefined' ? window.location.origin : 'https://astro-seva-mocha.vercel.app';
     const kundliUrl = `${liveOrigin}/kundli/${client.id}`;
-    const message = `Hari Om, ${client.name}.\nYour Kundli report prepared by Guruji is ready.\nClick here to view your complete Kundli:\n${kundliUrl}`;
+    const message = `Hari Om, ${client.name}.\nYour Kundli report prepared by Narendragiri Goswami Ji is ready.\nClick here to view your complete Kundli:\n${kundliUrl}`;
     
     // Clean phone to digits only (no '+' or spaces) for official wa.me click-to-chat format
     let cleanDigits = client.phone.replace(/\D/g, '');
@@ -166,50 +270,78 @@ export default function AdminDashboard() {
   // Render Login Card if not authenticated
   if (!user) {
     return (
-      <div className="flex flex-1 items-center justify-center min-h-screen bg-[#FAF9F6] p-4 sm:p-6">
-        <Card className="w-full max-w-md space-y-6">
-          <div className="text-center space-y-1.5">
-            <div className="w-12 h-12 rounded-2xl bg-amber-100/70 border border-amber-200 flex items-center justify-center text-[#A14E15] mx-auto">
-              <Sparkles className="w-6 h-6" />
+      <div className="flex flex-col min-h-screen bg-[#FAF9F6]">
+        {/* Top Header with 3-Way Language Switcher */}
+        <header className="w-full bg-white/80 backdrop-blur-md border-b border-stone-200/60 py-3.5 px-6 flex justify-between items-center">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-amber-100/70 border border-amber-200 flex items-center justify-center text-[#A14E15]">
+              <Sparkles className="w-4 h-4" />
             </div>
-            <h2 className="text-xl font-bold text-stone-900">Guruji Portal Login</h2>
-            <p className="text-stone-500 text-xs font-medium">Astro-Seva Administration Panel</p>
+            <span className="text-sm font-bold text-stone-900">{t.portalTitle}</span>
           </div>
 
-          {loginError && (
-            <div className="bg-red-50 border border-red-200 text-red-700 rounded-2xl p-4 text-xs font-semibold">
-              {loginError}
+          <div className="flex items-center gap-1 bg-stone-200/60 p-1 rounded-2xl border border-stone-300/60 shadow-2xs">
+            {(['EN', 'GU', 'HI'] as Language[]).map((l) => (
+              <button
+                key={l}
+                onClick={() => setLang(l)}
+                className={`px-3 py-1 rounded-xl text-[11px] font-bold transition-all cursor-pointer ${
+                  lang === l
+                    ? 'bg-[#7A1C28] text-white shadow-xs'
+                    : 'text-stone-700 hover:text-[#1F1E1B] hover:bg-stone-300/50'
+                }`}
+              >
+                {l === 'EN' ? 'English' : l === 'GU' ? 'ગુજરાતી' : 'हिंदी'}
+              </button>
+            ))}
+          </div>
+        </header>
+
+        <div className="flex flex-1 items-center justify-center p-4 sm:p-6">
+          <Card className="w-full max-w-md space-y-6">
+            <div className="text-center space-y-1.5">
+              <div className="w-12 h-12 rounded-2xl bg-amber-100/70 border border-amber-200 flex items-center justify-center text-[#A14E15] mx-auto">
+                <Sparkles className="w-6 h-6" />
+              </div>
+              <h2 className="text-xl font-bold text-stone-900">{t.loginTitle}</h2>
+              <p className="text-stone-500 text-xs font-medium">{t.loginSubtitle}</p>
             </div>
-          )}
 
-          <form onSubmit={handleLogin} className="space-y-4">
-            <Input
-              icon={<UserIcon className="w-3.5 h-3.5 text-[#A14E15]" />}
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="guruji@astro.com"
-              required
-            />
+            {loginError && (
+              <div className="bg-red-50 border border-red-200 text-red-700 rounded-2xl p-4 text-xs font-semibold">
+                {loginError}
+              </div>
+            )}
 
-            <Input
-              icon={<Lock className="w-3.5 h-3.5 text-[#A14E15]" />}
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              required
-            />
+            <form onSubmit={handleLogin} className="space-y-4">
+              <Input
+                icon={<UserIcon className="w-3.5 h-3.5 text-[#A14E15]" />}
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="guruji@astro.com"
+                required
+              />
 
-            <Button
-              type="submit"
-              disabled={isLoggingIn}
-              className="w-full h-14 rounded-2xl text-base mt-2"
-            >
-              Sign In to Dashboard
-            </Button>
-          </form>
-        </Card>
+              <Input
+                icon={<Lock className="w-3.5 h-3.5 text-[#A14E15]" />}
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+              />
+
+              <Button
+                type="submit"
+                disabled={isLoggingIn}
+                className="w-full h-14 rounded-2xl text-base mt-2"
+              >
+                {t.loginButton}
+              </Button>
+            </form>
+          </Card>
+        </div>
       </div>
     );
   }
@@ -227,15 +359,34 @@ export default function AdminDashboard() {
             <Sparkles className="w-4 h-4" />
           </div>
           <div>
-            <h1 className="text-base font-bold tracking-tight text-stone-900">Guruji Dashboard</h1>
-            <p className="text-xs text-stone-500 font-medium">Astro-Seva Management Panel</p>
+            <h1 className="text-base font-bold tracking-tight text-stone-900">{t.portalTitle}</h1>
+            <p className="text-xs text-stone-500 font-medium">{t.portalSubtitle}</p>
           </div>
         </div>
 
-        <Button variant="outline" size="sm" onClick={handleLogout}>
-          <LogOut className="w-3.5 h-3.5 text-stone-600" />
-          <span>Log Out</span>
-        </Button>
+        <div className="flex items-center gap-3">
+          {/* 3-Way Language Selector Switcher */}
+          <div className="flex items-center gap-1 bg-stone-200/60 p-1 rounded-2xl border border-stone-300/60 shadow-2xs">
+            {(['EN', 'GU', 'HI'] as Language[]).map((l) => (
+              <button
+                key={l}
+                onClick={() => setLang(l)}
+                className={`px-3 py-1 rounded-xl text-[11px] font-bold transition-all cursor-pointer ${
+                  lang === l
+                    ? 'bg-[#7A1C28] text-white shadow-xs'
+                    : 'text-stone-700 hover:text-[#1F1E1B] hover:bg-stone-300/50'
+                }`}
+              >
+                {l === 'EN' ? 'English' : l === 'GU' ? 'ગુજરાતી' : 'हिंदी'}
+              </button>
+            ))}
+          </div>
+
+          <Button variant="outline" size="sm" onClick={handleLogout}>
+            <LogOut className="w-3.5 h-3.5 text-stone-600" />
+            <span>{t.logoutButton}</span>
+          </Button>
+        </div>
       </header>
 
       {/* Main Content Area */}
@@ -245,7 +396,7 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Card className="flex items-center justify-between p-5">
             <div>
-              <span className="text-stone-400 text-xs font-bold uppercase tracking-wider block">Total Submissions</span>
+              <span className="text-stone-400 text-xs font-bold uppercase tracking-wider block">{t.totalSubmissions}</span>
               <span className="text-2xl font-extrabold text-stone-900 mt-1 block">{submissions.length}</span>
             </div>
             <div className="p-3 bg-stone-100 text-stone-700 rounded-2xl">
@@ -255,7 +406,7 @@ export default function AdminDashboard() {
 
           <Card className="flex items-center justify-between p-5">
             <div>
-              <span className="text-stone-400 text-xs font-bold uppercase tracking-wider block">Paid / Approved</span>
+              <span className="text-stone-400 text-xs font-bold uppercase tracking-wider block">{t.paidApproved}</span>
               <span className="text-2xl font-extrabold text-emerald-700 mt-1 block">{paidCount}</span>
             </div>
             <div className="p-3 bg-emerald-50 text-emerald-700 rounded-2xl">
@@ -265,7 +416,7 @@ export default function AdminDashboard() {
 
           <Card className="flex items-center justify-between p-5">
             <div>
-              <span className="text-stone-400 text-xs font-bold uppercase tracking-wider block">Pending Approval</span>
+              <span className="text-stone-400 text-xs font-bold uppercase tracking-wider block">{t.pendingApproval}</span>
               <span className="text-2xl font-extrabold text-[#A14E15] mt-1 block">{pendingCount}</span>
             </div>
             <div className="p-3 bg-amber-50 text-[#A14E15] rounded-2xl">
@@ -280,9 +431,9 @@ export default function AdminDashboard() {
           <div className="p-6 border-b border-stone-200/60 bg-stone-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <h2 className="text-base font-bold text-stone-900">
-                Client Submissions & Requests
+                {t.sectionTitle}
               </h2>
-              <p className="text-xs text-stone-500 font-medium mt-0.5">Real-time submissions from Astro-Seva website</p>
+              <p className="text-xs text-stone-500 font-medium mt-0.5">{t.sectionSubtitle}</p>
             </div>
             <Badge variant="secondary">
               Auto TTL: 30 Days
@@ -292,7 +443,7 @@ export default function AdminDashboard() {
           {submissions.length === 0 ? (
             <div className="py-20 text-center text-stone-400 space-y-2 font-medium">
               <ListFilter className="w-8 h-8 mx-auto text-stone-300" />
-              <p className="text-sm">No client submissions found yet.</p>
+              <p className="text-sm">{t.noSubmissions}</p>
             </div>
           ) : (
             <div>
@@ -301,10 +452,10 @@ export default function AdminDashboard() {
                 <table className="w-full text-sm text-left">
                   <thead className="bg-stone-50 text-stone-500 font-bold border-b border-stone-200 text-xs uppercase tracking-wider">
                     <tr>
-                      <th className="p-4">Client Info</th>
-                      <th className="p-4">Birth Details</th>
-                      <th className="p-4 text-center">Payment Status</th>
-                      <th className="p-4 text-center">Actions</th>
+                      <th className="p-4">{t.clientInfo}</th>
+                      <th className="p-4">{t.birthDetails}</th>
+                      <th className="p-4 text-center">{t.paymentStatus}</th>
+                      <th className="p-4 text-center">{t.actions}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-stone-100 font-medium">
@@ -347,7 +498,7 @@ export default function AdminDashboard() {
                         {/* Payment Status */}
                         <td className="p-4 text-center">
                           <Badge variant={client.paymentStatus === 'paid' ? 'emerald' : 'default'}>
-                            {client.paymentStatus === 'paid' ? 'Paid' : 'Pending'}
+                            {client.paymentStatus === 'paid' ? t.paidBadge : t.pendingBadge}
                           </Badge>
                         </td>
 
@@ -361,7 +512,7 @@ export default function AdminDashboard() {
                                 onClick={() => handleApprove(client.id)}
                               >
                                 <CheckCircle2 className="w-3.5 h-3.5" />
-                                <span>Approve</span>
+                                <span>{t.approve}</span>
                               </Button>
                             )}
 
@@ -374,7 +525,7 @@ export default function AdminDashboard() {
                                   className="inline-flex items-center gap-1.5 bg-[#A14E15] hover:bg-[#853E0F] text-white font-bold py-2 px-3.5 rounded-2xl text-xs shadow-xs"
                                 >
                                   <ExternalLink className="w-3.5 h-3.5" />
-                                  <span>View Kundli</span>
+                                  <span>{t.viewKundli}</span>
                                 </a>
 
                                 <button
@@ -382,7 +533,7 @@ export default function AdminDashboard() {
                                   className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-3.5 rounded-2xl text-xs flex items-center gap-1.5 cursor-pointer shadow-xs"
                                 >
                                   <MessageSquare className="w-3.5 h-3.5" />
-                                  <span>WhatsApp</span>
+                                  <span>{t.whatsapp}</span>
                                 </button>
                               </>
                             )}
@@ -423,7 +574,7 @@ export default function AdminDashboard() {
                       </div>
 
                       <Badge variant={client.paymentStatus === 'paid' ? 'emerald' : 'default'} className="shrink-0">
-                        {client.paymentStatus === 'paid' ? 'Paid' : 'Pending'}
+                        {client.paymentStatus === 'paid' ? t.paidBadge : t.pendingBadge}
                       </Badge>
                     </div>
 
@@ -454,7 +605,7 @@ export default function AdminDashboard() {
                           onClick={() => handleApprove(client.id)}
                         >
                           <CheckCircle2 className="w-4 h-4 shrink-0" />
-                          <span>Approve Payment</span>
+                          <span>{t.approve}</span>
                         </Button>
                       )}
 
@@ -467,7 +618,7 @@ export default function AdminDashboard() {
                             className="flex-1 bg-[#A14E15] text-white font-bold py-3 px-3 rounded-2xl text-xs flex items-center justify-center gap-1.5 shadow-xs text-center min-w-[120px]"
                           >
                             <ExternalLink className="w-4 h-4 shrink-0" />
-                            <span className="truncate">View Kundli</span>
+                            <span className="truncate">{t.viewKundli}</span>
                           </a>
 
                           <button
@@ -475,7 +626,7 @@ export default function AdminDashboard() {
                             className="flex-1 bg-emerald-600 text-white font-bold py-3 px-3 rounded-2xl text-xs flex items-center justify-center gap-1.5 shadow-xs min-w-[110px]"
                           >
                             <MessageSquare className="w-4 h-4 shrink-0" />
-                            <span className="truncate">WhatsApp</span>
+                            <span className="truncate">{t.whatsapp}</span>
                           </button>
                         </>
                       )}

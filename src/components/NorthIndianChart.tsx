@@ -2,6 +2,8 @@
 
 import React from 'react';
 
+export type Language = 'EN' | 'GU' | 'HI';
+
 interface PlanetPlacement {
   sign: number; // 0 to 11
   isRetrograde?: boolean;
@@ -11,25 +13,51 @@ interface NorthIndianChartProps {
   title: string;
   lagnaSign: number; // 0 to 11 (Aries = 0, Pisces = 11)
   planetsMap: Record<string, PlanetPlacement>;
+  lang?: Language;
   className?: string;
 }
 
-const PLANET_SHORT_NAMES: Record<string, string> = {
-  Sun: 'Su',
-  Moon: 'Mo',
-  Mars: 'Ma',
-  Mercury: 'Me',
-  Jupiter: 'Ju',
-  Venus: 'Ve',
-  Saturn: 'Sa',
-  Rahu: 'Ra',
-  Ketu: 'Ke',
+const PLANET_SHORT_NAMES: Record<Language, Record<string, string>> = {
+  EN: {
+    Sun: 'Su',
+    Moon: 'Mo',
+    Mars: 'Ma',
+    Mercury: 'Me',
+    Jupiter: 'Ju',
+    Venus: 'Ve',
+    Saturn: 'Sa',
+    Rahu: 'Ra',
+    Ketu: 'Ke',
+  },
+  GU: {
+    Sun: 'સૂ',
+    Moon: 'ચં',
+    Mars: 'મં',
+    Mercury: 'બુ',
+    Jupiter: 'ગુ',
+    Venus: 'શુ',
+    Saturn: 'શ',
+    Rahu: 'રા',
+    Ketu: 'કે',
+  },
+  HI: {
+    Sun: 'सू',
+    Moon: 'चं',
+    Mars: 'मं',
+    Mercury: 'बु',
+    Jupiter: 'गु',
+    Venus: 'शु',
+    Saturn: 'श',
+    Rahu: 'रा',
+    Ketu: 'के',
+  },
 };
 
 export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
   title,
   lagnaSign,
   planetsMap,
+  lang = 'GU',
   className = '',
 }) => {
   // House signs (1-indexed display sign number 1 to 12)
@@ -37,6 +65,8 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
   for (let h = 1; h <= 12; h++) {
     houseSigns[h] = ((lagnaSign + h - 1) % 12) + 1;
   }
+
+  const shortNames = PLANET_SHORT_NAMES[lang] || PLANET_SHORT_NAMES.GU;
 
   // Map planets to house numbers (1 to 12)
   const housePlanets: Record<number, { name: string; isRetro?: boolean }[]> = {};
@@ -46,7 +76,7 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
     if (!p) continue;
     const pSignIndex = p.sign;
     const house = ((pSignIndex - lagnaSign + 12) % 12) + 1;
-    const displayName = PLANET_SHORT_NAMES[name] || name;
+    const displayName = shortNames[name] || name;
     housePlanets[house].push({ name: displayName, isRetro: p.isRetrograde });
   }
 
@@ -92,7 +122,7 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
               fontWeight="700"
               fill={p.isRetro ? '#B91C1C' : '#1F1E1B'}
             >
-              {p.name}{p.isRetro ? '(R)' : ''}
+              {p.name}{p.isRetro ? '(વ)' : ''}
             </text>
           );
         })}
