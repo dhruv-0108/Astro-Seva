@@ -58,6 +58,7 @@ export default function Home() {
   const router = useRouter();
   const [lang, setLang] = useState<'EN' | 'GU'>('GU');
   const [currentSlide, setCurrentSlide] = useState<number>(0);
+  const [selectedPlanTab, setSelectedPlanTab] = useState<number>(1);
 
   const t = TRANSLATIONS[lang];
   const plansRef = useRef<HTMLDivElement>(null);
@@ -153,8 +154,100 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Consultation Cards Grid (3 Cards optimized for Mobile & Desktop) */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
+          {/* Mobile Single-Screen Segmented View (Visible on Mobile) */}
+          <div className="block md:hidden space-y-4 text-left">
+            {/* Top Plan Selector Segment Pills displaying all 3 prices at a glance */}
+            <div className="grid grid-cols-3 gap-1.5 p-1.5 bg-stone-100/90 rounded-2xl border border-stone-200/80 text-center shadow-xs">
+              {GURU_SERVICES.map((s, idx) => {
+                const isSelected = selectedPlanTab === idx;
+                return (
+                  <button
+                    key={s.id}
+                    onClick={() => setSelectedPlanTab(idx)}
+                    className={`py-2.5 px-1 rounded-xl transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5 ${
+                      isSelected
+                        ? 'bg-[#A14E15] text-white shadow-xs font-semibold scale-[1.02]'
+                        : 'text-stone-700 hover:bg-stone-200/60 font-medium'
+                    }`}
+                  >
+                    <span className="text-[11px] font-semibold tracking-tight truncate max-w-full">
+                      {idx === 0 ? 'Quick' : idx === 1 ? 'Standard' : 'Detailed'}
+                    </span>
+                    <span className={`text-[13px] font-bold font-mono ${isSelected ? 'text-amber-100' : 'text-[#A14E15]'}`}>
+                      ₹{s.price.toLocaleString('en-IN')}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Active Plan Detail Card (Single-Screen Mobile View) */}
+            {(() => {
+              const s = GURU_SERVICES[selectedPlanTab] || GURU_SERVICES[1];
+              return (
+                <Card
+                  onClick={() => handleSelectService(s)}
+                  className={`p-5 rounded-2xl relative flex flex-col justify-between bg-white text-left shadow-sm border-2 ${
+                    s.popular ? 'border-[#A14E15]' : 'border-stone-200/90'
+                  }`}
+                >
+                  {s.popular && (
+                    <span className="absolute -top-3 left-5 bg-[#A14E15] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-0.5 rounded-full shadow-xs">
+                      Most Popular Choice
+                    </span>
+                  )}
+
+                  <div className="space-y-3 pt-1">
+                    <div className="flex justify-between items-start">
+                      <div className="flex items-center gap-2.5">
+                        <div className="p-2.5 bg-amber-50 rounded-xl border border-amber-200/80 text-[#A14E15]">
+                          {renderServiceIcon(s.iconName)}
+                        </div>
+                        <div>
+                          <h4 className="text-[17px] font-bold text-[#1F1E1B] leading-tight">
+                            {lang === 'GU' ? s.titleGU : s.titleEN}
+                          </h4>
+                          <span className="text-[12px] text-stone-500 font-medium">Selected Plan</span>
+                        </div>
+                      </div>
+                      <span className="text-[22px] font-bold text-[#A14E15] font-mono shrink-0">
+                        ₹{s.price.toLocaleString('en-IN')}
+                      </span>
+                    </div>
+
+                    <p className="text-[13px] font-normal text-stone-600 leading-relaxed">
+                      {lang === 'GU' ? s.descGU : s.descEN}
+                    </p>
+
+                    <ul className="space-y-1.5 pt-2.5 border-t border-stone-100">
+                      {(lang === 'GU' ? s.featuresGU : s.featuresEN).map((f, i) => (
+                        <li key={i} className="flex items-start gap-2 text-[12px] text-stone-600 font-normal">
+                          <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0 stroke-[2] mt-0.5" />
+                          <span>{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="pt-4">
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSelectService(s);
+                      }}
+                      className="w-full text-[14px] font-semibold py-3"
+                    >
+                      <span>Select & Proceed (₹{s.price.toLocaleString('en-IN')})</span>
+                      <ArrowRight className="w-4 h-4 stroke-[1.75]" />
+                    </Button>
+                  </div>
+                </Card>
+              );
+            })()}
+          </div>
+
+          {/* Desktop 3-Column Grid (Visible on Desktop) */}
+          <div className="hidden md:grid md:grid-cols-3 gap-6">
             {GURU_SERVICES.map((s) => {
               return (
                 <Card
