@@ -157,6 +157,8 @@ export default function DedicatedIntakePage({ params }: { params: Promise<{ serv
     try {
       const now = new Date();
       const deleteAt = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+      const urlParams = new URLSearchParams(window.location.search);
+      const utrParam = urlParams.get('utr') || '';
 
       const docRef = await addDoc(collection(db, 'submissions'), {
         name: name.trim(),
@@ -171,7 +173,9 @@ export default function DedicatedIntakePage({ params }: { params: Promise<{ serv
           date: birthDetails.date,
           time: birthDetails.time,
         },
-        paymentStatus: 'pending',
+        paymentStatus: 'user_declared_paid',
+        paymentDeclared: true,
+        utrNumber: utrParam,
         createdAt: now,
         deleteAt: deleteAt,
       });
@@ -186,6 +190,7 @@ export default function DedicatedIntakePage({ params }: { params: Promise<{ serv
           serviceTitle: service.titleEN,
           servicePrice: service.price,
           birthDetails,
+          utrNumber: utrParam,
         }),
       });
 

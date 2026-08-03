@@ -2,14 +2,17 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   try {
-    const { name, phone, submissionId, birthDetails } = await request.json();
+    const { name, phone, submissionId, birthDetails, serviceTitle, servicePrice, utrNumber } = await request.json();
 
     const botToken = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;
 
+    const utrText = utrNumber ? `\n🔢 <b>UPI Ref / UTR:</b> <code>${utrNumber}</code>` : '';
+    const planText = serviceTitle ? `\n💰 <b>સેવા (Plan):</b> ${serviceTitle} (₹${servicePrice})` : '';
+
     const messageText = `🔔 <b>નવી કુંડળી વિનંતી (New Request)</b>\n\n` +
       `👤 <b>નામ (Name):</b> ${name}\n` +
-      `📞 <b>મોબાઇલ (Phone):</b> ${phone}\n\n` +
+      `📞 <b>મોબાઇલ (Phone):</b> ${phone}${planText}${utrText}\n\n` +
       `📅 <b>જન્મ તારીખ (DOB):</b> ${birthDetails.date}\n` +
       `⏰ <b>જન્મ સમય (TOB):</b> ${birthDetails.time}\n` +
       `📍 <b>જન્મ સ્થળ (POB):</b> ${birthDetails.place.split(',')[0]}\n\n` +
