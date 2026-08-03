@@ -159,28 +159,158 @@ export default function Home() {
         </Button>
       </header>
 
-      {/* 1. HERO SECTION */}
-      <section className="bg-[#FAF8F5] pt-20 sm:pt-24 pb-20 px-6 text-center max-w-4xl mx-auto space-y-8">
-        <div className="space-y-6">
-          <Badge variant="default" className="mx-auto bg-amber-100/90 text-[#A14E15] border-amber-300 px-4 py-1.5 text-[12px] font-medium">
-            <Sparkles className="w-3.5 h-3.5 stroke-[1.75]" />
-            <span>Sri Vidya Sadhak • 30+ Years Dedicated Experience</span>
-          </Badge>
+      {/* 1. TOP HERO SECTION: GURU-SHISHYA PARAMPARA & SPIRITUAL PRACTICES CAROUSEL */}
+      <section className="bg-[#FAF8F5] pt-6 sm:pt-10 pb-12 sm:pb-16 px-4 sm:px-6 max-w-5xl mx-auto space-y-6">
+        
+        {/* Carousel Header & Controls */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-rose-200/80 pb-4 text-left">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setCurrentSlide(0)}
+              className={`px-4 py-2 rounded-2xl text-[13px] sm:text-[14px] font-bold transition-all cursor-pointer ${
+                currentSlide === 0
+                  ? 'bg-gradient-to-r from-[#9E2A2B] to-[#7A1C28] text-white shadow-sm'
+                  : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
+              }`}
+            >
+              1. Guru–Shishya Parampara
+            </button>
+            <button
+              onClick={() => setCurrentSlide(1)}
+              className={`px-4 py-2 rounded-2xl text-[13px] sm:text-[14px] font-bold transition-all cursor-pointer ${
+                currentSlide === 1
+                  ? 'bg-gradient-to-r from-[#9E2A2B] to-[#7A1C28] text-white shadow-sm'
+                  : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
+              }`}
+            >
+              2. Spiritual Practices
+            </button>
+          </div>
 
-          <h2 className="text-[36px] sm:text-[56px] font-bold text-[#1F1E1B] tracking-tight leading-[110%] max-w-3xl mx-auto">
-            {t.heroTagline}
-          </h2>
-
-          <p className="text-[18px] sm:text-[22px] text-stone-600 font-medium leading-relaxed max-w-[65ch] mx-auto">
-            {t.heroSubtitle}
-          </p>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setCurrentSlide((prev) => (prev === 0 ? 1 : 0))}
+              aria-label="Previous Slide"
+              className="p-2.5 rounded-2xl border border-stone-200 bg-white hover:bg-stone-100 text-stone-800 transition-colors cursor-pointer"
+            >
+              <ChevronLeft className="w-5 h-5 stroke-[2]" />
+            </button>
+            <button
+              onClick={() => setCurrentSlide((prev) => (prev === 1 ? 0 : 1))}
+              aria-label="Next Slide"
+              className="p-2.5 rounded-2xl border border-stone-200 bg-white hover:bg-stone-100 text-stone-800 transition-colors cursor-pointer"
+            >
+              <ChevronRight className="w-5 h-5 stroke-[2]" />
+            </button>
+          </div>
         </div>
 
-        <div className="pt-2">
-          <Button size="lg" onClick={scrollToPlans}>
-            <span>{t.heroCta}</span>
-            <ArrowRight className="w-5 h-5 stroke-[1.75]" />
-          </Button>
+        {/* Carousel Container with Touch Swipe & Giri Kaka Photos */}
+        <div
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          className="bg-white border border-rose-200/80 rounded-3xl p-6 sm:p-10 shadow-md transition-all duration-300 min-h-[420px] flex items-center touch-pan-y relative overflow-hidden"
+        >
+          
+          {/* Slide 1: Guru–Shishya Parampara */}
+          {currentSlide === 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-10 items-center text-left w-full animate-fadeIn">
+              <div className="md:col-span-5 flex justify-center">
+                <div className="relative w-full h-64 sm:h-80 md:h-96 rounded-2xl overflow-hidden border-2 border-rose-200 shadow-md group">
+                  <img
+                    src="/images/giri-kaka/guru-1.jpeg"
+                    alt="Guruji Practice"
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                  <span className="absolute bottom-3 left-4 text-white text-[12px] font-bold font-mono tracking-wider">
+                    Guruji • 30+ Yrs Sadhana
+                  </span>
+                </div>
+              </div>
+
+              <div className="md:col-span-7 space-y-5">
+                <Badge variant="secondary" className="bg-rose-100 text-[#7A1C28] border-rose-300 px-3 py-1 text-[12px] font-bold">
+                  Guru–Shishya Parampara
+                </Badge>
+                
+                <h3 className="text-[22px] sm:text-[30px] font-black text-[#1C1817] leading-snug tracking-tight">
+                  Behind every consultation is decades of mantra sadhana, scriptural study, meditation, and guidance received through a traditional Guru–Shishya parampara.
+                </h3>
+
+                <p className="text-[15px] sm:text-[17px] font-normal text-[#4A423F] leading-relaxed">
+                  For our Guru, astrology is not merely a profession—it is the culmination of years of spiritual practice, mantra sadhana, and traditional learning.
+                </p>
+
+                <div className="pt-2">
+                  <Button onClick={scrollToPlans} className="bg-gradient-to-r from-[#9E2A2B] to-[#7A1C28] hover:from-[#B2182B] hover:to-[#5E121C] text-white font-bold px-6 py-2.5 shadow-sm">
+                    <span>Consult Guruji Now</span>
+                    <ArrowRight className="w-4 h-4 stroke-[2]" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Slide 2: Spiritual Practices & Lineage */}
+          {currentSlide === 1 && (
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-10 items-center text-left w-full animate-fadeIn">
+              <div className="md:col-span-5 flex justify-center">
+                <div className="relative w-full h-64 sm:h-80 md:h-96 rounded-2xl overflow-hidden border-2 border-rose-200 shadow-md group">
+                  <img
+                    src="/images/giri-kaka/guru-2.jpeg"
+                    alt="Guruji Spiritual Upasana"
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                  <span className="absolute bottom-3 left-4 text-white text-[12px] font-bold font-mono tracking-wider">
+                    Spiritual Upasana Siddhi
+                  </span>
+                </div>
+              </div>
+
+              <div className="md:col-span-7 space-y-5">
+                <div className="space-y-1">
+                  <span className="text-[12px] font-bold text-[#7A1C28] uppercase tracking-wider font-mono">
+                    Sacred Lineage & Discipline
+                  </span>
+                  <h3 className="text-[26px] sm:text-[34px] font-black text-[#1C1817] tracking-tight">
+                    Spiritual Practices
+                  </h3>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                  {[
+                    'Shri Vidya Sadhana',
+                    'Hanuman Sadhana',
+                    'Bhairava Sadhana',
+                    'Karna Pishachini Sadhana',
+                  ].map((practice, idx) => (
+                    <div key={idx} className="flex items-center gap-3 p-3 rounded-xl bg-[#FFF9F5] border border-rose-200/80">
+                      <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 font-bold text-[12px] border border-emerald-300">
+                        ✓
+                      </div>
+                      <span className="text-[14px] sm:text-[15px] font-bold text-[#1C1817]">
+                        {practice}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                <p className="text-[14px] text-[#5A514E] font-medium leading-relaxed pt-2 border-t border-rose-100">
+                  These disciplines were undertaken under the guidance of his Guru within the traditional Guru–Shishya lineage and continue to inform his spiritual practice today.
+                </p>
+
+                <div className="pt-2">
+                  <Button onClick={scrollToPlans} className="bg-gradient-to-r from-[#9E2A2B] to-[#7A1C28] hover:from-[#B2182B] hover:to-[#5E121C] text-white font-bold px-6 py-2.5 shadow-sm">
+                    <span>Consult Guruji Now</span>
+                    <ArrowRight className="w-4 h-4 stroke-[2]" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+
         </div>
       </section>
 
@@ -379,181 +509,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3. COMBINED CAROUSEL SECTION: GURU-SHISHYA PARAMPARA & SPIRITUAL PRACTICES */}
-      <section className="bg-[#FAF8F5] py-16 sm:py-24 px-4 sm:px-6 max-w-5xl mx-auto space-y-6">
-        
-        {/* Carousel Header & Controls */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-rose-200/80 pb-5 text-left">
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setCurrentSlide(0)}
-              className={`px-4 py-2 rounded-2xl text-[13px] sm:text-[14px] font-bold transition-all cursor-pointer ${
-                currentSlide === 0
-                  ? 'bg-gradient-to-r from-[#9E2A2B] to-[#7A1C28] text-white shadow-sm'
-                  : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
-              }`}
-            >
-              1. Guru–Shishya Parampara
-            </button>
-            <button
-              onClick={() => setCurrentSlide(1)}
-              className={`px-4 py-2 rounded-2xl text-[13px] sm:text-[14px] font-bold transition-all cursor-pointer ${
-                currentSlide === 1
-                  ? 'bg-gradient-to-r from-[#9E2A2B] to-[#7A1C28] text-white shadow-sm'
-                  : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
-              }`}
-            >
-              2. Spiritual Practices
-            </button>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setCurrentSlide((prev) => (prev === 0 ? 1 : 0))}
-              aria-label="Previous Slide"
-              className="p-2.5 rounded-2xl border border-stone-200 bg-white hover:bg-stone-100 text-stone-800 transition-colors cursor-pointer"
-            >
-              <ChevronLeft className="w-5 h-5 stroke-[2]" />
-            </button>
-            <button
-              onClick={() => setCurrentSlide((prev) => (prev === 1 ? 0 : 1))}
-              aria-label="Next Slide"
-              className="p-2.5 rounded-2xl border border-stone-200 bg-white hover:bg-stone-100 text-stone-800 transition-colors cursor-pointer"
-            >
-              <ChevronRight className="w-5 h-5 stroke-[2]" />
-            </button>
-          </div>
-        </div>
-
-        {/* Carousel Container with Touch Swipe & Giri Kaka Photos */}
-        <div
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-          className="bg-white border border-rose-200/80 rounded-3xl p-6 sm:p-10 shadow-md transition-all duration-300 min-h-[420px] flex items-center touch-pan-y relative overflow-hidden"
-        >
-          
-          {/* Slide 1: Guru–Shishya Parampara */}
-          {currentSlide === 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-10 items-center text-left w-full animate-fadeIn">
-              <div className="md:col-span-5 flex justify-center">
-                <div className="relative w-full h-64 sm:h-80 md:h-96 rounded-2xl overflow-hidden border-2 border-rose-200 shadow-md group">
-                  <img
-                    src="/images/giri-kaka/guru-1.jpeg"
-                    alt="Guruji Practice"
-                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-                  <span className="absolute bottom-3 left-4 text-white text-[12px] font-bold font-mono tracking-wider">
-                    Guruji • 30+ Yrs Sadhana
-                  </span>
-                </div>
-              </div>
-
-              <div className="md:col-span-7 space-y-5">
-                <Badge variant="secondary" className="bg-rose-100 text-[#7A1C28] border-rose-300 px-3 py-1 text-[12px] font-bold">
-                  Guru–Shishya Parampara
-                </Badge>
-                
-                <h3 className="text-[22px] sm:text-[30px] font-black text-[#1C1817] leading-snug tracking-tight">
-                  Behind every consultation is decades of mantra sadhana, scriptural study, meditation, and guidance received through a traditional Guru–Shishya parampara.
-                </h3>
-
-                <p className="text-[15px] sm:text-[17px] font-normal text-[#4A423F] leading-relaxed">
-                  For our Guru, astrology is not merely a profession—it is the culmination of years of spiritual practice, mantra sadhana, and traditional learning.
-                </p>
-
-                <div className="pt-2">
-                  <Button onClick={scrollToPlans} className="bg-gradient-to-r from-[#9E2A2B] to-[#7A1C28] hover:from-[#B2182B] hover:to-[#5E121C] text-white font-bold px-6 py-2.5 shadow-sm">
-                    <span>Consult Guruji Now</span>
-                    <ArrowRight className="w-4 h-4 stroke-[2]" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Slide 2: Spiritual Practices & Lineage */}
-          {currentSlide === 1 && (
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-10 items-center text-left w-full animate-fadeIn">
-              <div className="md:col-span-5 flex justify-center">
-                <div className="relative w-full h-64 sm:h-80 md:h-96 rounded-2xl overflow-hidden border-2 border-rose-200 shadow-md group">
-                  <img
-                    src="/images/giri-kaka/guru-2.jpeg"
-                    alt="Guruji Spiritual Upasana"
-                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-                  <span className="absolute bottom-3 left-4 text-white text-[12px] font-bold font-mono tracking-wider">
-                    Spiritual Upasana Siddhi
-                  </span>
-                </div>
-              </div>
-
-              <div className="md:col-span-7 space-y-5">
-                <div className="space-y-1">
-                  <span className="text-[12px] font-bold text-[#7A1C28] uppercase tracking-wider font-mono">
-                    Sacred Lineage & Discipline
-                  </span>
-                  <h3 className="text-[26px] sm:text-[34px] font-black text-[#1C1817] tracking-tight">
-                    Spiritual Practices
-                  </h3>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                  {[
-                    'Shri Vidya Sadhana',
-                    'Hanuman Sadhana',
-                    'Bhairava Sadhana',
-                    'Karna Pishachini Sadhana',
-                  ].map((practice, idx) => (
-                    <div key={idx} className="flex items-center gap-3 p-3 rounded-xl bg-[#FFF9F5] border border-rose-200/80">
-                      <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 font-bold text-[12px] border border-emerald-300">
-                        ✓
-                      </div>
-                      <span className="text-[14px] sm:text-[15px] font-bold text-[#1C1817]">
-                        {practice}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                <p className="text-[14px] text-[#5A514E] font-medium leading-relaxed pt-2 border-t border-rose-100">
-                  These disciplines were undertaken under the guidance of his Guru within the traditional Guru–Shishya lineage and continue to inform his spiritual practice today.
-                </p>
-
-                <div className="pt-2">
-                  <Button onClick={scrollToPlans} className="bg-gradient-to-r from-[#9E2A2B] to-[#7A1C28] hover:from-[#B2182B] hover:to-[#5E121C] text-white font-bold px-6 py-2.5 shadow-sm">
-                    <span>Consult Guruji Now</span>
-                    <ArrowRight className="w-4 h-4 stroke-[2]" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
-
-        </div>
-
-        {/* Slide Indicator Dots */}
-        <div className="flex justify-center items-center gap-2 pt-2">
-          <button
-            onClick={() => setCurrentSlide(0)}
-            className={`h-2.5 rounded-full transition-all cursor-pointer ${
-              currentSlide === 0 ? 'w-8 bg-[#A14E15]' : 'w-2.5 bg-stone-300 hover:bg-stone-400'
-            }`}
-            aria-label="Go to slide 1"
-          />
-          <button
-            onClick={() => setCurrentSlide(1)}
-            className={`h-2.5 rounded-full transition-all cursor-pointer ${
-              currentSlide === 1 ? 'w-8 bg-[#A14E15]' : 'w-2.5 bg-stone-300 hover:bg-stone-400'
-            }`}
-            aria-label="Go to slide 2"
-          />
-        </div>
-
-      </section>
-
-      {/* 4. FOOTER */}
+      {/* 3. FOOTER */}
       <footer className="bg-[#1D1D1F] text-stone-300 py-16 px-6 sm:px-12 text-left">
         <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-12 gap-10 pb-12 border-b border-stone-800">
           
@@ -572,9 +528,9 @@ export default function Home() {
           <div className="sm:col-span-3 space-y-3 text-[14px]">
             <h5 className="font-semibold text-white uppercase tracking-wider text-[12px]">Consultations</h5>
             <ul className="space-y-2 text-stone-400 font-normal">
-              <li><button onClick={scrollToPlans} className="hover:text-amber-400 transition-colors">Quick Question (₹2,500)</button></li>
-              <li><button onClick={scrollToPlans} className="hover:text-amber-400 transition-colors">Standard Full Reading (₹5,000)</button></li>
-              <li><button onClick={scrollToPlans} className="hover:text-amber-400 transition-colors">Detailed Life Analysis (₹10,000)</button></li>
+              <li><button onClick={scrollToPlans} className="hover:text-amber-400 transition-colors">Kundli Jova Na (₹250)</button></li>
+              <li><button onClick={scrollToPlans} className="hover:text-amber-400 transition-colors">30 Mins Live Session (₹250)</button></li>
+              <li><button onClick={scrollToPlans} className="hover:text-amber-400 transition-colors">Extra Questions (₹100)</button></li>
             </ul>
           </div>
 
