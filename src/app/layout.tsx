@@ -16,8 +16,8 @@ const gujarati = Noto_Sans_Gujarati({
 });
 
 export const metadata: Metadata = {
-  title: 'Astro-Seva | વૈદિક કુંડળી સેવા',
-  description: 'Get your detailed Vedic Kundli from Guruji — Astro-Seva',
+  title: 'Shree Ganeshambika Jyotish | શ્રી ગણેશામ્બિકા જ્યોતિષ',
+  description: 'Authentic Vedic Astrology Consultation & Upasana Guidance by Guruji — Hanuman Ji, Bhairav & Shri Vidya Upasak, Karna Pishachini Sadhana.',
 };
 
 export default function RootLayout({
@@ -27,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="gu" className={`${inter.variable} ${gujarati.variable}`}>
-      <body className="min-h-full flex flex-col font-sans bg-[#FAF9F6] text-[#1F1E1B] antialiased">
+      <body className="min-h-full flex flex-col font-sans bg-[#FDFBF7] text-[#1C1817] antialiased">
         {children}
       </body>
     </html>

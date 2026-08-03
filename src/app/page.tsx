@@ -25,30 +25,30 @@ import {
 
 const TRANSLATIONS = {
   EN: {
-    title: 'Astro-Seva',
-    subtitle: 'Vedic Consultation & Life Guidance',
-    heroTagline: 'Seeking Clarity in Career, Marriage, or Life Decisions?',
-    heroSubtitle: 'Receive calm, authentic Vedic guidance rooted in Brihat Parashara Hora Shastra principles from a dedicated Sri Vidya practitioner with 30+ years experience.',
-    heroCta: 'Consult Guru Ji',
-    meetTitle: 'Meet Guru Ji',
-    meetRole: 'Sri Vidya Sadhak • 30+ Years Dedicated Wisdom',
-    meetBio: 'For over three decades, Guru Ji has guided thousands of individuals through complex life phases using authentic Vedic astrology calculations and Shodasha Samskara spiritual wisdom.',
-    whyTitle: 'Why Thousands Trust Guru Ji',
-    whySubtitle: 'Consultations are strictly based on Brihat Parashara Hora Shastra principles and genuine spiritual discipline, without fear-based tactics or unnecessary ritual costs.',
-    step0Title: 'Choose Your Consultation Format',
+    title: 'Shree Ganeshambika Jyotish',
+    subtitle: 'Vedic Astrology Consultation & Upasana Wisdom',
+    heroTagline: 'Seeking Authentic Vedic Guidance & Divine Foresight?',
+    heroSubtitle: 'Calm, authentic astrological guidance rooted in Brihat Parashara Hora Shastra principles by Guruji — Hanuman Ji & Bhairav Upasak, Shri Vidya Practitioner & Karna Pishachini Sadhak.',
+    heroCta: 'Consult Guruji Now',
+    meetTitle: 'About Guruji',
+    meetRole: 'Hanuman Ji, Bhairav & Shri Vidya Upasak • Karna Pishachini Sadhana',
+    meetBio: 'Guruji is a dedicated Hanuman Ji, Bhairav, and Shri Vidya Upasak with profound Karna Pishachini Sadhana intuition. For over three decades, Guruji has guided individuals using authentic BPHS planetary calculations and intense spiritual sadhana.',
+    whyTitle: 'Why Trust Shree Ganeshambika Jyotish',
+    whySubtitle: 'Consultations are strictly based on classical Brihat Parashara Hora Shastra rules, divine upasana insights, and genuine spiritual guidance — without fear tactics or artificial remedies.',
+    step0Title: 'Choose Your Consultation Option',
     language: 'ગુજરાતી',
   },
   GU: {
-    title: 'એસ્ટ્રો-સેવા',
-    subtitle: 'વૈદિક પરામર્શ અને જીવન માર્ગદર્શન',
-    heroTagline: 'કારકિર્દી, લગ્ન કે જીવનના નિર્ણયોમાં સ્પષ્ટતા શોધી રહ્યા છો?',
-    heroSubtitle: '૩૦+ વર્ષનો સમર્પિત અનુભવ ધરાવતા શ્રી વિદ્યા સાધક પાસેથી બૃહત્ પરાશર હોરા શાસ્ત્ર સિદ્ધાંતો પર આધારિત શાંત અને પ્રામાણિક વૈદિક માર્ગદર્શન મેળવો.',
+    title: 'શ્રી ગણેશામ્બિકા જ્યોતિષ',
+    subtitle: 'વૈદિક જ્યોતિષ પરામર્શ અને આધ્યાત્મિક સાધના',
+    heroTagline: 'કારકિર્દી, લગ્ન કે જીવનના પ્રશ્નોમાં સાચી દિશા શોધી રહ્યા છો?',
+    heroSubtitle: 'હનુમાનજી ઉપાસક, ભૈરવ ઉપાસક, શ્રી વિદ્યા ઉપાસક અને કર્ણ પિશાચિની સાધના ધરાવતા ગુરુજી પાસેથી બૃહત્ પરાશર હોરા શાસ્ત્ર અને પવિત્ર ગણતરીઓ પર આધારિત સીધું માર્ગદર્શન મેળવો.',
     heroCta: 'ગુરુજી સાથે પરામર્શ કરો',
     meetTitle: 'ગુરુજી વિશે જાણો',
-    meetRole: 'શ્રી વિદ્યા સાધક • ૩૦+ વર્ષનો સમર્પિત અનુભવ',
-    meetBio: 'ત્રણ દાયકાથી વધુ સમયથી, ગુરુજીએ પ્રામાણિક વૈદિક જ્યોતિષ ગણતરીઓ અને ષોડશ સંસ્કાર આધ્યાત્મિક જ્ઞાનનો ઉપયોગ કરીને હજારો લોકોને માર્ગદર્શન આપ્યું છે.',
-    whyTitle: 'શા માટે હજારો લોકો ગુરુજી પર વિશ્વાસ કરે છે',
-    whySubtitle: 'પરામર્શ સંપૂર્ણપણે બૃહત્ પરાશર હોરા શાસ્ત્ર સિદ્ધાંતો અને સાચી આધ્યાત્મિક સાધના પર આધારિત છે, કોઈ પણ ડર કે બિનજરૂરી ઉપાયો વગર.',
+    meetRole: 'હનુમાનજી, ભૈરવ અને શ્રી વિદ્યા ઉપાસક • કર્ણ પિશાચિની સાધના',
+    meetBio: 'ગુરુજી હનુમાનજી, ભૈરવદેવ અને શ્રી વિદ્યા માતાજીના સમર્પિત ઉપાસક છે તથા કર્ણ પિશાચિની સાધનાની સૂક્ષ્મ દ્રષ્ટિ ધરાવે છે. ત્રણ દાયકાથી વધુ સમયથી પ્રામાણિક ગણતરીઓ અને સાધનાના આધારે સચોટ માર્ગદર્શન આપે છે.',
+    whyTitle: 'શા માટે લોકો શ્રી ગણેશામ્બિકા જ્યોતિષ પર વિશ્વાસ કરે છે',
+    whySubtitle: 'પરામર્શ સંપૂર્ણપણે બૃહત્ પરાશર હોરા શાસ્ત્ર નિયમો, આધ્યાત્મિક સાધના અને પવિત્ર ઉપાસના પર આધારિત છે — કોઈ પણ પ્રકારના ડર કે બિનજરૂરી ખર્ચ વગર.',
     step0Title: 'તમારું પરામર્શ ફોર્મેટ પસંદ કરો',
     language: 'English',
   }
@@ -595,7 +595,7 @@ export default function Home() {
         </div>
 
         <div className="max-w-6xl mx-auto pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-[14px] text-stone-500 font-normal">
-          <p>© {new Date().getFullYear()} Astro-Seva. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Shree Ganeshambika Jyotish. All rights reserved.</p>
           <div className="flex items-center gap-4 text-stone-400">
             <button onClick={toggleLanguage} className="hover:text-white transition-colors flex items-center gap-1">
               <Globe className="w-4 h-4 stroke-[1.75]" />

@@ -76,7 +76,7 @@ export default function DedicatedPayPage({ params }: { params: Promise<{ service
           <div className="w-8 h-8 rounded-xl bg-amber-100/70 border border-amber-200 flex items-center justify-center text-[#A14E15]">
             <Sparkles className="w-4 h-4 stroke-[1.75]" />
           </div>
-          <span className="text-[16px] font-bold tracking-tight text-[#1F1E1B]">Astro-Seva</span>
+          <span className="text-[16px] font-bold tracking-tight text-[#1F1E1B]">Shree Ganeshambika Jyotish</span>
         </div>
       </header>
 
@@ -240,7 +240,7 @@ export default function DedicatedPayPage({ params }: { params: Promise<{ service
 
       {/* Footer */}
       <footer className="w-full py-6 text-center text-[12px] text-stone-500 border-t border-stone-200/60">
-        © {new Date().getFullYear()} Astro-Seva. All rights reserved.
+        © {new Date().getFullYear()} Shree Ganeshambika Jyotish. All rights reserved.
       </footer>
     </div>
   );
