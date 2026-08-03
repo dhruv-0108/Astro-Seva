@@ -101,3 +101,8 @@ export const GURU_SERVICES: ServiceItem[] = [
 ];
 
 export const GURU_UPI_ID = 'verify@ybl';
+
+// If you have a custom QR code image file (e.g. qr-code.png or qr-code.jpg), place it in the public/ folder
+// and set this path below (e.g. '/qr-code.png'). If set to null or empty string, it automatically generates a dynamic UPI QR code.
+export const GURU_QR_IMAGE_PATH: string | null = null;
+

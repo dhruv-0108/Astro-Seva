@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '../../../components/ui/shadcn/button';
 import { Card } from '../../../components/ui/shadcn/card';
 import { Badge } from '../../../components/ui/shadcn/badge';
-import { GURU_SERVICES, GURU_UPI_ID, ServiceItem } from '../../../lib/services';
+import { GURU_SERVICES, GURU_UPI_ID, GURU_QR_IMAGE_PATH, ServiceItem } from '../../../lib/services';
 import {
   Sparkles,
   CreditCard,
@@ -125,11 +125,14 @@ export default function DedicatedPayPage({ params }: { params: Promise<{ service
             </p>
             <div className="border-4 border-amber-200 rounded-3xl p-3 bg-white shadow-xs">
               <img
-                src={`https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(
-                  upiLink
-                )}`}
+                src={
+                  GURU_QR_IMAGE_PATH ||
+                  `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(
+                    upiLink
+                  )}`
+                }
                 alt="UPI QR Code"
-                className="w-48 h-48 sm:w-52 sm:h-52"
+                className="w-48 h-48 sm:w-52 sm:h-52 object-contain"
               />
             </div>
             

@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '../components/ui/shadcn/button';
 import { Card } from '../components/ui/shadcn/card';
@@ -14,45 +14,14 @@ import {
   User,
   ArrowRight,
   ShieldCheck,
-  CreditCard,
   PhoneCall,
-  Award,
   BookOpen,
-  Users,
-  MessageCircle,
-  Compass,
-  ChevronDown,
   MessageSquare,
   Check,
   UserCheck,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
-
-const FAQS = [
-  {
-    qEN: 'What birth details are required for consultation?',
-    qGU: 'પરામર્શ માટે કઈ જન્મ વિગતો જરૂરી છે?',
-    aEN: 'You need to provide your Full Name, Date of Birth, Exact Time of Birth, and Birth Place (City/Town). These parameters are required for precise BPHS planetary calculations.',
-    aGU: 'તમારે તમારું આખું નામ, જન્મ તારીખ, ચોક્કસ જન્મ સમય અને જન્મ સ્થળ (શહેર/ગામ) આપવાની જરૂર છે. બૃહત્ પરાશર ગણતરીઓ માટે આ જરૂરી છે.',
-  },
-  {
-    qEN: 'How will I receive my consultation report?',
-    qGU: 'મને મારો પરામર્શ રિપોર્ટ કેવી રીતે મળશે?',
-    aEN: 'Once Guruji verifies your dakshina and calculates your birth chart, your complete Kundli digital report link will be sent directly to your WhatsApp number.',
-    aGU: 'ગુરુજી તમારી દક્ષિણા ચકાસીને જન્મ કુંડળી તૈયાર કરશે પછી, તમારો કુંડળી રિપોર્ટ સીધો તમારા વોટ્સએપ નંબર પર મોકલવામાં આવશે.',
-  },
-  {
-    qEN: 'What if I do not know my exact birth time?',
-    qGU: 'જો મને મારો ચોક્કસ જન્મ સમય ખબર ન હોય તો?',
-    aEN: 'If exact time is unknown, provide your approximate time window. Guruji utilizes Prashna (Horary) chart calculations to provide guidance.',
-    aGU: 'જો ચોક્કસ સમય ખબર ન હોય તો આશરે સમય જણાવો. ગુરુજી પ્રશ્ન કુંડળી ગણતરીનો ઉપયોગ કરીને તમને માર્ગદર્શન આપશે.',
-  },
-  {
-    qEN: 'Is my birth data and phone number secure?',
-    qGU: 'શું મારી જન્મ વિગતો અને ફોન નંબર સુરક્ષિત છે?',
-    aEN: 'Absolutely. All client records are strictly confidential, protected against public access, and automatically purged after 30 days.',
-    aGU: 'ચોક્કસ. તમામ ગ્રાહક માહિતી ગોપનીય રહે છે, સુરક્ષિત છે અને ૩૦ દિવસ પછી આપમેળે દૂર થઈ જાય છે.',
-  },
-];
 
 const TRANSLATIONS = {
   EN: {
@@ -64,15 +33,8 @@ const TRANSLATIONS = {
     meetTitle: 'Meet Guru Ji',
     meetRole: 'Sri Vidya Sadhak • 30+ Years Dedicated Wisdom',
     meetBio: 'For over three decades, Guru Ji has guided thousands of individuals through complex life phases using authentic Vedic astrology calculations and Shodasha Samskara spiritual wisdom.',
-    howTitle: 'How Consultation Works',
-    howStep1: 'Choose Consultation',
-    howStep1Desc: 'Select the guidance format that fits your current questions',
-    howStep2: 'Dakshina Offering',
-    howStep2Desc: 'Offer sacred dakshina securely via any UPI application',
-    howStep3: 'Tell Us About Yourself',
-    howStep3Desc: 'Provide accurate birth details for calculations',
-    howStep4: 'Personal Guidance',
-    howStep4Desc: 'Receive your detailed report directly on WhatsApp',
+    whyTitle: 'Why Thousands Trust Guru Ji',
+    whySubtitle: 'Consultations are strictly based on Brihat Parashara Hora Shastra principles and genuine spiritual discipline, without fear-based tactics or unnecessary ritual costs.',
     step0Title: 'Choose Your Consultation Format',
     language: 'ગુજરાતી',
   },
@@ -85,15 +47,8 @@ const TRANSLATIONS = {
     meetTitle: 'ગુરુજી વિશે જાણો',
     meetRole: 'શ્રી વિદ્યા સાધક • ૩૦+ વર્ષનો સમર્પિત અનુભવ',
     meetBio: 'ત્રણ દાયકાથી વધુ સમયથી, ગુરુજીએ પ્રામાણિક વૈદિક જ્યોતિષ ગણતરીઓ અને ષોડશ સંસ્કાર આધ્યાત્મિક જ્ઞાનનો ઉપયોગ કરીને હજારો લોકોને માર્ગદર્શન આપ્યું છે.',
-    howTitle: 'પરામર્શ પ્રક્રિયા કેવી રીતે કાર્ય કરે છે',
-    howStep1: 'પરામર્શ પસંદ કરો',
-    howStep1Desc: 'તમારા પ્રશ્નો અનુસાર પરામર્શ ફોર્મેટ પસંદ કરો',
-    howStep2: 'દક્ષિણા અર્પણ',
-    howStep2Desc: 'કોઈપણ યુપીઆઈ એપ દ્વારા સુરક્ષિત રીતે દક્ષિણા અર્પણ કરો',
-    howStep3: 'તમારી વિગતો જણાવો',
-    howStep3Desc: 'ચોક્કસ ગણતરીઓ માટે જન્મ વિગતો દાખલ કરો',
-    howStep4: 'વ્યક્તિગત માર્ગદર્શન',
-    howStep4Desc: 'તમારા વોટ્સએપ પર વિગતવાર કુંડળી રિપોર્ટ મેળવો',
+    whyTitle: 'શા માટે હજારો લોકો ગુરુજી પર વિશ્વાસ કરે છે',
+    whySubtitle: 'પરામર્શ સંપૂર્ણપણે બૃહત્ પરાશર હોરા શાસ્ત્ર સિદ્ધાંતો અને સાચી આધ્યાત્મિક સાધના પર આધારિત છે, કોઈ પણ ડર કે બિનજરૂરી ઉપાયો વગર.',
     step0Title: 'તમારું પરામર્શ ફોર્મેટ પસંદ કરો',
     language: 'English',
   }
@@ -102,7 +57,7 @@ const TRANSLATIONS = {
 export default function Home() {
   const router = useRouter();
   const [lang, setLang] = useState<'EN' | 'GU'>('GU');
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [currentSlide, setCurrentSlide] = useState<number>(0);
 
   const t = TRANSLATIONS[lang];
   const plansRef = useRef<HTMLDivElement>(null);
@@ -157,7 +112,7 @@ export default function Home() {
       </header>
 
       {/* 1. HERO SECTION */}
-      <section className="bg-[#FAF8F5] pt-20 sm:pt-24 pb-24 px-6 text-center max-w-4xl mx-auto space-y-8">
+      <section className="bg-[#FAF8F5] pt-20 sm:pt-24 pb-20 px-6 text-center max-w-4xl mx-auto space-y-8">
         <div className="space-y-6">
           <Badge variant="default" className="mx-auto bg-amber-100/90 text-[#A14E15] border-amber-300 px-4 py-1.5 text-[12px] font-medium">
             <Sparkles className="w-3.5 h-3.5 stroke-[1.75]" />
@@ -181,72 +136,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 2. TRUST SECTION */}
-      <section className="bg-[#FAF8F5] py-20 sm:py-24 px-6 max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
-          
-          {/* Left Column */}
-          <div className="md:col-span-7 space-y-6 text-left">
-            <div className="space-y-2">
-              <span className="text-[12px] font-semibold text-[#A14E15] uppercase tracking-wider font-mono">
-                Authentic Vedic Foundation
-              </span>
-              <h3 className="text-[28px] sm:text-[36px] font-bold text-[#1F1E1B] tracking-tight leading-tight">
-                Why Thousands Trust Guru Ji
-              </h3>
-              <p className="text-[16px] font-normal text-stone-600 leading-relaxed max-w-[65ch]">
-                Consultations are strictly based on Brihat Parashara Hora Shastra principles and genuine spiritual discipline, without fear-based tactics or unnecessary ritual costs.
-              </p>
-            </div>
-
-            <div className="space-y-4 pt-2">
-              {[
-                { title: '30+ Years Dedicated Experience', desc: 'Over three decades of precision horoscope calculation and client guidance.' },
-                { title: 'BPHS Principles & Math', desc: 'Calculations adhere strictly to ancient Brihat Parashara Hora Shastra rules.' },
-                { title: 'Sri Vidya Sadhak Discipline', desc: 'Spiritual grounding ensures calm, trustworthy, and sacred life insights.' },
-              ].map((item, idx) => (
-                <div key={idx} className="flex items-start gap-4">
-                  <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 mt-0.5 font-bold text-[12px]">
-                    ✓
-                  </div>
-                  <div className="space-y-0.5">
-                    <h4 className="text-[16px] font-semibold text-[#1F1E1B]">{item.title}</h4>
-                    <p className="text-[14px] font-normal text-stone-500">{item.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Right Column */}
-          <div className="md:col-span-5 space-y-6 text-left border-l-0 md:border-l border-stone-200/80 md:pl-10">
-            <div className="space-y-2">
-              <div className="text-[48px] sm:text-[56px] font-bold text-[#A14E15] font-mono leading-none">30+</div>
-              <div className="text-[18px] font-semibold text-[#1F1E1B]">Years Dedicated Sadhana</div>
-              <p className="text-[14px] font-normal text-stone-500 leading-relaxed">
-                Authentic calculation of planetary dasha periods and divisional charts.
-              </p>
-            </div>
-
-            <div className="pt-4 border-t border-stone-200/60 space-y-2">
-              <div className="flex items-center gap-2 text-[14px] font-semibold text-emerald-800">
-                <ShieldCheck className="w-5 h-5 stroke-[1.75] text-emerald-600" />
-                <span>Direct WhatsApp Delivery & Privacy Guarantee</span>
-              </div>
-              <p className="text-[14px] font-normal text-stone-500 leading-relaxed">
-                Your birth charts are personally analyzed by Guru Ji. Records are automatically purged after 30 days.
-              </p>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* 3. CONSULTATION PLANS SECTION */}
+      {/* 2. CONSULTATION PLANS SECTION */}
       <section ref={plansRef} id="plans" className="bg-white py-20 sm:py-24 border-y border-stone-200/50">
         <div className="max-w-7xl mx-auto px-6 space-y-12">
           
-          {/* Asymmetric Header */}
+          {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-stone-200/60 pb-6 text-left">
             <div className="space-y-1">
               <span className="text-[12px] font-semibold text-[#A14E15] uppercase tracking-wider font-mono">Professional Consultation Fees</span>
@@ -259,7 +153,7 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Consultation Cards (4 Responsive Grid) */}
+          {/* Consultation Cards Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {GURU_SERVICES.map((s) => {
               return (
@@ -326,127 +220,180 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. HOW IT WORKS */}
-      <section className="bg-[#FAF8F5] py-20 sm:py-24 px-6 max-w-5xl mx-auto space-y-12">
-        <div className="text-left space-y-2 border-b border-stone-200/60 pb-6">
-          <span className="text-[12px] font-semibold text-[#A14E15] uppercase tracking-wider font-mono">Simple Steps</span>
-          <h3 className="text-[28px] sm:text-[36px] font-bold text-[#1F1E1B] tracking-tight">{t.howTitle}</h3>
+      {/* 3. COMBINED CAROUSEL SECTION: MEET GURU JI -> WHY TRUST */}
+      <section className="bg-[#FAF8F5] py-20 sm:py-24 px-6 max-w-5xl mx-auto space-y-8">
+        
+        {/* Carousel Header & Controls */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-stone-200/60 pb-6 text-left">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setCurrentSlide(0)}
+              className={`px-4 py-2 rounded-2xl text-[14px] font-semibold transition-all cursor-pointer ${
+                currentSlide === 0
+                  ? 'bg-[#A14E15] text-white shadow-xs'
+                  : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
+              }`}
+            >
+              1. {t.meetTitle}
+            </button>
+            <button
+              onClick={() => setCurrentSlide(1)}
+              className={`px-4 py-2 rounded-2xl text-[14px] font-semibold transition-all cursor-pointer ${
+                currentSlide === 1
+                  ? 'bg-[#A14E15] text-white shadow-xs'
+                  : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
+              }`}
+            >
+              2. {t.whyTitle}
+            </button>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setCurrentSlide((prev) => (prev === 0 ? 1 : 0))}
+              aria-label="Previous Slide"
+              className="p-2.5 rounded-2xl border border-stone-200 bg-white hover:bg-stone-100 text-stone-700 transition-colors cursor-pointer"
+            >
+              <ChevronLeft className="w-5 h-5 stroke-[1.75]" />
+            </button>
+            <button
+              onClick={() => setCurrentSlide((prev) => (prev === 1 ? 0 : 1))}
+              aria-label="Next Slide"
+              className="p-2.5 rounded-2xl border border-stone-200 bg-white hover:bg-stone-100 text-stone-700 transition-colors cursor-pointer"
+            >
+              <ChevronRight className="w-5 h-5 stroke-[1.75]" />
+            </button>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-7 gap-y-8 text-left items-start">
-          {[
-            { num: '01', title: t.howStep1, desc: t.howStep1Desc, icon: Sparkles },
-            { num: '02', title: t.howStep2, desc: t.howStep2Desc, icon: CreditCard },
-            { num: '03', title: t.howStep3, desc: t.howStep3Desc, icon: User },
-            { num: '04', title: t.howStep4, desc: t.howStep4Desc, icon: Compass },
-          ].map((item, idx) => (
-            <React.Fragment key={idx}>
-              <div className={`space-y-3 relative ${idx < 3 ? 'md:col-span-1' : 'md:col-span-1'}`}>
-                <div className="flex justify-between items-center">
-                  <span className="text-[12px] font-bold text-[#A14E15] font-mono bg-amber-100/80 border border-amber-200 px-3 py-1 rounded-xl">
-                    {item.num}
-                  </span>
-                  <item.icon className="w-5 h-5 stroke-[1.75] text-stone-400" />
-                </div>
-                <h4 className="text-[16px] font-semibold text-[#1F1E1B] pt-1">{item.title}</h4>
-                <p className="text-[14px] font-normal text-stone-500 leading-relaxed">{item.desc}</p>
-              </div>
-              {idx < 3 && (
-                <div className="hidden md:flex items-center justify-center pt-4">
-                  <ArrowRight className="w-5 h-5 text-[#A14E15] stroke-[2]" />
-                </div>
-              )}
-            </React.Fragment>
-          ))}
-        </div>
-      </section>
-
-      {/* 5. ABOUT GURU JI */}
-      <section className="bg-[#FAF8F5] py-20 sm:py-24 px-6 max-w-5xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-center text-left">
+        {/* Carousel Container */}
+        <div className="bg-white border border-stone-200/80 rounded-3xl p-8 sm:p-12 shadow-xs transition-all duration-300 min-h-[380px] flex items-center">
           
-          <div className="md:col-span-4 flex justify-center md:justify-start">
-            <div className="relative w-44 h-44 sm:w-52 sm:h-52 rounded-3xl bg-gradient-to-b from-amber-50 to-stone-100 border-2 border-amber-200/80 shadow-sm flex items-center justify-center overflow-hidden">
-              <div className="flex flex-col items-center justify-center text-amber-800/70 gap-2">
-                <User className="w-16 h-16 stroke-[1.5]" />
-                <span className="text-[11px] font-bold uppercase tracking-wider text-amber-900/80">Guru Ji</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="md:col-span-8 space-y-6">
-            <div className="space-y-2">
-              <Badge variant="secondary" className="text-[12px] font-medium">{t.meetRole}</Badge>
-              <h3 className="text-[28px] sm:text-[36px] font-bold text-[#1F1E1B] tracking-tight">
-                {t.meetTitle}
-              </h3>
-            </div>
-
-            <p className="text-[16px] font-normal text-stone-600 leading-relaxed max-w-[65ch]">
-              {t.meetBio}
-            </p>
-
-            <div className="grid grid-cols-2 gap-4 pt-2">
-              <div className="border-l-2 border-[#A14E15] pl-3.5 space-y-0.5">
-                <div className="text-[14px] font-semibold text-[#1F1E1B]">Sri Vidya Sadhana</div>
-                <div className="text-[12px] text-stone-500 font-normal">Traditional Discipline</div>
-              </div>
-              <div className="border-l-2 border-[#A14E15] pl-3.5 space-y-0.5">
-                <div className="text-[14px] font-semibold text-[#1F1E1B]">BPHS Precision</div>
-                <div className="text-[12px] text-stone-500 font-normal">Authentic Math</div>
-              </div>
-            </div>
-
-            <div className="pt-2">
-              <Button onClick={scrollToPlans}>
-                <span>Book Consultation with Guruji</span>
-                <ArrowRight className="w-5 h-5 stroke-[1.75]" />
-              </Button>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* 6. FREQUENTLY ASKED QUESTIONS */}
-      <section className="bg-[#FAF8F5] py-20 sm:py-24 px-6 max-w-4xl mx-auto text-left space-y-8">
-        <div className="space-y-2 text-left border-b border-stone-200/60 pb-6">
-          <span className="text-[12px] font-semibold text-[#A14E15] uppercase tracking-wider font-mono">Clarifications</span>
-          <h3 className="text-[28px] sm:text-[36px] font-bold text-[#1F1E1B] tracking-tight">
-            Frequently Asked Questions
-          </h3>
-          <p className="text-[14px] font-normal text-stone-500 max-w-[50ch]">
-            Everything you need to know about preparing your birth details and receiving your consultation.
-          </p>
-        </div>
-
-        <div className="divide-y divide-stone-200/80">
-          {FAQS.map((faq, idx) => {
-            const isOpen = openFaq === idx;
-            return (
-              <div
-                key={idx}
-                onClick={() => setOpenFaq(isOpen ? null : idx)}
-                className="py-5 cursor-pointer text-left group transition-colors"
-              >
-                <div className="flex justify-between items-center gap-4">
-                  <h4 className="text-[16px] sm:text-[18px] font-semibold text-[#1F1E1B] group-hover:text-[#A14E15] transition-colors">
-                    {lang === 'GU' ? faq.qGU : faq.qEN}
-                  </h4>
-                  <ChevronDown className={`w-5 h-5 stroke-[1.75] text-stone-500 shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180 text-[#A14E15]' : ''}`} />
+          {/* Slide 1: Meet Guru Ji */}
+          {currentSlide === 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-center text-left w-full animate-fadeIn">
+              <div className="md:col-span-4 flex justify-center md:justify-start">
+                <div className="relative w-44 h-44 sm:w-52 sm:h-52 rounded-3xl bg-gradient-to-b from-amber-50 to-stone-100 border-2 border-amber-200/80 shadow-sm flex items-center justify-center overflow-hidden">
+                  <div className="flex flex-col items-center justify-center text-amber-800/70 gap-2">
+                    <User className="w-16 h-16 stroke-[1.5]" />
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-amber-900/80">Guru Ji</span>
+                  </div>
                 </div>
-                {isOpen && (
-                  <p className="text-[14px] sm:text-[16px] font-normal text-stone-600 mt-3 leading-relaxed max-w-[65ch]">
-                    {lang === 'GU' ? faq.aGU : faq.aEN}
-                  </p>
-                )}
               </div>
-            );
-          })}
+
+              <div className="md:col-span-8 space-y-6">
+                <div className="space-y-2">
+                  <Badge variant="secondary" className="text-[12px] font-medium">{t.meetRole}</Badge>
+                  <h3 className="text-[28px] sm:text-[36px] font-bold text-[#1F1E1B] tracking-tight">
+                    {t.meetTitle}
+                  </h3>
+                </div>
+
+                <p className="text-[16px] font-normal text-stone-600 leading-relaxed max-w-[65ch]">
+                  {t.meetBio}
+                </p>
+
+                <div className="grid grid-cols-2 gap-4 pt-2">
+                  <div className="border-l-2 border-[#A14E15] pl-3.5 space-y-0.5">
+                    <div className="text-[14px] font-semibold text-[#1F1E1B]">Sri Vidya Sadhana</div>
+                    <div className="text-[12px] text-stone-500 font-normal">Traditional Discipline</div>
+                  </div>
+                  <div className="border-l-2 border-[#A14E15] pl-3.5 space-y-0.5">
+                    <div className="text-[14px] font-semibold text-[#1F1E1B]">BPHS Precision</div>
+                    <div className="text-[12px] text-stone-500 font-normal">Authentic Math</div>
+                  </div>
+                </div>
+
+                <div className="pt-2">
+                  <Button onClick={scrollToPlans}>
+                    <span>Book Consultation with Guruji</span>
+                    <ArrowRight className="w-5 h-5 stroke-[1.75]" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Slide 2: Why Thousands Trust Guru Ji */}
+          {currentSlide === 1 && (
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-center text-left w-full animate-fadeIn">
+              <div className="md:col-span-7 space-y-6">
+                <div className="space-y-2">
+                  <span className="text-[12px] font-semibold text-[#A14E15] uppercase tracking-wider font-mono">
+                    Authentic Vedic Foundation
+                  </span>
+                  <h3 className="text-[28px] sm:text-[36px] font-bold text-[#1F1E1B] tracking-tight leading-tight">
+                    {t.whyTitle}
+                  </h3>
+                  <p className="text-[16px] font-normal text-stone-600 leading-relaxed max-w-[65ch]">
+                    {t.whySubtitle}
+                  </p>
+                </div>
+
+                <div className="space-y-3 pt-2">
+                  {[
+                    { title: '30+ Years Dedicated Experience', desc: 'Over three decades of precision horoscope calculation and client guidance.' },
+                    { title: 'BPHS Principles & Math', desc: 'Calculations adhere strictly to ancient Brihat Parashara Hora Shastra rules.' },
+                    { title: 'Sri Vidya Sadhak Discipline', desc: 'Spiritual grounding ensures calm, trustworthy, and sacred life insights.' },
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex items-start gap-3">
+                      <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 mt-0.5 font-bold text-[12px]">
+                        ✓
+                      </div>
+                      <div className="space-y-0.5">
+                        <h4 className="text-[15px] font-semibold text-[#1F1E1B]">{item.title}</h4>
+                        <p className="text-[13px] font-normal text-stone-500">{item.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="md:col-span-5 space-y-6 border-l-0 md:border-l border-stone-200/80 md:pl-10">
+                <div className="space-y-2">
+                  <div className="text-[48px] sm:text-[56px] font-bold text-[#A14E15] font-mono leading-none">30+</div>
+                  <div className="text-[18px] font-semibold text-[#1F1E1B]">Years Dedicated Sadhana</div>
+                  <p className="text-[14px] font-normal text-stone-500 leading-relaxed">
+                    Authentic calculation of planetary dasha periods and divisional charts.
+                  </p>
+                </div>
+
+                <div className="pt-4 border-t border-stone-200/60 space-y-2">
+                  <div className="flex items-center gap-2 text-[14px] font-semibold text-emerald-800">
+                    <ShieldCheck className="w-5 h-5 stroke-[1.75] text-emerald-600" />
+                    <span>Direct WhatsApp Delivery & Privacy Guarantee</span>
+                  </div>
+                  <p className="text-[13px] font-normal text-stone-500 leading-relaxed">
+                    Your birth charts are personally analyzed by Guru Ji. Records are automatically purged after 30 days.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
         </div>
+
+        {/* Slide Indicator Dots */}
+        <div className="flex justify-center items-center gap-2 pt-2">
+          <button
+            onClick={() => setCurrentSlide(0)}
+            className={`h-2.5 rounded-full transition-all cursor-pointer ${
+              currentSlide === 0 ? 'w-8 bg-[#A14E15]' : 'w-2.5 bg-stone-300 hover:bg-stone-400'
+            }`}
+            aria-label="Go to slide 1"
+          />
+          <button
+            onClick={() => setCurrentSlide(1)}
+            className={`h-2.5 rounded-full transition-all cursor-pointer ${
+              currentSlide === 1 ? 'w-8 bg-[#A14E15]' : 'w-2.5 bg-stone-300 hover:bg-stone-400'
+            }`}
+            aria-label="Go to slide 2"
+          />
+        </div>
+
       </section>
 
-      {/* 7. FOOTER */}
+      {/* 4. FOOTER */}
       <footer className="bg-[#1D1D1F] text-stone-300 py-16 px-6 sm:px-12 text-left">
         <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-12 gap-10 pb-12 border-b border-stone-800">
           
