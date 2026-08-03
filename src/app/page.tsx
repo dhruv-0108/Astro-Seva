@@ -59,7 +59,9 @@ export default function Home() {
   const [lang, setLang] = useState<'EN' | 'GU'>('GU');
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [selectedPlanTab, setSelectedPlanTab] = useState<number>(1);
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
+  const pricingScrollRef = useRef<HTMLDivElement>(null);
   const t = TRANSLATIONS[lang];
   const plansRef = useRef<HTMLDivElement>(null);
 
@@ -75,6 +77,51 @@ export default function Home() {
 
   const toggleLanguage = () => {
     setLang((prev) => (prev === 'GU' ? 'EN' : 'GU'));
+  };
+
+  // Touch Swipe for Meet Guru Ji Carousel
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartX(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX === null) return;
+    const touchEndX = e.changedTouches[0].clientX;
+    const diffX = touchStartX - touchEndX;
+
+    if (Math.abs(diffX) > 40) {
+      if (diffX > 0) {
+        setCurrentSlide(1);
+      } else {
+        setCurrentSlide(0);
+      }
+    }
+    setTouchStartX(null);
+  };
+
+  // Pricing Scroll & Pill Sync
+  const scrollToPlanIndex = (idx: number) => {
+    setSelectedPlanTab(idx);
+    if (pricingScrollRef.current) {
+      const container = pricingScrollRef.current;
+      const cardWidth = container.clientWidth;
+      container.scrollTo({
+        left: cardWidth * idx,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  const handlePricingScroll = () => {
+    if (pricingScrollRef.current) {
+      const container = pricingScrollRef.current;
+      const scrollLeft = container.scrollLeft;
+      const cardWidth = container.clientWidth;
+      const activeIdx = Math.round(scrollLeft / cardWidth);
+      if (activeIdx >= 0 && activeIdx < GURU_SERVICES.length && activeIdx !== selectedPlanTab) {
+        setSelectedPlanTab(activeIdx);
+      }
+    }
   };
 
   const renderServiceIcon = (iconName: string) => {
@@ -154,7 +201,7 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Mobile Single-Screen Segmented View (Visible on Mobile) */}
+          {/* Mobile Swipable Pricing Cards View (Visible on Mobile) */}
           <div className="block md:hidden space-y-4 text-left">
             {/* Top Plan Selector Segment Pills displaying all 3 prices at a glance */}
             <div className="grid grid-cols-3 gap-1.5 p-1.5 bg-stone-100/90 rounded-2xl border border-stone-200/80 text-center shadow-xs">
@@ -163,7 +210,7 @@ export default function Home() {
                 return (
                   <button
                     key={s.id}
-                    onClick={() => setSelectedPlanTab(idx)}
+                    onClick={() => scrollToPlanIndex(idx)}
                     className={`py-2.5 px-1 rounded-xl transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5 ${
                       isSelected
                         ? 'bg-[#A14E15] text-white shadow-xs font-semibold scale-[1.02]'
@@ -181,13 +228,18 @@ export default function Home() {
               })}
             </div>
 
-            {/* Active Plan Detail Card (Single-Screen Mobile View) */}
-            {(() => {
-              const s = GURU_SERVICES[selectedPlanTab] || GURU_SERVICES[1];
-              return (
+            {/* Horizontal Touch Swipable Snap Container */}
+            <div
+              ref={pricingScrollRef}
+              onScroll={handlePricingScroll}
+              className="flex overflow-x-auto snap-x snap-mandatory scrollbar-none gap-4 py-2 px-1 scroll-smooth"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              {GURU_SERVICES.map((s) => (
                 <Card
+                  key={s.id}
                   onClick={() => handleSelectService(s)}
-                  className={`p-5 rounded-2xl relative flex flex-col justify-between bg-white text-left shadow-sm border-2 ${
+                  className={`w-[88%] shrink-0 snap-center p-5 rounded-2xl relative flex flex-col justify-between bg-white text-left shadow-sm border-2 transition-all ${
                     s.popular ? 'border-[#A14E15]' : 'border-stone-200/90'
                   }`}
                 >
@@ -242,8 +294,22 @@ export default function Home() {
                     </Button>
                   </div>
                 </Card>
-              );
-            })()}
+              ))}
+            </div>
+
+            {/* Mobile Touch Swipe Indicator Dots */}
+            <div className="flex justify-center items-center gap-1.5 pt-1">
+              {GURU_SERVICES.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => scrollToPlanIndex(idx)}
+                  className={`h-2 rounded-full transition-all cursor-pointer ${
+                    selectedPlanTab === idx ? 'w-6 bg-[#A14E15]' : 'w-2 bg-stone-300'
+                  }`}
+                  aria-label={`Scroll to plan ${idx + 1}`}
+                />
+              ))}
+            </div>
           </div>
 
           {/* Desktop 3-Column Grid (Visible on Desktop) */}
@@ -359,8 +425,12 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Carousel Container */}
-        <div className="bg-white border border-stone-200/80 rounded-3xl p-8 sm:p-12 shadow-xs transition-all duration-300 min-h-[380px] flex items-center">
+        {/* Carousel Container with Touch Swipe Gesture Support */}
+        <div
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          className="bg-white border border-stone-200/80 rounded-3xl p-6 sm:p-12 shadow-xs transition-all duration-300 min-h-[380px] flex items-center touch-pan-y select-none"
+        >
           
           {/* Slide 1: Meet Guru Ji */}
           {currentSlide === 0 && (
