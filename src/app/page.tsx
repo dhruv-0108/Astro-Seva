@@ -41,10 +41,10 @@ const TRANSLATIONS: Record<Language, {
     title: 'Shree Ganeshambika Jyotish',
     subtitle: 'Vedic Astrology Consultation & Upasana Wisdom',
     heroHeading: 'Behind every consultation is decades of mantra sadhana, scriptural study, meditation, and guidance received through a traditional Guru–Shishya parampara.',
-    heroParagraph: 'For our Guru, astrology is not merely a profession—it is the culmination of years of spiritual practice, mantra sadhana, and traditional learning.',
-    heroCta: 'Consult Guruji Now',
+    heroParagraph: 'For Narendragiri Goswami Ji, astrology is not merely a profession—it is the culmination of years of spiritual practice, mantra sadhana, and traditional learning.',
+    heroCta: 'Consult Narendragiri Goswami Ji',
     practicesTitle: 'Spiritual Practices',
-    practicesNote: 'These disciplines were undertaken under the guidance of his Guru within the traditional Guru–Shishya lineage and continue to inform his spiritual practice today.',
+    practicesNote: 'These disciplines were undertaken under the guidance of his Guru within the traditional Guru–Shishya lineage and continue to inform Narendragiri Goswami Ji\'s spiritual practice today.',
     step0Title: 'Choose Your Consultation Option',
     step0Subtitle: 'Select your consultation category to proceed with sacred dakshina offering & payment.',
     practicesList: [
@@ -58,8 +58,8 @@ const TRANSLATIONS: Record<Language, {
     title: 'શ્રી ગણેશામ્બિકા જ્યોતિષ',
     subtitle: 'વૈદિક જ્યોતિષ પરામર્શ અને આધ્યાત્મિક સાધના',
     heroHeading: 'દરેક પરામર્શ પાછળ દાયકાઓની મંત્ર સાધના, શાસ્ત્ર અભ્યાસ, ધ્યાન અને પરંપરાગત ગુરુ-શિષ્ય પરંપરા દ્વારા પ્રાપ્ત માર્ગદર્શન છે.',
-    heroParagraph: 'અમારા ગુરુજી માટે, જ્યોતિષ એ માત્ર એક વ્યવસાય નથી—તે વર્ષોની આધ્યાત્મિક સાધના, મંત્ર જાપ અને પ્રામાણિક જ્ઞાનનું પવિત્ર ફળ છે.',
-    heroCta: 'ગુરુજી સાથે પરામર્શ કરો',
+    heroParagraph: 'નરેન્દ્રગિરી ગોસ્વામી જી માટે, જ્યોતિષ એ માત્ર એક વ્યવસાય નથી—તે વર્ષોની આધ્યાત્મિક સાધના, મંત્ર જાપ અને પ્રામાણિક જ્ઞાનનું પવિત્ર ફળ છે.',
+    heroCta: 'નરેન્દ્રગિરી ગોસ્વામી જી સાથે પરામર્શ કરો',
     practicesTitle: 'આધ્યાત્મિક સાધનાઓ',
     practicesNote: 'આ તમામ સાધનાઓ તેમણે પોતાના ગુરુજીના પવિત્ર માર્ગદર્શન હેઠળ ગુરુ-શિષ્ય પરંપરામાં સંપાદિત કરી છે.',
     step0Title: 'તમારું પરામર્શ ફોર્મેટ પસંદ કરો',
@@ -75,8 +75,8 @@ const TRANSLATIONS: Record<Language, {
     title: 'श्री गणेशाम्बिका ज्योतिष',
     subtitle: 'वैदिक ज्योतिष परामर्श एवं आध्यात्मिक साधना',
     heroHeading: 'प्रत्येक परामर्श के पीछे दशकों की मंत्र साधना, शास्त्र अध्ययन, ध्यान एवं पारंपरिक गुरु-शिष्य परंपरा द्वारा प्राप्त मार्गदर्शन है।',
-    heroParagraph: 'हमारे गुरुजी के लिए, ज्योतिष केवल एक व्यवसाय नहीं है—यह वर्षों की आध्यात्मिक साधना, मंत्र जप एवं प्रामाणिक ज्ञान का पवित्र फल है।',
-    heroCta: 'गुरुजी से परामर्श करें',
+    heroParagraph: 'नरेन्द्रगिरि गोस्वामी जी के लिए, ज्योतिष केवल एक व्यवसाय नहीं है—यह वर्षों की आध्यात्मिक साधना, मंत्र जप एवं प्रामाणिक ज्ञान का पवित्र फल है।',
+    heroCta: 'नरेन्द्रगिरि गोस्वामी जी से परामर्श करें',
     practicesTitle: 'आध्यात्मिक साधनाएँ',
     practicesNote: 'ये सभी साधनाएँ उन्होंने अपने गुरुजी के पवित्र मार्गदर्शन में पारंपरिक गुरु-शिष्य परंपरा के अंतर्गत संपन्न की हैं।',
     step0Title: 'अपना परामर्श विकल्प चुनें',
@@ -198,15 +198,15 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-[#1F1E1B] font-sans selection:bg-amber-100 antialiased">
       
-      {/* Serene Navigation Header */}
-      <header className="w-full bg-[#FAF8F5]/90 backdrop-blur-md border-b border-stone-200/50 sticky top-0 z-30 px-6 sm:px-12 py-4 flex justify-between items-center">
+      {/* Serene Navigation Header with 3-Way Language Switcher */}
+      <header className="w-full bg-[#FAF8F5]/90 backdrop-blur-md border-b border-stone-200/50 sticky top-0 z-30 px-4 sm:px-12 py-3.5 flex justify-between items-center">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-2xl bg-amber-100/70 border border-amber-200 flex items-center justify-center text-[#A14E15]">
             <Sparkles className="w-4 h-4 stroke-[1.75]" />
           </div>
           <div>
-            <h1 className="text-[16px] font-semibold tracking-tight text-[#1F1E1B]">{t.title}</h1>
-            <p className="text-[12px] text-stone-500 font-normal">{t.subtitle}</p>
+            <h1 className="text-[15px] sm:text-[16px] font-semibold tracking-tight text-[#1F1E1B]">{t.title}</h1>
+            <p className="text-[11px] sm:text-[12px] text-stone-500 font-normal">{t.subtitle}</p>
           </div>
         </div>
 
@@ -236,7 +236,7 @@ export default function Home() {
           <div className="md:col-span-5 flex justify-center">
             <div className="relative w-full h-[360px] sm:h-[440px] lg:h-[480px] rounded-3xl overflow-hidden shadow-xl border border-amber-300/80 group">
               {[
-                { src: '/images/giri-kaka/guru-2.jpeg', label: 'Guruji • 30+ Yrs Sadhana' },
+                { src: '/images/giri-kaka/guru-2.jpeg', label: 'Narendragiri Goswami Ji • 30+ Yrs Sadhana' },
                 { src: '/images/giri-kaka/guru-3.jpeg', label: 'Sacred Upasana Siddhi' },
                 { src: '/images/giri-kaka/guru-4.jpeg', label: 'Shastric Lineage & Practice' },
               ].map((img, idx) => (
@@ -531,14 +531,14 @@ export default function Home() {
               <span className="text-[16px] font-semibold text-white tracking-tight">{t.title}</span>
             </div>
             <p className="text-[14px] text-stone-400 font-normal leading-relaxed max-w-sm">
-              Authentic Vedic astrology consultation & Sri Vidya spiritual guidance based on Brihat Parashara Hora Shastra principles.
+              Authentic Vedic astrology consultation & Sri Vidya spiritual guidance by Narendragiri Goswami Ji based on Brihat Parashara Hora Shastra principles.
             </p>
           </div>
 
           <div className="sm:col-span-3 space-y-3 text-[14px]">
             <h5 className="font-semibold text-white uppercase tracking-wider text-[12px]">Consultations</h5>
             <ul className="space-y-2 text-stone-400 font-normal">
-              <li><button onClick={scrollToPlans} className="hover:text-amber-400 transition-colors">Kundli Jova Na (₹250)</button></li>
+              <li><button onClick={scrollToPlans} className="hover:text-amber-400 transition-colors">Kundli Reading (₹250)</button></li>
               <li><button onClick={scrollToPlans} className="hover:text-amber-400 transition-colors">30 Mins Live Session (₹250)</button></li>
               <li><button onClick={scrollToPlans} className="hover:text-amber-400 transition-colors">Extra Questions (₹100)</button></li>
             </ul>
