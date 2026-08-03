@@ -76,28 +76,6 @@ export const GURU_SERVICES: ServiceItem[] = [
       'ફોલો-અપ પ્રશ્નોત્તરી સત્ર',
     ],
   },
-  {
-    id: 'in-person-session',
-    titleEN: 'In-Person Personal Session',
-    titleGU: 'રૂબરૂ વ્યક્તિગત મુલાકાત (In-Person)',
-    price: 20000,
-    descEN: 'Personal face-to-face in-person consultation session with Guru Ji for higher-effort, non-scalable deep guidance.',
-    descGU: 'ગુરુજી સાથે સીધી રૂબરૂ વ્યક્તિગત મુલાકાત - ઊંડાણપૂર્વકનું આધ્યાત્મિક અને વૈદિક માર્ગદર્શન.',
-    iconName: 'UserCheck',
-    popular: false,
-    featuresEN: [
-      'Personal Face-to-Face Meeting with Guruji',
-      'In-Depth Prashna & Horoscope Verification',
-      'Private 1-on-1 Spiritual Guidance',
-      'Direct Prashna Chart Rectification',
-    ],
-    featuresGU: [
-      'ગુરુજી સાથે સીધી રૂબરૂ મુલાકાત',
-      'પ્રશ્ન કુંડળી અને જન્મ કુંડળી ચકાસણી',
-      'ખાનગી ૧-ઓન-૧ આધ્યાત્મિક માર્ગદર્શન',
-      'ચોક્કસ જન્મ સમય સુધારણા',
-    ],
-  },
 ];
 
 export const GURU_UPI_ID = 'verify@ybl';

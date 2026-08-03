@@ -153,8 +153,8 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Consultation Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Consultation Cards Grid (3 Cards optimized for Mobile & Desktop) */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
             {GURU_SERVICES.map((s) => {
               return (
                 <Card
@@ -415,7 +415,6 @@ export default function Home() {
               <li><button onClick={scrollToPlans} className="hover:text-amber-400 transition-colors">Quick Question (₹2,500)</button></li>
               <li><button onClick={scrollToPlans} className="hover:text-amber-400 transition-colors">Standard Full Reading (₹5,000)</button></li>
               <li><button onClick={scrollToPlans} className="hover:text-amber-400 transition-colors">Detailed Life Analysis (₹10,000)</button></li>
-              <li><button onClick={scrollToPlans} className="hover:text-amber-400 transition-colors">In-Person Session (₹20,000)</button></li>
             </ul>
           </div>
 
