@@ -23,39 +23,76 @@ import {
   ChevronRight,
 } from 'lucide-react';
 
-const TRANSLATIONS = {
+type Language = 'EN' | 'GU' | 'HI';
+
+const TRANSLATIONS: Record<Language, {
+  title: string;
+  subtitle: string;
+  heroHeading: string;
+  heroParagraph: string;
+  heroCta: string;
+  practicesTitle: string;
+  practicesNote: string;
+  step0Title: string;
+  step0Subtitle: string;
+  practicesList: string[];
+}> = {
   EN: {
     title: 'Shree Ganeshambika Jyotish',
     subtitle: 'Vedic Astrology Consultation & Upasana Wisdom',
-    heroTagline: 'Seeking Authentic Vedic Guidance & Divine Foresight?',
-    heroSubtitle: 'Calm, authentic astrological guidance rooted in Brihat Parashara Hora Shastra principles by Guruji — Hanuman Ji & Bhairav Upasak, Shri Vidya Practitioner & Karna Pishachini Sadhak.',
+    heroHeading: 'Behind every consultation is decades of mantra sadhana, scriptural study, meditation, and guidance received through a traditional Guru–Shishya parampara.',
+    heroParagraph: 'For our Guru, astrology is not merely a profession—it is the culmination of years of spiritual practice, mantra sadhana, and traditional learning.',
     heroCta: 'Consult Guruji Now',
-    meetTitle: 'About Guruji',
-    meetRole: 'Hanuman Ji, Bhairav & Shri Vidya Upasak • Karna Pishachini Sadhana',
-    meetBio: 'Guruji is a dedicated Hanuman Ji, Bhairav, and Shri Vidya Upasak with profound Karna Pishachini Sadhana intuition. For over three decades, Guruji has guided individuals using authentic BPHS planetary calculations and intense spiritual sadhana.',
-    whyTitle: 'Why Trust Shree Ganeshambika Jyotish',
-    whySubtitle: 'Consultations are strictly based on classical Brihat Parashara Hora Shastra rules, divine upasana insights, and genuine spiritual guidance — without fear tactics or artificial remedies.',
+    practicesTitle: 'Spiritual Practices',
+    practicesNote: 'These disciplines were undertaken under the guidance of his Guru within the traditional Guru–Shishya lineage and continue to inform his spiritual practice today.',
     step0Title: 'Choose Your Consultation Option',
-    language: 'ગુજરાતી',
+    step0Subtitle: 'Select your consultation category to proceed with sacred dakshina offering & payment.',
+    practicesList: [
+      'Shri Vidya Sadhana',
+      'Hanuman Sadhana',
+      'Bhairava Sadhana',
+      'Karna Pishachini Sadhana',
+    ],
   },
   GU: {
     title: 'શ્રી ગણેશામ્બિકા જ્યોતિષ',
     subtitle: 'વૈદિક જ્યોતિષ પરામર્શ અને આધ્યાત્મિક સાધના',
-    heroTagline: 'કારકિર્દી, લગ્ન કે જીવનના પ્રશ્નોમાં સાચી દિશા શોધી રહ્યા છો?',
-    heroSubtitle: 'હનુમાનજી ઉપાસક, ભૈરવ ઉપાસક, શ્રી વિદ્યા ઉપાસક અને કર્ણ પિશાચિની સાધના ધરાવતા ગુરુજી પાસેથી બૃહત્ પરાશર હોરા શાસ્ત્ર અને પવિત્ર ગણતરીઓ પર આધારિત સીધું માર્ગદર્શન મેળવો.',
+    heroHeading: 'દરેક પરામર્શ પાછળ દાયકાઓની મંત્ર સાધના, શાસ્ત્ર અભ્યાસ, ધ્યાન અને પરંપરાગત ગુરુ-શિષ્ય પરંપરા દ્વારા પ્રાપ્ત માર્ગદર્શન છે.',
+    heroParagraph: 'અમારા ગુરુજી માટે, જ્યોતિષ એ માત્ર એક વ્યવસાય નથી—તે વર્ષોની આધ્યાત્મિક સાધના, મંત્ર જાપ અને પ્રામાણિક જ્ઞાનનું પવિત્ર ફળ છે.',
     heroCta: 'ગુરુજી સાથે પરામર્શ કરો',
-    meetTitle: 'ગુરુજી વિશે જાણો',
-    meetRole: 'હનુમાનજી, ભૈરવ અને શ્રી વિદ્યા ઉપાસક • કર્ણ પિશાચિની સાધના',
-    meetBio: 'ગુરુજી હનુમાનજી, ભૈરવદેવ અને શ્રી વિદ્યા માતાજીના સમર્પિત ઉપાસક છે તથા કર્ણ પિશાચિની સાધનાની સૂક્ષ્મ દ્રષ્ટિ ધરાવે છે. ત્રણ દાયકાથી વધુ સમયથી પ્રામાણિક ગણતરીઓ અને સાધનાના આધારે સચોટ માર્ગદર્શન આપે છે.',
-    whyTitle: 'શા માટે લોકો શ્રી ગણેશામ્બિકા જ્યોતિષ પર વિશ્વાસ કરે છે',
-    whySubtitle: 'પરામર્શ સંપૂર્ણપણે બૃહત્ પરાશર હોરા શાસ્ત્ર નિયમો, આધ્યાત્મિક સાધના અને પવિત્ર ઉપાસના પર આધારિત છે — કોઈ પણ પ્રકારના ડર કે બિનજરૂરી ખર્ચ વગર.',
+    practicesTitle: 'આધ્યાત્મિક સાધનાઓ',
+    practicesNote: 'આ તમામ સાધનાઓ તેમણે પોતાના ગુરુજીના પવિત્ર માર્ગદર્શન હેઠળ ગુરુ-શિષ્ય પરંપરામાં સંપાદિત કરી છે.',
     step0Title: 'તમારું પરામર્શ ફોર્મેટ પસંદ કરો',
-    language: 'English',
+    step0Subtitle: 'દક્ષિણા અર્પણ અને ચૂકવણી સાથે આગળ વધવા માટે તમારો પરામર્શ વિકલ્પ પસંદ કરો.',
+    practicesList: [
+      'શ્રી વિદ્યા સાધના',
+      'હનુમાન સાધના',
+      'ભૈરવ સાધના',
+      'કર્ણ પિશાચિની સાધના',
+    ],
+  },
+  HI: {
+    title: 'श्री गणेशाम्बिका ज्योतिष',
+    subtitle: 'वैदिक ज्योतिष परामर्श एवं आध्यात्मिक साधना',
+    heroHeading: 'प्रत्येक परामर्श के पीछे दशकों की मंत्र साधना, शास्त्र अध्ययन, ध्यान एवं पारंपरिक गुरु-शिष्य परंपरा द्वारा प्राप्त मार्गदर्शन है।',
+    heroParagraph: 'हमारे गुरुजी के लिए, ज्योतिष केवल एक व्यवसाय नहीं है—यह वर्षों की आध्यात्मिक साधना, मंत्र जप एवं प्रामाणिक ज्ञान का पवित्र फल है।',
+    heroCta: 'गुरुजी से परामर्श करें',
+    practicesTitle: 'आध्यात्मिक साधनाएँ',
+    practicesNote: 'ये सभी साधनाएँ उन्होंने अपने गुरुजी के पवित्र मार्गदर्शन में पारंपरिक गुरु-शिष्य परंपरा के अंतर्गत संपन्न की हैं।',
+    step0Title: 'अपना परामर्श विकल्प चुनें',
+    step0Subtitle: 'दक्षिणा अर्पित करने एवं भुगतान के साथ आगे बढ़ने के लिए अपना परामर्श विकल्प चुनें।',
+    practicesList: [
+      'श्री विद्या साधना',
+      'हनुमान साधना',
+      'भैरव साधना',
+      'कर्ण पिशाचिनी साधना',
+    ],
   }
 };
+
 export default function Home() {
   const router = useRouter();
-  const [lang, setLang] = useState<'EN' | 'GU'>('GU');
+  const [lang, setLang] = useState<Language>('GU');
   const [currentSlide, setCurrentSlide] = useState<number>(0);
 
   // Auto rotate Giri Kaka photos every 3.5 seconds
@@ -65,6 +102,7 @@ export default function Home() {
     }, 3500);
     return () => clearInterval(timer);
   }, []);
+
   const [selectedPlanTab, setSelectedPlanTab] = useState<number>(1);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
@@ -82,10 +120,6 @@ export default function Home() {
     router.push(`/pay/${service.id}`);
   };
 
-  const toggleLanguage = () => {
-    setLang((prev) => (prev === 'GU' ? 'EN' : 'GU'));
-  };
-
   // Touch Swipe for Meet Guru Ji Carousel
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStartX(e.touches[0].clientX);
@@ -96,12 +130,10 @@ export default function Home() {
     const touchEndX = e.changedTouches[0].clientX;
     const diffX = touchStartX - touchEndX;
 
-    if (Math.abs(diffX) > 40) {
-      if (diffX > 0) {
-        setCurrentSlide(1);
-      } else {
-        setCurrentSlide(0);
-      }
+    if (diffX > 50) {
+      setCurrentSlide((prev) => (prev + 1) % 3);
+    } else if (diffX < -50) {
+      setCurrentSlide((prev) => (prev === 0 ? 2 : prev - 1));
     }
     setTouchStartX(null);
   };
@@ -145,6 +177,24 @@ export default function Home() {
     }
   };
 
+  const getServiceTitle = (s: ServiceItem) => {
+    if (lang === 'HI') return s.titleHI;
+    if (lang === 'GU') return s.titleGU;
+    return s.titleEN;
+  };
+
+  const getServiceDesc = (s: ServiceItem) => {
+    if (lang === 'HI') return s.descHI;
+    if (lang === 'GU') return s.descGU;
+    return s.descEN;
+  };
+
+  const getServiceFeatures = (s: ServiceItem) => {
+    if (lang === 'HI') return s.featuresHI;
+    if (lang === 'GU') return s.featuresGU;
+    return s.featuresEN;
+  };
+
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-[#1F1E1B] font-sans selection:bg-amber-100 antialiased">
       
@@ -160,10 +210,22 @@ export default function Home() {
           </div>
         </div>
 
-        <Button variant="outline" size="sm" onClick={toggleLanguage}>
-          <Globe className="w-4 h-4 stroke-[1.75] text-stone-600" />
-          <span>{t.language}</span>
-        </Button>
+        {/* 3-Way Language Selector Switcher */}
+        <div className="flex items-center gap-1 bg-stone-200/60 p-1 rounded-2xl border border-stone-300/60 shadow-2xs">
+          {(['EN', 'GU', 'HI'] as Language[]).map((l) => (
+            <button
+              key={l}
+              onClick={() => setLang(l)}
+              className={`px-3 py-1.5 rounded-xl text-[12px] font-bold transition-all cursor-pointer ${
+                lang === l
+                  ? 'bg-[#7A1C28] text-white shadow-xs'
+                  : 'text-stone-700 hover:text-[#1F1E1B] hover:bg-stone-300/50'
+              }`}
+            >
+              {l === 'EN' ? 'English' : l === 'GU' ? 'ગુજરાતી' : 'हिंदी'}
+            </button>
+          ))}
+        </div>
       </header>
 
       {/* 1. UNIFIED HERO SECTION WITH AUTO-ROTATING GIRI KAKA PHOTOS */}
@@ -220,26 +282,21 @@ export default function Home() {
           <div className="md:col-span-7 space-y-6">
             <div className="space-y-3">
               <h2 className="text-[24px] sm:text-[32px] lg:text-[36px] font-black text-[#1C1817] leading-[125%] tracking-tight">
-                Behind every consultation is decades of mantra sadhana, scriptural study, meditation, and guidance received through a traditional Guru–Shishya parampara.
+                {t.heroHeading}
               </h2>
 
               <p className="text-[15px] sm:text-[17px] font-normal text-[#4A423F] leading-relaxed">
-                For our Guru, astrology is not merely a profession—it is the culmination of years of spiritual practice, mantra sadhana, and traditional learning.
+                {t.heroParagraph}
               </p>
             </div>
 
             <div className="space-y-3 pt-2 border-t border-amber-200/60">
               <h3 className="text-[16px] sm:text-[18px] font-bold text-[#7A1C28] uppercase tracking-wider font-mono">
-                Spiritual Practices
+                {t.practicesTitle}
               </h3>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {[
-                  'Shri Vidya Sadhana',
-                  'Hanuman Sadhana',
-                  'Bhairava Sadhana',
-                  'Karna Pishachini Sadhana',
-                ].map((practice, idx) => (
+                {t.practicesList.map((practice, idx) => (
                   <div key={idx} className="flex items-center gap-3 p-3 rounded-2xl bg-white border border-stone-200/90 shadow-xs">
                     <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 font-bold text-[11px] border border-emerald-300">
                       ✓
@@ -253,12 +310,12 @@ export default function Home() {
             </div>
 
             <p className="text-[13px] sm:text-[14px] text-[#5A514E] font-medium leading-relaxed">
-              These disciplines were undertaken under the guidance of his Guru within the traditional Guru–Shishya lineage and continue to inform his spiritual practice today.
+              {t.practicesNote}
             </p>
 
             <div className="pt-2">
               <Button onClick={scrollToPlans} className="bg-gradient-to-r from-[#9E2A2B] to-[#7A1C28] hover:from-[#B2182B] hover:to-[#5E121C] text-white font-bold px-8 py-3.5 text-base shadow-md rounded-2xl">
-                <span>Consult Guruji Now</span>
+                <span>{t.heroCta}</span>
                 <ArrowRight className="w-5 h-5 stroke-[2]" />
               </Button>
             </div>
@@ -280,7 +337,7 @@ export default function Home() {
               </h3>
             </div>
             <p className="text-[14px] font-normal text-stone-500 max-w-[50ch]">
-              Select your consultation category to proceed with sacred dakshina offering & payment.
+              {t.step0Subtitle}
             </p>
           </div>
 
@@ -340,7 +397,7 @@ export default function Home() {
                         </div>
                         <div>
                           <h4 className="text-[17px] font-bold text-[#1F1E1B] leading-tight">
-                            {lang === 'GU' ? s.titleGU : s.titleEN}
+                            {getServiceTitle(s)}
                           </h4>
                           <span className="text-[12px] text-stone-500 font-medium">Selected Plan</span>
                         </div>
@@ -351,11 +408,11 @@ export default function Home() {
                     </div>
 
                     <p className="text-[13px] font-normal text-stone-600 leading-relaxed">
-                      {lang === 'GU' ? s.descGU : s.descEN}
+                      {getServiceDesc(s)}
                     </p>
 
                     <ul className="space-y-1.5 pt-2.5 border-t border-stone-100">
-                      {(lang === 'GU' ? s.featuresGU : s.featuresEN).map((f, i) => (
+                      {getServiceFeatures(s).map((f, i) => (
                         <li key={i} className="flex items-start gap-2 text-[12px] text-stone-600 font-normal">
                           <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0 stroke-[2] mt-0.5" />
                           <span>{f}</span>
@@ -426,15 +483,15 @@ export default function Home() {
 
                     <div className="space-y-2">
                       <h4 className="text-[18px] sm:text-[20px] font-semibold text-[#1F1E1B]">
-                        {lang === 'GU' ? s.titleGU : s.titleEN}
+                        {getServiceTitle(s)}
                       </h4>
                       <p className="text-[13px] sm:text-[14px] font-normal text-stone-600 leading-relaxed">
-                        {lang === 'GU' ? s.descGU : s.descEN}
+                        {getServiceDesc(s)}
                       </p>
                     </div>
 
                     <ul className="space-y-2 pt-3 border-t border-stone-100">
-                      {(lang === 'GU' ? s.featuresGU : s.featuresEN).map((f, i) => (
+                      {getServiceFeatures(s).map((f, i) => (
                         <li key={i} className="flex items-start gap-2 text-[12px] sm:text-[13px] text-stone-600 font-normal">
                           <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0 stroke-[2] mt-0.5" />
                           <span>{f}</span>
@@ -502,11 +559,19 @@ export default function Home() {
 
         <div className="max-w-6xl mx-auto pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-[14px] text-stone-500 font-normal">
           <p>© {new Date().getFullYear()} Shree Ganeshambika Jyotish. All rights reserved.</p>
-          <div className="flex items-center gap-4 text-stone-400">
-            <button onClick={toggleLanguage} className="hover:text-white transition-colors flex items-center gap-1">
-              <Globe className="w-4 h-4 stroke-[1.75]" />
-              <span>{t.language}</span>
-            </button>
+          <div className="flex items-center gap-2 text-stone-400">
+            <Globe className="w-4 h-4 stroke-[1.75]" />
+            {(['EN', 'GU', 'HI'] as Language[]).map((l) => (
+              <button
+                key={l}
+                onClick={() => setLang(l)}
+                className={`text-[12px] font-semibold transition-colors px-2 py-1 rounded-md cursor-pointer ${
+                  lang === l ? 'text-amber-400 bg-stone-800' : 'text-stone-400 hover:text-white'
+                }`}
+              >
+                {l === 'EN' ? 'English' : l === 'GU' ? 'ગુજરાતી' : 'हिंदी'}
+              </button>
+            ))}
           </div>
         </div>
       </footer>
