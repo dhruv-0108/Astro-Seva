@@ -263,7 +263,7 @@ export default function Home() {
     <div className="min-h-screen bg-[#FAF6EE] text-[#1F1E1B] font-sans selection:bg-amber-100 antialiased">
       
       {/* Serene Navigation Header with Centered Title & 3-Way Language Switcher Directly Below */}
-      <header className="w-full bg-[#FAF6EE]/95 backdrop-blur-md border-b border-amber-200/70 sticky top-0 z-30 px-4 py-3.5 flex flex-col items-center text-center gap-2.5 shadow-2xs">
+      <header className="w-full bg-[#FAF6EE] border-b border-amber-200/70 relative z-10 px-4 py-3.5 flex flex-col items-center text-center gap-2.5 shadow-2xs">
         
         {/* Sacred Chanting Header */}
         <span className="text-[12px] sm:text-[13px] font-bold text-[#A14E15] font-serif tracking-widest">
