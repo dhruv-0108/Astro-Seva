@@ -260,10 +260,10 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-[#1F1E1B] font-sans selection:bg-amber-100 antialiased">
+    <div className="min-h-screen bg-[#FAF6EE] text-[#1F1E1B] font-sans selection:bg-amber-100 antialiased">
       
       {/* Serene Navigation Header with Centered Title & 3-Way Language Switcher Directly Below */}
-      <header className="w-full bg-[#FAF8F5]/95 backdrop-blur-md border-b border-stone-200/60 sticky top-0 z-30 px-4 py-3.5 flex flex-col items-center text-center gap-2.5 shadow-2xs">
+      <header className="w-full bg-[#FAF6EE]/95 backdrop-blur-md border-b border-amber-200/70 sticky top-0 z-30 px-4 py-3.5 flex flex-col items-center text-center gap-2.5 shadow-2xs">
         
         {/* Sacred Chanting Header */}
         <span className="text-[12px] sm:text-[13px] font-bold text-[#A14E15] font-serif tracking-widest">
@@ -324,11 +324,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 2. TEXT DETAILS & LIFE GUIDANCE AREAS SECTION (BELOW POSTER) */}
-      <section className="py-10 px-4 sm:px-8 max-w-5xl mx-auto space-y-10">
+      {/* 2. TEXT DETAILS SECTION (BELOW POSTER) */}
+      <section className="py-10 px-4 sm:px-8 max-w-5xl mx-auto space-y-8">
         
         {/* Sacred Om Bio Box */}
-        <div className="bg-[#FAF6EE] border-2 border-amber-300/80 rounded-3xl p-6 sm:p-10 relative space-y-5 shadow-md">
+        <div className="bg-[#FFFDF9] border-2 border-amber-300/90 rounded-3xl p-6 sm:p-10 relative space-y-5 shadow-md">
           <div className="hidden sm:block absolute top-5 right-6 text-amber-700/20 font-serif text-6xl font-black select-none">
             ॐ
           </div>
@@ -352,43 +352,8 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Listed Areas Where Guidance is Available */}
-        <div className="space-y-6 pt-2">
-          <div className="text-center space-y-1.5">
-            <span className="text-[12px] font-bold text-[#A14E15] uppercase tracking-wider font-mono">
-              Comprehensive Vedic Consultations
-            </span>
-            <h3 className="text-[24px] sm:text-[32px] font-bold text-[#1F1E1B] tracking-tight">
-              {t.categoriesTitle}
-            </h3>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {t.categories.map((cat, idx) => (
-              <div
-                key={idx}
-                className="p-5 rounded-2xl bg-white border border-stone-200/90 shadow-xs hover:border-amber-400 hover:shadow-sm transition-all flex items-start gap-4"
-              >
-                <div className="w-11 h-11 rounded-2xl bg-amber-100/80 border border-amber-200 flex items-center justify-center shrink-0">
-                  {renderCategoryIcon(cat.iconName)}
-                </div>
-                <div className="space-y-1">
-                  <h4 className="text-[15px] sm:text-[16px] font-bold text-[#1F1E1B]">
-                    {cat.label}
-                  </h4>
-                  {cat.desc && (
-                    <p className="text-[12px] sm:text-[13px] text-stone-500 font-normal leading-relaxed">
-                      {cat.desc}
-                    </p>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
         {/* Quick CTA Scroll Button */}
-        <div className="text-center pt-4">
+        <div className="text-center pt-2">
           <Button
             onClick={scrollToPlans}
             className="bg-gradient-to-r from-[#9E2A2B] to-[#7A1C28] hover:from-[#B2182B] hover:to-[#5E121C] text-white font-bold px-10 py-4 text-base shadow-md rounded-2xl cursor-pointer"
@@ -401,7 +366,7 @@ export default function Home() {
       </section>
 
       {/* 3. CONSULTATION PLANS SECTION */}
-      <section ref={plansRef} id="plans" className="bg-white py-20 sm:py-24 border-y border-stone-200/50">
+      <section ref={plansRef} id="plans" className="bg-[#FAF6EE] py-16 sm:py-24 border-y border-amber-200/60">
         <div className="max-w-7xl mx-auto px-6 space-y-12">
           
           {/* Header */}
