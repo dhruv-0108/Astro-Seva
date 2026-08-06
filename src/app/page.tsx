@@ -310,182 +310,28 @@ export default function Home() {
         </div>
       </header>
 
-      {/* 1. HTML/CSS MOBILE-FIRST POSTER HERO SHOWCASE SECTION */}
-      <section className="pt-4 sm:pt-8 pb-10 px-3 sm:px-6 max-w-5xl mx-auto">
-        <div className="relative bg-gradient-to-b from-[#FFFDF9] via-[#FAF6EE] to-[#FDFBF7] border-2 border-amber-300/90 rounded-3xl p-5 sm:p-10 shadow-xl text-center space-y-6">
-          
-          {/* Sacred Corner Ornament Highlights */}
-          <div className="absolute top-2 left-2 text-amber-500/40 text-xl font-serif">❖</div>
-          <div className="absolute top-2 right-2 text-amber-500/40 text-xl font-serif">❖</div>
-          <div className="absolute bottom-2 left-2 text-amber-500/40 text-xl font-serif">❖</div>
-          <div className="absolute bottom-2 right-2 text-amber-500/40 text-xl font-serif">❖</div>
+      {/* 1. EXACT POSTER HERO SECTION */}
+      <section className="pt-4 sm:pt-8 pb-10 px-3 sm:px-6 max-w-4xl mx-auto text-center space-y-5">
+        <div className="relative rounded-3xl overflow-hidden shadow-2xl border-2 border-amber-300/80 cursor-pointer group" onClick={scrollToPlans}>
+          <img
+            src="/images/guru-poster.jpg"
+            alt="Shree Ganeshambika Jyotish - Narendragiri Goswami Ji"
+            className="w-full h-auto object-cover select-none"
+          />
 
-          {/* Top Tagline Header */}
-          <div className="space-y-1.5 pt-1">
-            <div className="flex items-center justify-center gap-2 text-amber-700">
-              <span className="text-sm">🪷</span>
-            </div>
-            <p className="text-[14px] sm:text-[18px] font-serif italic text-amber-900/90 font-medium">
-              {t.taglineSub}
-            </p>
-            <h2 className="text-[26px] sm:text-[38px] md:text-[44px] font-serif font-black text-[#59141D] leading-tight tracking-tight">
-              {t.taglineMain}
-            </h2>
-            <div className="pt-2">
-              <span className="text-[10px] sm:text-[12px] font-mono font-bold tracking-widest text-[#853E0F] bg-amber-100/80 border border-amber-300/80 rounded-full px-4 py-1.5 inline-block shadow-2xs">
-                {t.experienceBadge}
-              </span>
-            </div>
+          {/* Interactive Tap/Click Overlay Banner at bottom of poster */}
+          <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 sm:p-6 flex flex-col items-center justify-end gap-2 text-white">
+            <Button
+              onClick={(e) => {
+                e.stopPropagation();
+                scrollToPlans();
+              }}
+              className="bg-gradient-to-r from-[#9E2A2B] to-[#7A1C28] hover:from-[#B2182B] hover:to-[#5E121C] text-white font-black px-8 py-3.5 text-base shadow-lg rounded-2xl cursor-pointer"
+            >
+              <span>{t.bookNow} (₹250)</span>
+              <ArrowRight className="w-5 h-5 stroke-[2.5]" />
+            </Button>
           </div>
-
-          {/* Main Visual Frame: Upasak Highlights + Guruji Photo Showcase */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center pt-2">
-            
-            {/* Upasak Badges Stack */}
-            <div className="md:col-span-4 flex flex-col gap-2.5 text-left order-2 md:order-1">
-              {t.practicesList.map((item, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-center gap-3 p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200/90 shadow-2xs hover:bg-amber-100/60 transition-colors"
-                >
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-200 to-amber-300 border border-amber-400 flex items-center justify-center text-[#59141D] shrink-0 font-extrabold text-sm shadow-2xs">
-                    {idx === 0 ? '🪷' : '🔱'}
-                  </div>
-                  <div>
-                    <h4 className="text-[14px] sm:text-[15px] font-black text-[#421218] leading-tight">
-                      {item.title}
-                    </h4>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Guruji Auto-Rotating Photo Showcase */}
-            <div className="md:col-span-8 flex justify-center order-1 md:order-2">
-              <div className="relative w-full max-w-[340px] sm:max-w-[420px] h-[340px] sm:h-[420px] rounded-3xl overflow-hidden shadow-2xl border-4 border-amber-300/90 group">
-                {[
-                  { src: '/images/giri-kaka/guru-2.jpeg', label: 'Narendragiri Goswami Ji • 30+ Yrs Upasana' },
-                  { src: '/images/giri-kaka/guru-3.jpeg', label: 'Sacred Upasana Siddhi' },
-                  { src: '/images/giri-kaka/guru-4.jpeg', label: 'Shastric Lineage & Practice' },
-                ].map((img, idx) => (
-                  <div
-                    key={idx}
-                    className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-                      currentSlide % 3 === idx ? 'opacity-100 z-10' : 'opacity-0 z-0'
-                    }`}
-                  >
-                    <img
-                      src={img.src}
-                      alt={img.label}
-                      className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent pointer-events-none" />
-                    <div className="absolute bottom-4 left-4 right-4 text-white text-left space-y-0.5">
-                      <span className="text-[12px] font-bold font-mono tracking-wider block text-amber-200">
-                        {img.label}
-                      </span>
-                      <span className="text-[11px] font-medium text-stone-300 block">
-                        Authentic Vedic Practice
-                      </span>
-                    </div>
-                  </div>
-                ))}
-
-                {/* Photo Indicator Dots */}
-                <div className="absolute top-4 right-4 z-20 flex gap-1.5 bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20">
-                  {[0, 1, 2].map((idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setCurrentSlide(idx)}
-                      className={`h-2 rounded-full transition-all cursor-pointer ${
-                        currentSlide % 3 === idx ? 'w-5 bg-amber-300' : 'w-2 bg-white/60'
-                      }`}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          {/* Sacred Om Wisdom Box */}
-          <div className="bg-amber-100/60 border-2 border-amber-300/80 rounded-2xl p-5 sm:p-7 relative text-center sm:text-left space-y-3.5 shadow-xs">
-            <div className="hidden sm:block absolute top-4 right-5 text-amber-700/30 font-serif text-5xl font-black select-none">
-              ॐ
-            </div>
-
-            <p className="text-[15px] sm:text-[17px] font-bold text-[#59141D] leading-relaxed">
-              {t.guru30YrBox}
-            </p>
-
-            <div className="space-y-2 border-t border-amber-200/90 pt-3">
-              <h3 className="text-[14px] sm:text-[16px] font-bold text-[#421218] leading-snug">
-                {t.heroHeading}
-              </h3>
-              <p className="text-[13px] sm:text-[14px] text-stone-700 leading-relaxed font-normal">
-                {t.heroParagraph}
-              </p>
-              <p className="text-[12px] sm:text-[13px] text-amber-900/90 leading-relaxed italic font-medium">
-                {t.heroNote}
-              </p>
-            </div>
-          </div>
-
-          {/* Life Guidance Categories Icons Grid */}
-          <div className="space-y-3 pt-2">
-            <h4 className="text-[13px] sm:text-[14px] font-mono font-bold text-amber-900/80 uppercase tracking-wider">
-              {t.categoriesTitle}
-            </h4>
-
-            <div className="grid grid-cols-4 sm:grid-cols-7 gap-2.5">
-              {t.categories.map((cat, idx) => (
-                <div
-                  key={idx}
-                  className="flex flex-col items-center justify-center p-2.5 rounded-2xl bg-white border border-amber-200/90 shadow-2xs hover:border-amber-400 transition-all text-center gap-1.5"
-                >
-                  <div className="w-9 h-9 rounded-xl bg-amber-100/70 border border-amber-200/80 flex items-center justify-center shrink-0">
-                    {renderCategoryIcon(cat.iconName)}
-                  </div>
-                  <span className="text-[11px] sm:text-[12px] font-bold text-[#421218] leading-tight truncate max-w-full">
-                    {cat.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Quick Services Ribbon & Price CTA Banner */}
-          <div className="bg-gradient-to-r from-[#59141D] via-[#7A1C28] to-[#59141D] text-white rounded-2xl p-4 sm:p-5 shadow-lg space-y-4">
-            
-            <div className="grid grid-cols-3 gap-2 border-b border-amber-300/30 pb-3 text-center">
-              {t.servicesRibbon.map((srv, idx) => (
-                <div key={idx} className="space-y-0.5">
-                  <span className="text-[12px] sm:text-[14px] font-extrabold text-amber-200 block truncate">
-                    {srv.title}
-                  </span>
-                  <span className="text-[10px] sm:text-[11px] text-amber-100/80 hidden sm:block">
-                    {srv.desc}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-1">
-              <div className="bg-amber-100/20 border border-amber-300/40 rounded-xl px-4 py-1.5 text-amber-200 font-mono text-[12px] sm:text-[13px] font-bold tracking-wider">
-                {t.priceTag}
-              </div>
-
-              <Button
-                onClick={scrollToPlans}
-                className="w-full sm:w-auto bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-[#421218] font-black px-8 py-3.5 text-base shadow-md rounded-xl cursor-pointer"
-              >
-                <span>{t.bookNow}</span>
-                <ArrowRight className="w-5 h-5 stroke-[2.5]" />
-              </Button>
-            </div>
-
-          </div>
-
         </div>
       </section>
 
