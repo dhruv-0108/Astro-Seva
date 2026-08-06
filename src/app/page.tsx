@@ -37,15 +37,14 @@ interface PracticeItem {
 
 interface CategoryItem {
   label: string;
+  desc?: string;
   iconName: 'Briefcase' | 'Heart' | 'TrendingUp' | 'Users' | 'GraduationCap' | 'Sparkles' | 'Sun';
 }
 
 const TRANSLATIONS: Record<Language, {
+  ganeshayNamah: string;
   title: string;
   subtitle: string;
-  taglineSub: string;
-  taglineMain: string;
-  experienceBadge: string;
   guru30YrBox: string;
   heroHeading: string;
   heroParagraph: string;
@@ -62,11 +61,9 @@ const TRANSLATIONS: Record<Language, {
   step0Subtitle: string;
 }> = {
   EN: {
+    ganeshayNamah: '॥ Shree Ganeshay Namah ॥',
     title: 'Shree Ganeshambika Jyotish',
     subtitle: 'Vedic Astrology Consultation & Upasana Wisdom',
-    taglineSub: 'When Life Feels Uncertain...',
-    taglineMain: 'Seek Guidance Rooted in Tradition.',
-    experienceBadge: '30+ YEARS OF EXPERIENCE  •  VEDIC WISDOM  •  AUTHENTIC GUIDANCE',
     guru30YrBox: 'For over 30 years, Guruji has guided individuals and families through Vedic astrology, mantra sadhana, and traditional spiritual wisdom.',
     heroHeading: 'Behind every consultation is decades of mantra sadhana, scriptural study, meditation, and guidance received through a traditional Guru–Shishya parampara.',
     heroParagraph: 'For Narendragiri Goswami Ji, astrology is not merely a profession, it is the culmination of years of spiritual practice, mantra sadhana, and traditional learning.',
@@ -78,15 +75,15 @@ const TRANSLATIONS: Record<Language, {
       { title: 'Bhairav Upasak' },
       { title: 'Karna Pishachini Upasak' },
     ],
-    categoriesTitle: 'Guidance Available For Major Life Aspects',
+    categoriesTitle: 'Areas Where Guidance is Available',
     categories: [
-      { label: 'Career', iconName: 'Briefcase' },
-      { label: 'Marriage', iconName: 'Heart' },
-      { label: 'Business', iconName: 'TrendingUp' },
-      { label: 'Family', iconName: 'Users' },
-      { label: 'Education', iconName: 'GraduationCap' },
-      { label: 'Health', iconName: 'Sparkles' },
-      { label: 'Spiritual Remedies', iconName: 'Sun' },
+      { label: 'Career & Profession', desc: 'Job promotions, business growth & career transitions', iconName: 'Briefcase' },
+      { label: 'Marriage & Relationship', desc: 'Kundli matching, delay in marriage & marital peace', iconName: 'Heart' },
+      { label: 'Business & Financial Wealth', desc: 'Business expansion, trade decisions & financial stability', iconName: 'TrendingUp' },
+      { label: 'Family & Home Peace', desc: 'Family harmony, property & domestic peace', iconName: 'Users' },
+      { label: 'Education & Higher Studies', desc: 'Academic success, higher studies & concentration', iconName: 'GraduationCap' },
+      { label: 'Health & Vitality', desc: 'Wellbeing, stress reduction & vital remedies', iconName: 'Sparkles' },
+      { label: 'Spiritual Remedies & Puja', desc: 'Mantra sadhana, Grah Shanti & authentic remedies', iconName: 'Sun' },
     ],
     servicesBannerTitle: 'Available Consultations',
     servicesRibbon: [
@@ -95,16 +92,14 @@ const TRANSLATIONS: Record<Language, {
       { title: 'Additional Questions', desc: 'Targeted specific queries' },
     ],
     priceTag: 'FEES STARTING AT ₹250 ONLY',
-    bookNow: 'BOOK NOW',
+    bookNow: 'BOOK CONSULTATION NOW',
     step0Title: 'Choose Your Consultation Option',
     step0Subtitle: 'Select your consultation category to proceed with sacred dakshina offering & payment.',
   },
   GU: {
+    ganeshayNamah: '॥ શ્રી ગણેશાય નમઃ ॥',
     title: 'શ્રી ગણેશામ્બિકા જ્યોતિષ',
     subtitle: 'વૈદિક જ્યોતિષ પરામર્શ અને આધ્યાત્મિક સાધના',
-    taglineSub: 'જ્યારે જીવનમાં અનિશ્ચિતતા અનુભવાય...',
-    taglineMain: 'પરંપરા અને પવિત્ર જ્ઞાનમાં સમાયેલું સાચું માર્ગદર્શન મેળવો.',
-    experienceBadge: '૩૦+ વર્ષનો અનુભવ  •  વૈદિક જ્ઞાન  •  પ્રામાણિક માર્ગદર્શન',
     guru30YrBox: '૩૦ થી વધુ વર્ષોથી, ગુરુજી વૈદિક જ્યોતિષ, મંત્ર સાધના અને પરંપરાગત આધ્યાત્મિક જ્ઞાન દ્વારા અનેક પરિવારોને સાચી દિશા બતાવી રહ્યા છે.',
     heroHeading: 'દરેક પરામર્શ પાછળ દાયકાઓની મંત્ર સાધના, શાસ્ત્ર અભ્યાસ, ધ્યાન અને પરંપરાગત ગુરુ-શિષ્ય પરંપરા દ્વારા પ્રાપ્ત માર્ગદર્શન છે.',
     heroParagraph: 'નરેન્દ્રગિરી ગોસ્વામી જી માટે, જ્યોતિષ એ માત્ર એક વ્યવસાય નથી, તે વર્ષોની આધ્યાત્મિક સાધના, મંત્ર જાપ અને પ્રામાણિક જ્ઞાનનું પવિત્ર ફળ છે.',
@@ -116,15 +111,15 @@ const TRANSLATIONS: Record<Language, {
       { title: 'ભૈરવ ઉપાસક' },
       { title: 'કર્ણ પિશાચિની ઉપાસક' },
     ],
-    categoriesTitle: 'જીવનના દરેક ક્ષેત્ર માટે સ્પષ્ટ માર્ગદર્શન',
+    categoriesTitle: 'પરામર્શ માટેના મુખ્ય ક્ષેત્રો',
     categories: [
-      { label: 'કારકિર્દી', iconName: 'Briefcase' },
-      { label: 'લગ્ન જીવન', iconName: 'Heart' },
-      { label: 'વ્યાપાર', iconName: 'TrendingUp' },
-      { label: 'પરિવાર', iconName: 'Users' },
-      { label: 'શિક્ષણ', iconName: 'GraduationCap' },
-      { label: 'સ્વાસ્થ્ય', iconName: 'Sparkles' },
-      { label: 'આધ્યાત્મિક ઉપાય', iconName: 'Sun' },
+      { label: 'કારકિર્દી અને વ્યવસાય', desc: 'નોકરી, પ્રમોશન અને વ્યાપાર વૃદ્ધિ', iconName: 'Briefcase' },
+      { label: 'લગ્ન જીવન અને સગાઈ', desc: 'કુંડળી મેળપ, લગ્નમાં વિલંબ અને સુખી દંપતી જીવન', iconName: 'Heart' },
+      { label: 'વ્યાપાર અને આર્થિક સમૃદ્ધિ', desc: 'વ્યાપાર વિકાસ અને નાણાકીય સ્થિરતા', iconName: 'TrendingUp' },
+      { label: 'પરિવાર અને ગૃહ શાંતિ', desc: 'કૌટુંબિક સુમેળ અને સંપત્તિ વિવાદ નિવારણ', iconName: 'Users' },
+      { label: 'શિક્ષણ અને ઉચ્ચ અભ્યાસ', desc: 'અભ્યાસમાં સફળતા અને વિદેશ અભ્યાસ', iconName: 'GraduationCap' },
+      { label: 'સ્વાસ્થ્ય અને નિવારણ', desc: 'શારીરિક અને માનસિક શાંતિ માટે વૈદિક ઉપાય', iconName: 'Sparkles' },
+      { label: 'આધ્યાત્મિક ઉપાય અને પૂજા', desc: 'શાસ્ત્રોક્ત મંત્ર સાધના અને ગ્રહ શાંતિ ઉપાય', iconName: 'Sun' },
     ],
     servicesBannerTitle: 'ઉપલબ્ધ પરામર્શ વિકલ્પો',
     servicesRibbon: [
@@ -133,16 +128,14 @@ const TRANSLATIONS: Record<Language, {
       { title: 'વધારાના પ્રશ્નો', desc: 'ચોક્કસ શંકાઓનું સમાધાન' },
     ],
     priceTag: 'દક્ષિણા માત્ર ₹૨૫૦ થી શરૂ',
-    bookNow: 'અત્યારે જ બુક કરો',
+    bookNow: 'અત્યારે જ પરામર્શ બુક કરો',
     step0Title: 'તમારું પરામર્શ ફોર્મેટ પસંદ કરો',
     step0Subtitle: 'દક્ષિણા અર્પણ અને ચૂકવણી સાથે આગળ વધવા માટે તમારો પરામર્શ વિકલ્પ પસંદ કરો.',
   },
   HI: {
+    ganeshayNamah: '॥ श्री गणेशाय नमः ॥',
     title: 'श्री गणेशाम्बिका ज्योतिष',
     subtitle: 'वैदिक ज्योतिष परामर्श एवं आध्यात्मिक साधना',
-    taglineSub: 'जब जीवन में अनिश्चितता महसूस हो...',
-    taglineMain: 'परंपरा एवं वैदिक ज्ञान में निहित मार्गदर्शन प्राप्त करें।',
-    experienceBadge: '30+ वर्षों का अनुभव  •  वैदिक ज्ञान  •  प्रामाणिक मार्गदर्शन',
     guru30YrBox: '30 से अधिक वर्षों से, गुरुजी वैदिक ज्योतिष, मंत्र साधना एवं पारंपरिक आध्यात्मिक ज्ञान द्वारा परिवारों को सही दिशा दिखा रहे हैं।',
     heroHeading: 'प्रत्येक परामर्श के पीछे दशकों की मंत्र साधना, शास्त्र अध्ययन, ध्यान एवं पारंपरिक गुरु-शिष्य परंपरा द्वारा प्राप्त मार्गदर्शन है।',
     heroParagraph: 'नरेन्द्रगिरि गोस्वामी जी के लिए, ज्योतिष केवल एक व्यवसाय नहीं है, यह वर्षों की आध्यात्मिक साधना, मंत्र जप एवं प्रामाणिक ज्ञान का पवित्र फल है।',
@@ -154,15 +147,15 @@ const TRANSLATIONS: Record<Language, {
       { title: 'भैरव उपासक' },
       { title: 'कर्ण पिशाचिनी उपासक' },
     ],
-    categoriesTitle: 'जीवन के सभी क्षेत्रों हेतु मार्गदर्शन',
+    categoriesTitle: 'मार्गदर्शन हेतु प्रमुख क्षेत्र',
     categories: [
-      { label: 'करियर', iconName: 'Briefcase' },
-      { label: 'विवाह', iconName: 'Heart' },
-      { label: 'व्यापार', iconName: 'TrendingUp' },
-      { label: 'परिवार', iconName: 'Users' },
-      { label: 'शिक्षा', iconName: 'GraduationCap' },
-      { label: 'स्वास्थ्य', iconName: 'Sparkles' },
-      { label: 'आध्यात्मिक उपाय', iconName: 'Sun' },
+      { label: 'करियर एवं व्यवसाय', desc: 'नौकरी, पदोन्नति एवं व्यापार वृद्धि', iconName: 'Briefcase' },
+      { label: 'विवाह एवं संबंध', desc: 'कुंडली मिलान, विवाह में विलंब एवं सुखी दाम्पत्य', iconName: 'Heart' },
+      { label: 'व्यापार एवं आर्थिक समृद्धि', desc: 'व्यापार विस्तार एवं वित्तीय स्थिरता', iconName: 'TrendingUp' },
+      { label: 'परिवार एवं गृह शांति', desc: 'पारिवारिक सामंजस्य एवं संपत्ति विवाद समाधान', iconName: 'Users' },
+      { label: 'शिक्षा एवं उच्च अध्ययन', desc: 'शैक्षणिक सफलता एवं उच्च शिक्षा', iconName: 'GraduationCap' },
+      { label: 'स्वास्थ्य एवं निवारण', desc: 'मानसिक शांति एवं उत्तम स्वास्थ्य हेतु उपाय', iconName: 'Sparkles' },
+      { label: 'आध्यात्मिक उपाय एवं पूजा', desc: 'मंत्र साधना, ग्रह शांति एवं प्रामाणिक शास्त्रीय उपाय', iconName: 'Sun' },
     ],
     servicesBannerTitle: 'उपलब्ध परामर्श विकल्प',
     servicesRibbon: [
@@ -171,7 +164,7 @@ const TRANSLATIONS: Record<Language, {
       { title: 'अतिरिक्त प्रश्न', desc: 'विशिष्ट शंका समाधान' },
     ],
     priceTag: 'दक्षिणा मात्र ₹250 से प्रारंभ',
-    bookNow: 'अभी बुक करें',
+    bookNow: 'अभी परामर्श बुक करें',
     step0Title: 'अपना परामर्श विकल्प चुनें',
     step0Subtitle: 'दक्षिणा अर्पित करने एवं भुगतान के साथ आगे बढ़ने के लिए अपना परामर्श विकल्प चुनें।',
   }
@@ -180,20 +173,9 @@ const TRANSLATIONS: Record<Language, {
 export default function Home() {
   const router = useRouter();
   const [lang, setLang] = useState<Language>('GU');
-  const [currentSlide, setCurrentSlide] = useState<number>(0);
-
-  // Auto rotate Giri Kaka photos every 3.5 seconds
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % 3);
-    }, 3500);
-    return () => clearInterval(timer);
-  }, []);
-
-  const [selectedPlanTab, setSelectedPlanTab] = useState<number>(1);
-  const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
   const pricingScrollRef = useRef<HTMLDivElement>(null);
+  const [selectedPlanTab, setSelectedPlanTab] = useState<number>(1);
   const t = TRANSLATIONS[lang];
   const plansRef = useRef<HTMLDivElement>(null);
 
@@ -280,27 +262,33 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-[#1F1E1B] font-sans selection:bg-amber-100 antialiased">
       
-      {/* Serene Navigation Header with 3-Way Language Switcher */}
-      <header className="w-full bg-[#FAF8F5]/90 backdrop-blur-md border-b border-stone-200/50 sticky top-0 z-30 px-4 sm:px-12 py-3.5 flex justify-between items-center">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-2xl bg-amber-100/70 border border-amber-200 flex items-center justify-center text-[#A14E15]">
-            <Sparkles className="w-4 h-4 stroke-[1.75]" />
-          </div>
-          <div>
-            <h1 className="text-[15px] sm:text-[16px] font-semibold tracking-tight text-[#1F1E1B]">{t.title}</h1>
-            <p className="text-[11px] sm:text-[12px] text-stone-500 font-normal">{t.subtitle}</p>
-          </div>
+      {/* Serene Navigation Header with Centered Title & 3-Way Language Switcher Directly Below */}
+      <header className="w-full bg-[#FAF8F5]/95 backdrop-blur-md border-b border-stone-200/60 sticky top-0 z-30 px-4 py-3.5 flex flex-col items-center text-center gap-2.5 shadow-2xs">
+        
+        {/* Sacred Chanting Header */}
+        <span className="text-[12px] sm:text-[13px] font-bold text-[#A14E15] font-serif tracking-widest">
+          {t.ganeshayNamah}
+        </span>
+
+        {/* Full-Width Centered Title & Subtitle */}
+        <div className="w-full max-w-xl mx-auto space-y-0.5">
+          <h1 className="text-[18px] sm:text-[22px] md:text-[24px] font-extrabold tracking-tight text-[#59141D] leading-tight w-full">
+            {t.title}
+          </h1>
+          <p className="text-[11px] sm:text-[13px] text-stone-600 font-medium">
+            {t.subtitle}
+          </p>
         </div>
 
-        {/* 3-Way Language Selector Switcher */}
-        <div className="flex items-center gap-1 bg-stone-200/60 p-1 rounded-2xl border border-stone-300/60 shadow-2xs">
+        {/* Centered 3-Way Language Selector Switcher Pill directly below */}
+        <div className="flex items-center gap-1 bg-stone-200/70 p-1 rounded-2xl border border-stone-300/70 shadow-2xs">
           {(['EN', 'GU', 'HI'] as Language[]).map((l) => (
             <button
               key={l}
               onClick={() => setLang(l)}
-              className={`px-3 py-1.5 rounded-xl text-[12px] font-bold transition-all cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-xl text-[12px] sm:text-[13px] font-bold transition-all cursor-pointer ${
                 lang === l
-                  ? 'bg-[#7A1C28] text-white shadow-xs'
+                  ? 'bg-[#7A1C28] text-white shadow-xs scale-[1.02]'
                   : 'text-stone-700 hover:text-[#1F1E1B] hover:bg-stone-300/50'
               }`}
             >
@@ -308,6 +296,7 @@ export default function Home() {
             </button>
           ))}
         </div>
+
       </header>
 
       {/* 1. TRILINGUAL POSTER HERO SECTION (FULL WEBSITE WIDTH) */}
@@ -335,7 +324,83 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 2. CONSULTATION PLANS SECTION */}
+      {/* 2. TEXT DETAILS & LIFE GUIDANCE AREAS SECTION (BELOW POSTER) */}
+      <section className="py-10 px-4 sm:px-8 max-w-5xl mx-auto space-y-10">
+        
+        {/* Sacred Om Bio Box */}
+        <div className="bg-[#FAF6EE] border-2 border-amber-300/80 rounded-3xl p-6 sm:p-10 relative space-y-5 shadow-md">
+          <div className="hidden sm:block absolute top-5 right-6 text-amber-700/20 font-serif text-6xl font-black select-none">
+            ॐ
+          </div>
+
+          <p className="text-[16px] sm:text-[18px] font-bold text-[#59141D] leading-relaxed border-b border-amber-200/90 pb-4">
+            {t.guru30YrBox}
+          </p>
+
+          <div className="space-y-4">
+            <h3 className="text-[16px] sm:text-[18px] font-bold text-[#421218] leading-snug">
+              {t.heroHeading}
+            </h3>
+
+            <p className="text-[14px] sm:text-[16px] text-stone-800 leading-relaxed font-normal">
+              {t.heroParagraph}
+            </p>
+
+            <p className="text-[13px] sm:text-[15px] text-amber-900/90 leading-relaxed italic font-medium pt-3 border-t border-amber-200/80">
+              {t.heroNote}
+            </p>
+          </div>
+        </div>
+
+        {/* Listed Areas Where Guidance is Available */}
+        <div className="space-y-6 pt-2">
+          <div className="text-center space-y-1.5">
+            <span className="text-[12px] font-bold text-[#A14E15] uppercase tracking-wider font-mono">
+              Comprehensive Vedic Consultations
+            </span>
+            <h3 className="text-[24px] sm:text-[32px] font-bold text-[#1F1E1B] tracking-tight">
+              {t.categoriesTitle}
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {t.categories.map((cat, idx) => (
+              <div
+                key={idx}
+                className="p-5 rounded-2xl bg-white border border-stone-200/90 shadow-xs hover:border-amber-400 hover:shadow-sm transition-all flex items-start gap-4"
+              >
+                <div className="w-11 h-11 rounded-2xl bg-amber-100/80 border border-amber-200 flex items-center justify-center shrink-0">
+                  {renderCategoryIcon(cat.iconName)}
+                </div>
+                <div className="space-y-1">
+                  <h4 className="text-[15px] sm:text-[16px] font-bold text-[#1F1E1B]">
+                    {cat.label}
+                  </h4>
+                  {cat.desc && (
+                    <p className="text-[12px] sm:text-[13px] text-stone-500 font-normal leading-relaxed">
+                      {cat.desc}
+                    </p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Quick CTA Scroll Button */}
+        <div className="text-center pt-4">
+          <Button
+            onClick={scrollToPlans}
+            className="bg-gradient-to-r from-[#9E2A2B] to-[#7A1C28] hover:from-[#B2182B] hover:to-[#5E121C] text-white font-bold px-10 py-4 text-base shadow-md rounded-2xl cursor-pointer"
+          >
+            <span>{t.bookNow} (₹250)</span>
+            <ArrowRight className="w-5 h-5 stroke-[2.5]" />
+          </Button>
+        </div>
+
+      </section>
+
+      {/* 3. CONSULTATION PLANS SECTION */}
       <section ref={plansRef} id="plans" className="bg-white py-20 sm:py-24 border-y border-stone-200/50">
         <div className="max-w-7xl mx-auto px-6 space-y-12">
           
@@ -530,7 +595,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3. FOOTER */}
+      {/* 4. FOOTER */}
       <footer className="bg-[#1D1D1F] text-stone-300 py-16 px-6 sm:px-12 text-left">
         <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-12 gap-10 pb-12 border-b border-stone-800">
           
