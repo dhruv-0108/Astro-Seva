@@ -17,7 +17,7 @@ const gujarati = Noto_Sans_Gujarati({
 
 export const metadata: Metadata = {
   title: 'Shree Ganeshambika Jyotish | શ્રી ગણેશામ્બિકા જ્યોતિષ',
-  description: 'Authentic Vedic Astrology Consultation & Upasana Guidance by Guruji — Hanuman Ji, Bhairav & Shri Vidya Upasak, Karna Pishachini Sadhana.',
+  description: 'Authentic Vedic Astrology Consultation & Upasana Guidance by Narendragiri Goswami Ji — Shaakta Upasak, Hanuman Upasak, Bhairava Upasak, Karna Pishachini Upasak.',
 };
 
 export default function RootLayout({

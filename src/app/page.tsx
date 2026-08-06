@@ -43,15 +43,15 @@ const TRANSLATIONS: Record<Language, {
     heroHeading: 'Behind every consultation is decades of mantra sadhana, scriptural study, meditation, and guidance received through a traditional Guru–Shishya parampara.',
     heroParagraph: 'For Narendragiri Goswami Ji, astrology is not merely a profession—it is the culmination of years of spiritual practice, mantra sadhana, and traditional learning.',
     heroCta: 'Consult Narendragiri Goswami Ji',
-    practicesTitle: 'Spiritual Practices',
+    practicesTitle: 'Sacred Upasana & Siddhi',
     practicesNote: 'These disciplines were undertaken under the guidance of his Guru within the traditional Guru–Shishya lineage and continue to inform Narendragiri Goswami Ji\'s spiritual practice today.',
     step0Title: 'Choose Your Consultation Option',
     step0Subtitle: 'Select your consultation category to proceed with sacred dakshina offering & payment.',
     practicesList: [
-      'Shri Vidya Sadhana',
-      'Hanuman Sadhana',
-      'Bhairava Sadhana',
-      'Karna Pishachini Sadhana',
+      'Shaakta Upasak',
+      'Hanuman Upasak',
+      'Bhairava Upasak',
+      'Karna Pishachini Upasak',
     ],
   },
   GU: {
@@ -60,15 +60,15 @@ const TRANSLATIONS: Record<Language, {
     heroHeading: 'દરેક પરામર્શ પાછળ દાયકાઓની મંત્ર સાધના, શાસ્ત્ર અભ્યાસ, ધ્યાન અને પરંપરાગત ગુરુ-શિષ્ય પરંપરા દ્વારા પ્રાપ્ત માર્ગદર્શન છે.',
     heroParagraph: 'નરેન્દ્રગિરી ગોસ્વામી જી માટે, જ્યોતિષ એ માત્ર એક વ્યવસાય નથી—તે વર્ષોની આધ્યાત્મિક સાધના, મંત્ર જાપ અને પ્રામાણિક જ્ઞાનનું પવિત્ર ફળ છે.',
     heroCta: 'નરેન્દ્રગિરી ગોસ્વામી જી સાથે પરામર્શ કરો',
-    practicesTitle: 'આધ્યાત્મિક સાધનાઓ',
+    practicesTitle: 'પવિત્ર ઉપાસના અને સિદ્ધિ',
     practicesNote: 'આ તમામ સાધનાઓ તેમણે પોતાના ગુરુજીના પવિત્ર માર્ગદર્શન હેઠળ ગુરુ-શિષ્ય પરંપરામાં સંપાદિત કરી છે.',
     step0Title: 'તમારું પરામર્શ ફોર્મેટ પસંદ કરો',
     step0Subtitle: 'દક્ષિણા અર્પણ અને ચૂકવણી સાથે આગળ વધવા માટે તમારો પરામર્શ વિકલ્પ પસંદ કરો.',
     practicesList: [
-      'શ્રી વિદ્યા સાધના',
-      'હનુમાન સાધના',
-      'ભૈરવ સાધના',
-      'કર્ણ પિશાચિની સાધના',
+      'શાક્ત ઉપાસક',
+      'હનુમાન ઉપાસક',
+      'ભૈરવ ઉપાસક',
+      'કર્ણ પિશાચિની ઉપાસક',
     ],
   },
   HI: {
@@ -77,15 +77,15 @@ const TRANSLATIONS: Record<Language, {
     heroHeading: 'प्रत्येक परामर्श के पीछे दशकों की मंत्र साधना, शास्त्र अध्ययन, ध्यान एवं पारंपरिक गुरु-शिष्य परंपरा द्वारा प्राप्त मार्गदर्शन है।',
     heroParagraph: 'नरेन्द्रगिरि गोस्वामी जी के लिए, ज्योतिष केवल एक व्यवसाय नहीं है—यह वर्षों की आध्यात्मिक साधना, मंत्र जप एवं प्रामाणिक ज्ञान का पवित्र फल है।',
     heroCta: 'नरेन्द्रगिरि गोस्वामी जी से परामर्श करें',
-    practicesTitle: 'आध्यात्मिक साधनाएँ',
+    practicesTitle: 'पवित्र उपासना एवं सिद्धि',
     practicesNote: 'ये सभी साधनाएँ उन्होंने अपने गुरुजी के पवित्र मार्गदर्शन में पारंपरिक गुरु-शिष्य परंपरा के अंतर्गत संपन्न की हैं।',
     step0Title: 'अपना परामर्श विकल्प चुनें',
     step0Subtitle: 'दक्षिणा अर्पित करने एवं भुगतान के साथ आगे बढ़ने के लिए अपना परामर्श विकल्प चुनें।',
     practicesList: [
-      'श्री विद्या साधना',
-      'हनुमान साधना',
-      'भैरव साधना',
-      'कर्ण पिशाचिनी साधना',
+      'शक्ति उपासक',
+      'हनुमान उपासक',
+      'भैरव उपासक',
+      'कर्ण पिशाचिनी उपासक',
     ],
   }
 };
@@ -236,7 +236,7 @@ export default function Home() {
           <div className="md:col-span-5 flex justify-center">
             <div className="relative w-full h-[360px] sm:h-[440px] lg:h-[480px] rounded-3xl overflow-hidden shadow-xl border border-amber-300/80 group">
               {[
-                { src: '/images/giri-kaka/guru-2.jpeg', label: 'Narendragiri Goswami Ji • 30+ Yrs Sadhana' },
+                { src: '/images/giri-kaka/guru-2.jpeg', label: 'Narendragiri Goswami Ji • 30+ Yrs Upasana' },
                 { src: '/images/giri-kaka/guru-3.jpeg', label: 'Sacred Upasana Siddhi' },
                 { src: '/images/giri-kaka/guru-4.jpeg', label: 'Shastric Lineage & Practice' },
               ].map((img, idx) => (
