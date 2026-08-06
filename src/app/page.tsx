@@ -310,23 +310,23 @@ export default function Home() {
         </div>
       </header>
 
-      {/* 1. EXACT POSTER HERO SECTION */}
-      <section className="pt-4 sm:pt-8 pb-10 px-3 sm:px-6 max-w-4xl mx-auto text-center space-y-5">
-        <div className="relative rounded-3xl overflow-hidden shadow-2xl border-2 border-amber-300/80 cursor-pointer group" onClick={scrollToPlans}>
+      {/* 1. EXACT POSTER HERO SECTION - FULL WEBSITE WIDTH */}
+      <section className="w-full text-center cursor-pointer relative" onClick={scrollToPlans}>
+        <div className="w-full relative overflow-hidden group">
           <img
             src="/images/guru-poster.jpg"
             alt="Shree Ganeshambika Jyotish - Narendragiri Goswami Ji"
-            className="w-full h-auto object-cover select-none"
+            className="w-full h-auto object-cover block select-none"
           />
 
           {/* Interactive Tap/Click Overlay Banner at bottom of poster */}
-          <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 sm:p-6 flex flex-col items-center justify-end gap-2 text-white">
+          <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent p-4 sm:p-8 flex flex-col items-center justify-end text-white">
             <Button
               onClick={(e) => {
                 e.stopPropagation();
                 scrollToPlans();
               }}
-              className="bg-gradient-to-r from-[#9E2A2B] to-[#7A1C28] hover:from-[#B2182B] hover:to-[#5E121C] text-white font-black px-8 py-3.5 text-base shadow-lg rounded-2xl cursor-pointer"
+              className="bg-gradient-to-r from-[#9E2A2B] to-[#7A1C28] hover:from-[#B2182B] hover:to-[#5E121C] text-white font-black px-10 py-4 text-base sm:text-lg shadow-2xl rounded-2xl cursor-pointer"
             >
               <span>{t.bookNow} (₹250)</span>
               <ArrowRight className="w-5 h-5 stroke-[2.5]" />
