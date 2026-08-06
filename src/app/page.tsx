@@ -19,74 +19,162 @@ import {
   MessageSquare,
   Check,
   UserCheck,
-  ChevronLeft,
-  ChevronRight,
+  Briefcase,
+  Heart,
+  TrendingUp,
+  Users,
+  GraduationCap,
+  Sun,
+  HelpCircle,
+  Award,
 } from 'lucide-react';
 
 type Language = 'EN' | 'GU' | 'HI';
 
+interface PracticeItem {
+  title: string;
+  sub?: string;
+}
+
+interface CategoryItem {
+  label: string;
+  iconName: 'Briefcase' | 'Heart' | 'TrendingUp' | 'Users' | 'GraduationCap' | 'Sparkles' | 'Sun';
+}
+
 const TRANSLATIONS: Record<Language, {
   title: string;
   subtitle: string;
+  taglineSub: string;
+  taglineMain: string;
+  experienceBadge: string;
+  guru30YrBox: string;
   heroHeading: string;
   heroParagraph: string;
-  heroCta: string;
+  heroNote: string;
   practicesTitle: string;
-  practicesNote: string;
+  practicesList: PracticeItem[];
+  categoriesTitle: string;
+  categories: CategoryItem[];
+  servicesBannerTitle: string;
+  servicesRibbon: { title: string; desc: string }[];
+  priceTag: string;
+  bookNow: string;
   step0Title: string;
   step0Subtitle: string;
-  practicesList: string[];
 }> = {
   EN: {
     title: 'Shree Ganeshambika Jyotish',
     subtitle: 'Vedic Astrology Consultation & Upasana Wisdom',
+    taglineSub: 'When Life Feels Uncertain...',
+    taglineMain: 'Seek Guidance Rooted in Tradition.',
+    experienceBadge: '30+ YEARS OF EXPERIENCE  •  VEDIC WISDOM  •  AUTHENTIC GUIDANCE',
+    guru30YrBox: 'For over 30 years, Guruji has guided individuals and families through Vedic astrology, mantra sadhana, and traditional spiritual wisdom.',
     heroHeading: 'Behind every consultation is decades of mantra sadhana, scriptural study, meditation, and guidance received through a traditional Guru–Shishya parampara.',
-    heroParagraph: 'For Narendragiri Goswami Ji, astrology is not merely a profession—it is the culmination of years of spiritual practice, mantra sadhana, and traditional learning.',
-    heroCta: 'Consult Narendragiri Goswami Ji',
+    heroParagraph: 'For Narendragiri Goswami Ji, astrology is not merely a profession, it is the culmination of years of spiritual practice, mantra sadhana, and traditional learning.',
+    heroNote: 'These disciplines were undertaken under the guidance of his Guru within the traditional Guru–Shishya lineage and continue to inform Narendragiri Goswami Ji\'s spiritual practice today.',
     practicesTitle: 'Sacred Upasana & Siddhi',
-    practicesNote: 'These disciplines were undertaken under the guidance of his Guru within the traditional Guru–Shishya lineage and continue to inform Narendragiri Goswami Ji\'s spiritual practice today.',
+    practicesList: [
+      { title: 'Shri Vidya Sadhana', sub: '(Shakti Upasak)' },
+      { title: 'Hanuman Upasak' },
+      { title: 'Bhairav Upasak' },
+      { title: 'Karna Pishachini Upasak' },
+    ],
+    categoriesTitle: 'Guidance Available For Major Life Aspects',
+    categories: [
+      { label: 'Career', iconName: 'Briefcase' },
+      { label: 'Marriage', iconName: 'Heart' },
+      { label: 'Business', iconName: 'TrendingUp' },
+      { label: 'Family', iconName: 'Users' },
+      { label: 'Education', iconName: 'GraduationCap' },
+      { label: 'Health', iconName: 'Sparkles' },
+      { label: 'Spiritual Remedies', iconName: 'Sun' },
+    ],
+    servicesBannerTitle: 'Available Consultations',
+    servicesRibbon: [
+      { title: 'Kundli Reading', desc: 'Birth chart & Dasha reading' },
+      { title: 'Personal Consultation', desc: '1-on-1 direct phone/video' },
+      { title: 'Additional Questions', desc: 'Targeted specific queries' },
+    ],
+    priceTag: 'FEES STARTING AT ₹250 ONLY',
+    bookNow: 'BOOK NOW',
     step0Title: 'Choose Your Consultation Option',
     step0Subtitle: 'Select your consultation category to proceed with sacred dakshina offering & payment.',
-    practicesList: [
-      'Shaakta Upasak',
-      'Hanuman Upasak',
-      'Bhairava Upasak',
-      'Karna Pishachini Upasak',
-    ],
   },
   GU: {
     title: 'શ્રી ગણેશામ્બિકા જ્યોતિષ',
     subtitle: 'વૈદિક જ્યોતિષ પરામર્શ અને આધ્યાત્મિક સાધના',
+    taglineSub: 'જ્યારે જીવનમાં અનિશ્ચિતતા અનુભવાય...',
+    taglineMain: 'પરંપરા અને પવિત્ર જ્ઞાનમાં સમાયેલું સાચું માર્ગદર્શન મેળવો.',
+    experienceBadge: '૩૦+ વર્ષનો અનુભવ  •  વૈદિક જ્ઞાન  •  પ્રામાણિક માર્ગદર્શન',
+    guru30YrBox: '૩૦ થી વધુ વર્ષોથી, ગુરુજી વૈદિક જ્યોતિષ, મંત્ર સાધના અને પરંપરાગત આધ્યાત્મિક જ્ઞાન દ્વારા અનેક પરિવારોને સાચી દિશા બતાવી રહ્યા છે.',
     heroHeading: 'દરેક પરામર્શ પાછળ દાયકાઓની મંત્ર સાધના, શાસ્ત્ર અભ્યાસ, ધ્યાન અને પરંપરાગત ગુરુ-શિષ્ય પરંપરા દ્વારા પ્રાપ્ત માર્ગદર્શન છે.',
-    heroParagraph: 'નરેન્દ્રગિરી ગોસ્વામી જી માટે, જ્યોતિષ એ માત્ર એક વ્યવસાય નથી—તે વર્ષોની આધ્યાત્મિક સાધના, મંત્ર જાપ અને પ્રામાણિક જ્ઞાનનું પવિત્ર ફળ છે.',
-    heroCta: 'નરેન્દ્રગિરી ગોસ્વામી જી સાથે પરામર્શ કરો',
+    heroParagraph: 'નરેન્દ્રગિરી ગોસ્વામી જી માટે, જ્યોતિષ એ માત્ર એક વ્યવસાય નથી, તે વર્ષોની આધ્યાત્મિક સાધના, મંત્ર જાપ અને પ્રામાણિક જ્ઞાનનું પવિત્ર ફળ છે.',
+    heroNote: 'આ તમામ સાધનાઓ તેમણે પોતાના ગુરુજીના પવિત્ર માર્ગદર્શન હેઠળ ગુરુ-શિષ્ય પરંપરામાં સંપાદિત કરી છે અને આજે પણ તેમની સાધનાનો મુખ્ય આધાર છે.',
     practicesTitle: 'પવિત્ર ઉપાસના અને સિદ્ધિ',
-    practicesNote: 'આ તમામ સાધનાઓ તેમણે પોતાના ગુરુજીના પવિત્ર માર્ગદર્શન હેઠળ ગુરુ-શિષ્ય પરંપરામાં સંપાદિત કરી છે.',
+    practicesList: [
+      { title: 'શ્રી વિદ્યા સાધના', sub: '(શાક્ત ઉપાસક)' },
+      { title: 'હનુમાન ઉપાસક' },
+      { title: 'ભૈરવ ઉપાસક' },
+      { title: 'કર્ણ પિશાચિની ઉપાસક' },
+    ],
+    categoriesTitle: 'જીવનના દરેક ક્ષેત્ર માટે સ્પષ્ટ માર્ગદર્શન',
+    categories: [
+      { label: 'કારકિર્દી', iconName: 'Briefcase' },
+      { label: 'લગ્ન જીવન', iconName: 'Heart' },
+      { label: 'વ્યાપાર', iconName: 'TrendingUp' },
+      { label: 'પરિવાર', iconName: 'Users' },
+      { label: 'શિક્ષણ', iconName: 'GraduationCap' },
+      { label: 'સ્વાસ્થ્ય', iconName: 'Sparkles' },
+      { label: 'આધ્યાત્મિક ઉપાય', iconName: 'Sun' },
+    ],
+    servicesBannerTitle: 'ઉપલબ્ધ પરામર્શ વિકલ્પો',
+    servicesRibbon: [
+      { title: 'કુંડળી જોવાના', desc: 'સંપૂર્ણ જન્મ કુંડળી વિશ્લેષણ' },
+      { title: 'વ્યક્તિગત પરામર્શ', desc: '૩૦ મિનિટ ફોન/વીડિયો કૉલ' },
+      { title: 'વધારાના પ્રશ્નો', desc: 'ચોક્કસ શંકાઓનું સમાધાન' },
+    ],
+    priceTag: 'દક્ષિણા માત્ર ₹૨૫૦ થી શરૂ',
+    bookNow: 'અત્યારે જ બુક કરો',
     step0Title: 'તમારું પરામર્શ ફોર્મેટ પસંદ કરો',
     step0Subtitle: 'દક્ષિણા અર્પણ અને ચૂકવણી સાથે આગળ વધવા માટે તમારો પરામર્શ વિકલ્પ પસંદ કરો.',
-    practicesList: [
-      'શાક્ત ઉપાસક',
-      'હનુમાન ઉપાસક',
-      'ભૈરવ ઉપાસક',
-      'કર્ણ પિશાચિની ઉપાસક',
-    ],
   },
   HI: {
     title: 'श्री गणेशाम्बिका ज्योतिष',
     subtitle: 'वैदिक ज्योतिष परामर्श एवं आध्यात्मिक साधना',
+    taglineSub: 'जब जीवन में अनिश्चितता महसूस हो...',
+    taglineMain: 'परंपरा एवं वैदिक ज्ञान में निहित मार्गदर्शन प्राप्त करें।',
+    experienceBadge: '30+ वर्षों का अनुभव  •  वैदिक ज्ञान  •  प्रामाणिक मार्गदर्शन',
+    guru30YrBox: '30 से अधिक वर्षों से, गुरुजी वैदिक ज्योतिष, मंत्र साधना एवं पारंपरिक आध्यात्मिक ज्ञान द्वारा परिवारों को सही दिशा दिखा रहे हैं।',
     heroHeading: 'प्रत्येक परामर्श के पीछे दशकों की मंत्र साधना, शास्त्र अध्ययन, ध्यान एवं पारंपरिक गुरु-शिष्य परंपरा द्वारा प्राप्त मार्गदर्शन है।',
-    heroParagraph: 'नरेन्द्रगिरि गोस्वामी जी के लिए, ज्योतिष केवल एक व्यवसाय नहीं है—यह वर्षों की आध्यात्मिक साधना, मंत्र जप एवं प्रामाणिक ज्ञान का पवित्र फल है।',
-    heroCta: 'नरेन्द्रगिरि गोस्वामी जी से परामर्श करें',
+    heroParagraph: 'नरेन्द्रगिरि गोस्वामी जी के लिए, ज्योतिष केवल एक व्यवसाय नहीं है, यह वर्षों की आध्यात्मिक साधना, मंत्र जप एवं प्रामाणिक ज्ञान का पवित्र फल है।',
+    heroNote: 'ये सभी साधनाएँ उन्होंने अपने गुरुजी के पवित्र मार्गदर्शन में पारंपरिक गुरु-शिष्य परंपरा के अंतर्गत संपन्न की हैं और आज भी उनकी साधना का मुख्य आधार हैं।',
     practicesTitle: 'पवित्र उपासना एवं सिद्धि',
-    practicesNote: 'ये सभी साधनाएँ उन्होंने अपने गुरुजी के पवित्र मार्गदर्शन में पारंपरिक गुरु-शिष्य परंपरा के अंतर्गत संपन्न की हैं।',
+    practicesList: [
+      { title: 'श्री विद्या साधना', sub: '(शक्ति उपासक)' },
+      { title: 'हनुमान उपासक' },
+      { title: 'भैरव उपासक' },
+      { title: 'कर्ण पिशाचिनी उपासक' },
+    ],
+    categoriesTitle: 'जीवन के सभी क्षेत्रों हेतु मार्गदर्शन',
+    categories: [
+      { label: 'करियर', iconName: 'Briefcase' },
+      { label: 'विवाह', iconName: 'Heart' },
+      { label: 'व्यापार', iconName: 'TrendingUp' },
+      { label: 'परिवार', iconName: 'Users' },
+      { label: 'शिक्षा', iconName: 'GraduationCap' },
+      { label: 'स्वास्थ्य', iconName: 'Sparkles' },
+      { label: 'आध्यात्मिक उपाय', iconName: 'Sun' },
+    ],
+    servicesBannerTitle: 'उपलब्ध परामर्श विकल्प',
+    servicesRibbon: [
+      { title: 'कुंडली देखना', desc: 'जन्म कुंडली एवं ग्रह फल' },
+      { title: 'व्यक्तिगत परामर्श', desc: '30 मिनट सीधा कॉल' },
+      { title: 'अतिरिक्त प्रश्न', desc: 'विशिष्ट शंका समाधान' },
+    ],
+    priceTag: 'दक्षिणा मात्र ₹250 से प्रारंभ',
+    bookNow: 'अभी बुक करें',
     step0Title: 'अपना परामर्श विकल्प चुनें',
     step0Subtitle: 'दक्षिणा अर्पित करने एवं भुगतान के साथ आगे बढ़ने के लिए अपना परामर्श विकल्प चुनें।',
-    practicesList: [
-      'शक्ति उपासक',
-      'हनुमान उपासक',
-      'भैरव उपासक',
-      'कर्ण पिशाचिनी उपासक',
-    ],
   }
 };
 
@@ -118,24 +206,6 @@ export default function Home() {
 
   const handleSelectService = (service: ServiceItem) => {
     router.push(`/pay/${service.id}`);
-  };
-
-  // Touch Swipe for Meet Guru Ji Carousel
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStartX(e.touches[0].clientX);
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX === null) return;
-    const touchEndX = e.changedTouches[0].clientX;
-    const diffX = touchStartX - touchEndX;
-
-    if (diffX > 50) {
-      setCurrentSlide((prev) => (prev + 1) % 3);
-    } else if (diffX < -50) {
-      setCurrentSlide((prev) => (prev === 0 ? 2 : prev - 1));
-    }
-    setTouchStartX(null);
   };
 
   // Pricing Scroll & Pill Sync
@@ -174,6 +244,19 @@ export default function Home() {
       case 'Sparkles':
       default:
         return <Sparkles className="w-5 h-5 stroke-[1.75]" />;
+    }
+  };
+
+  const renderCategoryIcon = (iconName: string) => {
+    switch (iconName) {
+      case 'Briefcase': return <Briefcase className="w-5 h-5 text-[#853E0F]" />;
+      case 'Heart': return <Heart className="w-5 h-5 text-[#853E0F]" />;
+      case 'TrendingUp': return <TrendingUp className="w-5 h-5 text-[#853E0F]" />;
+      case 'Users': return <Users className="w-5 h-5 text-[#853E0F]" />;
+      case 'GraduationCap': return <GraduationCap className="w-5 h-5 text-[#853E0F]" />;
+      case 'Sparkles': return <Sparkles className="w-5 h-5 text-[#853E0F]" />;
+      case 'Sun': return <Sun className="w-5 h-5 text-[#853E0F]" />;
+      default: return <Sparkles className="w-5 h-5 text-[#853E0F]" />;
     }
   };
 
@@ -228,97 +311,185 @@ export default function Home() {
         </div>
       </header>
 
-      {/* 1. UNIFIED HERO SECTION WITH AUTO-ROTATING GIRI KAKA PHOTOS */}
-      <section className="bg-[#FAF8F5] pt-8 sm:pt-14 pb-12 sm:pb-16 px-4 sm:px-6 max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center text-left w-full">
+      {/* 1. SINGLE-GO POSTER HERO SHOWCASE SECTION (MATCHING POSTER DESIGN FOR MOBILE & DESKTOP) */}
+      <section className="pt-4 sm:pt-8 pb-10 px-3 sm:px-6 max-w-5xl mx-auto">
+        <div className="relative bg-gradient-to-b from-[#FFFDF9] via-[#FAF6EE] to-[#FDFBF7] border-2 border-amber-300/90 rounded-3xl p-5 sm:p-10 shadow-xl overflow-hidden text-center space-y-7">
           
-          {/* Auto-Rotating Giri Kaka Photos (Excluding Image 2) */}
-          <div className="md:col-span-5 flex justify-center">
-            <div className="relative w-full h-[360px] sm:h-[440px] lg:h-[480px] rounded-3xl overflow-hidden shadow-xl border border-amber-300/80 group">
-              {[
-                { src: '/images/giri-kaka/guru-2.jpeg', label: 'Narendragiri Goswami Ji • 30+ Yrs Upasana' },
-                { src: '/images/giri-kaka/guru-3.jpeg', label: 'Sacred Upasana Siddhi' },
-                { src: '/images/giri-kaka/guru-4.jpeg', label: 'Shastric Lineage & Practice' },
-              ].map((img, idx) => (
-                <div
-                  key={idx}
-                  className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-                    currentSlide % 3 === idx ? 'opacity-100 z-10' : 'opacity-0 z-0'
-                  }`}
-                >
-                  <img
-                    src={img.src}
-                    alt={img.label}
-                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent pointer-events-none" />
-                  <div className="absolute bottom-4 left-4 right-4 text-white space-y-0.5">
-                    <span className="text-[12px] font-bold font-mono tracking-wider block text-amber-200">
-                      {img.label}
-                    </span>
-                    <span className="text-[11px] font-medium text-stone-300 block">
-                      Authentic Vedic Practice
-                    </span>
-                  </div>
-                </div>
-              ))}
+          {/* Sacred Corner Ornament Highlights */}
+          <div className="absolute top-2 left-2 text-amber-500/40 text-xl font-serif">❖</div>
+          <div className="absolute top-2 right-2 text-amber-500/40 text-xl font-serif">❖</div>
+          <div className="absolute bottom-2 left-2 text-amber-500/40 text-xl font-serif">❖</div>
+          <div className="absolute bottom-2 right-2 text-amber-500/40 text-xl font-serif">❖</div>
 
-              {/* Photo Indicator Dots */}
-              <div className="absolute top-4 right-4 z-20 flex gap-1.5 bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20">
-                {[0, 1, 2].map((idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCurrentSlide(idx)}
-                    className={`h-2 rounded-full transition-all cursor-pointer ${
-                      currentSlide % 3 === idx ? 'w-5 bg-amber-300' : 'w-2 bg-white/60'
-                    }`}
-                  />
-                ))}
-              </div>
+          {/* Top Tagline Header */}
+          <div className="space-y-1.5 pt-2">
+            <div className="flex items-center justify-center gap-2 text-amber-700">
+              <span className="text-sm">🪷</span>
+            </div>
+            <p className="text-[14px] sm:text-[18px] font-serif italic text-amber-900/90 font-medium">
+              {t.taglineSub}
+            </p>
+            <h2 className="text-[26px] sm:text-[38px] md:text-[44px] font-serif font-black text-[#59141D] leading-tight tracking-tight">
+              {t.taglineMain}
+            </h2>
+            <div className="pt-2">
+              <span className="text-[10px] sm:text-[12px] font-mono font-bold tracking-widest text-[#853E0F] bg-amber-100/80 border border-amber-300/80 rounded-full px-4 py-1.5 inline-block shadow-2xs">
+                {t.experienceBadge}
+              </span>
             </div>
           </div>
 
-          {/* Unified Copy & Spiritual Practices Checklist */}
-          <div className="md:col-span-7 space-y-6">
-            <div className="space-y-3">
-              <h2 className="text-[24px] sm:text-[32px] lg:text-[36px] font-black text-[#1C1817] leading-[125%] tracking-tight">
-                {t.heroHeading}
-              </h2>
-
-              <p className="text-[15px] sm:text-[17px] font-normal text-[#4A423F] leading-relaxed">
-                {t.heroParagraph}
-              </p>
+          {/* Main Visual Frame: Upasak Highlights + Guruji Photo Showcase */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center pt-2">
+            
+            {/* Upasak Badges Stack */}
+            <div className="md:col-span-4 flex flex-col gap-2.5 text-left order-2 md:order-1">
+              {t.practicesList.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-center gap-3 p-3 rounded-2xl bg-amber-50/70 border border-amber-200/90 shadow-2xs hover:bg-amber-100/60 transition-colors"
+                >
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-200 to-amber-300 border border-amber-400 flex items-center justify-center text-[#59141D] shrink-0 font-extrabold text-sm shadow-2xs">
+                    {idx === 0 ? '🪷' : '🔱'}
+                  </div>
+                  <div>
+                    <h4 className="text-[14px] sm:text-[15px] font-black text-[#421218] leading-tight">
+                      {item.title}
+                    </h4>
+                    {item.sub && (
+                      <span className="text-[11px] font-bold text-amber-800/80 block mt-0.5">
+                        {item.sub}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
 
-            <div className="space-y-3 pt-2 border-t border-amber-200/60">
-              <h3 className="text-[16px] sm:text-[18px] font-bold text-[#7A1C28] uppercase tracking-wider font-mono">
-                {t.practicesTitle}
-              </h3>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {t.practicesList.map((practice, idx) => (
-                  <div key={idx} className="flex items-center gap-3 p-3 rounded-2xl bg-white border border-stone-200/90 shadow-xs">
-                    <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 font-bold text-[11px] border border-emerald-300">
-                      ✓
+            {/* Guruji Auto-Rotating Photo Showcase */}
+            <div className="md:col-span-8 flex justify-center order-1 md:order-2">
+              <div className="relative w-full max-w-[340px] sm:max-w-[420px] h-[340px] sm:h-[420px] rounded-3xl overflow-hidden shadow-2xl border-4 border-amber-300/90 group">
+                {[
+                  { src: '/images/giri-kaka/guru-2.jpeg', label: 'Narendragiri Goswami Ji • 30+ Yrs Upasana' },
+                  { src: '/images/giri-kaka/guru-3.jpeg', label: 'Sacred Upasana Siddhi' },
+                  { src: '/images/giri-kaka/guru-4.jpeg', label: 'Shastric Lineage & Practice' },
+                ].map((img, idx) => (
+                  <div
+                    key={idx}
+                    className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                      currentSlide % 3 === idx ? 'opacity-100 z-10' : 'opacity-0 z-0'
+                    }`}
+                  >
+                    <img
+                      src={img.src}
+                      alt={img.label}
+                      className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent pointer-events-none" />
+                    <div className="absolute bottom-4 left-4 right-4 text-white text-left space-y-0.5">
+                      <span className="text-[12px] font-bold font-mono tracking-wider block text-amber-200">
+                        {img.label}
+                      </span>
+                      <span className="text-[11px] font-medium text-stone-300 block">
+                        Authentic Vedic Practice
+                      </span>
                     </div>
-                    <span className="text-[14px] sm:text-[15px] font-bold text-[#1C1817]">
-                      {practice}
-                    </span>
                   </div>
                 ))}
+
+                {/* Photo Indicator Dots */}
+                <div className="absolute top-4 right-4 z-20 flex gap-1.5 bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20">
+                  {[0, 1, 2].map((idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setCurrentSlide(idx)}
+                      className={`h-2 rounded-full transition-all cursor-pointer ${
+                        currentSlide % 3 === idx ? 'w-5 bg-amber-300' : 'w-2 bg-white/60'
+                      }`}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
 
-            <p className="text-[13px] sm:text-[14px] text-[#5A514E] font-medium leading-relaxed">
-              {t.practicesNote}
+          </div>
+
+          {/* Sacred Om Wisdom Box */}
+          <div className="bg-amber-100/50 border-2 border-amber-300/80 rounded-2xl p-5 sm:p-7 relative text-center sm:text-left space-y-3.5 shadow-xs">
+            <div className="hidden sm:block absolute top-4 right-5 text-amber-700/30 font-serif text-5xl font-black select-none">
+              ॐ
+            </div>
+
+            <p className="text-[15px] sm:text-[17px] font-bold text-[#59141D] leading-relaxed">
+              {t.guru30YrBox}
             </p>
 
-            <div className="pt-2">
-              <Button onClick={scrollToPlans} className="bg-gradient-to-r from-[#9E2A2B] to-[#7A1C28] hover:from-[#B2182B] hover:to-[#5E121C] text-white font-bold px-8 py-3.5 text-base shadow-md rounded-2xl">
-                <span>{t.heroCta}</span>
-                <ArrowRight className="w-5 h-5 stroke-[2]" />
+            <div className="space-y-2 border-t border-amber-200/90 pt-3">
+              <h3 className="text-[14px] sm:text-[16px] font-bold text-[#421218] leading-snug">
+                {t.heroHeading}
+              </h3>
+              <p className="text-[13px] sm:text-[14px] text-stone-700 leading-relaxed font-normal">
+                {t.heroParagraph}
+              </p>
+              <p className="text-[12px] sm:text-[13px] text-amber-900/90 leading-relaxed italic font-medium">
+                {t.heroNote}
+              </p>
+            </div>
+          </div>
+
+          {/* Life Guidance Categories Icons Grid */}
+          <div className="space-y-3 pt-2">
+            <h4 className="text-[13px] sm:text-[14px] font-mono font-bold text-amber-900/80 uppercase tracking-wider">
+              {t.categoriesTitle}
+            </h4>
+
+            <div className="grid grid-cols-4 sm:grid-cols-7 gap-2.5">
+              {t.categories.map((cat, idx) => (
+                <div
+                  key={idx}
+                  className="flex flex-col items-center justify-center p-2.5 rounded-2xl bg-white border border-amber-200/90 shadow-2xs hover:border-amber-400 transition-all text-center gap-1.5"
+                >
+                  <div className="w-9 h-9 rounded-xl bg-amber-100/70 border border-amber-200/80 flex items-center justify-center shrink-0">
+                    {renderCategoryIcon(cat.iconName)}
+                  </div>
+                  <span className="text-[11px] sm:text-[12px] font-bold text-[#421218] leading-tight truncate max-w-full">
+                    {cat.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Quick Services Ribbon & Price CTA Banner */}
+          <div className="bg-gradient-to-r from-[#59141D] via-[#7A1C28] to-[#59141D] text-white rounded-2xl p-4 sm:p-5 shadow-lg space-y-4">
+            
+            <div className="grid grid-cols-3 gap-2 border-b border-amber-300/30 pb-3 text-center">
+              {t.servicesRibbon.map((srv, idx) => (
+                <div key={idx} className="space-y-0.5">
+                  <span className="text-[12px] sm:text-[14px] font-extrabold text-amber-200 block truncate">
+                    {srv.title}
+                  </span>
+                  <span className="text-[10px] sm:text-[11px] text-amber-100/80 hidden sm:block">
+                    {srv.desc}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-1">
+              <div className="bg-amber-100/20 border border-amber-300/40 rounded-xl px-4 py-1.5 text-amber-200 font-mono text-[12px] sm:text-[13px] font-bold tracking-wider">
+                {t.priceTag}
+              </div>
+
+              <Button
+                onClick={scrollToPlans}
+                className="w-full sm:w-auto bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-[#421218] font-black px-8 py-3.5 text-base shadow-md rounded-xl cursor-pointer"
+              >
+                <span>{t.bookNow}</span>
+                <ArrowRight className="w-5 h-5 stroke-[2.5]" />
               </Button>
             </div>
+
           </div>
 
         </div>
