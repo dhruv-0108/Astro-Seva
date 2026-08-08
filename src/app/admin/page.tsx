@@ -643,26 +643,33 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-stone-900 font-sans selection:bg-amber-100 antialiased pb-24">
       
-      {/* Navigation Header */}
-      <header className="bg-white border-b border-stone-200/80 sticky top-0 z-30 px-6 sm:px-12 py-4 flex justify-between items-center shadow-2xs">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-2xl bg-amber-100/70 border border-amber-200 flex items-center justify-center text-[#A14E15]">
+      {/* Top Sacred Chanting Bar - Center Top in small text size, single horizontal line without wrapping */}
+      <div className="w-full bg-[#FAF6EE] border-b border-amber-200/60 py-1 text-center whitespace-nowrap overflow-hidden">
+        <span className="text-[11px] sm:text-xs font-bold text-[#A14E15] font-serif tracking-widest">
+          {lang === 'EN' ? '॥ Shree Ganeshay Namah ॥' : lang === 'GU' ? '॥ શ્રી ગણેશાય નમઃ ॥' : '॥ श्री गणेशाय नमः ॥'}
+        </span>
+      </div>
+
+      {/* Navigation Header - Non-sticky (scrolls away naturally when scrolling down) */}
+      <header className="bg-white border-b border-stone-200/80 px-4 sm:px-12 py-2.5 sm:py-3.5 flex justify-between items-center gap-2 shadow-2xs">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-2xl bg-amber-100/70 border border-amber-200 flex items-center justify-center text-[#A14E15] shrink-0">
             <Sparkles className="w-4 h-4 stroke-[1.75]" />
           </div>
-          <div>
-            <h1 className="text-base font-bold text-stone-900 tracking-tight">{t.portalTitle}</h1>
-            <p className="text-xs text-stone-500 font-normal">{t.portalSubtitle}</p>
+          <div className="min-w-0">
+            <h1 className="text-xs sm:text-base font-bold text-stone-900 tracking-tight truncate">{t.portalTitle}</h1>
+            <p className="text-[10px] sm:text-xs text-stone-500 font-normal truncate hidden sm:block">{t.portalSubtitle}</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           {/* Language Selector Switcher */}
-          <div className="flex items-center gap-1 bg-stone-100 p-1 rounded-xl border border-stone-200">
+          <div className="flex items-center gap-0.5 sm:gap-1 bg-stone-100 p-0.5 sm:p-1 rounded-xl border border-stone-200">
             {(['EN', 'GU', 'HI'] as Language[]).map((l) => (
               <button
                 key={l}
                 onClick={() => setLang(l)}
-                className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                className={`px-2 sm:px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-bold transition-all cursor-pointer ${
                   lang === l ? 'bg-[#7A1C28] text-white shadow-2xs' : 'text-stone-600 hover:text-stone-900'
                 }`}
               >
@@ -675,7 +682,7 @@ export default function AdminPage() {
             variant="outline"
             size="sm"
             onClick={handleLogout}
-            className="border-stone-200 text-stone-700 hover:bg-stone-100 text-xs"
+            className="border-stone-200 text-stone-700 hover:bg-stone-100 text-xs h-8 px-2 sm:px-3"
           >
             <LogOut className="w-3.5 h-3.5 stroke-[1.75]" />
             <span className="hidden sm:inline">{t.logoutButton}</span>
@@ -684,53 +691,53 @@ export default function AdminPage() {
       </header>
 
       {/* Main Content Area */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-8 py-8 space-y-8 text-left">
+      <main className="max-w-7xl mx-auto px-3 sm:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8 text-left">
         
-        {/* Top Action & Stat Cards Row */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="space-y-1">
-            <h2 className="text-2xl font-bold text-stone-900 tracking-tight">{t.sectionTitle}</h2>
-            <p className="text-xs text-stone-500 font-medium">{t.sectionSubtitle}</p>
+        {/* Top Action & Stat Cards Row - Single horizontal row on all viewports */}
+        <div className="flex items-center justify-between gap-3 whitespace-nowrap overflow-x-auto scrollbar-none pb-1">
+          <div className="space-y-0.5 min-w-0">
+            <h2 className="text-lg sm:text-2xl font-bold text-stone-900 tracking-tight whitespace-nowrap">{t.sectionTitle}</h2>
+            <p className="text-xs text-stone-500 font-medium whitespace-nowrap hidden sm:block">{t.sectionSubtitle}</p>
           </div>
 
           {/* Add New Entry Button */}
           <Button
             onClick={handleOpenCreateModal}
-            className="bg-gradient-to-r from-[#9E2A2B] to-[#7A1C28] hover:from-[#B2182B] hover:to-[#5E121C] text-white font-bold px-6 py-3 rounded-2xl text-xs sm:text-sm shadow-md cursor-pointer flex items-center gap-2"
+            className="bg-gradient-to-r from-[#9E2A2B] to-[#7A1C28] hover:from-[#B2182B] hover:to-[#5E121C] text-white font-bold px-3.5 sm:px-6 py-2 sm:py-3 rounded-xl sm:rounded-2xl text-xs sm:text-sm shadow-md cursor-pointer flex items-center gap-1.5 shrink-0 whitespace-nowrap"
           >
             <Plus className="w-4 h-4 stroke-[2.5]" />
             <span>{t.createNew}</span>
           </Button>
         </div>
 
-        {/* Stats Row */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <Card className="p-5 flex items-center justify-between bg-white border border-stone-200/80 shadow-xs">
+        {/* Stats Row - Single horizontal touch scroll row on mobile */}
+        <div className="grid grid-cols-3 gap-2 sm:gap-4 overflow-x-auto whitespace-nowrap scrollbar-thin">
+          <Card className="p-3 sm:p-5 flex items-center justify-between bg-white border border-stone-200/80 shadow-xs min-w-[110px]">
             <div>
-              <span className="text-xs font-semibold text-stone-500 uppercase tracking-wider">{t.totalSubmissions}</span>
-              <span className="text-2xl font-extrabold text-stone-900 mt-1 block">{submissions.length}</span>
+              <span className="text-[10px] sm:text-xs font-semibold text-stone-500 uppercase tracking-wider block">{t.totalSubmissions}</span>
+              <span className="text-lg sm:text-2xl font-extrabold text-stone-900 mt-0.5 block">{submissions.length}</span>
             </div>
-            <div className="p-3 bg-stone-100 text-stone-600 rounded-2xl">
+            <div className="p-2 sm:p-3 bg-stone-100 text-stone-600 rounded-xl sm:rounded-2xl hidden sm:block">
               <ListFilter className="w-5 h-5" />
             </div>
           </Card>
 
-          <Card className="p-5 flex items-center justify-between bg-white border border-stone-200/80 shadow-xs">
+          <Card className="p-3 sm:p-5 flex items-center justify-between bg-white border border-stone-200/80 shadow-xs min-w-[110px]">
             <div>
-              <span className="text-xs font-semibold text-emerald-700 uppercase tracking-wider">{t.paidApproved}</span>
-              <span className="text-2xl font-extrabold text-emerald-700 mt-1 block">{paidCount}</span>
+              <span className="text-[10px] sm:text-xs font-semibold text-emerald-700 uppercase tracking-wider block">{t.paidApproved}</span>
+              <span className="text-lg sm:text-2xl font-extrabold text-emerald-700 mt-0.5 block">{paidCount}</span>
             </div>
-            <div className="p-3 bg-emerald-50 text-emerald-700 rounded-2xl">
+            <div className="p-2 sm:p-3 bg-emerald-50 text-emerald-700 rounded-xl sm:rounded-2xl hidden sm:block">
               <Check className="w-5 h-5" />
             </div>
           </Card>
 
-          <Card className="p-5 flex items-center justify-between bg-white border border-stone-200/80 shadow-xs">
+          <Card className="p-3 sm:p-5 flex items-center justify-between bg-white border border-stone-200/80 shadow-xs min-w-[110px]">
             <div>
-              <span className="text-xs font-semibold text-[#A14E15] uppercase tracking-wider">{t.pendingApproval}</span>
-              <span className="text-2xl font-extrabold text-[#A14E15] mt-1 block">{pendingCount}</span>
+              <span className="text-[10px] sm:text-xs font-semibold text-[#A14E15] uppercase tracking-wider block">{t.pendingApproval}</span>
+              <span className="text-lg sm:text-2xl font-extrabold text-[#A14E15] mt-0.5 block">{pendingCount}</span>
             </div>
-            <div className="p-3 bg-amber-50 text-[#A14E15] rounded-2xl">
+            <div className="p-2 sm:p-3 bg-amber-50 text-[#A14E15] rounded-xl sm:rounded-2xl hidden sm:block">
               <Hourglass className="w-5 h-5" />
             </div>
           </Card>
@@ -739,21 +746,21 @@ export default function AdminPage() {
         {/* Submissions Container */}
         <Card className="p-0 overflow-hidden bg-white border border-stone-200/80 shadow-xs">
           
-          <div className="p-4 sm:p-6 border-b border-stone-200/60 bg-stone-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-3 sm:p-6 border-b border-stone-200/60 bg-stone-50/50 flex flex-row items-center justify-between gap-3">
             
             {/* Search Input Bar */}
-            <div className="relative w-full sm:w-80">
-              <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-3.5" />
+            <div className="relative w-full max-w-sm">
+              <Search className="w-4 h-4 text-stone-400 absolute left-3 top-3" />
               <input
                 type="text"
                 value={filterSearch}
                 onChange={(e) => setFilterSearch(e.target.value)}
                 placeholder={t.searchPlaceholder}
-                className="w-full pl-10 pr-4 py-2.5 bg-white border border-stone-200 rounded-xl text-xs text-stone-900 outline-none focus:border-[#A14E15] focus:ring-2 focus:ring-amber-500/10 transition-all font-medium"
+                className="w-full pl-9 pr-3 py-2 bg-white border border-stone-200 rounded-xl text-xs text-stone-900 outline-none focus:border-[#A14E15] focus:ring-2 focus:ring-amber-500/10 transition-all font-medium"
               />
             </div>
 
-            <Badge variant="secondary" className="self-start sm:self-auto">
+            <Badge variant="secondary" className="shrink-0 text-[10px] sm:text-xs">
               Auto TTL: 30 Days
             </Badge>
           </div>
@@ -764,218 +771,122 @@ export default function AdminPage() {
               <p className="text-sm">{t.noSubmissions}</p>
             </div>
           ) : (
-            <div>
-              {/* DESKTOP TABLE VIEW */}
-              <div className="hidden md:block overflow-x-auto">
-                <table className="w-full text-sm text-left">
-                  <thead className="bg-stone-50 text-stone-500 font-bold border-b border-stone-200 text-xs uppercase tracking-wider">
-                    <tr>
-                      <th className="p-4">{t.clientInfo}</th>
-                      <th className="p-4">{t.birthDetails}</th>
-                      <th className="p-4 text-center">{t.paymentStatus}</th>
-                      <th className="p-4 text-center">{t.actions}</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-stone-100 font-medium">
-                    {filteredSubmissions.map((client) => (
-                      <tr key={client.id} className="hover:bg-amber-50/20 transition-colors">
-                        {/* Client Info */}
-                        <td className="p-4">
-                          <div className="font-bold text-base text-stone-900">{client.name}</div>
-                          <div className="text-xs text-stone-500 flex items-center gap-1 mt-1 font-mono">
-                            <Phone className="w-3.5 h-3.5 text-stone-400" />
-                            <span>{client.phone}</span>
-                          </div>
-                          {client.serviceSelected && (
-                            <div className="mt-1.5">
-                              <Badge variant="default">
-                                {client.serviceSelected.title} (₹{client.serviceSelected.price})
-                              </Badge>
-                            </div>
-                          )}
-                        </td>
-
-                        {/* Birth Details */}
-                        <td className="p-4 text-xs space-y-1">
-                          <div className="flex items-center gap-1.5 text-stone-800">
-                            <Calendar className="w-3.5 h-3.5 text-[#A14E15]" />
-                            <span className="font-bold">{client.birthDetails.date}</span>
-                          </div>
-                          <div className="flex items-center gap-1.5 text-stone-600">
-                            <Clock className="w-3.5 h-3.5 text-[#A14E15]" />
-                            <span>{client.birthDetails.time} (IST +{client.birthDetails.tzOffset})</span>
-                          </div>
-                          <div className="flex items-center gap-1.5 text-stone-500">
-                            <MapPin className="w-3.5 h-3.5 text-[#A14E15]" />
-                            <span className="truncate max-w-[200px]" title={client.birthDetails.place}>
-                              {client.birthDetails.place}
-                            </span>
-                          </div>
-                        </td>
-
-                        {/* Payment Status */}
-                        <td className="p-4 text-center">
-                          <Badge variant={client.paymentStatus === 'paid' ? 'emerald' : 'default'}>
-                            {client.paymentStatus === 'paid' ? t.paidBadge : t.pendingBadge}
-                          </Badge>
-                        </td>
-
-                        {/* Actions */}
-                        <td className="p-4 text-center">
-                          <div className="flex items-center justify-center gap-2">
-                            {client.paymentStatus === 'pending' && (
-                              <Button
-                                size="sm"
-                                variant="default"
-                                onClick={() => handleApprove(client.id)}
-                              >
-                                <CheckCircle2 className="w-3.5 h-3.5" />
-                                <span>{t.approve}</span>
-                              </Button>
-                            )}
-
-                            {client.paymentStatus === 'paid' && (
-                              <>
-                                <a
-                                  href={`/kundli/${client.id}`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-1.5 bg-[#A14E15] hover:bg-[#853E0F] text-white font-bold py-2 px-3.5 rounded-2xl text-xs shadow-xs"
-                                >
-                                  <ExternalLink className="w-3.5 h-3.5" />
-                                  <span>{t.viewKundli}</span>
-                                </a>
-
-                                <button
-                                  onClick={() => handleWhatsAppShare(client)}
-                                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-3.5 rounded-2xl text-xs flex items-center gap-1.5 cursor-pointer shadow-xs"
-                                >
-                                  <MessageSquare className="w-3.5 h-3.5" />
-                                  <span>{t.whatsapp}</span>
-                                </button>
-                              </>
-                            )}
-
-                            <button
-                              onClick={() => handleOpenEditModal(client)}
-                              className="text-stone-500 hover:text-amber-700 hover:bg-amber-50 p-2 rounded-xl text-xs transition-all cursor-pointer"
-                              title="Edit Birth Details"
-                            >
-                              <Edit3 className="w-4 h-4" />
-                            </button>
-
-                            <button
-                              onClick={() => handleDelete(client.id)}
-                              className="text-stone-400 hover:text-red-600 hover:bg-red-50 p-2 rounded-xl text-xs transition-all cursor-pointer"
-                              title="Delete Record"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* MOBILE CARDS VIEW */}
-              <div className="block md:hidden divide-y divide-stone-100">
-                {filteredSubmissions.map((client) => (
-                  <div key={client.id} className="p-5 space-y-3.5 hover:bg-amber-50/10">
-                    <div className="flex justify-between items-start gap-2">
-                      <div className="min-w-0 flex-1">
-                        <h3 className="font-bold text-base text-stone-900 truncate">{client.name}</h3>
-                        <p className="text-xs font-mono text-stone-500 flex items-center gap-1.5 mt-0.5">
-                          <Phone className="w-3.5 h-3.5 text-stone-400 shrink-0" />
-                          <span className="truncate">{client.phone}</span>
-                        </p>
+            <div className="overflow-x-auto w-full scrollbar-thin">
+              {/* UNIFIED HORIZONTAL TABLE VIEW (Strict 1 single line per row on mobile & desktop) */}
+              <table className="w-full text-xs text-left whitespace-nowrap min-w-[720px]">
+                <thead className="bg-stone-50 text-stone-500 font-bold border-b border-stone-200 text-[11px] uppercase tracking-wider">
+                  <tr>
+                    <th className="p-3.5 sm:p-4">{t.clientInfo}</th>
+                    <th className="p-3.5 sm:p-4">{t.birthDetails}</th>
+                    <th className="p-3.5 sm:p-4 text-center">{t.paymentStatus}</th>
+                    <th className="p-3.5 sm:p-4 text-center">{t.actions}</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-stone-100 font-medium">
+                  {filteredSubmissions.map((client) => (
+                    <tr key={client.id} className="hover:bg-amber-50/20 transition-colors whitespace-nowrap">
+                      {/* Client Info */}
+                      <td className="p-3.5 sm:p-4">
+                        <div className="font-bold text-sm sm:text-base text-stone-900">{client.name}</div>
+                        <div className="text-[11px] text-stone-500 flex items-center gap-1 mt-0.5 font-mono">
+                          <Phone className="w-3.5 h-3.5 text-stone-400" />
+                          <span>{client.phone}</span>
+                        </div>
                         {client.serviceSelected && (
                           <div className="mt-1">
-                            <Badge variant="default">
+                            <Badge variant="default" className="text-[10px] font-semibold">
                               {client.serviceSelected.title} (₹{client.serviceSelected.price})
                             </Badge>
                           </div>
                         )}
-                      </div>
+                      </td>
 
-                      <Badge variant={client.paymentStatus === 'paid' ? 'emerald' : 'default'} className="shrink-0">
-                        {client.paymentStatus === 'paid' ? t.paidBadge : t.pendingBadge}
-                      </Badge>
-                    </div>
-
-                    <div className="bg-stone-50 rounded-2xl p-3.5 space-y-1.5 text-xs text-stone-700 border border-stone-200/60">
-                      <div className="flex flex-wrap items-center gap-2 font-medium">
-                        <div className="flex items-center gap-1">
-                          <Calendar className="w-3.5 h-3.5 text-[#A14E15] shrink-0" />
-                          <span className="font-bold">{client.birthDetails.date}</span>
+                      {/* Birth Details (Single Horizontal Line) */}
+                      <td className="p-3.5 sm:p-4 text-xs">
+                        <div className="flex items-center gap-2 text-stone-800 font-medium">
+                          <div className="flex items-center gap-1">
+                            <Calendar className="w-3.5 h-3.5 text-[#A14E15] shrink-0" />
+                            <span className="font-bold">{client.birthDetails.date}</span>
+                          </div>
+                          <span className="text-stone-300">|</span>
+                          <div className="flex items-center gap-1 text-stone-600">
+                            <Clock className="w-3.5 h-3.5 text-[#A14E15] shrink-0" />
+                            <span>{client.birthDetails.time}</span>
+                          </div>
                         </div>
-                        <span className="text-stone-300">|</span>
-                        <div className="flex items-center gap-1">
-                          <Clock className="w-3.5 h-3.5 text-[#A14E15] shrink-0" />
-                          <span>{client.birthDetails.time}</span>
+                        <div className="flex items-center gap-1 text-stone-500 mt-1">
+                          <MapPin className="w-3.5 h-3.5 text-[#A14E15] shrink-0" />
+                          <span className="truncate max-w-[220px]" title={client.birthDetails.place}>
+                            {client.birthDetails.place}
+                          </span>
                         </div>
-                      </div>
-                      <div className="flex items-center gap-1.5 text-stone-600 min-w-0">
-                        <MapPin className="w-3.5 h-3.5 text-[#A14E15] shrink-0" />
-                        <span className="truncate" title={client.birthDetails.place}>{client.birthDetails.place}</span>
-                      </div>
-                    </div>
+                      </td>
 
-                    {/* Mobile Action Buttons */}
-                    <div className="flex flex-wrap items-center gap-2 pt-1">
-                      {client.paymentStatus === 'pending' && (
-                        <Button
-                          size="default"
-                          className="w-full"
-                          onClick={() => handleApprove(client.id)}
-                        >
-                          <CheckCircle2 className="w-4 h-4 shrink-0" />
-                          <span>{t.approve}</span>
-                        </Button>
-                      )}
+                      {/* Payment Status */}
+                      <td className="p-3.5 sm:p-4 text-center whitespace-nowrap">
+                        <Badge variant={client.paymentStatus === 'paid' ? 'emerald' : 'default'} className="whitespace-nowrap text-[11px]">
+                          {client.paymentStatus === 'paid' ? t.paidBadge : t.pendingBadge}
+                        </Badge>
+                      </td>
 
-                      {client.paymentStatus === 'paid' && (
-                        <>
-                          <a
-                            href={`/kundli/${client.id}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex-1 bg-[#A14E15] text-white font-bold py-3 px-3 rounded-2xl text-xs flex items-center justify-center gap-1.5 shadow-xs text-center min-w-[120px]"
-                          >
-                            <ExternalLink className="w-4 h-4 shrink-0" />
-                            <span>{t.viewKundli}</span>
-                          </a>
+                      {/* Actions (Single Horizontal Line of Buttons) */}
+                      <td className="p-3.5 sm:p-4 text-center whitespace-nowrap">
+                        <div className="flex items-center justify-center gap-1.5 sm:gap-2 whitespace-nowrap">
+                          {client.paymentStatus === 'pending' && (
+                            <Button
+                              size="sm"
+                              variant="default"
+                              onClick={() => handleApprove(client.id)}
+                              className="h-8 px-2.5 text-xs whitespace-nowrap"
+                            >
+                              <CheckCircle2 className="w-3.5 h-3.5" />
+                              <span>{t.approve}</span>
+                            </Button>
+                          )}
+
+                          {client.paymentStatus === 'paid' && (
+                            <>
+                              <a
+                                href={`/kundli/${client.id}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 bg-[#A14E15] hover:bg-[#853E0F] text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-xs whitespace-nowrap"
+                              >
+                                <ExternalLink className="w-3.5 h-3.5" />
+                                <span>{t.viewKundli}</span>
+                              </a>
+
+                              <button
+                                onClick={() => handleWhatsAppShare(client)}
+                                className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-1.5 px-3 rounded-xl text-xs flex items-center gap-1 cursor-pointer shadow-xs whitespace-nowrap"
+                              >
+                                <MessageSquare className="w-3.5 h-3.5" />
+                                <span>{t.whatsapp}</span>
+                              </button>
+                            </>
+                          )}
 
                           <button
-                            onClick={() => handleWhatsAppShare(client)}
-                            className="flex-1 bg-emerald-600 text-white font-bold py-3 px-3 rounded-2xl text-xs flex items-center justify-center gap-1.5 shadow-xs text-center min-w-[120px]"
+                            onClick={() => handleOpenEditModal(client)}
+                            className="text-stone-500 hover:text-amber-700 hover:bg-amber-50 p-1.5 rounded-lg text-xs transition-all cursor-pointer"
+                            title="Edit Details"
                           >
-                            <MessageSquare className="w-4 h-4 shrink-0" />
-                            <span>{t.whatsapp}</span>
+                            <Edit3 className="w-4 h-4" />
                           </button>
-                        </>
-                      )}
 
-                      <button
-                        onClick={() => handleOpenEditModal(client)}
-                        className="bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold p-3 rounded-2xl text-xs shrink-0 cursor-pointer"
-                        title="Edit Entry"
-                      >
-                        <Edit3 className="w-4 h-4" />
-                      </button>
-
-                      <button
-                        onClick={() => handleDelete(client.id)}
-                        className="bg-red-50 text-red-600 font-bold p-3 rounded-2xl text-xs shrink-0 cursor-pointer"
-                        title="Delete Entry"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                          <button
+                            onClick={() => handleDelete(client.id)}
+                            className="text-stone-400 hover:text-red-600 hover:bg-red-50 p-1.5 rounded-lg text-xs transition-all cursor-pointer"
+                            title="Delete Record"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
 
