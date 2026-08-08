@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { adminDb } from '../../../lib/firebase/admin';
-import { calculateAstrologicalData } from '../../../lib/astrology/astro';
+import { calculateAstrologicalData, calculateCurrentGochar } from '../../../lib/astrology/astro';
 import { calculatePanchanga } from '../../../lib/astrology/panchanga';
 import { calculateVimshottari, getCurrentDashaChain } from '../../../lib/astrology/dashas';
 import { calculateSaturnTransits } from '../../../lib/astrology/transits';
@@ -50,9 +50,9 @@ export async function GET(request: Request) {
     const panchanga = calculatePanchanga(astro.jd, tzOffset);
     const dasha = calculateVimshottari(astro.planets.Moon.longitude, birthDateObj);
     const currentDashaChain = getCurrentDashaChain(astro.planets.Moon.longitude, birthDateObj, new Date());
-    const transits = calculateSaturnTransits(astro.jd, astro.planets.Moon.sign, tzOffset);
+    const transits = calculateSaturnTransits(astro.jd, astro.planets.Moon.sign, tzOffset, new Date());
     const shubha = calculateShubhashubh(birthDateObj, lagnaSignIndex);
-
+    const currentGochar = calculateCurrentGochar(astro.ascendant, astro.planets.Moon.sign, new Date(), tzOffset);
 
     // Navamsha (D9) placements
     const d9Placements: Record<string, { sign: number; isRetrograde: boolean }> = {};
@@ -93,6 +93,7 @@ export async function GET(request: Request) {
       d9Lagna,
       d9Placements,
       cuspPlacements,
+      currentGochar,
     });
   } catch (error: any) {
 

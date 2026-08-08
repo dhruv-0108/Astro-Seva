@@ -146,3 +146,111 @@ export function calculateAstrologicalData(
     mc: siderealMc,
   };
 }
+
+export interface CurrentGocharPlanet {
+  name: string;
+  longitude: number;
+  sign: number;
+  degree: number;
+  nakshatraIdx: number;
+  pada: number;
+  isRetrograde: boolean;
+  transitHouseFromLagna: number;
+  transitHouseFromMoon: number;
+}
+
+export interface CurrentGocharData {
+  calculatedAt: string;
+  jd: number;
+  ayanamsa: number;
+  planets: Record<string, CurrentGocharPlanet>;
+}
+
+export function calculateCurrentGochar(
+  natalAscendant: number,
+  natalMoonSign: number,
+  currentDate: Date = new Date(),
+  timezoneOffsetHours: number = 5.5
+): CurrentGocharData {
+  swisseph.swe_set_sid_mode(swisseph.SE_SIDM_LAHIRI, 0, 0);
+
+  const year = currentDate.getUTCFullYear();
+  const month = currentDate.getUTCMonth() + 1;
+  const day = currentDate.getUTCDate();
+  const hour = currentDate.getUTCHours() + currentDate.getUTCMinutes() / 60 + currentDate.getUTCSeconds() / 3600;
+
+  const jd = swisseph.swe_julday(year, month, day, hour, swisseph.SE_GREG_CAL);
+  const ayanamsa = swisseph.swe_get_ayanamsa_ut(jd);
+
+  const planetIds = {
+    Sun: swisseph.SE_SUN,
+    Moon: swisseph.SE_MOON,
+    Mars: swisseph.SE_MARS,
+    Mercury: swisseph.SE_MERCURY,
+    Jupiter: swisseph.SE_JUPITER,
+    Venus: swisseph.SE_VENUS,
+    Saturn: swisseph.SE_SATURN,
+    Rahu: swisseph.SE_MEAN_NODE,
+  };
+
+  const flag = swisseph.SEFLG_SIDEREAL | swisseph.SEFLG_SPEED;
+  const planets: Record<string, CurrentGocharPlanet> = {};
+  const natalLagnaSign = Math.floor(natalAscendant / 30) % 12;
+
+  for (const [name, id] of Object.entries(planetIds)) {
+    const res = swisseph.swe_calc_ut(jd, id, flag);
+    let long = res.longitude;
+    if (long < 0) long += 360;
+
+    const sign = Math.floor(long / 30) % 12;
+    const degree = long % 30;
+    const isRetrograde = res.longitudeSpeed < 0;
+
+    const nakshatraIdx = Math.floor(long / (360 / 27)) % 27;
+    const pada = Math.floor((long % (360 / 27)) / (360 / 108)) + 1;
+
+    const transitHouseFromLagna = ((sign - natalLagnaSign + 12) % 12) + 1;
+    const transitHouseFromMoon = ((sign - natalMoonSign + 12) % 12) + 1;
+
+    planets[name] = {
+      name,
+      longitude: long,
+      sign,
+      degree,
+      nakshatraIdx,
+      pada,
+      isRetrograde,
+      transitHouseFromLagna,
+      transitHouseFromMoon,
+    };
+  }
+
+  // Calculate Ketu (180° from Rahu)
+  const rahu = planets['Rahu'];
+  let ketuLong = (rahu.longitude + 180) % 360;
+  if (ketuLong < 0) ketuLong += 360;
+  const ketuSign = Math.floor(ketuLong / 30) % 12;
+  const ketuDegree = ketuLong % 30;
+  const ketuNakshatraIdx = Math.floor(ketuLong / (360 / 27)) % 27;
+  const ketuPada = Math.floor((ketuLong % (360 / 27)) / (360 / 108)) + 1;
+
+  planets['Ketu'] = {
+    name: 'Ketu',
+    longitude: ketuLong,
+    sign: ketuSign,
+    degree: ketuDegree,
+    nakshatraIdx: ketuNakshatraIdx,
+    pada: ketuPada,
+    isRetrograde: rahu.isRetrograde,
+    transitHouseFromLagna: ((ketuSign - natalLagnaSign + 12) % 12) + 1,
+    transitHouseFromMoon: ((ketuSign - natalMoonSign + 12) % 12) + 1,
+  };
+
+  return {
+    calculatedAt: currentDate.toISOString(),
+    jd,
+    ayanamsa,
+    planets,
+  };
+}
+
