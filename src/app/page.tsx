@@ -262,31 +262,31 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#FAF6EE] text-[#1F1E1B] font-sans selection:bg-amber-100 antialiased">
       
-      {/* Serene Navigation Header with Centered Title & 3-Way Language Switcher Directly Below */}
-      <header className="w-full bg-[#FAF6EE] border-b border-amber-200/70 relative z-10 px-4 py-3.5 flex flex-col items-center text-center gap-2.5 shadow-2xs">
+      {/* Serene Navigation Header with Centered Title & 3-Way Language Switcher */}
+      <header className="w-full bg-[#FAF6EE] border-b border-amber-200/70 relative z-10 px-3 sm:px-6 py-2 sm:py-3 flex flex-col items-center text-center gap-1.5 shadow-2xs">
         
-        {/* Sacred Chanting Header */}
-        <span className="text-[12px] sm:text-[13px] font-bold text-[#A14E15] font-serif tracking-widest">
+        {/* Sacred Chanting Header - Center Top in small text in single horizontal line */}
+        <span className="text-[11px] sm:text-[12px] font-bold text-[#A14E15] font-serif tracking-widest whitespace-nowrap">
           {t.ganeshayNamah}
         </span>
 
-        {/* Full-Width Centered Title & Subtitle */}
-        <div className="w-full max-w-xl mx-auto space-y-0.5">
-          <h1 className="text-[18px] sm:text-[22px] md:text-[24px] font-extrabold tracking-tight text-[#59141D] leading-tight w-full">
+        {/* Full-Width Centered Title */}
+        <div className="w-full max-w-xl mx-auto space-y-0.5 whitespace-nowrap overflow-hidden">
+          <h1 className="text-sm sm:text-xl font-extrabold tracking-tight text-[#59141D] leading-tight w-full truncate">
             {t.title}
           </h1>
-          <p className="text-[11px] sm:text-[13px] text-stone-600 font-medium">
+          <p className="hidden sm:block text-xs text-stone-600 font-medium truncate">
             {t.subtitle}
           </p>
         </div>
 
-        {/* Centered 3-Way Language Selector Switcher Pill directly below */}
-        <div className="flex items-center gap-1 bg-stone-200/70 p-1 rounded-2xl border border-stone-300/70 shadow-2xs">
+        {/* Centered 3-Way Language Selector Switcher */}
+        <div className="flex items-center gap-1 bg-stone-200/70 p-0.5 sm:p-1 rounded-xl sm:rounded-2xl border border-stone-300/70 shadow-2xs">
           {(['EN', 'GU', 'HI'] as Language[]).map((l) => (
             <button
               key={l}
               onClick={() => setLang(l)}
-              className={`px-3.5 py-1.5 rounded-xl text-[12px] sm:text-[13px] font-bold transition-all cursor-pointer ${
+              className={`px-2.5 sm:px-3.5 py-1 rounded-lg sm:rounded-xl text-[10px] sm:text-[12px] font-bold transition-all cursor-pointer whitespace-nowrap ${
                 lang === l
                   ? 'bg-[#7A1C28] text-white shadow-xs scale-[1.02]'
                   : 'text-stone-700 hover:text-[#1F1E1B] hover:bg-stone-300/50'

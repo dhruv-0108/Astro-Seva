@@ -87,6 +87,7 @@ const VARGA_LABELS: Record<Language, Record<string, string>> = {
 };
 
 const UI_TEXTS: Record<Language, {
+  ganeshayNamah: string;
   home: string;
   subTitle: string;
   printPdf: string;
@@ -159,6 +160,7 @@ const UI_TEXTS: Record<Language, {
   payaMap: Record<string, string>;
 }> = {
   EN: {
+    ganeshayNamah: '॥ Shree Ganeshay Namah ॥',
     home: 'Home',
     subTitle: 'Vedic Astrology Consultation Workspace',
     printPdf: 'Print Customer PDF',
@@ -231,6 +233,7 @@ const UI_TEXTS: Record<Language, {
     payaMap: { Gold: 'Gold (સોનુ)', Silver: 'Silver (રૂપું)', Copper: 'Copper (તાંબુ)', Iron: 'Iron (લોઢું)' },
   },
   GU: {
+    ganeshayNamah: '॥ શ્રી ગણેશાય નમઃ ॥',
     home: 'મુખ્ય પૃષ્ઠ',
     subTitle: 'વૈદિક જ્યોતિષ ગણતરી અને પરામર્શ',
     printPdf: 'ગ્રાહક PDF પ્રિન્ટ કરો',
@@ -303,6 +306,7 @@ const UI_TEXTS: Record<Language, {
     payaMap: { Gold: 'સોનુ (Gold)', Silver: 'રૂપું (Silver)', Copper: 'તાંબુ (Copper)', Iron: 'લોઢું (Iron)' },
   },
   HI: {
+    ganeshayNamah: '॥ श्री गणेशाय नमः ॥',
     home: 'मुख्य पृष्ठ',
     subTitle: 'वैदिक ज्योतिष गणना एवं परामर्श',
     printPdf: 'ग्राहक PDF प्रिंट करें',
@@ -471,8 +475,15 @@ export default function KundliReportPage() {
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-stone-900 font-sans selection:bg-amber-100 antialiased flex flex-col justify-between">
       
+      {/* Top Sacred Chanting Bar - Center Top in small text size, single horizontal line without wrapping */}
+      <div className="w-full bg-[#FAF6EE] border-b border-amber-200/60 py-1 text-center whitespace-nowrap overflow-hidden print:hidden">
+        <span className="text-[11px] sm:text-xs font-bold text-[#A14E15] font-serif tracking-widest">
+          {t.ganeshayNamah}
+        </span>
+      </div>
+
       {/* Navigation Header - Fixed 1 single horizontal bar on mobile & desktop */}
-      <header className="bg-white border-b border-stone-200/60 px-3 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-2 shadow-xs print:hidden">
+      <header className="bg-white border-b border-stone-200/60 px-3 sm:px-6 py-2 sm:py-2.5 flex items-center justify-between gap-2 shadow-xs print:hidden">
         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <button
             onClick={handleHomeClick}
