@@ -82,22 +82,29 @@ export async function GET(request: Request) {
       };
     }
 
-    return NextResponse.json({
-      success: true,
-      client: data,
-      astro,
-      panchanga,
-      dasha,
-      currentDashaChain,
-      transits,
-      shubha,
-      lagnaSignIndex,
-      d9Lagna,
-      d9Placements,
-      cuspPlacements,
-      currentGochar,
-      bphsStrengths,
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        client: data,
+        astro,
+        panchanga,
+        dasha,
+        currentDashaChain,
+        transits,
+        shubha,
+        lagnaSignIndex,
+        d9Lagna,
+        d9Placements,
+        cuspPlacements,
+        currentGochar,
+        bphsStrengths,
+      },
+      {
+        headers: {
+          'Cache-Control': 's-maxage=3600, stale-while-revalidate=86400',
+        },
+      }
+    );
   } catch (error: any) {
 
     console.error('Kundli API Calculation error:', error);

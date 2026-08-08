@@ -24,7 +24,7 @@ service cloud.firestore {
         request.resource.data.deleteAt is timestamp;
 
       // Only Guruji (authenticated admin) can read, update, or delete submissions
-      allow read, update, delete: if request.auth != null && request.auth.token.email_verified == true;
+      allow read, update, delete: if request.auth != null;
     }
   }
 }
