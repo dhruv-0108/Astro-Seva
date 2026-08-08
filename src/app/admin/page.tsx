@@ -743,6 +743,9 @@ export default function AdminPage() {
           </form>
 
         </Card>
+
+        {/* PWA Mobile App Installation Prompt Banner on Login Screen */}
+        <PWAInstallBanner lang={lang} />
       </div>
     );
   }
