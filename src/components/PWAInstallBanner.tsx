@@ -51,22 +51,19 @@ export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps)
 
   const handleInstallClick = async () => {
     if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === 'accepted') {
-        setShowBanner(false);
+      try {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          setShowBanner(false);
+        }
+        setDeferredPrompt(null);
+      } catch (err) {
+        console.error(err);
+        setShowIOSInstructions(true);
       }
-      setDeferredPrompt(null);
-    } else if (isIOS) {
-      setShowIOSInstructions(true);
     } else {
-      alert(
-        lang === 'GU'
-          ? 'બ્રાઉઝર મેનૂ (3 બિંદુઓ ⋮) પર ક્લિક કરીને "Add to Home screen" પસંદ કરો.'
-          : lang === 'HI'
-          ? 'ब्राउज़र मेनू (3 बिंदु ⋮) पर क्लिक करके "Add to Home screen" चुनें।'
-          : 'Tap browser menu (3 dots ⋮) and select "Add to Home screen".'
-      );
+      setShowIOSInstructions((prev) => !prev);
     }
   };
 
@@ -77,17 +74,17 @@ export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps)
       title: 'અસ્તરો-સેવા મોબાઇલ એપ',
       subtitle: 'ફોનની હોમ સ્ક્રીન પરથી સિંગલ ટેપમાં ડાયરેક્ટ ખોલો',
       installBtn: 'હમણાં ઇન્સ્ટોલ કરો',
-      iosTitle: 'iPhone માં ઉમેરવા માટે:',
-      iosStep1: '૧. નીચેના Share બટન [↑] પર ક્લિક કરો.',
-      iosStep2: '૨. "Add to Home Screen" પસંદ કરો.',
+      iosTitle: 'ઇન્સ્ટોલ કરવા માટે સરળ 2 સ્ટેપ:',
+      iosStep1: '૧. બ્રાઉઝરના Share [↑] અથવા મેનૂ (3 બિંદુઓ ⋮) પર ટૅપ કરો.',
+      iosStep2: '૨. "Add to Home Screen" (હોમ સ્ક્રીન પર ઉમેરો) પસંદ કરો.',
       gotIt: 'બરાબર છે',
     },
     HI: {
       title: 'एस्ट्रो-सेवा मोबाइल ऐप',
       subtitle: 'फोन की होम स्क्रीन से सिंगल टैप में डायरेक्ट खोलें',
       installBtn: 'अभी इंस्टॉल करें',
-      iosTitle: 'iPhone में जोड़ने के लिए:',
-      iosStep1: '1. नीचे Share बटन [↑] पर क्लिक करें।',
+      iosTitle: 'इंस्टॉल करने के लिए सरल 2 स्टेप:',
+      iosStep1: '1. ब्राउज़र के Share [↑] या मेनू (3 बिंदु ⋮) पर टैप करें।',
       iosStep2: '2. "Add to Home Screen" चुनें।',
       gotIt: 'ठीक है',
     },
@@ -95,8 +92,8 @@ export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps)
       title: 'Astro-Seva Mobile App',
       subtitle: 'Open directly from home screen with one tap',
       installBtn: 'INSTALL NOW',
-      iosTitle: 'How to add on iPhone:',
-      iosStep1: '1. Tap Share button [↑] at the bottom.',
+      iosTitle: 'Simple 2 Steps to Add:',
+      iosStep1: '1. Tap Share [↑] or Menu (3 dots ⋮).',
       iosStep2: '2. Tap "Add to Home Screen".',
       gotIt: 'Got It',
     },
