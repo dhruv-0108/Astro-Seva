@@ -24,6 +24,7 @@ import { Button } from '../../components/ui/shadcn/button';
 import { Card } from '../../components/ui/shadcn/card';
 import { Input } from '../../components/ui/shadcn/input';
 import { Badge } from '../../components/ui/shadcn/badge';
+import { CustomDatePicker, CustomTimePicker } from '../../components/CustomDateTimePicker';
 import { GURU_SERVICES } from '../../lib/services';
 import {
   Sparkles,
@@ -1057,33 +1058,19 @@ export default function AdminPage() {
                 </select>
               </div>
 
-              {/* Date & Time Row */}
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <label className="text-xs font-bold text-stone-700 uppercase tracking-wider">
-                    Birth Date
-                  </label>
-                  <Input
-                    type="date"
-                    value={formData.date}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, date: e.target.value }))}
-                    className="w-full rounded-2xl p-3.5 text-sm"
-                    required
-                  />
-                </div>
+              {/* Custom Intuitive Date & Time Selection Widgets */}
+              <div className="space-y-3.5 pt-1">
+                <CustomDatePicker
+                  value={formData.date}
+                  onChange={(newDate) => setFormData((prev) => ({ ...prev, date: newDate }))}
+                  label="Birth Date"
+                />
 
-                <div className="space-y-1">
-                  <label className="text-xs font-bold text-stone-700 uppercase tracking-wider">
-                    Birth Time (24h)
-                  </label>
-                  <Input
-                    type="time"
-                    value={formData.time}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, time: e.target.value }))}
-                    className="w-full rounded-2xl p-3.5 text-sm"
-                    required
-                  />
-                </div>
+                <CustomTimePicker
+                  value={formData.time}
+                  onChange={(newTime) => setFormData((prev) => ({ ...prev, time: newTime }))}
+                  label="Birth Time"
+                />
               </div>
 
               {/* Birth Place Search Input (Exhaustive Nominatim + Photon Fetcher) */}

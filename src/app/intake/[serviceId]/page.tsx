@@ -10,6 +10,7 @@ import { Button } from '../../../components/ui/shadcn/button';
 import { Card } from '../../../components/ui/shadcn/card';
 import { Input } from '../../../components/ui/shadcn/input';
 import { Badge } from '../../../components/ui/shadcn/badge';
+import { CustomDatePicker, CustomTimePicker } from '../../../components/CustomDateTimePicker';
 import { GURU_SERVICES, ServiceItem } from '../../../lib/services';
 import {
   Sparkles,
@@ -415,36 +416,18 @@ export default function DedicatedIntakePage({ params }: { params: Promise<{ serv
                 </div>
               </div>
 
-              {/* Date of Birth */}
-              <div className="space-y-1.5">
-                <label className="text-[12px] font-semibold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5 stroke-[1.75] text-[#A14E15]" />
-                  <span>Date of Birth</span>
-                </label>
-                <Input
-                  type="date"
+              {/* Date & Time Selection Widgets */}
+              <div className="space-y-4">
+                <CustomDatePicker
                   value={birthDetails.date}
-                  onClick={(e) => (e.currentTarget as any).showPicker?.()}
-                  onChange={(e) => setBirthDetails((prev) => ({ ...prev, date: e.target.value }))}
-                  className="cursor-pointer"
-                  required
+                  onChange={(newDate) => setBirthDetails((prev) => ({ ...prev, date: newDate }))}
+                  label="Date of Birth"
                 />
-              </div>
 
-              {/* Time of Birth */}
-              <div className="space-y-1.5">
-                <label className="text-[12px] font-semibold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 stroke-[1.75] text-[#A14E15]" />
-                  <span>Exact Time of Birth</span>
-                </label>
-                <Input
-                  type="time"
-                  step="1"
+                <CustomTimePicker
                   value={birthDetails.time}
-                  onClick={(e) => (e.currentTarget as any).showPicker?.()}
-                  onChange={(e) => setBirthDetails((prev) => ({ ...prev, time: e.target.value }))}
-                  className="cursor-pointer"
-                  required
+                  onChange={(newTime) => setBirthDetails((prev) => ({ ...prev, time: newTime }))}
+                  label="Exact Time of Birth"
                 />
               </div>
 
