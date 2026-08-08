@@ -14,22 +14,15 @@ import {
   MapPin,
   Sparkles,
   Printer,
-  ArrowLeft,
-  RefreshCw,
-  Award,
-  BookOpen,
-  Compass,
-  FileText,
-  Loader2,
-  TrendingUp,
-  ShieldCheck,
-  Zap,
-  AlertTriangle,
   Home,
-  Globe,
-  Lock,
   ChevronDown,
   ChevronUp,
+  Compass,
+  ShieldCheck,
+  Award,
+  TrendingUp,
+  Activity,
+  Layers,
 } from 'lucide-react';
 
 type Language = 'EN' | 'GU' | 'HI';
@@ -59,375 +52,328 @@ const NAKSHATRA_NAMES: Record<Language, string[]> = {
     'अश्विनी', 'भरणी', 'कृत्तिका', 'रोहिणी', 'मृगशिरा', 'आर्द्रा',
     'पुनर्वसु', 'पुष्य', 'अश्लेषा', 'मघा', 'पूर्वा फाल्गुनी', 'उत्तरा फाल्गुनी',
     'हस्त', 'चित्रा', 'स्वाति', 'विशाखा', 'अनुराधा', 'ज्येष्ठा',
-    'मूल', 'पूर्वाषाढ़ा', 'उत्तराषाढ़ा', 'श्रवण', 'धनिष्ठा', 'शतभिषा',
-    'पूर्वा भाद्रपद', 'उत्तरा भाद्रपद', 'रेवती'
+    'मूल', 'पूर्वा भाद्रपद', 'उत्तरा भाद्रपद', 'वती'
   ],
 };
 
 const PLANET_NAMES: Record<Language, Record<string, string>> = {
+  EN: { Sun: 'Sun', Moon: 'Moon', Mars: 'Mars', Mercury: 'Mercury', Jupiter: 'Jupiter', Venus: 'Venus', Saturn: 'Saturn', Rahu: 'Rahu', Ketu: 'Ketu' },
+  GU: { Sun: 'સૂર્ય', Moon: 'ચંદ્ર', Mars: 'મંગળ', Mercury: 'બુધ', Jupiter: 'ગુરુ', Venus: 'શુક્ર', Saturn: 'શનિ', Rahu: 'રાહુ', Ketu: 'કેતુ' },
+  HI: { Sun: 'सूर्य', Moon: 'चंद्र', Mars: 'मंगल', Mercury: 'बुध', Jupiter: 'गुरु', Venus: 'शुक्र', Saturn: 'शनि', Rahu: 'राहु', Ketu: 'केतु' },
+};
+
+const VARGA_LABELS: Record<Language, Record<string, string>> = {
   EN: {
-    Sun: 'Sun',
-    Moon: 'Moon',
-    Mars: 'Mars',
-    Mercury: 'Mercury',
-    Jupiter: 'Jupiter',
-    Venus: 'Venus',
-    Saturn: 'Saturn',
-    Rahu: 'Rahu',
-    Ketu: 'Ketu',
+    D1: 'D1 - Birth Lagna Chart', D2: 'D2 - Hora (Wealth)', D3: 'D3 - Drekkana (Siblings)', D4: 'D4 - Chaturthamsha (Fortune)',
+    D7: 'D7 - Saptamsha (Children)', D9: 'D9 - Navamsha (Spouse)', D10: 'D10 - Dashamsha (Career)', D12: 'D12 - Dwadashamsha (Parents)',
+    D16: 'D16 - Shodashamsha (Comforts)', D20: 'D20 - Vimshamsha (Spiritual)', D24: 'D24 - Chaturvimshamsha (Learning)',
+    D27: 'D27 - Bhamsa (Strengths)', D30: 'D30 - Trimshamsha (Misfortunes)', D40: 'D40 - Khavedamsha (Auspicious)',
+    D45: 'D45 - Akshavedamsha (General)', D60: 'D60 - Shashtiamsha (Past Life)',
   },
   GU: {
-    Sun: 'સૂર્ય',
-    Moon: 'ચંદ્ર',
-    Mars: 'મંગળ',
-    Mercury: 'બુધ',
-    Jupiter: 'ગુરુ',
-    Venus: 'શુક્ર',
-    Saturn: 'શનિ',
-    Rahu: 'રાહુ',
-    Ketu: 'કેતુ',
+    D1: 'D1 - જન્મ લગ્ન કુંડળી', D2: 'D2 - હોરા (સંપત્તિ)', D3: 'D3 - દ્રેષ્કાણ (ભાઈ-બહેન)', D4: 'D4 - ચતુર્થાંશ (ભાગ્ય)',
+    D7: 'D7 - સપ્તમાંશ (સંતતિ)', D9: 'D9 - નવાંશ (જીવનસાથી)', D10: 'D10 - દશમાંશ (કારકિર્દી/વ્યવસાય)', D12: 'D12 - દ્વાદશાંશ (માતા-પિતા)',
+    D16: 'D16 - ષોડશાંશ (વાહન/સુખ)', D20: 'D20 - વિંશાંશ (ઉપાસના)', D24: 'D24 - ચતુર્વિંશાંશ (વિદ્યા)',
+    D27: 'D27 - ભાંશ (બળ/શક્તિ)', D30: 'D30 - ત્રિંશાંશ (અરિષ્ટ/સંકટ)', D40: 'D40 - ખવેદાંશ (શુભ ફળ)',
+    D45: 'D45 - અક્ષવેદાંશ (સર્વ સુખ)', D60: 'D60 - ષષ્ટિયાંશ (પૂર્વજન્મ કર્મ)',
   },
   HI: {
-    Sun: 'सूर्य',
-    Moon: 'चंद्र',
-    Mars: 'मंगल',
-    Mercury: 'बुध',
-    Jupiter: 'गुरु',
-    Venus: 'शुक्र',
-    Saturn: 'शनि',
-    Rahu: 'राहु',
-    Ketu: 'केतु',
+    D1: 'D1 - जन्म लग्न कुंडली', D2: 'D2 - होरा (संपत्ति)', D3: 'D3 - द्रेष्काण (भाई-बहन)', D4: 'D4 - चतुर्थांश (भाग्य)',
+    D7: 'D7 - सप्तमांश (संतान)', D9: 'D9 - नवांश (जीवनसाथी)', D10: 'D10 - दशमांश (करियर/व्यवसाय)', D12: 'D12 - द्वादशांश (माता-पिता)',
+    D16: 'D16 - षोडशांश (वाहन/सुख)', D20: 'D20 - विंशांश (उपासना)', D24: 'D24 - चतुर्विंशांश (विद्या)',
+    D27: 'D27 - भांश (बल/शक्ति)', D30: 'D30 - त्रिंशांश (अरिष्ट/संकट)', D40: 'D40 - खवेदांश (शुभ फल)',
+    D45: 'D45 - अक्षवेदांश (सर्व सुख)', D60: 'D60 - षष्ठियांश (पूर्वजन्म कर्म)',
   },
 };
 
-const PAGE_TRANSLATIONS: Record<Language, {
+const UI_TEXTS: Record<Language, {
   home: string;
-  reportSuffix: string;
-  subtitle: string;
-  print: string;
+  subTitle: string;
+  printPdf: string;
   lagna: string;
   moonSign: string;
   nakshatra: string;
   mahadasha: string;
-  gurujiGocharTitle: string;
-  gurujiGocharBadge: string;
-  gurujiGocharSub: string;
+  gocharTitle: string;
+  gocharSub: string;
+  chartModeLabel: string;
+  natalOnly: string;
+  gocharOnly: string;
+  natalGocharBoth: string;
+  transitComparisonTitle: string;
+  colPlanet: string;
+  colTransitSign: string;
+  colHouseLagna: string;
+  colHouseMoon: string;
+  colNatalSign: string;
+  mainChartsHeader: string;
+  vargaSelectLabel: string;
+  dashaChainTitle: string;
+  dashaTimelineTitle: string;
+  bhogyaText: string;
+  activeNow: string;
+  sadesatiTitle: string;
+  sadesatiSub: string;
+  colType: string;
+  colSaturnSign: string;
+  colDates: string;
+  colStatus: string;
+  colPaya: string;
+  planetPositionsTitle: string;
+  colDegree: string;
+  colNakshatraPada: string;
+  panchangTitle: string;
+  remediesTitle: string;
+  tithi: string;
+  yoga: string;
+  karana: string;
+  mulank: string;
+  bhagyank: string;
+  friendlyNumbers: string;
+  enemyNumbers: string;
+  auspiciousYears: string;
+  auspiciousDays: string;
+  auspiciousGemstone: string;
+  subGemstone: string;
+  fortuneGemstone: string;
+  auspiciousDeity: string;
+  auspiciousMetal: string;
+  auspiciousColor: string;
+  auspiciousDirection: string;
   tabs: {
     gochar: string;
     charts: string;
     dashas: string;
+    sadesati: string;
     planets: string;
-    dosha: string;
-    panchanga: string;
     remedies: string;
   };
-  chartTitles: {
-    lagna: string;
-    chandra: string;
-    navamsha: string;
+  chartNames: {
+    d1: string;
     chalit: string;
+    cusp: string;
+    moon: string;
+    d9: string;
   };
-  dashaTitle: string;
-  dashaTimelineTitle: string;
-  planetTable: {
-    title: string;
-    colPlanet: string;
-    colStatus: string;
-    colSign: string;
-    colDeg: string;
-    colNakshatra: string;
-    direct: string;
-    retrograde: string;
-  };
-  dosha: {
-    manglikTitle: string;
-    manglikPresent: string;
-    manglikAbsent: string;
-    manglikPresentDesc: string;
-    manglikAbsentDesc: string;
-    sadeSatiTitle: string;
-    sadeSatiBadge: string;
-    sadeSatiDesc: string;
-    panotiTitle: string;
-    panotiBadge: string;
-    colType: string;
-    colSign: string;
-    colDates: string;
-    colStatus: string;
-    colPaya: string;
-  };
-  panchanga: {
-    title: string;
-    tithi: string;
-    nakshatra: string;
-    yoga: string;
-    karana: string;
-  };
-  remedies: {
-    title: string;
-    colParam: string;
-    colRec: string;
-    mulank: string;
-    bhagyank: string;
-    friendlyNumbers: string;
-    enemyNumbers: string;
-    auspiciousYears: string;
-    auspiciousDays: string;
-    auspiciousGemstone: string;
-    subGemstone: string;
-    fortuneGemstone: string;
-    auspiciousDeity: string;
-    auspiciousMetal: string;
-    auspiciousColor: string;
-    auspiciousDirection: string;
-  };
+  statusMap: Record<string, string>;
+  payaMap: Record<string, string>;
 }> = {
   EN: {
     home: 'Home',
-    reportSuffix: "'s Kundli Report",
-    subtitle: 'Vedic Astrology Digital Analysis',
-    print: 'Print Complete Report',
+    subTitle: 'Vedic Astrology Consultation Workspace',
+    printPdf: 'Print Customer PDF',
     lagna: 'Lagna',
     moonSign: 'Moon Sign',
     nakshatra: 'Nakshatra',
     mahadasha: 'MahaDasha',
-    gurujiGocharTitle: 'Current Planetary Transits (Live Gochar)',
-    gurujiGocharBadge: 'Guruji Private View • Live Timestamp',
-    gurujiGocharSub: 'Real-time planetary transits calculated for consultation. Excluded from customer PDF.',
+    gocharTitle: 'Current Planetary Transits Overlay (Live Gochar)',
+    gocharSub: 'Real-time planetary transits compared against natal birth placements.',
+    chartModeLabel: 'Display Chart Mode:',
+    natalOnly: 'Natal Only',
+    gocharOnly: 'Current Gochar Only',
+    natalGocharBoth: 'Natal + Gochar Overlay',
+    transitComparisonTitle: 'Live Transit vs Natal Placement Comparison',
+    colPlanet: 'Planet',
+    colTransitSign: 'Transit Sign',
+    colHouseLagna: 'House (Lagna)',
+    colHouseMoon: 'House (Moon)',
+    colNatalSign: 'Natal Sign',
+    mainChartsHeader: 'Core 5 Vedic Charts & Shodashavarga Selector',
+    vargaSelectLabel: 'Select Additional Divisional Chart (Varga):',
+    dashaChainTitle: 'Current 5-Level Active Dasha Chain',
+    dashaTimelineTitle: '120-Year Vimshottari Dasha Timeline',
+    bhogyaText: 'Bhogya at Birth:',
+    activeNow: 'Active Now',
+    sadesatiTitle: 'Saturn Sade Sati & Nani Panoti Chronological Timeline',
+    sadesatiSub: 'Comprehensive lifetime Saturn transits, phases, status, and metal payas.',
+    colType: 'Transit Type',
+    colSaturnSign: 'Saturn Sign',
+    colDates: 'Start Date → End Date',
+    colStatus: 'Current Status',
+    colPaya: 'Paya (Metal)',
+    planetPositionsTitle: 'Planetary Positions & Degree Details Table',
+    colDegree: 'Degree in Sign',
+    colNakshatraPada: 'Nakshatra & Pada',
+    panchangTitle: 'Birth Panchanga Details',
+    remediesTitle: 'Auspicious Guide & Astrological Remedies Table',
+    tithi: 'Tithi',
+    yoga: 'Yoga',
+    karana: 'Karana',
+    mulank: 'Radical Number (Mulank)',
+    bhagyank: 'Destiny Number (Bhagyank)',
+    friendlyNumbers: 'Friendly Numbers',
+    enemyNumbers: 'Enemy Numbers',
+    auspiciousYears: 'Auspicious Years',
+    auspiciousDays: 'Auspicious Days',
+    auspiciousGemstone: 'Auspicious Gemstone',
+    subGemstone: 'Sub-Gemstone',
+    fortuneGemstone: 'Fortune Gemstone',
+    auspiciousDeity: 'Auspicious Deity',
+    auspiciousMetal: 'Auspicious Metal',
+    auspiciousColor: 'Auspicious Color',
+    auspiciousDirection: 'Auspicious Direction',
     tabs: {
-      gochar: '0. Live Gochar (Guruji)',
+      gochar: '0. Gochar Overlay',
       charts: '1. Kundli Charts',
       dashas: '2. Vimshottari Dasha',
-      planets: '3. Planetary Positions',
-      dosha: '4. Sade Sati & Panoti',
-      panchanga: '5. Panchanga & Cusps',
-      remedies: '6. Remedies & Strengths',
+      sadesati: '3. Sade Sati & Panoti',
+      planets: '4. Planetary Positions',
+      remedies: '5. Panchang & Remedies',
     },
-    chartTitles: {
-      lagna: 'Lagna Chart (Birth Kundli)',
-      chandra: 'Chandra Kundli (Moon Chart)',
-      navamsha: 'Navamsha Chart (D9)',
-      chalit: 'Bhav Chalit Chart (Cusps)',
+    chartNames: {
+      d1: '1. Birth Lagna Chart (D1)',
+      chalit: '2. Bhav Chalit Chart',
+      cusp: '3. KP Cusp Chart',
+      moon: '4. Chandra Rashi Kundli (Moon)',
+      d9: '5. Navamsha Chart (D9)',
     },
-    dashaTitle: 'Current Active Dasha Hierarchy',
-    dashaTimelineTitle: '120-Year Vimshottari Dasha Timeline',
-    planetTable: {
-      title: 'Planetary Positions & Degrees Table',
-      colPlanet: 'Planet',
-      colStatus: 'Status',
-      colSign: 'Zodiac Sign',
-      colDeg: 'Degrees',
-      colNakshatra: 'Nakshatra & Pada',
-      direct: 'Direct',
-      retrograde: 'Retrograde (R)',
-    },
-    dosha: {
-      manglikTitle: 'Manglik Dosha Status',
-      manglikPresent: 'Present',
-      manglikAbsent: 'Not Present',
-      manglikPresentDesc: 'Mars is placed in House {house}. Specific Vedic shanti remedies and gemstone alignment are recommended.',
-      manglikAbsentDesc: 'Mars is safely placed. No primary Manglik affliction detected in Lagna chart.',
-      sadeSatiTitle: 'Saturn Sade Sati Chronological Timeline',
-      sadeSatiBadge: '7.5 Years Transit',
-      sadeSatiDesc: 'Lifetime Saturn transit timeline computed for Moon Sign ({sign}).',
-      panotiTitle: 'Nani Panoti (Dhaiya) Timeline',
-      panotiBadge: '2.5 Years Transit',
-      colType: 'Transit Type',
-      colSign: 'Saturn Sign',
-      colDates: 'Transit Dates',
-      colStatus: 'Current Status',
-      colPaya: 'Paya (Metal)',
-    },
-    panchanga: {
-      title: 'Birth Panchanga Details',
-      tithi: 'Tithi',
-      nakshatra: 'Nakshatra',
-      yoga: 'Yoga',
-      karana: 'Karana',
-    },
-    remedies: {
-      title: 'Auspicious Guide & Astrological Remedies Table',
-      colParam: 'Astrological Parameter',
-      colRec: 'Auspicious Value / Recommendation',
-      mulank: 'Radical Number (Mulank)',
-      bhagyank: 'Destiny Number (Bhagyank)',
-      friendlyNumbers: 'Friendly Numbers',
-      enemyNumbers: 'Enemy Numbers',
-      auspiciousYears: 'Auspicious Years',
-      auspiciousDays: 'Auspicious Days',
-      auspiciousGemstone: 'Auspicious Gemstone',
-      subGemstone: 'Sub-gemstone',
-      fortuneGemstone: 'Fortune Gemstone',
-      auspiciousDeity: 'Auspicious Deity',
-      auspiciousMetal: 'Auspicious Metal',
-      auspiciousColor: 'Auspicious Color',
-      auspiciousDirection: 'Auspicious Direction',
-    },
+    statusMap: { Active: 'Active Now', Completed: 'Completed', Upcoming: 'Upcoming' },
+    payaMap: { Gold: 'Gold (સોનુ)', Silver: 'Silver (રૂપું)', Copper: 'Copper (તાંબુ)', Iron: 'Iron (લોઢું)' },
   },
   GU: {
     home: 'મુખ્ય પૃષ્ઠ',
-    reportSuffix: ' ની જન્મ કુંડળી વિશ્લેષણ',
-    subtitle: 'વૈદિક જ્યોતિષ ગણતરી અને પરામર્શ',
-    print: 'સંપૂર્ણ કુંડળી પ્રિન્ટ કરો',
+    subTitle: 'વૈદિક જ્યોતિષ ગણતરી અને પરામર્શ',
+    printPdf: 'ગ્રાહક PDF પ્રિન્ટ કરો',
     lagna: 'લગ્ન રાશિ',
     moonSign: 'ચંદ્ર રાશિ',
     nakshatra: 'નક્ષત્ર',
     mahadasha: 'મહાદશા',
-    gurujiGocharTitle: 'વર્તમાન ગ્રહ ગોચર (લાઈવ ટ્રાન્ઝિટ)',
-    gurujiGocharBadge: 'ગુરુજી પરામર્શ હેતુ • લાઈવ સમય',
-    gurujiGocharSub: 'ગુરુજી માટે વર્તમાન સમયની ગોચર ગ્રહ સ્થિતિ. આ માહિતી ગ્રાહક PDF પ્રિન્ટમાં સમાવિષ્ટ નથી.',
-    tabs: {
-      gochar: '૦. લાઈવ ગોચર (ગુરુજી)',
-      charts: '૧. જન્મ કુંડળી ચાર્ટ',
-      dashas: '૨. વિંશોત્તરી દશા સ્રંખલા',
-      planets: '૩. ગ્રહ સ્થિતિ અને અંશ',
-      dosha: '૪. સાડાસાતી અને પનોતી',
-      panchanga: '૫. જન્મ પંચાંગ વિગત',
-      remedies: '૬. શુભ અંક અને ઉપાય',
-    },
-    chartTitles: {
-      lagna: 'લગ્ન કુંડળી (જન્મ ચાર્ટ)',
-      chandra: 'ચંદ્ર કુંડળી (Moon Chart)',
-      navamsha: 'નવાંશ કુંડળી (D9 Chart)',
-      chalit: 'ભાવ ચાલિત કુંડળી (Chalit)',
-    },
-    dashaTitle: 'વર્તમાન ૫-સ્તરીય દશા સ્રંખલા',
+    gocharTitle: 'વર્તમાન ગ્રહ ગોચર ઓવરલે (લાઈવ ટ્રાન્ઝિટ)',
+    gocharSub: 'જન્મ સમયના ગ્રહો સામે વર્તમાન ગોચર ગ્રહોની લાઈવ તુલના.',
+    chartModeLabel: 'ચાર્ટ મોડ પસંદ કરો:',
+    natalOnly: 'માત્ર જન્મ ગ્રહો',
+    gocharOnly: 'માત્ર વર્તમાન ગોચર',
+    natalGocharBoth: 'જન્મ + ગોચર ઓવરલે',
+    transitComparisonTitle: 'વર્તમાન ગોચર અને જન્મ ગ્રહ સ્થિતિ તુલના કોષ્ટક',
+    colPlanet: 'ગ્રહ',
+    colTransitSign: 'ગોચર રાશિ',
+    colHouseLagna: 'ભાવ (લગ્નથી)',
+    colHouseMoon: 'ભાવ (ચંદ્રથી)',
+    colNatalSign: 'જન્મ રાશિ',
+    mainChartsHeader: 'મુખ્ય ૫ વૈદિક ચાર્ટ અને વર્ગ કુંડળી પસંદગી',
+    vargaSelectLabel: 'અન્ય ષોડશવર્ગ કુંડળી પસંદ કરો:',
+    dashaChainTitle: 'વર્તમાન ૫-સ્તરીય સક્રિય દશા સ્રંખલા',
     dashaTimelineTitle: '૧૨૦-વર્ષીય સંપૂર્ણ વિંશોત્તરી દશા સમયરેખા',
-    planetTable: {
-      title: 'ગ્રહ સ્થિતિ, રાશિ અને અંશ કોષ્ટક',
-      colPlanet: 'ગ્રહ',
-      colStatus: 'સ્થિતિ',
-      colSign: 'રાશિ',
-      colDeg: 'અંશ (Degrees)',
-      colNakshatra: 'નક્ષત્ર અને પદ',
-      direct: 'માર્ગી (Direct)',
-      retrograde: 'વક્રી (Retrograde)',
+    bhogyaText: 'જન્મ સમયે ભોગ્ય દશા:',
+    activeNow: 'વર્તમાન સક્રિય',
+    sadesatiTitle: 'શનિ સાડાસાતી અને નાની પનોતી (ઢૈયા) સમયરેખા',
+    sadesatiSub: 'આયુષ્યભરની શનિ સાડાસાતી તબક્કા, સ્થિતિ અને ધાતુ પાયા કોષ્ટક.',
+    colType: 'ગોચર પ્રકાર',
+    colSaturnSign: 'શનિની રાશિ',
+    colDates: 'પ્રારંભ તારીખ → અંત તારીખ',
+    colStatus: 'વર્તમાન સ્થિતિ',
+    colPaya: 'પાયા (ધાતુ)',
+    planetPositionsTitle: 'ગ્રહ સ્પષ્ટ અંશ અને નક્ષત્ર પદ કોષ્ટક',
+    colDegree: 'રાશિમાં અંશ',
+    colNakshatraPada: 'નક્ષત્ર અને પદ',
+    panchangTitle: 'જન્મ પંચાંગ વિગત',
+    remediesTitle: 'અનુકૂળતા માર્ગદર્શિકા અને શુભ ઉપાય કોષ્ટક',
+    tithi: 'તિથિ',
+    yoga: 'યોગ',
+    karana: 'કરણ',
+    mulank: 'મૂળાંક (Radical Number)',
+    bhagyank: 'ભાગ્યાંક (Destiny Number)',
+    friendlyNumbers: 'મિત્ર અંક',
+    enemyNumbers: 'શત્રુ અંક',
+    auspiciousYears: 'શુભ વર્ષ',
+    auspiciousDays: 'શુભ વાર',
+    auspiciousGemstone: 'શુભ રત્ન',
+    subGemstone: 'ઉપ-રત્ન',
+    fortuneGemstone: 'ભાગ્ય રત્ન',
+    auspiciousDeity: 'ઇષ્ટદેવ / પૂજ્ય દેવ',
+    auspiciousMetal: 'શુભ ધાતુ',
+    auspiciousColor: 'શુભ રંગ',
+    auspiciousDirection: 'શુભ દિશા',
+    tabs: {
+      gochar: '૦. લાઈવ ગોચર ઓવરલે',
+      charts: '૧. કુંડળી ચાર્ટ્સ (મુખ્ય ૫ + વર્ગ)',
+      dashas: '૨. વિંશોત્તરી દશા',
+      sadesati: '૩. સાડાસાતી અને પનોતી',
+      planets: '૪. ગ્રહ સ્થિતિ અને અંશ',
+      remedies: '૫. પંચાંગ અને ઉપાય',
     },
-    dosha: {
-      manglikTitle: 'મંગળ દોષ સ્થિતિ',
-      manglikPresent: 'મંગળ દોષ હાજર',
-      manglikAbsent: 'મંગળ દોષ નથી',
-      manglikPresentDesc: 'મંગળ ગ્રહ {house} મા ભાવમાં સ્થિત છે. મંગળ શાંતિ ઉપાય અને પ્રામાણિક પૂજા અર્ચના સલાહભર્યું છે.',
-      manglikAbsentDesc: 'મંગળ ગ્રહ અનુકૂળ સ્થાન પર છે. જન્મ કુંડળીમાં મુખ્ય મંગળ દોષ નથી.',
-      sadeSatiTitle: 'શનિ સાડાસાતી સંપૂર્ણ સમયરેખા',
-      sadeSatiBadge: '૭.૫ વર્ષ ગોચર',
-      sadeSatiDesc: 'ચંદ્ર રાશિ ({sign}) પર આધારિત શનિ ગોચર અને સાડાસાતી સમયરેખા.',
-      panotiTitle: 'નાની પનોતી (ઢૈયા) સમયરેખા',
-      panotiBadge: '૨.૫ વર્ષ ગોચર',
-      colType: 'ગોચર પ્રકાર',
-      colSign: 'શનિની રાશિ',
-      colDates: 'સમયગાળો',
-      colStatus: 'વર્તમાન સ્થિતિ',
-      colPaya: 'પાયા (ધાતુ)',
+    chartNames: {
+      d1: '૧. જન્મ લગ્ન કુંડળી (D1)',
+      chalit: '૨. ભાવ ચાલિત કુંડળી',
+      cusp: '૩. કસ્પ કુંડળી (KP Cusp)',
+      moon: '૪. ચંદ્ર રાશિ કુંડળી',
+      d9: '૫. નવાંશ કુંડળી (D9)',
     },
-    panchanga: {
-      title: 'જન્મ સમયનું પંચાંગ વિગત',
-      tithi: 'તિથિ',
-      nakshatra: 'નક્ષત્ર',
-      yoga: 'યોગ',
-      karana: 'કરણ',
-    },
-    remedies: {
-      title: 'શુભ અંક, રત્ન અને ઉપાય કોષ્ટક',
-      colParam: 'જ્યોતિષીય પરિમાણ',
-      colRec: 'શુભ મૂલ્ય / માર્ગદર્શન',
-      mulank: 'મુળાંક (Radical Number)',
-      bhagyank: 'ભાગ્યાંક (Destiny Number)',
-      friendlyNumbers: 'મિત્ર અંક',
-      enemyNumbers: 'શત્રુ અંક',
-      auspiciousYears: 'શુભ વર્ષ',
-      auspiciousDays: 'શુભ વાર',
-      auspiciousGemstone: 'શુભ રત્ન',
-      subGemstone: 'ઉપ-રત્ન',
-      fortuneGemstone: 'ભાગ્ય રત્ન',
-      auspiciousDeity: 'ઇષ્ટદેવ / પૂજ્ય દેવ',
-      auspiciousMetal: 'શુભ ધાતુ',
-      auspiciousColor: 'શુભ રંગ',
-      auspiciousDirection: 'શુભ દિશા',
-    },
+    statusMap: { Active: 'વર્તમાન સક્રિય', Completed: 'પૂર્ણ થયેલ', Upcoming: 'આવનારી' },
+    payaMap: { Gold: 'સોનુ (Gold)', Silver: 'રૂપું (Silver)', Copper: 'તાંબુ (Copper)', Iron: 'લોઢું (Iron)' },
   },
   HI: {
     home: 'मुख्य पृष्ठ',
-    reportSuffix: ' की जन्म कुंडली विश्लेषण',
-    subtitle: 'वैदिक ज्योतिष गणना एवं परामर्श',
-    print: 'संपूर्ण कुंडली प्रिंट करें',
+    subTitle: 'वैदिक ज्योतिष गणना एवं परामर्श',
+    printPdf: 'ग्राहक PDF प्रिंट करें',
     lagna: 'लग्न राशि',
     moonSign: 'चंद्र राशि',
     nakshatra: 'नक्षत्र',
     mahadasha: 'महादशा',
-    gurujiGocharTitle: 'वर्तमान ग्रह गोचर (लाइव गोचर)',
-    gurujiGocharBadge: 'गुरुजी परामर्श हेतु • लाइव समय',
-    gurujiGocharSub: 'गुरुजी के लिए वर्तमान समय की गोचर ग्रह स्थिति। यह जानकारी ग्राहक PDF में शामिल नहीं है।',
-    tabs: {
-      gochar: '0. लाइव गोचर (गुरुजी)',
-      charts: '1. जन्म कुंडली चार्ट',
-      dashas: '2. विंशोत्तरी दशा श्रृंखला',
-      planets: '3. ग्रह स्थिति एवं अंश',
-      dosha: '4. साढ़ेसाती एवं पनौती',
-      panchanga: '5. जन्म पंचांग विवरण',
-      remedies: '6. शुभ अंक एवं उपाय',
-    },
-    chartTitles: {
-      lagna: 'लग्न कुंडली (जन्म चार्ट)',
-      chandra: 'चंद्र कुंडली (Moon Chart)',
-      navamsha: 'नवांश कुंडली (D9 Chart)',
-      chalit: 'भाव चलित कुंडली (Chalit)',
-    },
-    dashaTitle: 'वर्तमान 5-स्तरीय दशा श्रृंखला',
+    gocharTitle: 'वर्तमान ग्रह गोचर ओवरले (लाइव गोचर)',
+    gocharSub: 'जन्म ग्रहों के सापेक्ष वर्तमान गोचर ग्रहों की लाइव तुलना।',
+    chartModeLabel: 'चार्ट मोड चुनें:',
+    natalOnly: 'केवल जन्म ग्रह',
+    gocharOnly: 'केवल वर्तमान गोचर',
+    natalGocharBoth: 'जन्म + गोचर ओवरले',
+    transitComparisonTitle: 'वर्तमान गोचर एवं जन्म ग्रह स्थिति तुलना तालिका',
+    colPlanet: 'ग्रह',
+    colTransitSign: 'गोचर राशि',
+    colHouseLagna: 'भाव (लग्न से)',
+    colHouseMoon: 'भाव (चंद्र से)',
+    colNatalSign: 'जन्म राशि',
+    mainChartsHeader: 'मुख्य 5 वैदिक चार्ट एवं वर्ग कुंडली चयन',
+    vargaSelectLabel: 'अन्य षोडशवर्ग कुंडली चुनें:',
+    dashaChainTitle: 'वर्तमान 5-स्तरीय सक्रिय दशा श्रृंखला',
     dashaTimelineTitle: '120-वर्षीय संपूर्ण विंशोत्तरी दशा समयरेखा',
-    planetTable: {
-      title: 'ग्रह स्थिति, राशि एवं अंश तालिका',
-      colPlanet: 'ग्रह',
-      colStatus: 'स्थिति',
-      colSign: 'राशि',
-      colDeg: 'अंश (Degrees)',
-      colNakshatra: 'नक्षत्र एवं पद',
-      direct: 'मार्गी (Direct)',
-      retrograde: 'वक्र (Retrograde)',
+    bhogyaText: 'जन्म समय भोग्य दशा:',
+    activeNow: 'वर्तमान सक्रिय',
+    sadesatiTitle: 'शनि साढ़ेसाती एवं छोटी पनौती (ढैय्या) समयरेखा',
+    sadesatiSub: 'जीवनपर्यंत शनि गोचर, चरण, स्थिति एवं धातु पाया तालिका।',
+    colType: 'गोचर प्रकार',
+    colSaturnSign: 'शनि की राशि',
+    colDates: 'प्रारंभ तिथि → अंत तिथि',
+    colStatus: 'वर्तमान स्थिति',
+    colPaya: 'पाया (धातु)',
+    planetPositionsTitle: 'ग्रह स्पष्ट अंश एवं नक्षत्र पद तालिका',
+    colDegree: 'राशि में अंश',
+    colNakshatraPada: 'नक्षत्र एवं पद',
+    panchangTitle: 'जन्म पंचांग विवरण',
+    remediesTitle: 'अनुकूलता मार्गदर्शिका एवं शुभ उपाय तालिका',
+    tithi: 'तिथि',
+    yoga: 'योग',
+    karana: 'करण',
+    mulank: 'मूलांक (Radical Number)',
+    bhagyank: 'भाग्यांक (Destiny Number)',
+    friendlyNumbers: 'मित्र अंक',
+    enemyNumbers: 'शत्रु अंक',
+    auspiciousYears: 'शुभ वर्ष',
+    auspiciousDays: 'शुभ वार',
+    auspiciousGemstone: 'शुभ रत्न',
+    subGemstone: 'उप-रत्न',
+    fortuneGemstone: 'भाग्य रत्न',
+    auspiciousDeity: 'इष्टदेव / पूज्य देव',
+    auspiciousMetal: 'शुभ धातु',
+    auspiciousColor: 'शुभ रंग',
+    auspiciousDirection: 'शुभ दिशा',
+    tabs: {
+      gochar: '0. लाइव गोचर ओवरले',
+      charts: '1. कुंडली चार्ट्स (मुख्य 5 + वर्ग)',
+      dashas: '2. विंशोत्तरी दशा',
+      sadesati: '3. साढ़ेसाती एवं पनौती',
+      planets: '4. ग्रह स्थिति एवं अंश',
+      remedies: '5. पंचांग एवं उपाय',
     },
-    dosha: {
-      manglikTitle: 'मंगल दोष स्थिति',
-      manglikPresent: 'मंगल दोष उपस्थित',
-      manglikAbsent: 'मंगल दोष नहीं',
-      manglikPresentDesc: 'मंगल ग्रह {house} वें भाव में स्थित है। मंगल शांति उपाय अनुशंसित हैं।',
-      manglikAbsentDesc: 'मंगल ग्रह अनुकूल स्थान पर है। लग्न कुंडली में मुख्य मंगल दोष नहीं है।',
-      sadeSatiTitle: 'शनि साढ़ेसाती संपूर्ण समयरेखा',
-      sadeSatiBadge: '7.5 वर्ष गोचर',
-      sadeSatiDesc: 'चंद्र राशि ({sign}) पर आधारित शनि गोचर एवं साढ़ेसाती समयरेखा।',
-      panotiTitle: 'छोटी पनौती (ढैय्या) समयरेखा',
-      panotiBadge: '2.5 वर्ष गोचर',
-      colType: 'गोचर प्रकार',
-      colSign: 'शनि की राशि',
-      colDates: 'समय अवधि',
-      colStatus: 'वर्तमान स्थिति',
-      colPaya: 'पाया (धातु)',
+    chartNames: {
+      d1: '1. जन्म लग्न कुंडली (D1)',
+      chalit: '2. भाव चलित कुंडली',
+      cusp: '3. कस्प कुंडली (KP Cusp)',
+      moon: '4. चंद्र राशि कुंडली',
+      d9: '5. नवांश कुंडली (D9)',
     },
-    panchanga: {
-      title: 'जन्म समय का पंचांग विवरण',
-      tithi: 'तिथि',
-      nakshatra: 'नक्षत्र',
-      yoga: 'योग',
-      karana: 'करण',
-    },
-    remedies: {
-      title: 'शुभ अंक, रत्न एवं उपाय तालिका',
-      colParam: 'ज्योतिषीय पैरामीटर',
-      colRec: 'शुभ मूल्य / मार्गदर्शन',
-      mulank: 'मूलांक (Radical Number)',
-      bhagyank: 'भाग्यांक (Destiny Number)',
-      friendlyNumbers: 'मित्र अंक',
-      enemyNumbers: 'शत्रु अंक',
-      auspiciousYears: 'शुभ वर्ष',
-      auspiciousDays: 'शुभ वार',
-      auspiciousGemstone: 'शुभ रत्न',
-      subGemstone: 'उप-रत्न',
-      fortuneGemstone: 'भाग्य रत्न',
-      auspiciousDeity: 'इष्टदेव / पूज्य देव',
-      auspiciousMetal: 'शुभ धातु',
-      auspiciousColor: 'शुभ रंग',
-      auspiciousDirection: 'शुभ दिशा',
-    },
-  }
+    statusMap: { Active: 'वर्तमान सक्रिय', Completed: 'पूर्ण', Upcoming: 'आगामी' },
+    payaMap: { Gold: 'सोना (Gold)', Silver: 'चांदी (Silver)', Copper: 'तांबा (Copper)', Iron: 'लोहा (Iron)' },
+  },
 };
 
 export default function KundliReportPage() {
@@ -439,10 +385,12 @@ export default function KundliReportPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
   const [kundliData, setKundliData] = useState<any>(null);
-  const [activeTab, setActiveTab] = useState<'gochar' | 'charts' | 'dashas' | 'planets' | 'dosha' | 'panchanga' | 'remedies'>('gochar');
-  const [expandedMdIndex, setExpandedMdIndex] = useState<number | null>(0);
 
-  const t = PAGE_TRANSLATIONS[lang];
+  // Active Tab & State
+  const [activeTab, setActiveTab] = useState<'gochar' | 'charts' | 'dashas' | 'sadesati' | 'planets' | 'remedies'>('gochar');
+  const [overlayMode, setOverlayMode] = useState<'natal' | 'gochar' | 'both'>('both');
+  const [selectedVarga, setSelectedVarga] = useState<string>('D2');
+  const [expandedMdIndex, setExpandedMdIndex] = useState<number | null>(0);
 
   useEffect(() => {
     if (!id) return;
@@ -469,6 +417,7 @@ export default function KundliReportPage() {
     fetchKundli();
   }, [id]);
 
+  const t = UI_TEXTS[lang];
   const getRashiName = (idx: number) => RASHI_NAMES[lang][idx % 12] || '';
   const getPlanetName = (name: string) => PLANET_NAMES[lang][name] || name;
 
@@ -480,17 +429,10 @@ export default function KundliReportPage() {
     return `${d}° ${m}' ${s}"`;
   };
 
-  const getNakshatraInfo = (deg: number) => {
-    const nakIdx = Math.floor((deg % 360) / (360 / 27));
-    const pada = Math.floor(((deg % 360) % (360 / 27)) / (360 / 108)) + 1;
-    const nakName = NAKSHATRA_NAMES[lang][nakIdx];
-    return `${nakName} (Pada ${pada})`;
-  };
-
   const formatDateShort = (dStr: any) => {
     if (!dStr) return '';
     const d = new Date(dStr);
-    return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    return d.toLocaleDateString(lang === 'EN' ? 'en-GB' : 'gu-IN', { day: '2-digit', month: 'short', year: 'numeric' });
   };
 
   const handleHomeClick = () => {
@@ -501,8 +443,8 @@ export default function KundliReportPage() {
     return (
       <div className="min-h-screen bg-[#FAF8F5] flex items-center justify-center">
         <div className="text-center space-y-4">
-          <Loader2 className="w-10 h-10 text-[#A14E15] animate-spin mx-auto stroke-[1.75]" />
-          <p className="text-sm font-semibold text-stone-600">Calculating Astronomical Ephemeris Chart...</p>
+          <Activity className="w-10 h-10 text-[#A14E15] animate-spin mx-auto stroke-[1.75]" />
+          <p className="text-sm font-semibold text-stone-600">Calculating Ephemeris & Workspace...</p>
         </div>
       </div>
     );
@@ -515,19 +457,16 @@ export default function KundliReportPage() {
           <div className="w-12 h-12 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center mx-auto font-bold">!</div>
           <h2 className="text-lg font-bold text-stone-900">Unable to Load Kundli Report</h2>
           <p className="text-xs text-stone-500 font-medium">{error || 'Record does not exist'}</p>
-          <Button onClick={handleHomeClick} className="w-full">Return Home</Button>
+          <Button onClick={handleHomeClick} className="w-full">{t.home}</Button>
         </Card>
       </div>
     );
   }
 
-  const { client, astro, currentDashaChain, transits, d9Lagna, currentGochar } = kundliData;
+  const { client, astro, currentDashaChain, transits, currentGochar, vargasData, cuspPlacements } = kundliData;
 
-  // Manglik Check (Mars in House 1, 4, 7, 8, 12)
-  const marsSign = astro.planets.Mars.sign;
-  const lagnaSign = kundliData.lagnaSignIndex;
-  const marsHouse = ((marsSign - lagnaSign + 12) % 12) + 1;
-  const isManglik = [1, 4, 7, 8, 12].includes(marsHouse);
+  // Additional Selected Varga Chart Data
+  const activeVargaInfo = vargasData?.[selectedVarga] || { lagnaSign: kundliData.lagnaSignIndex, placements: astro.planets };
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-stone-900 font-sans selection:bg-amber-100 antialiased flex flex-col justify-between">
@@ -538,14 +477,14 @@ export default function KundliReportPage() {
           <button
             onClick={handleHomeClick}
             className="p-2 rounded-2xl hover:bg-stone-100 transition-colors cursor-pointer text-stone-600 flex items-center gap-1.5 text-xs font-bold"
-            title="Go to Home Page"
+            title={t.home}
           >
             <Home className="w-4 h-4 text-[#A14E15]" />
             <span>{t.home}</span>
           </button>
           <div>
-            <h1 className="text-base font-bold tracking-tight text-stone-900">{client.name}{t.reportSuffix}</h1>
-            <p className="text-xs text-stone-500 font-medium">{t.subtitle}</p>
+            <h1 className="text-base font-bold tracking-tight text-stone-900">{client.name}</h1>
+            <p className="text-xs text-stone-500 font-medium">{t.subTitle}</p>
           </div>
         </div>
         
@@ -569,19 +508,19 @@ export default function KundliReportPage() {
 
           <Button onClick={() => window.print()} variant="outline" size="sm">
             <Printer className="w-4 h-4 text-stone-600" />
-            <span className="hidden sm:inline">{t.print}</span>
+            <span className="hidden sm:inline">{t.printPdf}</span>
           </Button>
         </div>
       </header>
 
-      {/* 1. COMPACT EXECUTIVE SUMMARY BANNER */}
+      {/* EXECUTIVE SUMMARY BANNER */}
       <div className="bg-white border-b border-stone-200/60 px-6 py-5">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
           
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <h2 className="text-xl sm:text-2xl font-extrabold text-stone-900 tracking-tight">{client.name}</h2>
-              <Badge variant="default" className="text-[10px] py-0.5">Vedic Kundli</Badge>
+              <Badge variant="default" className="text-[10px] py-0.5 bg-[#7A1C28]">Vedic Kundli</Badge>
             </div>
             <div className="flex flex-wrap items-center gap-3 text-xs text-stone-600 font-medium">
               <span className="flex items-center gap-1">
@@ -601,7 +540,7 @@ export default function KundliReportPage() {
             </div>
           </div>
 
-          {/* Quick First-Eye Metrics */}
+          {/* Core Metrics */}
           <div className="flex flex-wrap items-center gap-3">
             <div className="bg-stone-50 border border-stone-200/60 rounded-xl px-3.5 py-2 text-center">
               <span className="text-[9px] uppercase font-bold text-stone-400 block">{t.lagna}</span>
@@ -631,16 +570,15 @@ export default function KundliReportPage() {
         </div>
       </div>
 
-      {/* Navigation Bar (Tabs) */}
+      {/* Main Navigation Bar (Tabs) */}
       <nav className="bg-white border-b border-stone-200/60 sticky top-0 z-20 px-6 overflow-x-auto scrollbar-none shadow-xs print:hidden">
         <div className="flex gap-6 text-sm font-semibold max-w-6xl mx-auto">
           {[
             { id: 'gochar', label: t.tabs.gochar },
             { id: 'charts', label: t.tabs.charts },
             { id: 'dashas', label: t.tabs.dashas },
+            { id: 'sadesati', label: t.tabs.sadesati },
             { id: 'planets', label: t.tabs.planets },
-            { id: 'dosha', label: t.tabs.dosha },
-            { id: 'panchanga', label: t.tabs.panchanga },
             { id: 'remedies', label: t.tabs.remedies },
           ].map((tab) => {
             const isActive = activeTab === tab.id;
@@ -662,15 +600,15 @@ export default function KundliReportPage() {
         </div>
       </nav>
 
-      {/* Main Body */}
+      {/* Main Workspace Area */}
       <main className="flex-1 max-w-6xl w-full mx-auto px-6 py-8 space-y-10">
         
-        {/* TAB 0: GURUJI PRIVATE LIVE GOCHAR SECTION (વર્તમાન ગ્રહ ગોચર) */}
+        {/* TAB 0: LIVE GOCHAR OVERLAY */}
         <div className={activeTab === 'gochar' ? 'block' : 'hidden print:hidden'}>
           <div className="space-y-6">
             
-            {/* Header Banner */}
-            <div className="bg-[#FAF6EE] border-2 border-amber-300 rounded-3xl p-6 relative space-y-2 shadow-sm">
+            {/* Gochar Overlay Header Banner (Tagline removed) */}
+            <div className="bg-[#FAF6EE] border-2 border-amber-300 rounded-3xl p-6 relative space-y-4 shadow-xs">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-2.5">
                   <div className="w-10 h-10 rounded-2xl bg-[#7A1C28] text-amber-100 flex items-center justify-center font-bold">
@@ -678,131 +616,204 @@ export default function KundliReportPage() {
                   </div>
                   <div>
                     <h2 className="text-lg sm:text-xl font-extrabold text-[#59141D] tracking-tight">
-                      {t.gurujiGocharTitle}
+                      {t.gocharTitle}
                     </h2>
-                    <p className="text-xs text-stone-600 font-medium">{t.gurujiGocharSub}</p>
+                    <p className="text-xs text-stone-600 font-medium">{t.gocharSub}</p>
                   </div>
                 </div>
-
-                <Badge variant="default" className="bg-[#7A1C28] text-white px-3 py-1 text-xs self-start sm:self-auto shadow-2xs">
-                  <Lock className="w-3 h-3 mr-1" />
-                  {t.gurujiGocharBadge}
-                </Badge>
               </div>
 
-              {currentGochar && (
-                <div className="pt-2 text-[11px] font-mono text-amber-950/80 flex items-center gap-2 border-t border-amber-200/80 mt-3">
-                  <Clock className="w-3.5 h-3.5 text-[#A14E15]" />
-                  <span>Calculated at: {new Date(currentGochar.calculatedAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })} (IST)</span>
+              {/* Overlay Toggle Controls */}
+              <div className="flex items-center justify-between pt-2 border-t border-amber-200/80">
+                <span className="text-xs font-bold text-stone-700">{t.chartModeLabel}</span>
+                <div className="flex items-center gap-1.5 bg-white p-1 rounded-2xl border border-amber-300">
+                  <button
+                    onClick={() => setOverlayMode('natal')}
+                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
+                      overlayMode === 'natal' ? 'bg-[#7A1C28] text-white shadow-xs' : 'text-stone-600 hover:bg-stone-100'
+                    }`}
+                  >
+                    {t.natalOnly}
+                  </button>
+                  <button
+                    onClick={() => setOverlayMode('gochar')}
+                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
+                      overlayMode === 'gochar' ? 'bg-[#7A1C28] text-white shadow-xs' : 'text-stone-600 hover:bg-stone-100'
+                    }`}
+                  >
+                    {t.gocharOnly}
+                  </button>
+                  <button
+                    onClick={() => setOverlayMode('both')}
+                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
+                      overlayMode === 'both' ? 'bg-[#7A1C28] text-white shadow-xs' : 'text-stone-600 hover:bg-stone-100'
+                    }`}
+                  >
+                    {t.natalGocharBoth}
+                  </button>
                 </div>
-              )}
+              </div>
             </div>
 
-            {/* Live Gochar Planets Table */}
-            {currentGochar && (
-              <Card className="p-0 overflow-hidden bg-white border border-stone-200 shadow-xs">
-                <div className="p-4 bg-stone-50/80 border-b border-stone-200/80 flex items-center justify-between">
-                  <h3 className="font-bold text-sm text-stone-900 flex items-center gap-2">
-                    <Compass className="w-4 h-4 text-[#A14E15]" />
-                    <span>વર્તમાન ગોચર ગ્રહ કોષ્ટક (Current Live Transits)</span>
-                  </h3>
-                  <span className="text-xs text-stone-500 font-mono font-medium">Sidereal Lahiri Ayanamsa</span>
-                </div>
+            {/* Chart + Gochar Table Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+              
+              {/* Overlay Chart */}
+              <NorthIndianChart
+                title={overlayMode === 'natal' ? t.chartNames.d1 : overlayMode === 'gochar' ? t.gocharTitle : t.natalGocharBoth}
+                lagnaSign={kundliData.lagnaSignIndex}
+                planetsMap={overlayMode === 'gochar' ? currentGochar?.planets : astro.planets}
+                overlayPlanetsMap={overlayMode === 'both' ? currentGochar?.planets : undefined}
+                lang={lang}
+              />
 
-                <div className="overflow-x-auto">
-                  <table className="w-full text-xs text-left">
-                    <thead className="bg-stone-50 text-stone-500 font-bold border-b border-stone-200/80 text-[11px] uppercase tracking-wider">
-                      <tr>
-                        <th className="p-3.5">Planet</th>
-                        <th className="p-3.5">Transit Status</th>
-                        <th className="p-3.5">Current Rashi</th>
-                        <th className="p-3.5">Exact Degree</th>
-                        <th className="p-3.5">Nakshatra & Pada</th>
-                        <th className="p-3.5 text-center">House from Lagna</th>
-                        <th className="p-3.5 text-center">House from Moon</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-stone-100 font-medium">
-                      {Object.entries(currentGochar.planets).map(([pName, pObj]: [string, any]) => (
-                        <tr key={pName} className="hover:bg-amber-50/20">
-                          <td className="p-3.5 font-bold text-stone-900 text-sm">{getPlanetName(pName)}</td>
-                          <td className="p-3.5">
-                            <Badge variant={pObj.isRetrograde ? 'destructive' : 'emerald'}>
-                              {pObj.isRetrograde ? 'વક્રી (R)' : 'માર્ગી (Direct)'}
-                            </Badge>
-                          </td>
-                          <td className="p-3.5 font-bold text-[#A14E15] text-sm">{getRashiName(pObj.sign)}</td>
-                          <td className="p-3.5 font-mono text-stone-800 text-xs">{formatDegStr(pObj.longitude)}</td>
-                          <td className="p-3.5 text-stone-700 text-xs">
-                            {NAKSHATRA_NAMES[lang][pObj.nakshatraIdx]} (Pada {pObj.pada})
-                          </td>
-                          <td className="p-3.5 text-center font-bold text-stone-900 bg-amber-50/30">
-                            {pObj.transitHouseFromLagna} મો ભાવ
-                          </td>
-                          <td className="p-3.5 text-center font-bold text-[#A14E15] bg-stone-50/50">
-                            {pObj.transitHouseFromMoon} મો ભાવ
-                          </td>
+              {/* Transit vs Natal Planet Details Table */}
+              {currentGochar && (
+                <Card className="p-0 overflow-hidden bg-white border border-stone-200 shadow-xs">
+                  <div className="p-4 bg-stone-50/80 border-b border-stone-200/80">
+                    <h3 className="font-bold text-sm text-stone-900 flex items-center gap-2">
+                      <Compass className="w-4 h-4 text-[#A14E15]" />
+                      <span>{t.transitComparisonTitle}</span>
+                    </h3>
+                  </div>
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-xs text-left">
+                      <thead className="bg-stone-50 text-stone-500 font-bold border-b border-stone-200/80 text-[11px] uppercase tracking-wider">
+                        <tr>
+                          <th className="p-3">{t.colPlanet}</th>
+                          <th className="p-3">{t.colTransitSign}</th>
+                          <th className="p-3 text-center">{t.colHouseLagna}</th>
+                          <th className="p-3 text-center">{t.colHouseMoon}</th>
+                          <th className="p-3">{t.colNatalSign}</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </Card>
-            )}
+                      </thead>
+                      <tbody className="divide-y divide-stone-100 font-medium">
+                        {Object.entries(currentGochar.planets).map(([pName, pObj]: [string, any]) => {
+                          const natalP = astro.planets[pName];
+                          return (
+                            <tr key={pName} className="hover:bg-amber-50/20">
+                              <td className="p-3 font-bold text-stone-900 text-sm">{getPlanetName(pName)}</td>
+                              <td className="p-3 font-bold text-amber-800 text-sm">
+                                {getRashiName(pObj.sign)} {pObj.isRetrograde ? '(વ)' : ''}
+                              </td>
+                              <td className="p-3 text-center font-bold text-stone-900 bg-amber-50/30">
+                                {pObj.transitHouseFromLagna}
+                              </td>
+                              <td className="p-3 text-center font-bold text-[#A14E15] bg-stone-50/50">
+                                {pObj.transitHouseFromMoon}
+                              </td>
+                              <td className="p-3 font-semibold text-stone-600 text-sm">
+                                {natalP ? getRashiName(natalP.sign) : '-'}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </Card>
+              )}
 
+            </div>
           </div>
         </div>
 
-        {/* TAB 1: KUNDLI CHARTS */}
+        {/* TAB 1: 5 CORE CHARTS + SHODASHAVARGA SELECTOR */}
         <div className={activeTab === 'charts' ? 'block' : 'hidden print:block'}>
-          <div className="space-y-6">
-            <div className="hidden print:block">
-              <h2 className="text-xl font-bold text-stone-900 pb-2 border-b border-stone-200">{t.tabs.charts}</h2>
+          <div className="space-y-8">
+            
+            <div className="bg-white p-5 rounded-3xl border border-stone-200 shadow-xs">
+              <h3 className="font-extrabold text-lg text-stone-900">{t.mainChartsHeader}</h3>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+            {/* Grid of 5 Basic Charts */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
+              
+              {/* Chart 1: Birth Lagna Chart (D1) */}
               <NorthIndianChart
-                title={t.chartTitles.lagna}
+                title={t.chartNames.d1}
                 lagnaSign={kundliData.lagnaSignIndex}
                 planetsMap={astro.planets}
                 lang={lang}
               />
 
+              {/* Chart 2: Bhav Chalit Chart */}
               <NorthIndianChart
-                title={t.chartTitles.chandra}
+                title={t.chartNames.chalit}
+                lagnaSign={kundliData.lagnaSignIndex}
+                planetsMap={cuspPlacements || astro.planets}
+                lang={lang}
+              />
+
+              {/* Chart 3: KP Cusp Chart */}
+              <NorthIndianChart
+                title={t.chartNames.cusp}
+                lagnaSign={kundliData.lagnaSignIndex}
+                planetsMap={cuspPlacements || astro.planets}
+                lang={lang}
+              />
+
+              {/* Chart 4: Chandra Rashi Kundli (Moon Chart) */}
+              <NorthIndianChart
+                title={t.chartNames.moon}
                 lagnaSign={astro.planets.Moon.sign}
                 planetsMap={astro.planets}
                 lang={lang}
               />
 
+              {/* Chart 5: Navamsha Chart (D9) */}
               <NorthIndianChart
-                title={t.chartTitles.navamsha}
-                lagnaSign={kundliData.d9Lagna}
-                planetsMap={kundliData.d9Placements}
+                title={t.chartNames.d9}
+                lagnaSign={vargasData?.['D9']?.lagnaSign ?? kundliData.lagnaSignIndex}
+                planetsMap={vargasData?.['D9']?.placements ?? astro.planets}
                 lang={lang}
               />
 
-              <NorthIndianChart
-                title={t.chartTitles.chalit}
-                lagnaSign={kundliData.lagnaSignIndex}
-                planetsMap={kundliData.cuspPlacements}
-                lang={lang}
-              />
             </div>
+
+            {/* Additional Shodashavarga Dropdown Selector */}
+            <Card className="p-6 bg-white border border-stone-200 shadow-xs space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-100 pb-4">
+                <div>
+                  <h4 className="font-bold text-base text-stone-900">{t.vargaSelectLabel}</h4>
+                  <p className="text-xs text-stone-500 font-medium">Select any of the 11 additional Parashari Varga charts.</p>
+                </div>
+
+                <select
+                  value={selectedVarga}
+                  onChange={(e) => setSelectedVarga(e.target.value)}
+                  className="px-4 py-2.5 rounded-2xl bg-stone-100 border border-stone-300 font-bold text-sm text-stone-900 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#A14E15]"
+                >
+                  {['D2', 'D3', 'D4', 'D7', 'D10', 'D12', 'D16', 'D20', 'D24', 'D27', 'D30', 'D40', 'D45', 'D60'].map((code) => (
+                    <option key={code} value={code}>
+                      {VARGA_LABELS[lang][code] || code}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex justify-center pt-2">
+                <NorthIndianChart
+                  title={VARGA_LABELS[lang][selectedVarga] || selectedVarga}
+                  lagnaSign={activeVargaInfo.lagnaSign}
+                  planetsMap={activeVargaInfo.placements}
+                  lang={lang}
+                />
+              </div>
+            </Card>
+
           </div>
         </div>
 
         {/* TAB 2: VIMSHOTTARI DASHA */}
         <div className={activeTab === 'dashas' ? 'block' : 'hidden print:block'}>
           <div className="space-y-6 print:break-before-page">
-            <div className="hidden print:block">
-              <h2 className="text-xl font-bold text-stone-900 pb-2 border-b border-stone-200">{t.tabs.dashas}</h2>
-            </div>
-
+            
             {/* Current Active Dasha Hierarchy */}
             {currentDashaChain && (
               <Card className="space-y-4 bg-white border border-stone-200 shadow-xs p-6">
-                <h3 className="text-base font-bold text-stone-900">{t.dashaTitle}</h3>
+                <h3 className="text-base font-bold text-stone-900">{t.dashaChainTitle}</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 text-xs">
                   <div className="p-3.5 bg-amber-50 rounded-2xl border border-amber-200/80">
                     <span className="text-[10px] font-bold text-stone-500 uppercase block">MahaDasha</span>
@@ -852,7 +863,7 @@ export default function KundliReportPage() {
               <div className="flex items-center justify-between border-b border-stone-100 pb-3">
                 <h3 className="text-base font-bold text-stone-900">{t.dashaTimelineTitle}</h3>
                 <Badge variant="secondary" className="font-mono text-xs">
-                  Bhogya: {kundliData.dasha.bhogyaDasha.formatted}
+                  {t.bhogyaText} {kundliData.dasha.bhogyaDasha.formatted}
                 </Badge>
               </div>
 
@@ -879,23 +890,28 @@ export default function KundliReportPage() {
                             <span className="font-extrabold text-sm block">
                               {getPlanetName(md.lord)} MahaDasha
                             </span>
-                            <span className="text-xs text-stone-500 font-mono">
-                              {formatDateShort(md.startDate)} → {formatDateShort(md.endDate)}
-                            </span>
+                            {idx === 0 ? (
+                              <div className="space-y-0.5 mt-0.5">
+                                <span className="text-xs text-stone-700 font-bold block">
+                                  Birth Entry: {formatDateShort(md.startDate)} → End: {formatDateShort(md.endDate)}
+                                </span>
+                                {md.theoreticalStartDate && (
+                                  <span className="text-[10px] text-stone-500 font-mono block">
+                                    Full Cycle: {formatDateShort(md.theoreticalStartDate)} → {formatDateShort(md.endDate)} (7 Years Total)
+                                  </span>
+                                )}
+                              </div>
+                            ) : (
+                              <span className="text-xs text-stone-500 font-mono">
+                                {formatDateShort(md.startDate)} → {formatDateShort(md.endDate)}
+                              </span>
+                            )}
                           </div>
                         </div>
 
                         <div className="flex items-center gap-2">
-                          {isCurrent && (
-                            <Badge variant="default" className="bg-[#7A1C28] text-white text-[10px]">
-                              Active Now
-                            </Badge>
-                          )}
-                          {isExpanded ? (
-                            <ChevronUp className="w-4 h-4 text-stone-400" />
-                          ) : (
-                            <ChevronDown className="w-4 h-4 text-stone-400" />
-                          )}
+                          {isCurrent && <Badge variant="default" className="bg-[#7A1C28] text-white text-[10px]">{t.activeNow}</Badge>}
+                          {isExpanded ? <ChevronUp className="w-4 h-4 text-stone-400" /> : <ChevronDown className="w-4 h-4 text-stone-400" />}
                         </div>
                       </div>
 
@@ -919,7 +935,7 @@ export default function KundliReportPage() {
                                 >
                                   <div className="flex justify-between items-center">
                                     <span>{getPlanetName(ad.lord)}</span>
-                                    {isAdActive && <span className="text-[9px] bg-[#7A1C28] text-white px-1.5 py-0.5 rounded-md">Active</span>}
+                                    {isAdActive && <span className="text-[9px] bg-[#7A1C28] text-white px-1.5 py-0.5 rounded-md">{t.activeNow}</span>}
                                   </div>
                                   <span className="text-[10px] text-stone-500 font-mono block mt-1">
                                     {formatDateShort(ad.startDate)} - {formatDateShort(ad.endDate)}
@@ -938,44 +954,53 @@ export default function KundliReportPage() {
           </div>
         </div>
 
-        {/* TAB 3: PLANETARY POSITIONS */}
-        <div className={activeTab === 'planets' ? 'block' : 'hidden print:block'}>
-          <div className="space-y-6 print:break-before-page">
-            <div className="hidden print:block">
-              <h2 className="text-xl font-bold text-stone-900 pb-2 border-b border-stone-200">{t.tabs.planets}</h2>
-            </div>
-
+        {/* TAB 3: SADE SATI & NANI PANOTI TIMELINE */}
+        <div className={activeTab === 'sadesati' ? 'block' : 'hidden print:block'}>
+          <div className="space-y-6">
             <Card className="p-0 overflow-hidden bg-white border border-stone-200 shadow-xs">
-              <div className="p-4 bg-stone-50/60 border-b border-stone-200/60">
-                <h3 className="font-bold text-sm text-stone-900">
-                  {t.planetTable.title}
-                </h3>
+              <div className="p-5 bg-stone-50/80 border-b border-stone-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <h3 className="font-bold text-base text-stone-900 flex items-center gap-2">
+                    <ShieldCheck className="w-5 h-5 text-[#A14E15]" />
+                    <span>{t.sadesatiTitle}</span>
+                  </h3>
+                  <p className="text-xs text-stone-500 font-medium mt-0.5">{t.sadesatiSub}</p>
+                </div>
               </div>
+
               <div className="overflow-x-auto">
                 <table className="w-full text-xs text-left">
-                  <thead className="bg-stone-50 text-stone-500 font-bold border-b border-stone-200/80">
+                  <thead className="bg-stone-50 text-stone-500 font-bold border-b border-stone-200/80 text-[11px] uppercase tracking-wider">
                     <tr>
-                      <th className="p-4">{t.planetTable.colPlanet}</th>
-                      <th className="p-4">{t.planetTable.colStatus}</th>
-                      <th className="p-4">{t.planetTable.colSign}</th>
-                      <th className="p-4">{t.planetTable.colDeg}</th>
-                      <th className="p-4">{t.planetTable.colNakshatra}</th>
+                      <th className="p-4">{t.colType}</th>
+                      <th className="p-4">{t.colSaturnSign}</th>
+                      <th className="p-4">{t.colDates}</th>
+                      <th className="p-4 text-center">{t.colStatus}</th>
+                      <th className="p-4 text-right">{t.colPaya}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-stone-100 font-medium">
-                    {Object.entries(astro.planets).map(([pName, pObj]: [string, any]) => (
-                      <tr key={pName} className="hover:bg-amber-50/20">
-                        <td className="p-4 font-bold text-stone-900 text-sm">{getPlanetName(pName)}</td>
-                        <td className="p-4">
-                          <Badge variant={pObj.isRetrograde ? 'destructive' : 'emerald'}>
-                            {pObj.isRetrograde ? t.planetTable.retrograde : t.planetTable.direct}
-                          </Badge>
-                        </td>
-                        <td className="p-4 font-semibold text-[#A14E15] text-sm">{getRashiName(pObj.sign)}</td>
-                        <td className="p-4 font-mono text-stone-800 text-sm">{formatDegStr(pObj.longitude)}</td>
-                        <td className="p-4 text-stone-700 text-sm">{getNakshatraInfo(pObj.longitude)}</td>
-                      </tr>
-                    ))}
+                    {transits && transits.map((item: any, idx: number) => {
+                      const isActive = item.status === 'Active';
+                      const statusLabel = t.statusMap[item.status] || item.status;
+                      const payaLabel = t.payaMap[item.paya] || item.paya;
+                      return (
+                        <tr key={idx} className={isActive ? 'bg-amber-100/60 font-bold' : 'hover:bg-stone-50'}>
+                          <td className="p-4 font-bold text-[#7A1C28]">
+                            {item.type}
+                            {item.sadesatiPhase && <span className="text-[10px] text-stone-500 block font-normal">Phase {item.sadesatiPhase}</span>}
+                          </td>
+                          <td className="p-4 font-bold text-stone-900">{getRashiName(item.saturnSign)}</td>
+                          <td className="p-4 font-mono text-stone-700 text-xs">{formatDateShort(item.startDate)} → {formatDateShort(item.endDate)}</td>
+                          <td className="p-4 text-center">
+                            <Badge variant={isActive ? 'default' : item.status === 'Completed' ? 'secondary' : 'outline'}>
+                              {statusLabel}
+                            </Badge>
+                          </td>
+                          <td className="p-4 text-right font-bold text-stone-800">{payaLabel}</td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -983,88 +1008,44 @@ export default function KundliReportPage() {
           </div>
         </div>
 
-        {/* TAB 4: SADE SATI & NANI PANOTI CHRONOLOGICAL TIMELINE */}
-        <div className={activeTab === 'dosha' ? 'block' : 'hidden print:block'}>
-          <div className="space-y-6 print:break-before-page">
-            <div className="hidden print:block">
-              <h2 className="text-xl font-bold text-stone-900 pb-2 border-b border-stone-200">{t.tabs.dosha}</h2>
-            </div>
-
-            {/* Manglik Dosha Card */}
-            <Card className="space-y-3 p-6 bg-white border border-stone-200 shadow-xs">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <AlertTriangle className={`w-5 h-5 ${isManglik ? 'text-amber-600' : 'text-emerald-600'}`} />
-                  <h3 className="font-bold text-stone-900 text-base">{t.dosha.manglikTitle}</h3>
-                </div>
-                <Badge variant={isManglik ? 'default' : 'emerald'}>
-                  {isManglik ? t.dosha.manglikPresent : t.dosha.manglikAbsent}
-                </Badge>
-              </div>
-              <p className="text-xs text-stone-600 leading-relaxed font-medium">
-                {isManglik
-                  ? t.dosha.manglikPresentDesc.replace('{house}', marsHouse.toString())
-                  : t.dosha.manglikAbsentDesc}
-              </p>
-            </Card>
-
-            {/* Sade Sati & Nani Panoti Chronological Timeline */}
+        {/* TAB 4: PLANETARY POSITIONS */}
+        <div className={activeTab === 'planets' ? 'block' : 'hidden print:block'}>
+          <div className="space-y-6">
             <Card className="p-0 overflow-hidden bg-white border border-stone-200 shadow-xs">
-              <div className="p-4 bg-stone-50/80 border-b border-stone-200/80 flex items-center justify-between">
+              <div className="p-4 bg-stone-50/80 border-b border-stone-200/80">
                 <h3 className="font-bold text-sm text-stone-900 flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-[#A14E15]" />
-                  <span>{t.dosha.sadeSatiTitle} ({getRashiName(astro.planets.Moon.sign)})</span>
+                  <Award className="w-4 h-4 text-[#A14E15]" />
+                  <span>{t.planetPositionsTitle}</span>
                 </h3>
-                <Badge variant="secondary">{t.dosha.sadeSatiBadge}</Badge>
               </div>
 
               <div className="overflow-x-auto">
                 <table className="w-full text-xs text-left">
                   <thead className="bg-stone-50 text-stone-500 font-bold border-b border-stone-200/80 text-[11px] uppercase tracking-wider">
                     <tr>
-                      <th className="p-4">{t.dosha.colType}</th>
-                      <th className="p-4">{t.dosha.colSign}</th>
-                      <th className="p-4">{t.dosha.colDates}</th>
-                      <th className="p-4 text-center">{t.dosha.colStatus}</th>
-                      <th className="p-4 text-right">{t.dosha.colPaya}</th>
+                      <th className="p-4">{t.colPlanet}</th>
+                      <th className="p-4">{t.colTransitSign}</th>
+                      <th className="p-4">{t.colDegree}</th>
+                      <th className="p-4">{t.colNakshatraPada}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-stone-100 font-medium">
-                    {transits && transits.map((item: any, idx: number) => {
-                      const isActive = item.status === 'Active';
-                      const isSadeSati = item.type === 'સાડાસાતી';
-
+                    {astro && astro.planets && Object.entries(astro.planets).map(([pName, pObj]: [string, any]) => {
+                      const nakIdx = Math.floor((pObj.longitude % 360) / (360 / 27));
+                      const pada = Math.floor(((pObj.longitude % 360) % (360 / 27)) / (360 / 108)) + 1;
                       return (
-                        <tr key={idx} className={isActive ? 'bg-amber-100/60 font-bold' : 'hover:bg-stone-50'}>
-                          <td className="p-4 font-bold">
-                            <span className={isSadeSati ? 'text-[#7A1C28]' : 'text-amber-900'}>
-                              {item.type}
-                            </span>
-                            {item.sadesatiPhase && (
-                              <span className="text-[10px] text-stone-500 block font-normal">
-                                Phase {item.sadesatiPhase} ({item.sadesatiPhase === 1 ? '12th House' : item.sadesatiPhase === 2 ? '1st House (Janma)' : '2nd House'})
-                              </span>
-                            )}
+                        <tr key={pName} className="hover:bg-amber-50/20">
+                          <td className="p-4 font-bold text-stone-900 text-sm">
+                            {getPlanetName(pName)} {pObj.isRetrograde ? '(વ)' : ''}
                           </td>
-                          <td className="p-4 font-bold text-stone-900">{getRashiName(item.saturnSign)}</td>
-                          <td className="p-4 font-mono text-stone-700 text-xs">
-                            {formatDateShort(item.startDate)} → {formatDateShort(item.endDate)}
+                          <td className="p-4 font-bold text-[#A14E15] text-sm">
+                            {getRashiName(pObj.sign)}
                           </td>
-                          <td className="p-4 text-center">
-                            <Badge
-                              variant={
-                                item.status === 'Active'
-                                  ? 'default'
-                                  : item.status === 'Completed'
-                                  ? 'secondary'
-                                  : 'outline'
-                              }
-                            >
-                              {item.status === 'Active' ? 'ACTIVE NOW' : item.status === 'Completed' ? 'Completed' : 'Upcoming'}
-                            </Badge>
+                          <td className="p-4 font-mono text-stone-700">
+                            {formatDegStr(pObj.longitude)}
                           </td>
-                          <td className="p-4 text-right font-bold text-stone-800">
-                            {item.paya} (Paya)
+                          <td className="p-4 text-stone-800 font-semibold">
+                            {NAKSHATRA_NAMES[lang][nakIdx]} (Pada {pada})
                           </td>
                         </tr>
                       );
@@ -1073,82 +1054,69 @@ export default function KundliReportPage() {
                 </table>
               </div>
             </Card>
-
           </div>
         </div>
 
-        {/* TAB 5: PANCHANGA & HOUSE CUSPS */}
-        <div className={activeTab === 'panchanga' ? 'block' : 'hidden print:block'}>
-          <div className="space-y-6 print:break-before-page">
-            <div className="hidden print:block">
-              <h2 className="text-xl font-bold text-stone-900 pb-2 border-b border-stone-200">{t.tabs.panchanga}</h2>
-            </div>
-
+        {/* TAB 5: PANCHANG & REMEDIES */}
+        <div className={activeTab === 'remedies' ? 'block' : 'hidden print:block'}>
+          <div className="space-y-6">
+            
+            {/* Birth Panchanga */}
             <Card className="space-y-4 p-6 bg-white border border-stone-200 shadow-xs">
-              <h3 className="text-base font-bold text-stone-900">{t.panchanga.title}</h3>
+              <h3 className="text-base font-bold text-stone-900">{t.panchangTitle}</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                 <div className="p-4 bg-stone-50 rounded-2xl border border-stone-200/60 space-y-1">
-                  <span className="text-xs text-stone-500 font-semibold block">{t.panchanga.tithi}</span>
+                  <span className="text-xs text-stone-500 font-semibold block">{t.tithi}</span>
                   <span className="font-bold text-stone-900 text-base">{kundliData.panchanga.tithi.formatted || kundliData.panchanga.tithi.name}</span>
                 </div>
 
                 <div className="p-4 bg-stone-50 rounded-2xl border border-stone-200/60 space-y-1">
-                  <span className="text-xs text-stone-500 font-semibold block">{t.panchanga.nakshatra}</span>
+                  <span className="text-xs text-stone-500 font-semibold block">{t.nakshatra}</span>
                   <span className="font-bold text-stone-900 text-base">
                     {kundliData.panchanga.nakshatra.formatted || kundliData.panchanga.nakshatra.name} (Pada {Math.floor(((astro.planets.Moon.longitude % 360) % 13.333) / 3.333) + 1})
                   </span>
                 </div>
 
                 <div className="p-4 bg-stone-50 rounded-2xl border border-stone-200/60 space-y-1">
-                  <span className="text-xs text-stone-500 font-semibold block">{t.panchanga.yoga}</span>
+                  <span className="text-xs text-stone-500 font-semibold block">{t.yoga}</span>
                   <span className="font-bold text-stone-900 text-base">{kundliData.panchanga.yoga.formatted || kundliData.panchanga.yoga.name}</span>
                 </div>
 
                 <div className="p-4 bg-stone-50 rounded-2xl border border-stone-200/60 space-y-1">
-                  <span className="text-xs text-stone-500 font-semibold block">{t.panchanga.karana}</span>
+                  <span className="text-xs text-stone-500 font-semibold block">{t.karana}</span>
                   <span className="font-bold text-stone-900 text-base">{kundliData.panchanga.karana.formatted || kundliData.panchanga.karana.name}</span>
                 </div>
               </div>
             </Card>
-          </div>
-        </div>
 
-        {/* TAB 6: REMEDIES & STRENGTHS */}
-        <div className={activeTab === 'remedies' ? 'block' : 'hidden print:block'}>
-          <div className="space-y-6 print:break-before-page">
-            <div className="hidden print:block">
-              <h2 className="text-xl font-bold text-stone-900 pb-2 border-b border-stone-200">{t.tabs.remedies}</h2>
-            </div>
-
+            {/* Remedies & Numerology */}
             <Card className="p-0 overflow-hidden bg-white border border-stone-200 shadow-xs">
               <div className="p-4 bg-stone-50/60 border-b border-stone-200/60">
-                <h3 className="font-bold text-sm text-stone-900">
-                  {t.remedies.title}
-                </h3>
+                <h3 className="font-bold text-sm text-stone-900">{t.remediesTitle}</h3>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-xs text-left">
                   <thead className="bg-stone-50 text-stone-500 font-bold border-b border-stone-200/80">
                     <tr>
-                      <th className="p-4">{t.remedies.colParam}</th>
-                      <th className="p-4 text-right">{t.remedies.colRec}</th>
+                      <th className="p-4">Astrological Parameter</th>
+                      <th className="p-4 text-right">Recommendation</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-stone-100 font-medium">
                     {[
-                      { k: t.remedies.mulank, v: kundliData.shubha.mulank },
-                      { k: t.remedies.bhagyank, v: kundliData.shubha.bhagyank },
-                      { k: t.remedies.friendlyNumbers, v: kundliData.shubha.friendlyNumbers },
-                      { k: t.remedies.enemyNumbers, v: kundliData.shubha.enemyNumbers },
-                      { k: t.remedies.auspiciousYears, v: kundliData.shubha.auspiciousYears },
-                      { k: t.remedies.auspiciousDays, v: kundliData.shubha.auspiciousDays },
-                      { k: t.remedies.auspiciousGemstone, v: kundliData.shubha.gemstone },
-                      { k: t.remedies.subGemstone, v: kundliData.shubha.subGemstone },
-                      { k: t.remedies.fortuneGemstone, v: kundliData.shubha.fortuneGemstone },
-                      { k: t.remedies.auspiciousDeity, v: kundliData.shubha.deity },
-                      { k: t.remedies.auspiciousMetal, v: kundliData.shubha.metal },
-                      { k: t.remedies.auspiciousColor, v: kundliData.shubha.color },
-                      { k: t.remedies.auspiciousDirection, v: kundliData.shubha.direction },
+                      { k: t.mulank, v: kundliData.shubha.mulank },
+                      { k: t.bhagyank, v: kundliData.shubha.bhagyank },
+                      { k: t.friendlyNumbers, v: kundliData.shubha.friendlyNumbers },
+                      { k: t.enemyNumbers, v: kundliData.shubha.enemyNumbers },
+                      { k: t.auspiciousYears, v: kundliData.shubha.auspiciousYears },
+                      { k: t.auspiciousDays, v: kundliData.shubha.auspiciousDays },
+                      { k: t.auspiciousGemstone, v: kundliData.shubha.gemstone },
+                      { k: t.subGemstone, v: kundliData.shubha.subGemstone },
+                      { k: t.fortuneGemstone, v: kundliData.shubha.fortuneGemstone },
+                      { k: t.auspiciousDeity, v: kundliData.shubha.deity },
+                      { k: t.auspiciousMetal, v: kundliData.shubha.metal },
+                      { k: t.auspiciousColor, v: kundliData.shubha.color },
+                      { k: t.auspiciousDirection, v: kundliData.shubha.direction },
                     ].map((item, idx) => (
                       <tr key={idx} className="hover:bg-amber-50/20">
                         <td className="p-4 font-semibold text-stone-600">{item.k}</td>

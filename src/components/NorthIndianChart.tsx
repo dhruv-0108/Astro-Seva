@@ -7,12 +7,14 @@ export type Language = 'EN' | 'GU' | 'HI';
 interface PlanetPlacement {
   sign: number; // 0 to 11
   isRetrograde?: boolean;
+  isTransit?: boolean;
 }
 
 interface NorthIndianChartProps {
   title: string;
   lagnaSign: number; // 0 to 11 (Aries = 0, Pisces = 11)
   planetsMap: Record<string, PlanetPlacement>;
+  overlayPlanetsMap?: Record<string, PlanetPlacement>;
   lang?: Language;
   className?: string;
 }
@@ -57,6 +59,7 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
   title,
   lagnaSign,
   planetsMap,
+  overlayPlanetsMap,
   lang = 'GU',
   className = '',
 }) => {
@@ -69,7 +72,7 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
   const shortNames = PLANET_SHORT_NAMES[lang] || PLANET_SHORT_NAMES.GU;
 
   // Map planets to house numbers (1 to 12)
-  const housePlanets: Record<number, { name: string; isRetro?: boolean }[]> = {};
+  const housePlanets: Record<number, { name: string; isRetro?: boolean; isTransit?: boolean }[]> = {};
   for (let h = 1; h <= 12; h++) housePlanets[h] = [];
 
   for (const [name, p] of Object.entries(planetsMap)) {
@@ -77,7 +80,17 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
     const pSignIndex = p.sign;
     const house = ((pSignIndex - lagnaSign + 12) % 12) + 1;
     const displayName = shortNames[name] || name;
-    housePlanets[house].push({ name: displayName, isRetro: p.isRetrograde });
+    housePlanets[house].push({ name: displayName, isRetro: p.isRetrograde, isTransit: false });
+  }
+
+  if (overlayPlanetsMap) {
+    for (const [name, p] of Object.entries(overlayPlanetsMap)) {
+      if (!p) continue;
+      const pSignIndex = p.sign;
+      const house = ((pSignIndex - lagnaSign + 12) % 12) + 1;
+      const displayName = shortNames[name] || name;
+      housePlanets[house].push({ name: `${displayName}(T)`, isRetro: p.isRetrograde, isTransit: true });
+    }
   }
 
   // Centroids & Sign Badge positions in 360x360 SVG box
@@ -100,12 +113,12 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
   };
 
   // Render plain planet text in a single clean vertical column inside house boundaries
-  const renderHousePlanets = (houseNum: number, planets: { name: string; isRetro?: boolean }[]) => {
+  const renderHousePlanets = (houseNum: number, planets: { name: string; isRetro?: boolean; isTransit?: boolean }[]) => {
     if (!planets || planets.length === 0) return null;
     const cfg = houseConfig[houseNum];
     const count = planets.length;
-    const spacing = count > 3 ? 13 : 15;
-    const fontSize = count > 3 ? 10 : 11;
+    const spacing = count > 3 ? 12 : 14;
+    const fontSize = count > 3 ? 9 : 10;
 
     return (
       <g>
@@ -120,7 +133,7 @@ export const NorthIndianChart: React.FC<NorthIndianChartProps> = ({
               dominantBaseline="central"
               fontSize={fontSize}
               fontWeight="700"
-              fill={p.isRetro ? '#B91C1C' : '#1F1E1B'}
+              fill={p.isTransit ? '#D97706' : p.isRetro ? '#B91C1C' : '#1F1E1B'}
             >
               {p.name}{p.isRetro ? '(વ)' : ''}
             </text>
