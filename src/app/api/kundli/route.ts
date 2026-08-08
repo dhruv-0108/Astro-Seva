@@ -6,6 +6,7 @@ import { calculateVimshottari, getCurrentDashaChain } from '../../../lib/astrolo
 import { calculateSaturnTransits } from '../../../lib/astrology/transits';
 import { calculateShubhashubh } from '../../../lib/astrology/shubhashubh';
 import { calculateVargaSign } from '../../../lib/astrology/vargas';
+import { calculateBphsPlanetaryStrengths } from '../../../lib/astrology/shadbala';
 import { getSwisseph } from '../../../lib/astrology/swisseph';
 
 export const dynamic = 'force-dynamic';
@@ -53,6 +54,7 @@ export async function GET(request: Request) {
     const transits = calculateSaturnTransits(astro.jd, astro.planets.Moon.sign, tzOffset, new Date());
     const shubha = calculateShubhashubh(birthDateObj, lagnaSignIndex);
     const currentGochar = calculateCurrentGochar(astro.ascendant, astro.planets.Moon.sign, new Date(), tzOffset);
+    const bphsStrengths = calculateBphsPlanetaryStrengths(astro.planets, astro.ascendant);
 
     // Navamsha (D9) placements
     const d9Placements: Record<string, { sign: number; isRetrograde: boolean }> = {};
@@ -94,6 +96,7 @@ export async function GET(request: Request) {
       d9Placements,
       cuspPlacements,
       currentGochar,
+      bphsStrengths,
     });
   } catch (error: any) {
 

@@ -125,6 +125,21 @@ const UI_TEXTS: Record<Language, {
   colNakshatraPada: string;
   panchangTitle: string;
   remediesTitle: string;
+  bphsTitle: string;
+  bphsSub: string;
+  strongPlanetsTitle: string;
+  weakPlanetsTitle: string;
+  noStrongPlanets: string;
+  noWeakPlanets: string;
+  colShadbalaRupas: string;
+  colRequiredRupas: string;
+  colRatio: string;
+  colSthana: string;
+  colDig: string;
+  colKala: string;
+  colCheshta: string;
+  colNaisargika: string;
+  colDrik: string;
   tithi: string;
   yoga: string;
   karana: string;
@@ -198,6 +213,21 @@ const UI_TEXTS: Record<Language, {
     colNakshatraPada: 'Nakshatra & Pada',
     panchangTitle: 'Birth Panchanga Details',
     remediesTitle: 'Auspicious Guide & Astrological Remedies Table',
+    bphsTitle: 'Parashari Strong & Weak Planets Analysis (BPHS Shadbala)',
+    bphsSub: 'Strictly computed per Brihat Parasara Hora Shastra (Ch. 27). Combines 6-fold Shadbala potencies in Rupas, Exaltation/Debilitation & Combustion status.',
+    strongPlanetsTitle: 'Strong Planets (Balavan Grahas)',
+    weakPlanetsTitle: 'Weak Planets (Nirbala Grahas)',
+    noStrongPlanets: 'No planets meet BPHS strong threshold.',
+    noWeakPlanets: 'No weak planets detected.',
+    colShadbalaRupas: 'Shadbala (Rupas)',
+    colRequiredRupas: 'Required (Rupas)',
+    colRatio: 'SMR Ratio',
+    colSthana: 'Sthana',
+    colDig: 'Dig',
+    colKala: 'Kala',
+    colCheshta: 'Cheshta',
+    colNaisargika: 'Naisargika',
+    colDrik: 'Drik',
     tithi: 'Tithi',
     yoga: 'Yoga',
     karana: 'Karana',
@@ -219,7 +249,7 @@ const UI_TEXTS: Record<Language, {
       charts: '1. Kundli Charts',
       dashas: '2. Vimshottari Dasha',
       sadesati: '3. Sade Sati & Panoti',
-      planets: '4. Planetary Positions',
+      planets: '4. Planets & BPHS Strengths',
       remedies: '5. Panchang & Remedies',
     },
     chartNames: {
@@ -271,6 +301,21 @@ const UI_TEXTS: Record<Language, {
     colNakshatraPada: 'નક્ષત્ર અને પદ',
     panchangTitle: 'જન્મ પંચાંગ વિગત',
     remediesTitle: 'અનુકૂળતા માર્ગદર્શિકા અને શુભ ઉપાય કોષ્ટક',
+    bphsTitle: 'પરાશરી બળવાન અને નિર્બળ ગ્રહો વિશ્લેષણ (બૃહત્ પરાશર હોરા શાસ્ત્ર)',
+    bphsSub: 'બૃહત્ પરાશર હોરા શાસ્ત્ર (અધ્યાય ૨૭) મુજબ ષડ્બળ (Virupas/Rupas), ઉચ્ચ/નીચ સ્થાન અને અસ્ત સ્થિતિનું ગણિત.',
+    strongPlanetsTitle: 'બળવાન ગ્રહો (Balavan Grahas)',
+    weakPlanetsTitle: 'નિર્બળ ગ્રહો (Nirbala Grahas)',
+    noStrongPlanets: 'કોઈપણ ગ્રહ પરાશરી બળવાન માનદંડ સુધી પહોંચતો નથી.',
+    noWeakPlanets: 'કોઈપણ નિર્બળ ગ્રહ નથી.',
+    colShadbalaRupas: 'ષડ્બળ (રૂપઃ)',
+    colRequiredRupas: 'જરૂરી (રૂપઃ)',
+    colRatio: 'SMR ગુણોત્તર',
+    colSthana: 'સ્થાન',
+    colDig: 'દિગ્',
+    colKala: 'કાલ',
+    colCheshta: 'ચેષ્ટા',
+    colNaisargika: 'નૈસર્ગિક',
+    colDrik: 'દૃગ્',
     tithi: 'તિથિ',
     yoga: 'યોગ',
     karana: 'કરણ',
@@ -292,7 +337,7 @@ const UI_TEXTS: Record<Language, {
       charts: '૧. કુંડળી ચાર્ટ્સ (મુખ્ય ૫ + વર્ગ)',
       dashas: '૨. વિંશોત્તરી દશા',
       sadesati: '૩. સાડાસાતી અને પનોતી',
-      planets: '૪. ગ્રહ સ્થિતિ અને અંશ',
+      planets: '૪. ગ્રહ સ્થિતિ અને પરાશરી બળ વિશ્લેષણ',
       remedies: '૫. પંચાંગ અને ઉપાય',
     },
     chartNames: {
@@ -344,6 +389,21 @@ const UI_TEXTS: Record<Language, {
     colNakshatraPada: 'नक्षत्र एवं पद',
     panchangTitle: 'जन्म पंचांग विवरण',
     remediesTitle: 'अनुकूलता मार्गदर्शिका एवं शुभ उपाय तालिका',
+    bphsTitle: 'पराशरी बलवान एवं दुर्बल ग्रह विश्लेषण (बृहत् पराशर होरा शास्त्र)',
+    bphsSub: 'बृहत् पराशर होरा शास्त्र (अध्याय 27) अनुसार षड्बल (Virupas/Rupas), उच्च/नीच एवं अस्त स्थिति का गणित।',
+    strongPlanetsTitle: 'बलवान ग्रह (Balavan Grahas)',
+    weakPlanetsTitle: 'दुर्बल ग्रह (Nirbala Grahas)',
+    noStrongPlanets: 'कोई भी ग्रह पराशरी बलवान मानक तक नहीं पहुंचता।',
+    noWeakPlanets: 'कोई दुर्बल ग्रह नहीं है।',
+    colShadbalaRupas: 'षड्बल (रूपः)',
+    colRequiredRupas: 'आवश्यक (रूपः)',
+    colRatio: 'SMR अनुपात',
+    colSthana: 'स्थान',
+    colDig: 'दिग्',
+    colKala: 'काल',
+    colCheshta: 'चेष्टा',
+    colNaisargika: 'नैसर्गिक',
+    colDrik: 'दृग्',
     tithi: 'तिथि',
     yoga: 'योग',
     karana: 'करण',
@@ -1020,9 +1080,158 @@ export default function KundliReportPage() {
           </div>
         </div>
 
-        {/* TAB 4: PLANETARY POSITIONS */}
+        {/* TAB 4: PLANETARY POSITIONS & BPHS STRENGTHS */}
         <div className={activeTab === 'planets' ? 'block' : 'hidden print:block'}>
           <div className="space-y-6">
+            
+            {/* UNIFIED BPHS PLANETARY STRENGTHS SECTION (STRONG & WEAK PLANETS TOGETHER) */}
+            {kundliData.bphsStrengths && (
+              <Card className="p-5 sm:p-6 bg-white border border-stone-200 shadow-xs space-y-6">
+                <div className="border-b border-stone-100 pb-4">
+                  <h3 className="font-extrabold text-base sm:text-lg text-stone-900 flex items-center gap-2">
+                    <Award className="w-5 h-5 text-[#A14E15]" />
+                    <span>{t.bphsTitle}</span>
+                  </h3>
+                  <p className="text-xs text-stone-500 font-medium mt-1">{t.bphsSub}</p>
+                </div>
+
+                {/* Unified Strong & Weak Section Under One Container */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  
+                  {/* Strong Planets (Balavan Grahas) */}
+                  <div className="p-4 bg-emerald-50/60 border border-emerald-200/80 rounded-2xl space-y-3">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-extrabold text-sm text-emerald-900 flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                        <span>{t.strongPlanetsTitle}</span>
+                      </h4>
+                      <Badge className="bg-emerald-700 text-white text-[10px]">
+                        {kundliData.bphsStrengths.strongPlanets.length} {lang === 'EN' ? 'Planets' : 'ગ્રહો'}
+                      </Badge>
+                    </div>
+
+                    {kundliData.bphsStrengths.strongPlanets.length === 0 ? (
+                      <p className="text-xs text-stone-500 italic">{t.noStrongPlanets}</p>
+                    ) : (
+                      <div className="space-y-2.5">
+                        {kundliData.bphsStrengths.strongPlanets.map((sp: any) => {
+                          const pName = getPlanetName(sp.planet);
+                          const signName = lang === 'EN' ? sp.signNameEN : lang === 'HI' ? sp.signNameHI : sp.signNameGU;
+                          const dignityStr = lang === 'EN' ? sp.dignityFormattedEN : lang === 'HI' ? sp.dignityFormattedHI : sp.dignityFormattedGU;
+                          const reasonStr = lang === 'EN' ? sp.bphsReasonEN : lang === 'HI' ? sp.bphsReasonHI : sp.bphsReasonGU;
+                          return (
+                            <div key={sp.planet} className="p-3 bg-white rounded-xl border border-emerald-200/70 text-xs space-y-1 shadow-2xs">
+                              <div className="flex items-center justify-between">
+                                <span className="font-extrabold text-stone-900 text-sm">{pName}</span>
+                                <span className="font-mono font-bold text-emerald-700">
+                                  {sp.totalRupas} Rupas ({Math.round(sp.shadbalaRatio * 100)}%)
+                                </span>
+                              </div>
+                              <div className="text-[11px] text-stone-600 font-medium">
+                                <span>{signName} (House {sp.houseFromLagna})</span> • <span className="font-bold text-emerald-800">{dignityStr}</span>
+                              </div>
+                              <p className="text-[10px] text-stone-500 leading-normal">{reasonStr}</p>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Weak Planets (Nirbala Grahas) */}
+                  <div className="p-4 bg-rose-50/60 border border-rose-200/80 rounded-2xl space-y-3">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-extrabold text-sm text-rose-900 flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
+                        <span>{t.weakPlanetsTitle}</span>
+                      </h4>
+                      <Badge variant="destructive" className="bg-rose-700 text-white text-[10px]">
+                        {kundliData.bphsStrengths.weakPlanets.length} {lang === 'EN' ? 'Planets' : 'ગ્રહો'}
+                      </Badge>
+                    </div>
+
+                    {kundliData.bphsStrengths.weakPlanets.length === 0 ? (
+                      <p className="text-xs text-stone-500 italic">{t.noWeakPlanets}</p>
+                    ) : (
+                      <div className="space-y-2.5">
+                        {kundliData.bphsStrengths.weakPlanets.map((wp: any) => {
+                          const pName = getPlanetName(wp.planet);
+                          const signName = lang === 'EN' ? wp.signNameEN : lang === 'HI' ? wp.signNameHI : wp.signNameGU;
+                          const dignityStr = lang === 'EN' ? wp.dignityFormattedEN : lang === 'HI' ? wp.dignityFormattedHI : wp.dignityFormattedGU;
+                          const reasonStr = lang === 'EN' ? wp.bphsReasonEN : lang === 'HI' ? wp.bphsReasonHI : wp.bphsReasonGU;
+                          return (
+                            <div key={wp.planet} className="p-3 bg-white rounded-xl border border-rose-200/70 text-xs space-y-1 shadow-2xs">
+                              <div className="flex items-center justify-between">
+                                <span className="font-extrabold text-stone-900 text-sm">{pName}</span>
+                                <span className="font-mono font-bold text-rose-700">
+                                  {wp.totalRupas} Rupas ({Math.round(wp.shadbalaRatio * 100)}%)
+                                </span>
+                              </div>
+                              <div className="text-[11px] text-stone-600 font-medium">
+                                <span>{signName} (House {wp.houseFromLagna})</span> • <span className="font-bold text-rose-800">{dignityStr}</span>
+                              </div>
+                              <p className="text-[10px] text-stone-500 leading-normal">{reasonStr}</p>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+
+                </div>
+
+                {/* 6-Fold Parashari Shadbala Table */}
+                <div className="pt-4 border-t border-stone-100">
+                  <h4 className="font-bold text-xs text-stone-700 uppercase tracking-wider mb-3">
+                    BPHS 6-Fold Shadbala Breakdown Table (in Rupas)
+                  </h4>
+                  <div className="overflow-x-auto w-full scrollbar-thin">
+                    <table className="w-full min-w-[600px] text-xs text-left whitespace-nowrap">
+                      <thead className="bg-stone-50 text-stone-500 font-bold border-b border-stone-200/80 text-[11px] uppercase tracking-wider">
+                        <tr>
+                          <th className="p-3">{t.colPlanet}</th>
+                          <th className="p-3">{t.colSthana}</th>
+                          <th className="p-3">{t.colDig}</th>
+                          <th className="p-3">{t.colKala}</th>
+                          <th className="p-3">{t.colCheshta}</th>
+                          <th className="p-3">{t.colNaisargika}</th>
+                          <th className="p-3">{t.colDrik}</th>
+                          <th className="p-3 text-center">{t.colShadbalaRupas}</th>
+                          <th className="p-3 text-center">{t.colRequiredRupas}</th>
+                          <th className="p-3 text-center">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-stone-100 font-medium">
+                        {kundliData.bphsStrengths.allPlanets.map((p: any) => {
+                          const pName = getPlanetName(p.planet);
+                          const statusLabel = lang === 'EN' ? p.statusFormattedEN : lang === 'HI' ? p.statusFormattedHI : p.statusFormattedGU;
+                          return (
+                            <tr key={p.planet} className={p.isStrongBphs ? 'hover:bg-emerald-50/20' : 'bg-rose-50/30 hover:bg-rose-50/50'}>
+                              <td className="p-3 font-bold text-stone-900">{pName}</td>
+                              <td className="p-3 font-mono">{(p.sthanaBala / 60).toFixed(2)}</td>
+                              <td className="p-3 font-mono">{(p.digBala / 60).toFixed(2)}</td>
+                              <td className="p-3 font-mono">{(p.kalaBala / 60).toFixed(2)}</td>
+                              <td className="p-3 font-mono">{(p.cheshtaBala / 60).toFixed(2)}</td>
+                              <td className="p-3 font-mono">{(p.naisargikaBala / 60).toFixed(2)}</td>
+                              <td className="p-3 font-mono">{(p.drikBala / 60).toFixed(2)}</td>
+                              <td className="p-3 text-center font-extrabold font-mono text-stone-900">{p.totalRupas}</td>
+                              <td className="p-3 text-center font-mono text-stone-500">{p.requiredRupas}</td>
+                              <td className="p-3 text-center">
+                                <Badge variant={p.isStrongBphs ? 'default' : 'destructive'} className={p.isStrongBphs ? 'bg-emerald-700 text-white' : 'bg-rose-700 text-white'}>
+                                  {statusLabel}
+                                </Badge>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </Card>
+            )}
+
+            {/* Planetary Positions & Degree Details Table */}
             <Card className="p-0 overflow-hidden bg-white border border-stone-200 shadow-xs">
               <div className="p-4 bg-stone-50/80 border-b border-stone-200/80">
                 <h3 className="font-bold text-sm text-stone-900 flex items-center gap-2">
