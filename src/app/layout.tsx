@@ -26,6 +26,11 @@ export const metadata: Metadata = {
   title: 'Shree Ganeshambika Jyotish | શ્રી ગણેશામ્બિકા જ્યોતિષ',
   description: 'Authentic Vedic Astrology Consultation & Upasana Guidance by Narendragiri Goswami Ji — Shaakta Upasak, Hanuman Upasak, Bhairava Upasak, Karna Pishachini Upasak.',
   manifest: '/manifest.json',
+  icons: {
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
