@@ -440,7 +440,7 @@ export default function KundliReportPage() {
   };
 
   const handleHomeClick = () => {
-    router.push('/');
+    router.push('/admin');
   };
 
   if (loading) {
@@ -448,7 +448,7 @@ export default function KundliReportPage() {
       <div className="min-h-screen bg-[#FAF8F5] flex items-center justify-center">
         <div className="text-center space-y-4">
           <Activity className="w-10 h-10 text-[#A14E15] animate-spin mx-auto stroke-[1.75]" />
-          <p className="text-sm font-semibold text-stone-600">Calculating Ephemeris & Workspace...</p>
+          <p className="text-sm font-semibold text-stone-600">Loading Kundli details...</p>
         </div>
       </div>
     );
