@@ -1,0 +1,24 @@
+{
+  "name": "Shree Ganeshambika Jyotish | Guruji Portal",
+  "short_name": "Astro-Seva",
+  "description": "Authentic Vedic Astrology Consultation & Kundli Management System by Narendragiri Goswami Ji",
+  "start_url": "/admin",
+  "display": "standalone",
+  "background_color": "#FAF8F5",
+  "theme_color": "#7A1C28",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/file.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/file.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

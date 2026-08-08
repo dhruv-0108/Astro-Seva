@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter, Noto_Sans_Gujarati } from 'next/font/google';
 import './globals.css';
 
@@ -15,9 +15,22 @@ const gujarati = Noto_Sans_Gujarati({
   display: 'swap',
 });
 
+export const viewport: Viewport = {
+  themeColor: '#7A1C28',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+};
+
 export const metadata: Metadata = {
   title: 'Shree Ganeshambika Jyotish | શ્રી ગણેશામ્બિકા જ્યોતિષ',
   description: 'Authentic Vedic Astrology Consultation & Upasana Guidance by Narendragiri Goswami Ji — Shaakta Upasak, Hanuman Upasak, Bhairava Upasak, Karna Pishachini Upasak.',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Astro-Seva',
+  },
 };
 
 export default function RootLayout({
