@@ -106,7 +106,7 @@ const ADMIN_TRANSLATIONS: Record<Language, {
     loginButton: 'Sign In to Dashboard',
     logoutButton: 'Log Out',
     totalSubmissions: 'Total Submissions',
-    paidApproved: 'Paid / Approved',
+    paidApproved: 'Paid',
     pendingApproval: 'Pending Approval',
     sectionTitle: 'Client Consultation Records',
     sectionSubtitle: 'Real-time database of intake forms & generated Kundlis',
@@ -119,9 +119,9 @@ const ADMIN_TRANSLATIONS: Record<Language, {
     viewKundli: 'View Kundli',
     whatsapp: 'WhatsApp',
     deleteConfirm: 'Are you sure you want to delete this consultation record?',
-    paidBadge: 'Paid / Active',
+    paidBadge: 'Paid',
     pendingBadge: 'Pending Verification',
-    createNew: '+ New Kundli Entry',
+    createNew: 'New Kundli Entry',
     searchPlaceholder: 'Search by Name, Phone, or Village/City...',
   },
   GU: {
@@ -132,7 +132,7 @@ const ADMIN_TRANSLATIONS: Record<Language, {
     loginButton: 'ડેશબોર્ડમાં પ્રવેશ કરો',
     logoutButton: 'લૉગ આઉટ',
     totalSubmissions: 'કુલ અરજીઓ',
-    paidApproved: 'ચૂકવેલ / માન્ય',
+    paidApproved: 'ચૂકવેલ',
     pendingApproval: 'ચકાસણી બાકી',
     sectionTitle: 'ગ્રાહક પરામર્શ રેકોર્ડ્સ',
     sectionSubtitle: 'જન્મ વિગતો અને કુંડળી રેકોર્ડ્સની યાદી',
@@ -145,9 +145,9 @@ const ADMIN_TRANSLATIONS: Record<Language, {
     viewKundli: 'કુંડળી જુઓ',
     whatsapp: 'વોટ્સએપ',
     deleteConfirm: 'શું તમે ખરેખર આ પરામર્શ રેકોર્ડ કાઢી નાખવા માંગો છો?',
-    paidBadge: 'ચૂકવેલ / સક્રિય',
+    paidBadge: 'ચૂકવેલ',
     pendingBadge: 'ચકાસણી બાકી',
-    createNew: '+ નવી કુંડળી નોંધ',
+    createNew: 'નવી કુંડળી નોંધ',
     searchPlaceholder: 'નામ, ફોન અથવા ગામ/શહેર શોધો...',
   },
   HI: {
@@ -158,7 +158,7 @@ const ADMIN_TRANSLATIONS: Record<Language, {
     loginButton: 'डैशबोर्ड में प्रवेश करें',
     logoutButton: 'लॉग आउट',
     totalSubmissions: 'कुल आवेदन',
-    paidApproved: 'भुगतान / स्वीकृत',
+    paidApproved: 'भुगतान',
     pendingApproval: 'सत्यापन लंबित',
     sectionTitle: 'ग्राहक परामर्श रिकॉर्ड्स',
     sectionSubtitle: 'जन्म विवरण एवं निर्मित कुंडलियों का रिकॉर्ड',
@@ -171,9 +171,9 @@ const ADMIN_TRANSLATIONS: Record<Language, {
     viewKundli: 'कुंडली देखें',
     whatsapp: 'व्हाट्सएप',
     deleteConfirm: 'क्या आप निश्चित रूप से इस परामर्श रिकॉर्ड को हटाना चाहते हैं?',
-    paidBadge: 'भुगतान / सक्रिय',
+    paidBadge: 'भुगतान',
     pendingBadge: 'सत्यापन लंबित',
-    createNew: '+ नई कुंडली प्रविष्टि',
+    createNew: 'नई कुंडली प्रविष्टि',
     searchPlaceholder: 'नाम, फोन या गांव/शहर खोजें...',
   }
 };
@@ -477,14 +477,46 @@ export default function AdminPage() {
 
   const handleSaveForm = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name.trim() || !formData.place.trim() || formData.lat === 0) {
-      alert('Please select a valid place from the suggestions dropdown.');
+    const targetPlace = (formData.place || placeSearch).trim();
+    if (!formData.name.trim() || !targetPlace) {
+      alert('Please enter client name and birth place.');
       return;
+    }
+
+    let finalLat = formData.lat;
+    let finalLng = formData.lng;
+    let finalPlace = targetPlace;
+
+    // Auto-pick from top suggestion if lat is still 0
+    if (finalLat === 0 && placeSuggestions.length > 0) {
+      const topItem = placeSuggestions[0];
+      finalLat = topItem.lat;
+      finalLng = topItem.lon;
+      finalPlace = topItem.display_name || topItem.full_name || targetPlace;
+    } else if (finalLat === 0) {
+      try {
+        const geoRes = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(targetPlace)}&limit=1`
+        );
+        const geoData = await geoRes.json();
+        if (Array.isArray(geoData) && geoData.length > 0) {
+          finalLat = parseFloat(geoData[0].lat);
+          finalLng = parseFloat(geoData[0].lon);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // Default fallback coordinates if still 0 (Surat/India default)
+    if (finalLat === 0) {
+      finalLat = 21.1702;
+      finalLng = 72.8311;
     }
 
     const srv = GURU_SERVICES.find((s) => s.id === formData.serviceId) || GURU_SERVICES[0];
 
-    const submissionPayload = {
+    const submissionPayload: any = {
       name: formData.name.trim(),
       phone: formData.phone.trim(),
       serviceSelected: {
@@ -495,14 +527,17 @@ export default function AdminPage() {
       birthDetails: {
         date: formData.date,
         time: formData.time,
-        place: formData.place,
-        lat: formData.lat,
-        lng: formData.lng,
-        tzOffset: formData.tzOffset,
+        place: finalPlace,
+        lat: finalLat,
+        lng: finalLng,
+        tzOffset: formData.tzOffset || 5.5,
       },
       paymentStatus: formData.paymentStatus,
-      createdAt: new Date().toISOString(),
     };
+
+    if (!editingId) {
+      submissionPayload.createdAt = new Date().toISOString();
+    }
 
     try {
       if (editingId) {
@@ -693,17 +728,17 @@ export default function AdminPage() {
       {/* Main Content Area */}
       <main className="max-w-7xl mx-auto px-3 sm:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8 text-left">
         
-        {/* Top Action & Stat Cards Row - Single horizontal row on all viewports */}
-        <div className="flex items-center justify-between gap-3 whitespace-nowrap overflow-x-auto scrollbar-none pb-1">
-          <div className="space-y-0.5 min-w-0">
-            <h2 className="text-lg sm:text-2xl font-bold text-stone-900 tracking-tight whitespace-nowrap">{t.sectionTitle}</h2>
-            <p className="text-xs text-stone-500 font-medium whitespace-nowrap hidden sm:block">{t.sectionSubtitle}</p>
+        {/* Top Action & Stat Cards Row - Responsive flex for zero clashing */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1">
+          <div className="space-y-0.5">
+            <h2 className="text-xl sm:text-2xl font-bold text-stone-900 tracking-tight">{t.sectionTitle}</h2>
+            <p className="text-xs text-stone-500 font-medium hidden sm:block">{t.sectionSubtitle}</p>
           </div>
 
           {/* Add New Entry Button */}
           <Button
             onClick={handleOpenCreateModal}
-            className="bg-gradient-to-r from-[#9E2A2B] to-[#7A1C28] hover:from-[#B2182B] hover:to-[#5E121C] text-white font-bold px-3.5 sm:px-6 py-2 sm:py-3 rounded-xl sm:rounded-2xl text-xs sm:text-sm shadow-md cursor-pointer flex items-center gap-1.5 shrink-0 whitespace-nowrap"
+            className="bg-gradient-to-r from-[#9E2A2B] to-[#7A1C28] hover:from-[#B2182B] hover:to-[#5E121C] text-white font-bold px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl text-xs sm:text-sm shadow-md cursor-pointer flex items-center gap-1.5 shrink-0 self-start sm:self-auto"
           >
             <Plus className="w-4 h-4 stroke-[2.5]" />
             <span>{t.createNew}</span>
@@ -895,8 +930,8 @@ export default function AdminPage() {
 
       {/* CREATE / EDIT KUNDLI ENTRY MODAL WITH EXHAUSTIVE VILLAGE LOCATION FETCHER */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl border border-stone-200 text-left my-8">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-start sm:items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-7 space-y-5 shadow-2xl border border-stone-200 text-left my-auto max-h-[85vh] overflow-y-auto">
             
             <div className="flex items-center justify-between border-b border-stone-100 pb-4">
               <div className="flex items-center gap-2.5">
@@ -998,8 +1033,9 @@ export default function AdminPage() {
                   type="text"
                   value={placeSearch}
                   onChange={(e) => {
-                    setPlaceSearch(e.target.value);
-                    setFormData((prev) => ({ ...prev, place: '', lat: 0, lng: 0 }));
+                    const val = e.target.value;
+                    setPlaceSearch(val);
+                    setFormData((prev) => ({ ...prev, place: val, lat: 0, lng: 0 }));
                   }}
                   placeholder="Type any Indian village or city (e.g. Gariadhar, Talaja, Vanthali)"
                   className="w-full bg-white border border-stone-200 rounded-2xl p-3.5 text-sm text-stone-900 outline-none focus:border-[#A14E15] focus:ring-2 focus:ring-amber-500/10"
