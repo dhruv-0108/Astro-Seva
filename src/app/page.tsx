@@ -6,8 +6,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '../components/ui/shadcn/button';
 import { Card } from '../components/ui/shadcn/card';
-import { Badge } from '../components/ui/shadcn/badge';
 import { GURU_SERVICES, ServiceItem } from '../lib/services';
+import PWAInstallBanner from '../components/PWAInstallBanner';
 import {
   Globe,
   Sparkles,
@@ -599,6 +599,9 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* PWA Mobile App Installation Prompt Banner (24-Hour Persistence) */}
+      <PWAInstallBanner lang={lang} />
 
     </div>
   );

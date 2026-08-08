@@ -25,6 +25,7 @@ import { Card } from '../../components/ui/shadcn/card';
 import { Input } from '../../components/ui/shadcn/input';
 import { Badge } from '../../components/ui/shadcn/badge';
 import { CustomDatePicker, CustomTimePicker } from '../../components/CustomDateTimePicker';
+import PWAInstallBanner from '../../components/PWAInstallBanner';
 import { GURU_SERVICES } from '../../lib/services';
 import {
   Sparkles,
@@ -1209,6 +1210,9 @@ export default function AdminPage() {
           </div>
         </div>
       )}
+
+      {/* PWA Mobile App Installation Prompt Banner (24-Hour Persistence) */}
+      <PWAInstallBanner lang={lang} />
 
     </div>
   );
