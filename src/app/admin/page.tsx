@@ -211,6 +211,7 @@ export default function AdminPage() {
   const [placeSuggestions, setPlaceSuggestions] = useState<any[]>([]);
   const [isPlaceSearching, setIsPlaceSearching] = useState<boolean>(false);
   const searchContainerRef = useRef<HTMLDivElement>(null);
+  const justSelectedPlaceRef = useRef<boolean>(false);
 
   const t = ADMIN_TRANSLATIONS[lang];
 
@@ -255,6 +256,12 @@ export default function AdminPage() {
 
   // Exhaustive Multi-Source Location Fetcher (Nominatim + Photon API) for Admin Form
   useEffect(() => {
+    if (justSelectedPlaceRef.current) {
+      justSelectedPlaceRef.current = false;
+      setPlaceSuggestions([]);
+      return;
+    }
+
     const q = placeSearch.trim();
     if (q.length < 2) {
       setPlaceSuggestions([]);
@@ -391,14 +398,15 @@ export default function AdminPage() {
 
   const handleSelectPlace = (item: any) => {
     const cleanName = item.display_name || item.full_name;
+    justSelectedPlaceRef.current = true;
+    setPlaceSuggestions([]);
+    setPlaceSearch(cleanName);
     setFormData((prev) => ({
       ...prev,
       place: cleanName,
       lat: item.lat,
       lng: item.lon,
     }));
-    setPlaceSearch(cleanName);
-    setPlaceSuggestions([]);
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -439,6 +447,7 @@ export default function AdminPage() {
   };
 
   const handleOpenCreateModal = () => {
+    justSelectedPlaceRef.current = true;
     setEditingId(null);
     setFormData({
       name: '',
