@@ -93,8 +93,8 @@ const TRANSLATIONS: Record<Language, {
     ],
     priceTag: 'FEES STARTING AT ₹250 ONLY',
     bookNow: 'BOOK CONSULTATION NOW',
-    step0Title: 'Choose Your Consultation Option',
-    step0Subtitle: 'Select your consultation category to proceed with sacred dakshina offering & payment.',
+    step0Title: 'Consultation Fees',
+    step0Subtitle: '',
   },
   GU: {
     ganeshayNamah: '॥ શ્રી ગણેશાય નમઃ ॥',
@@ -129,8 +129,8 @@ const TRANSLATIONS: Record<Language, {
     ],
     priceTag: 'દક્ષિણા માત્ર ₹૨૫૦ થી શરૂ',
     bookNow: 'મુલાકાત માટે બુક કરો',
-    step0Title: 'તમારું પરામર્શ ફોર્મેટ પસંદ કરો',
-    step0Subtitle: 'દક્ષિણા અર્પણ અને ચૂકવણી સાથે આગળ વધવા માટે તમારો પરામર્શ વિકલ્પ પસંદ કરો.',
+    step0Title: 'પરામર્શ ફી',
+    step0Subtitle: '',
   },
   HI: {
     ganeshayNamah: '॥ श्री गणेशाय नमः ॥',
@@ -165,8 +165,8 @@ const TRANSLATIONS: Record<Language, {
     ],
     priceTag: 'दक्षिणा मात्र ₹250 से प्रारंभ',
     bookNow: 'अभी परामर्श बुक करें',
-    step0Title: 'अपना परामर्श विकल्प चुनें',
-    step0Subtitle: 'दक्षिणा अर्पित करने एवं भुगतान के साथ आगे बढ़ने के लिए अपना परामर्श विकल्प चुनें।',
+    step0Title: 'परामर्श फीस',
+    step0Subtitle: '',
   }
 };
 
@@ -325,7 +325,7 @@ export default function Home() {
       </section>
 
       {/* 2. TEXT DETAILS SECTION (BELOW POSTER) */}
-      <section className="py-10 px-4 sm:px-8 max-w-5xl mx-auto space-y-8">
+      <section className="pt-8 pb-4 px-4 sm:px-8 max-w-5xl mx-auto">
         
         {/* Sacred Om Bio Box */}
         <div className="bg-[#FFFDF9] border-2 border-amber-300/90 rounded-3xl p-6 sm:p-10 relative space-y-5 shadow-md">
@@ -352,34 +352,17 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Quick CTA Scroll Button */}
-        <div className="text-center pt-2">
-          <Button
-            onClick={scrollToPlans}
-            className="bg-gradient-to-r from-[#9E2A2B] to-[#7A1C28] hover:from-[#B2182B] hover:to-[#5E121C] text-white font-bold px-10 py-4 text-base shadow-md rounded-2xl cursor-pointer"
-          >
-            <span>{t.bookNow} (₹250)</span>
-            <ArrowRight className="w-5 h-5 stroke-[2.5]" />
-          </Button>
-        </div>
-
       </section>
 
       {/* 3. CONSULTATION PLANS SECTION */}
-      <section ref={plansRef} id="plans" className="bg-[#FAF6EE] py-16 sm:py-24 border-y border-amber-200/60">
-        <div className="max-w-7xl mx-auto px-6 space-y-12">
+      <section ref={plansRef} id="plans" className="bg-[#FAF6EE] pt-6 pb-16 sm:pb-24">
+        <div className="max-w-7xl mx-auto px-6 space-y-8">
           
-          {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-stone-200/60 pb-6 text-left">
-            <div className="space-y-1">
-              <span className="text-[12px] font-semibold text-[#A14E15] uppercase tracking-wider font-mono">Professional Consultation Fees</span>
-              <h3 className="text-[28px] sm:text-[36px] font-bold text-[#1F1E1B] tracking-tight">
-                {t.step0Title}
-              </h3>
-            </div>
-            <p className="text-[14px] font-normal text-stone-500 max-w-[50ch]">
-              {t.step0Subtitle}
-            </p>
+          {/* Clean Consultation Fees Header */}
+          <div className="text-center">
+            <h3 className="text-[26px] sm:text-[34px] font-bold text-[#59141D] tracking-tight">
+              {t.step0Title}
+            </h3>
           </div>
 
           {/* Mobile Swipable Pricing Cards View (Visible on Mobile) */}
