@@ -178,6 +178,45 @@ const ADMIN_TRANSLATIONS: Record<Language, {
   }
 };
 
+const COUNTRY_CODES = [
+  { code: '+91', country: 'IN', flag: '🇮🇳', name: 'India' },
+  { code: '+1', country: 'US', flag: '🇺🇸', name: 'USA / Canada' },
+  { code: '+44', country: 'GB', flag: '🇬🇧', name: 'UK' },
+  { code: '+971', country: 'AE', flag: '🇦🇪', name: 'UAE' },
+  { code: '+61', country: 'AU', flag: '🇦🇺', name: 'Australia' },
+  { code: '+966', country: 'SA', flag: '🇸🇦', name: 'Saudi Arabia' },
+  { code: '+974', country: 'QA', flag: '🇶🇦', name: 'Qatar' },
+  { code: '+968', country: 'OM', flag: '🇴🇲', name: 'Oman' },
+  { code: '+965', country: 'KW', flag: '🇰🇼', name: 'Kuwait' },
+  { code: '+973', country: 'BH', flag: '🇧🇭', name: 'Bahrain' },
+  { code: '+977', country: 'NP', flag: '🇳🇵', name: 'Nepal' },
+  { code: '+65', country: 'SG', flag: '🇸🇬', name: 'Singapore' },
+  { code: '+60', country: 'MY', flag: '🇲🇾', name: 'Malaysia' },
+  { code: '+64', country: 'NZ', flag: '🇳🇿', name: 'New Zealand' },
+  { code: '+27', country: 'ZA', flag: '🇿🇦', name: 'South Africa' },
+  { code: '+66', country: 'TH', flag: '🇹🇭', name: 'Thailand' },
+  { code: '+49', country: 'DE', flag: '🇩🇪', name: 'Germany' },
+  { code: '+33', country: 'FR', flag: '🇫🇷', name: 'France' },
+  { code: '+39', country: 'IT', flag: '🇮🇹', name: 'Italy' },
+  { code: '+34', country: 'ES', flag: '🇪🇸', name: 'Spain' },
+  { code: '+31', country: 'NL', flag: '🇳🇱', name: 'Netherlands' },
+  { code: '+41', country: 'CH', flag: '🇨🇭', name: 'Switzerland' },
+  { code: '+81', country: 'JP', flag: '🇯🇵', name: 'Japan' },
+  { code: '+82', country: 'KR', flag: '🇰🇷', name: 'South Korea' },
+  { code: '+852', country: 'HK', flag: '🇭🇰', name: 'Hong Kong' },
+  { code: '+94', country: 'LK', flag: '🇱🇰', name: 'Sri Lanka' },
+  { code: '+880', country: 'BD', flag: '🇧🇩', name: 'Bangladesh' },
+  { code: '+92', country: 'PK', flag: '🇵🇰', name: 'Pakistan' },
+  { code: '+62', country: 'ID', flag: '🇮🇩', name: 'Indonesia' },
+  { code: '+63', country: 'PH', flag: '🇵🇭', name: 'Philippines' },
+  { code: '+55', country: 'BR', flag: '🇧🇷', name: 'Brazil' },
+  { code: '+52', country: 'MX', flag: '🇲🇽', name: 'Mexico' },
+  { code: '+7', country: 'RU', flag: '🇷🇺', name: 'Russia' },
+  { code: '+20', country: 'EG', flag: '🇪🇬', name: 'Egypt' },
+  { code: '+254', country: 'KE', flag: '🇰🇪', name: 'Kenya' },
+  { code: '+234', country: 'NG', flag: '🇳🇬', name: 'Nigeria' },
+];
+
 export default function AdminPage() {
   const [lang, setLang] = useState<Language>('GU');
   const [user, setUser] = useState<User | null>(null);
@@ -193,6 +232,9 @@ export default function AdminPage() {
   // Modal State for Creating/Editing Submissions
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+
+  const [countryCode, setCountryCode] = useState<string>('+91');
+  const [phoneDigits, setPhoneDigits] = useState<string>('');
 
   const [formData, setFormData] = useState({
     name: '',
@@ -449,9 +491,11 @@ export default function AdminPage() {
   const handleOpenCreateModal = () => {
     justSelectedPlaceRef.current = true;
     setEditingId(null);
+    setCountryCode('+91');
+    setPhoneDigits('');
     setFormData({
       name: '',
-      phone: '+91 ',
+      phone: '',
       serviceId: 'kundli-reading',
       date: '1995-01-01',
       time: '12:00',
@@ -462,11 +506,27 @@ export default function AdminPage() {
       paymentStatus: 'paid',
     });
     setPlaceSearch('');
+    setPlaceSuggestions([]);
     setIsModalOpen(true);
   };
 
   const handleOpenEditModal = (client: ClientSubmission) => {
+    justSelectedPlaceRef.current = true;
     setEditingId(client.id);
+    
+    let matchedCode = '+91';
+    let rawDigits = (client.phone || '').trim();
+    
+    for (const c of COUNTRY_CODES) {
+      if (rawDigits.startsWith(c.code)) {
+        matchedCode = c.code;
+        rawDigits = rawDigits.slice(c.code.length).trim();
+        break;
+      }
+    }
+    setCountryCode(matchedCode);
+    setPhoneDigits(rawDigits);
+
     const selectedServiceId = client.serviceSelected?.id || 'kundli-reading';
     setFormData({
       name: client.name,
@@ -481,6 +541,7 @@ export default function AdminPage() {
       paymentStatus: client.paymentStatus,
     });
     setPlaceSearch(client.birthDetails.place);
+    setPlaceSuggestions([]);
     setIsModalOpen(true);
   };
 
@@ -524,10 +585,11 @@ export default function AdminPage() {
     }
 
     const srv = GURU_SERVICES.find((s) => s.id === formData.serviceId) || GURU_SERVICES[0];
+    const combinedPhone = `${countryCode} ${phoneDigits.trim()}`;
 
     const submissionPayload: any = {
       name: formData.name.trim(),
-      phone: formData.phone.trim(),
+      phone: combinedPhone.trim(),
       serviceSelected: {
         id: srv.id,
         title: srv.titleEN,
@@ -980,19 +1042,32 @@ export default function AdminPage() {
                 />
               </div>
 
-              {/* Client Phone */}
+              {/* Client Phone with Country Code Picker */}
               <div className="space-y-1">
                 <label className="text-xs font-bold text-stone-700 uppercase tracking-wider">
                   WhatsApp Phone Number
                 </label>
-                <Input
-                  type="text"
-                  value={formData.phone}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, phone: e.target.value }))}
-                  placeholder="+91 9876543210"
-                  className="w-full rounded-2xl p-3.5 text-sm"
-                  required
-                />
+                <div className="flex gap-2">
+                  <select
+                    value={countryCode}
+                    onChange={(e) => setCountryCode(e.target.value)}
+                    className="bg-white border border-stone-200 rounded-2xl p-3 text-xs sm:text-sm font-bold text-stone-900 outline-none focus:border-[#A14E15] shrink-0 max-w-[140px] cursor-pointer"
+                  >
+                    {COUNTRY_CODES.map((c) => (
+                      <option key={c.code + c.country} value={c.code}>
+                        {c.flag} {c.code} ({c.name})
+                      </option>
+                    ))}
+                  </select>
+                  <Input
+                    type="tel"
+                    value={phoneDigits}
+                    onChange={(e) => setPhoneDigits(e.target.value)}
+                    placeholder="9876543210"
+                    className="w-full rounded-2xl p-3.5 text-sm font-mono"
+                    required
+                  />
+                </div>
               </div>
 
               {/* Service Selection */}
