@@ -84,9 +84,10 @@ export default function DedicatedIntakePage({ params }: { params: Promise<{ serv
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Geocoding Search using OpenStreetMap Nominatim with English locale
+  // Exhaustive Geocoding Search (Nominatim + Photon API) for Indian villages, towns, and cities
   useEffect(() => {
-    if (placeSearch.length < 3) {
+    const q = placeSearch.trim();
+    if (q.length < 2) {
       setPlaceSuggestions([]);
       return;
     }
@@ -94,32 +95,142 @@ export default function DedicatedIntakePage({ params }: { params: Promise<{ serv
     const delayDebounceFn = setTimeout(async () => {
       setIsSearching(true);
       try {
-        const response = await fetch(
-          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-            placeSearch
-          )}&accept-language=en&limit=5`
-        );
-        const data = await response.json();
-        setPlaceSuggestions(data || []);
+        // Run parallel queries to OpenStreetMap Nominatim and Photon API
+        const [nomRes, photonRes] = await Promise.allSettled([
+          fetch(
+            `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+              q
+            )}&countrycodes=in&addressdetails=1&limit=10`
+          ).then((res) => res.json()),
+          fetch(
+            `https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=10`
+          ).then((res) => res.json()),
+        ]);
+
+        let nomData = nomRes.status === 'fulfilled' && Array.isArray(nomRes.value) ? nomRes.value : [];
+        
+        // Fallback global Nominatim query if Indian prioritized query returned 0 results
+        if (nomData.length === 0) {
+          try {
+            const res = await fetch(
+              `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+                q
+              )}&addressdetails=1&limit=10`
+            );
+            nomData = await res.json();
+          } catch (e) {
+            console.error('Nominatim global error:', e);
+          }
+        }
+
+        const photonFeatures =
+          photonRes.status === 'fulfilled' && photonRes.value?.features
+            ? photonRes.value.features
+            : [];
+
+        const combined: any[] = [];
+        const seenCoords = new Set<string>();
+
+        // 1. Process Nominatim results
+        for (const item of nomData) {
+          const lat = parseFloat(item.lat);
+          const lon = parseFloat(item.lon);
+          const key = `${lat.toFixed(3)},${lon.toFixed(3)}`;
+
+          if (!seenCoords.has(key) && !isNaN(lat) && !isNaN(lon)) {
+            seenCoords.add(key);
+
+            const addr = item.address || {};
+            const mainPlace =
+              addr.village ||
+              addr.town ||
+              addr.city ||
+              addr.suburb ||
+              addr.hamlet ||
+              addr.county ||
+              item.name;
+            const district = addr.state_district || addr.county || addr.district;
+            const state = addr.state;
+            const country = addr.country || 'India';
+
+            const parts = [mainPlace, district, state, country].filter(Boolean);
+            const cleanDisplay = Array.from(new Set(parts)).join(', ');
+            const typeLabel = addr.village
+              ? 'Village'
+              : addr.town
+              ? 'Town'
+              : addr.city
+              ? 'City'
+              : addr.hamlet
+              ? 'Village'
+              : 'Location';
+
+            combined.push({
+              display_name: cleanDisplay || item.display_name,
+              full_name: item.display_name,
+              lat: lat,
+              lon: lon,
+              type: typeLabel,
+            });
+          }
+        }
+
+        // 2. Process Photon API results
+        for (const feat of photonFeatures) {
+          const props = feat.properties || {};
+          const coords = feat.geometry?.coordinates || [0, 0];
+          const lon = coords[0];
+          const lat = coords[1];
+          const key = `${lat.toFixed(3)},${lon.toFixed(3)}`;
+
+          if (!seenCoords.has(key) && lat !== 0 && lon !== 0) {
+            seenCoords.add(key);
+
+            const mainPlace = props.name || props.city || props.town || props.village;
+            const district = props.county || props.district || props.city;
+            const state = props.state;
+            const country = props.country || 'India';
+
+            const parts = [mainPlace, district, state, country].filter(Boolean);
+            const cleanDisplay = Array.from(new Set(parts)).join(', ');
+            const typeLabel =
+              props.osm_value === 'village'
+                ? 'Village'
+                : props.osm_value === 'town'
+                ? 'Town'
+                : props.type === 'city'
+                ? 'City'
+                : 'Location';
+
+            combined.push({
+              display_name: cleanDisplay,
+              full_name: `${cleanDisplay} ${props.postcode ? `(${props.postcode})` : ''}`,
+              lat: lat,
+              lon: lon,
+              type: typeLabel,
+            });
+          }
+        }
+
+        setPlaceSuggestions(combined);
       } catch (err) {
         console.error('Error fetching places:', err);
       } finally {
         setIsSearching(false);
       }
-    }, 500);
+    }, 300);
 
     return () => clearTimeout(delayDebounceFn);
   }, [placeSearch]);
 
   const handleSelectPlace = (item: any) => {
-    const parts = item.display_name.split(',').map((s: string) => s.trim());
-    const cleanName = parts.length > 3 ? `${parts[0]}, ${parts[parts.length - 2]}, ${parts[parts.length - 1]}` : item.display_name;
+    const cleanName = item.display_name || item.full_name;
 
     setBirthDetails((prev) => ({
       ...prev,
       place: cleanName,
-      lat: parseFloat(item.lat),
-      lng: parseFloat(item.lon),
+      lat: item.lat,
+      lng: item.lon,
     }));
     setPlaceSearch(cleanName);
     setPlaceSuggestions([]);
@@ -362,15 +473,22 @@ export default function DedicatedIntakePage({ params }: { params: Promise<{ serv
                 )}
 
                 {placeSuggestions.length > 0 && (
-                  <ul className="absolute z-30 top-[82px] left-0 w-full bg-white border border-stone-200 rounded-2xl shadow-xl max-h-56 overflow-y-auto divide-y divide-stone-100">
+                  <ul className="absolute z-30 top-[82px] left-0 w-full bg-white border border-stone-200 rounded-2xl shadow-xl max-h-64 overflow-y-auto divide-y divide-stone-100">
                     {placeSuggestions.map((item, idx) => (
                       <li
                         key={idx}
                         onClick={() => handleSelectPlace(item)}
-                        className="p-4 hover:bg-amber-50/50 cursor-pointer text-[14px] font-normal text-stone-800 transition-colors flex items-center gap-2.5"
+                        className="p-3.5 hover:bg-amber-50/70 cursor-pointer text-[14px] font-medium text-stone-800 transition-colors flex items-center justify-between gap-3"
                       >
-                        <MapPin className="w-4 h-4 stroke-[1.75] text-[#A14E15] shrink-0" />
-                        <span className="truncate">{item.display_name}</span>
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <MapPin className="w-4 h-4 stroke-[1.75] text-[#A14E15] shrink-0" />
+                          <span className="truncate">{item.display_name}</span>
+                        </div>
+                        {item.type && (
+                          <span className="text-[10px] font-bold font-mono uppercase bg-amber-100/80 text-[#853E0F] px-2 py-0.5 rounded-md shrink-0 border border-amber-200/80">
+                            {item.type}
+                          </span>
+                        )}
                       </li>
                     ))}
                   </ul>
