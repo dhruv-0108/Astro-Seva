@@ -471,31 +471,31 @@ export default function KundliReportPage() {
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-stone-900 font-sans selection:bg-amber-100 antialiased flex flex-col justify-between">
       
-      {/* Navigation Header */}
-      <header className="bg-white border-b border-stone-200/60 px-6 py-3.5 flex justify-between items-center shadow-xs print:hidden">
-        <div className="flex items-center gap-3">
+      {/* Navigation Header - Fixed 1 single horizontal bar on mobile & desktop */}
+      <header className="bg-white border-b border-stone-200/60 px-3 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-2 shadow-xs print:hidden">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <button
             onClick={handleHomeClick}
-            className="p-2 rounded-2xl hover:bg-stone-100 transition-colors cursor-pointer text-stone-600 flex items-center gap-1.5 text-xs font-bold"
+            className="p-1.5 sm:p-2 rounded-xl sm:rounded-2xl hover:bg-stone-100 transition-colors cursor-pointer text-stone-600 flex items-center gap-1 text-xs font-bold shrink-0"
             title={t.home}
           >
             <Home className="w-4 h-4 text-[#A14E15]" />
-            <span>{t.home}</span>
+            <span className="hidden sm:inline">{t.home}</span>
           </button>
-          <div>
-            <h1 className="text-base font-bold tracking-tight text-stone-900">{client.name}</h1>
-            <p className="text-xs text-stone-500 font-medium">{t.subTitle}</p>
+          <div className="min-w-0">
+            <h1 className="text-xs sm:text-base font-extrabold tracking-tight text-stone-900 truncate max-w-[90px] sm:max-w-xs">{client.name}</h1>
+            <p className="hidden sm:block text-xs text-stone-500 font-medium truncate">{t.subTitle}</p>
           </div>
         </div>
         
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
           {/* 3-Way Language Selector Switcher */}
-          <div className="flex items-center gap-1 bg-stone-200/60 p-1 rounded-2xl border border-stone-300/60 shadow-2xs">
+          <div className="flex items-center gap-0.5 sm:gap-1 bg-stone-200/60 p-0.5 sm:p-1 rounded-xl sm:rounded-2xl border border-stone-300/60 shadow-2xs">
             {(['EN', 'GU', 'HI'] as Language[]).map((l) => (
               <button
                 key={l}
                 onClick={() => setLang(l)}
-                className={`px-3 py-1 rounded-xl text-[11px] font-bold transition-all cursor-pointer ${
+                className={`px-2 sm:px-3 py-1 rounded-lg sm:rounded-xl text-[10px] sm:text-[11px] font-bold transition-all cursor-pointer ${
                   lang === l
                     ? 'bg-[#7A1C28] text-white shadow-xs'
                     : 'text-stone-700 hover:text-[#1F1E1B] hover:bg-stone-300/50'
@@ -506,7 +506,7 @@ export default function KundliReportPage() {
             ))}
           </div>
 
-          <Button onClick={() => window.print()} variant="outline" size="sm">
+          <Button onClick={() => window.print()} variant="outline" size="sm" className="h-8 px-2 sm:px-3">
             <Printer className="w-4 h-4 text-stone-600" />
             <span className="hidden sm:inline">{t.printPdf}</span>
           </Button>
@@ -514,15 +514,15 @@ export default function KundliReportPage() {
       </header>
 
       {/* EXECUTIVE SUMMARY BANNER */}
-      <div className="bg-white border-b border-stone-200/60 px-6 py-5">
+      <div className="bg-white border-b border-stone-200/60 px-4 sm:px-6 py-4 sm:py-5">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
           
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <h2 className="text-xl sm:text-2xl font-extrabold text-stone-900 tracking-tight">{client.name}</h2>
+              <h2 className="text-lg sm:text-2xl font-extrabold text-stone-900 tracking-tight">{client.name}</h2>
               <Badge variant="default" className="text-[10px] py-0.5 bg-[#7A1C28]">Vedic Kundli</Badge>
             </div>
-            <div className="flex flex-wrap items-center gap-3 text-xs text-stone-600 font-medium">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs text-stone-600 font-medium">
               <span className="flex items-center gap-1">
                 <Calendar className="w-3.5 h-3.5 text-[#A14E15]" />
                 {client.birthDetails.date}
@@ -541,28 +541,28 @@ export default function KundliReportPage() {
           </div>
 
           {/* Core Metrics */}
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="bg-stone-50 border border-stone-200/60 rounded-xl px-3.5 py-2 text-center">
-              <span className="text-[9px] uppercase font-bold text-stone-400 block">{t.lagna}</span>
-              <span className="text-sm font-extrabold text-stone-900">{getRashiName(kundliData.lagnaSignIndex)}</span>
+          <div className="grid grid-cols-4 gap-2 sm:flex sm:flex-wrap sm:items-center sm:gap-3">
+            <div className="bg-stone-50 border border-stone-200/60 rounded-xl px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-center">
+              <span className="text-[8px] sm:text-[9px] uppercase font-bold text-stone-400 block">{t.lagna}</span>
+              <span className="text-xs sm:text-sm font-extrabold text-stone-900">{getRashiName(kundliData.lagnaSignIndex)}</span>
             </div>
 
-            <div className="bg-stone-50 border border-stone-200/60 rounded-xl px-3.5 py-2 text-center">
-              <span className="text-[9px] uppercase font-bold text-stone-400 block">{t.moonSign}</span>
-              <span className="text-sm font-extrabold text-stone-900">{getRashiName(astro.planets.Moon.sign)}</span>
+            <div className="bg-stone-50 border border-stone-200/60 rounded-xl px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-center">
+              <span className="text-[8px] sm:text-[9px] uppercase font-bold text-stone-400 block">{t.moonSign}</span>
+              <span className="text-xs sm:text-sm font-extrabold text-stone-900">{getRashiName(astro.planets.Moon.sign)}</span>
             </div>
 
-            <div className="bg-stone-50 border border-stone-200/60 rounded-xl px-3.5 py-2 text-center">
-              <span className="text-[9px] uppercase font-bold text-stone-400 block">{t.nakshatra}</span>
-              <span className="text-sm font-extrabold text-[#A14E15] truncate max-w-[100px] block">
+            <div className="bg-stone-50 border border-stone-200/60 rounded-xl px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-center">
+              <span className="text-[8px] sm:text-[9px] uppercase font-bold text-stone-400 block">{t.nakshatra}</span>
+              <span className="text-xs sm:text-sm font-extrabold text-[#A14E15] truncate max-w-[70px] sm:max-w-[100px] block mx-auto">
                 {NAKSHATRA_NAMES[lang][Math.floor((astro.planets.Moon.longitude % 360) / (360 / 27))]}
               </span>
             </div>
 
             {currentDashaChain && (
-              <div className="bg-amber-50 border border-amber-200/80 rounded-xl px-3.5 py-2 text-center">
-                <span className="text-[9px] uppercase font-bold text-amber-800/70 block">{t.mahadasha}</span>
-                <span className="text-sm font-extrabold text-[#A14E15]">{getPlanetName(currentDashaChain.mahadasha.lord)}</span>
+              <div className="bg-amber-50 border border-amber-200/80 rounded-xl px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-center">
+                <span className="text-[8px] sm:text-[9px] uppercase font-bold text-amber-800/70 block">{t.mahadasha}</span>
+                <span className="text-xs sm:text-sm font-extrabold text-[#A14E15]">{getPlanetName(currentDashaChain.mahadasha.lord)}</span>
               </div>
             )}
           </div>
@@ -571,8 +571,8 @@ export default function KundliReportPage() {
       </div>
 
       {/* Main Navigation Bar (Tabs) */}
-      <nav className="bg-white border-b border-stone-200/60 sticky top-0 z-20 px-6 overflow-x-auto scrollbar-none shadow-xs print:hidden">
-        <div className="flex gap-6 text-sm font-semibold max-w-6xl mx-auto">
+      <nav className="bg-white border-b border-stone-200/60 sticky top-0 z-20 px-4 sm:px-6 overflow-x-auto scrollbar-none shadow-xs print:hidden">
+        <div className="flex gap-4 sm:gap-6 text-xs sm:text-sm font-semibold max-w-6xl mx-auto">
           {[
             { id: 'gochar', label: t.tabs.gochar },
             { id: 'charts', label: t.tabs.charts },
@@ -586,7 +586,7 @@ export default function KundliReportPage() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`py-3.5 relative whitespace-nowrap cursor-pointer transition-all duration-200 ${
+                className={`py-3 relative whitespace-nowrap cursor-pointer transition-all duration-200 ${
                   isActive ? 'text-[#A14E15] font-bold' : 'text-stone-500 hover:text-stone-900'
                 }`}
               >
@@ -601,21 +601,21 @@ export default function KundliReportPage() {
       </nav>
 
       {/* Main Workspace Area */}
-      <main className="flex-1 max-w-6xl w-full mx-auto px-6 py-8 space-y-10">
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-8 sm:space-y-10">
         
         {/* TAB 0: LIVE GOCHAR OVERLAY */}
         <div className={activeTab === 'gochar' ? 'block' : 'hidden print:hidden'}>
           <div className="space-y-6">
             
             {/* Gochar Overlay Header Banner (Tagline removed) */}
-            <div className="bg-[#FAF6EE] border-2 border-amber-300 rounded-3xl p-6 relative space-y-4 shadow-xs">
+            <div className="bg-[#FAF6EE] border-2 border-amber-300 rounded-3xl p-5 sm:p-6 relative space-y-4 shadow-xs">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-10 h-10 rounded-2xl bg-[#7A1C28] text-amber-100 flex items-center justify-center font-bold">
-                    <Sparkles className="w-5 h-5 stroke-[2]" />
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#7A1C28] text-amber-100 flex items-center justify-center font-bold shrink-0">
+                    <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2]" />
                   </div>
                   <div>
-                    <h2 className="text-lg sm:text-xl font-extrabold text-[#59141D] tracking-tight">
+                    <h2 className="text-base sm:text-xl font-extrabold text-[#59141D] tracking-tight">
                       {t.gocharTitle}
                     </h2>
                     <p className="text-xs text-stone-600 font-medium">{t.gocharSub}</p>
@@ -624,12 +624,12 @@ export default function KundliReportPage() {
               </div>
 
               {/* Overlay Toggle Controls */}
-              <div className="flex items-center justify-between pt-2 border-t border-amber-200/80">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-amber-200/80">
                 <span className="text-xs font-bold text-stone-700">{t.chartModeLabel}</span>
-                <div className="flex items-center gap-1.5 bg-white p-1 rounded-2xl border border-amber-300">
+                <div className="flex items-center gap-1 bg-white p-1 rounded-2xl border border-amber-300 self-start sm:self-auto">
                   <button
                     onClick={() => setOverlayMode('natal')}
-                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
+                    className={`px-2.5 sm:px-3 py-1 rounded-xl text-[11px] sm:text-xs font-bold transition-all ${
                       overlayMode === 'natal' ? 'bg-[#7A1C28] text-white shadow-xs' : 'text-stone-600 hover:bg-stone-100'
                     }`}
                   >
@@ -637,7 +637,7 @@ export default function KundliReportPage() {
                   </button>
                   <button
                     onClick={() => setOverlayMode('gochar')}
-                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
+                    className={`px-2.5 sm:px-3 py-1 rounded-xl text-[11px] sm:text-xs font-bold transition-all ${
                       overlayMode === 'gochar' ? 'bg-[#7A1C28] text-white shadow-xs' : 'text-stone-600 hover:bg-stone-100'
                     }`}
                   >
@@ -645,7 +645,7 @@ export default function KundliReportPage() {
                   </button>
                   <button
                     onClick={() => setOverlayMode('both')}
-                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
+                    className={`px-2.5 sm:px-3 py-1 rounded-xl text-[11px] sm:text-xs font-bold transition-all ${
                       overlayMode === 'both' ? 'bg-[#7A1C28] text-white shadow-xs' : 'text-stone-600 hover:bg-stone-100'
                     }`}
                   >
@@ -677,8 +677,8 @@ export default function KundliReportPage() {
                     </h3>
                   </div>
 
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-xs text-left">
+                  <div className="overflow-x-auto w-full">
+                    <table className="w-full min-w-[500px] text-xs text-left whitespace-nowrap">
                       <thead className="bg-stone-50 text-stone-500 font-bold border-b border-stone-200/80 text-[11px] uppercase tracking-wider">
                         <tr>
                           <th className="p-3">{t.colPlanet}</th>
@@ -724,7 +724,7 @@ export default function KundliReportPage() {
           <div className="space-y-8">
             
             <div className="bg-white p-5 rounded-3xl border border-stone-200 shadow-xs">
-              <h3 className="font-extrabold text-lg text-stone-900">{t.mainChartsHeader}</h3>
+              <h3 className="font-extrabold text-base sm:text-lg text-stone-900">{t.mainChartsHeader}</h3>
             </div>
 
             {/* Grid of 5 Basic Charts */}
@@ -773,17 +773,17 @@ export default function KundliReportPage() {
             </div>
 
             {/* Additional Shodashavarga Dropdown Selector */}
-            <Card className="p-6 bg-white border border-stone-200 shadow-xs space-y-6">
+            <Card className="p-5 sm:p-6 bg-white border border-stone-200 shadow-xs space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-100 pb-4">
                 <div>
-                  <h4 className="font-bold text-base text-stone-900">{t.vargaSelectLabel}</h4>
+                  <h4 className="font-bold text-sm sm:text-base text-stone-900">{t.vargaSelectLabel}</h4>
                   <p className="text-xs text-stone-500 font-medium">Select any of the 11 additional Parashari Varga charts.</p>
                 </div>
 
                 <select
                   value={selectedVarga}
                   onChange={(e) => setSelectedVarga(e.target.value)}
-                  className="px-4 py-2.5 rounded-2xl bg-stone-100 border border-stone-300 font-bold text-sm text-stone-900 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#A14E15]"
+                  className="px-3.5 py-2 rounded-2xl bg-stone-100 border border-stone-300 font-bold text-xs sm:text-sm text-stone-900 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#A14E15]"
                 >
                   {['D2', 'D3', 'D4', 'D7', 'D10', 'D12', 'D16', 'D20', 'D24', 'D27', 'D30', 'D40', 'D45', 'D60'].map((code) => (
                     <option key={code} value={code}>
@@ -812,10 +812,10 @@ export default function KundliReportPage() {
             
             {/* Current Active Dasha Hierarchy */}
             {currentDashaChain && (
-              <Card className="space-y-4 bg-white border border-stone-200 shadow-xs p-6">
-                <h3 className="text-base font-bold text-stone-900">{t.dashaChainTitle}</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 text-xs">
-                  <div className="p-3.5 bg-amber-50 rounded-2xl border border-amber-200/80">
+              <Card className="space-y-4 bg-white border border-stone-200 shadow-xs p-5 sm:p-6">
+                <h3 className="text-sm sm:text-base font-bold text-stone-900">{t.dashaChainTitle}</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs">
+                  <div className="p-3 bg-amber-50 rounded-2xl border border-amber-200/80">
                     <span className="text-[10px] font-bold text-stone-500 uppercase block">MahaDasha</span>
                     <span className="text-base font-bold text-[#A14E15] block mt-0.5">{getPlanetName(currentDashaChain.mahadasha.lord)}</span>
                     <span className="text-[10px] text-stone-600 font-mono block mt-1">
@@ -823,7 +823,7 @@ export default function KundliReportPage() {
                     </span>
                   </div>
 
-                  <div className="p-3.5 bg-stone-50 rounded-2xl border border-stone-200/60">
+                  <div className="p-3 bg-stone-50 rounded-2xl border border-stone-200/60">
                     <span className="text-[10px] font-bold text-stone-500 uppercase block">Antra Dasha</span>
                     <span className="text-sm font-bold text-stone-900 block mt-0.5">{getPlanetName(currentDashaChain.antardasha.lord)}</span>
                     <span className="text-[10px] text-stone-600 font-mono block mt-1">
@@ -831,7 +831,7 @@ export default function KundliReportPage() {
                     </span>
                   </div>
 
-                  <div className="p-3.5 bg-stone-50 rounded-2xl border border-stone-200/60">
+                  <div className="p-3 bg-stone-50 rounded-2xl border border-stone-200/60">
                     <span className="text-[10px] font-bold text-stone-500 uppercase block">Pratyantra</span>
                     <span className="text-sm font-bold text-stone-900 block mt-0.5">{getPlanetName(currentDashaChain.pratyantardasha.lord)}</span>
                     <span className="text-[10px] text-stone-600 font-mono block mt-1">
@@ -839,7 +839,7 @@ export default function KundliReportPage() {
                     </span>
                   </div>
 
-                  <div className="p-3.5 bg-stone-50 rounded-2xl border border-stone-200/60">
+                  <div className="p-3 bg-stone-50 rounded-2xl border border-stone-200/60">
                     <span className="text-[10px] font-bold text-stone-500 uppercase block">Sookshma</span>
                     <span className="text-sm font-bold text-stone-900 block mt-0.5">{getPlanetName(currentDashaChain.sookshmadasha.lord)}</span>
                     <span className="text-[10px] text-stone-600 font-mono block mt-1">
@@ -847,7 +847,7 @@ export default function KundliReportPage() {
                     </span>
                   </div>
 
-                  <div className="p-3.5 bg-stone-50 rounded-2xl border border-stone-200/60">
+                  <div className="p-3 bg-stone-50 rounded-2xl border border-stone-200/60 col-span-2 sm:col-span-1">
                     <span className="text-[10px] font-bold text-stone-500 uppercase block">Pran Dasha</span>
                     <span className="text-sm font-bold text-stone-900 block mt-0.5">{getPlanetName(currentDashaChain.prandasha.lord)}</span>
                     <span className="text-[10px] text-stone-600 font-mono block mt-1">
@@ -859,10 +859,10 @@ export default function KundliReportPage() {
             )}
 
             {/* 120-Year Vimshottari Timeline Accordion */}
-            <Card className="space-y-4 p-6 bg-white border border-stone-200 shadow-xs">
-              <div className="flex items-center justify-between border-b border-stone-100 pb-3">
-                <h3 className="text-base font-bold text-stone-900">{t.dashaTimelineTitle}</h3>
-                <Badge variant="secondary" className="font-mono text-xs">
+            <Card className="space-y-4 p-5 sm:p-6 bg-white border border-stone-200 shadow-xs">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-100 pb-3">
+                <h3 className="text-sm sm:text-base font-bold text-stone-900">{t.dashaTimelineTitle}</h3>
+                <Badge variant="secondary" className="font-mono text-xs self-start sm:self-auto">
                   {t.bhogyaText} {kundliData.dasha.bhogyaDasha.formatted}
                 </Badge>
               </div>
@@ -883,7 +883,7 @@ export default function KundliReportPage() {
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          <span className="w-8 h-8 rounded-xl bg-amber-200/60 font-bold text-xs flex items-center justify-center text-[#A14E15]">
+                          <span className="w-8 h-8 rounded-xl bg-amber-200/60 font-bold text-xs flex items-center justify-center text-[#A14E15] shrink-0">
                             {idx + 1}
                           </span>
                           <div>
@@ -909,7 +909,7 @@ export default function KundliReportPage() {
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 shrink-0">
                           {isCurrent && <Badge variant="default" className="bg-[#7A1C28] text-white text-[10px]">{t.activeNow}</Badge>}
                           {isExpanded ? <ChevronUp className="w-4 h-4 text-stone-400" /> : <ChevronDown className="w-4 h-4 text-stone-400" />}
                         </div>
@@ -917,7 +917,7 @@ export default function KundliReportPage() {
 
                       {/* Expanded Antardashas */}
                       {isExpanded && md.antardashas && (
-                        <div className="pl-6 pr-2 space-y-2 pt-1 border-l-2 border-amber-200/80 ml-4">
+                        <div className="pl-4 sm:pl-6 pr-2 space-y-2 pt-1 border-l-2 border-amber-200/80 ml-3 sm:ml-4">
                           <h4 className="text-xs font-bold text-stone-500 uppercase tracking-wider">
                             Antardashas under {getPlanetName(md.lord)}
                           </h4>
@@ -958,25 +958,26 @@ export default function KundliReportPage() {
         <div className={activeTab === 'sadesati' ? 'block' : 'hidden print:block'}>
           <div className="space-y-6">
             <Card className="p-0 overflow-hidden bg-white border border-stone-200 shadow-xs">
-              <div className="p-5 bg-stone-50/80 border-b border-stone-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div className="p-4 sm:p-5 bg-stone-50/80 border-b border-stone-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
-                  <h3 className="font-bold text-base text-stone-900 flex items-center gap-2">
-                    <ShieldCheck className="w-5 h-5 text-[#A14E15]" />
+                  <h3 className="font-bold text-sm sm:text-base text-stone-900 flex items-center gap-2">
+                    <ShieldCheck className="w-5 h-5 text-[#A14E15] shrink-0" />
                     <span>{t.sadesatiTitle}</span>
                   </h3>
                   <p className="text-xs text-stone-500 font-medium mt-0.5">{t.sadesatiSub}</p>
                 </div>
               </div>
 
-              <div className="overflow-x-auto">
-                <table className="w-full text-xs text-left">
+              {/* Sade Sati Table - Strict single line horizontal row per entry with overflow-x scroll */}
+              <div className="overflow-x-auto w-full scrollbar-thin">
+                <table className="w-full min-w-[640px] text-xs text-left whitespace-nowrap">
                   <thead className="bg-stone-50 text-stone-500 font-bold border-b border-stone-200/80 text-[11px] uppercase tracking-wider">
                     <tr>
-                      <th className="p-4">{t.colType}</th>
-                      <th className="p-4">{t.colSaturnSign}</th>
-                      <th className="p-4">{t.colDates}</th>
-                      <th className="p-4 text-center">{t.colStatus}</th>
-                      <th className="p-4 text-right">{t.colPaya}</th>
+                      <th className="p-3.5 sm:p-4">{t.colType}</th>
+                      <th className="p-3.5 sm:p-4">{t.colSaturnSign}</th>
+                      <th className="p-3.5 sm:p-4">{t.colDates}</th>
+                      <th className="p-3.5 sm:p-4 text-center">{t.colStatus}</th>
+                      <th className="p-3.5 sm:p-4 text-right">{t.colPaya}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-stone-100 font-medium">
@@ -986,18 +987,18 @@ export default function KundliReportPage() {
                       const payaLabel = t.payaMap[item.paya] || item.paya;
                       return (
                         <tr key={idx} className={isActive ? 'bg-amber-100/60 font-bold' : 'hover:bg-stone-50'}>
-                          <td className="p-4 font-bold text-[#7A1C28]">
+                          <td className="p-3.5 sm:p-4 font-bold text-[#7A1C28]">
                             {item.type}
-                            {item.sadesatiPhase && <span className="text-[10px] text-stone-500 block font-normal">Phase {item.sadesatiPhase}</span>}
+                            {item.sadesatiPhase && <span className="text-[10px] text-stone-500 font-normal ml-1">(Phase {item.sadesatiPhase})</span>}
                           </td>
-                          <td className="p-4 font-bold text-stone-900">{getRashiName(item.saturnSign)}</td>
-                          <td className="p-4 font-mono text-stone-700 text-xs">{formatDateShort(item.startDate)} → {formatDateShort(item.endDate)}</td>
-                          <td className="p-4 text-center">
-                            <Badge variant={isActive ? 'default' : item.status === 'Completed' ? 'secondary' : 'outline'}>
+                          <td className="p-3.5 sm:p-4 font-bold text-stone-900">{getRashiName(item.saturnSign)}</td>
+                          <td className="p-3.5 sm:p-4 font-mono text-stone-700 text-xs">{formatDateShort(item.startDate)} → {formatDateShort(item.endDate)}</td>
+                          <td className="p-3.5 sm:p-4 text-center">
+                            <Badge variant={isActive ? 'default' : item.status === 'Completed' ? 'secondary' : 'outline'} className="whitespace-nowrap">
                               {statusLabel}
                             </Badge>
                           </td>
-                          <td className="p-4 text-right font-bold text-stone-800">{payaLabel}</td>
+                          <td className="p-3.5 sm:p-4 text-right font-bold text-stone-800">{payaLabel}</td>
                         </tr>
                       );
                     })}
@@ -1019,14 +1020,14 @@ export default function KundliReportPage() {
                 </h3>
               </div>
 
-              <div className="overflow-x-auto">
-                <table className="w-full text-xs text-left">
+              <div className="overflow-x-auto w-full">
+                <table className="w-full min-w-[500px] text-xs text-left whitespace-nowrap">
                   <thead className="bg-stone-50 text-stone-500 font-bold border-b border-stone-200/80 text-[11px] uppercase tracking-wider">
                     <tr>
-                      <th className="p-4">{t.colPlanet}</th>
-                      <th className="p-4">{t.colTransitSign}</th>
-                      <th className="p-4">{t.colDegree}</th>
-                      <th className="p-4">{t.colNakshatraPada}</th>
+                      <th className="p-3.5 sm:p-4">{t.colPlanet}</th>
+                      <th className="p-3.5 sm:p-4">{t.colTransitSign}</th>
+                      <th className="p-3.5 sm:p-4">{t.colDegree}</th>
+                      <th className="p-3.5 sm:p-4">{t.colNakshatraPada}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-stone-100 font-medium">
@@ -1035,16 +1036,16 @@ export default function KundliReportPage() {
                       const pada = Math.floor(((pObj.longitude % 360) % (360 / 27)) / (360 / 108)) + 1;
                       return (
                         <tr key={pName} className="hover:bg-amber-50/20">
-                          <td className="p-4 font-bold text-stone-900 text-sm">
+                          <td className="p-3.5 sm:p-4 font-bold text-stone-900 text-sm">
                             {getPlanetName(pName)} {pObj.isRetrograde ? '(વ)' : ''}
                           </td>
-                          <td className="p-4 font-bold text-[#A14E15] text-sm">
+                          <td className="p-3.5 sm:p-4 font-bold text-[#A14E15] text-sm">
                             {getRashiName(pObj.sign)}
                           </td>
-                          <td className="p-4 font-mono text-stone-700">
+                          <td className="p-3.5 sm:p-4 font-mono text-stone-700">
                             {formatDegStr(pObj.longitude)}
                           </td>
-                          <td className="p-4 text-stone-800 font-semibold">
+                          <td className="p-3.5 sm:p-4 text-stone-800 font-semibold">
                             {NAKSHATRA_NAMES[lang][nakIdx]} (Pada {pada})
                           </td>
                         </tr>
@@ -1062,7 +1063,7 @@ export default function KundliReportPage() {
           <div className="space-y-6">
             
             {/* Birth Panchanga */}
-            <Card className="space-y-4 p-6 bg-white border border-stone-200 shadow-xs">
+            <Card className="space-y-4 p-5 sm:p-6 bg-white border border-stone-200 shadow-xs">
               <h3 className="text-base font-bold text-stone-900">{t.panchangTitle}</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                 <div className="p-4 bg-stone-50 rounded-2xl border border-stone-200/60 space-y-1">
@@ -1094,12 +1095,12 @@ export default function KundliReportPage() {
               <div className="p-4 bg-stone-50/60 border-b border-stone-200/60">
                 <h3 className="font-bold text-sm text-stone-900">{t.remediesTitle}</h3>
               </div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-xs text-left">
+              <div className="overflow-x-auto w-full">
+                <table className="w-full min-w-[500px] text-xs text-left whitespace-nowrap">
                   <thead className="bg-stone-50 text-stone-500 font-bold border-b border-stone-200/80">
                     <tr>
-                      <th className="p-4">Astrological Parameter</th>
-                      <th className="p-4 text-right">Recommendation</th>
+                      <th className="p-3.5 sm:p-4">Astrological Parameter</th>
+                      <th className="p-3.5 sm:p-4 text-right">Recommendation</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-stone-100 font-medium">
@@ -1119,8 +1120,8 @@ export default function KundliReportPage() {
                       { k: t.auspiciousDirection, v: kundliData.shubha.direction },
                     ].map((item, idx) => (
                       <tr key={idx} className="hover:bg-amber-50/20">
-                        <td className="p-4 font-semibold text-stone-600">{item.k}</td>
-                        <td className="p-4 font-bold text-stone-900 text-sm text-right">{item.v || '-'}</td>
+                        <td className="p-3.5 sm:p-4 font-semibold text-stone-600">{item.k}</td>
+                        <td className="p-3.5 sm:p-4 font-bold text-stone-900 text-sm text-right">{item.v || '-'}</td>
                       </tr>
                     ))}
                   </tbody>
