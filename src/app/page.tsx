@@ -8,6 +8,7 @@ import { Button } from '../components/ui/shadcn/button';
 import { Card } from '../components/ui/shadcn/card';
 import { GURU_SERVICES, ServiceItem } from '../lib/services';
 import PWAInstallBanner from '../components/PWAInstallBanner';
+import Footer from '../components/Footer';
 import {
   Globe,
   Sparkles,
@@ -543,62 +544,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. FOOTER */}
-      <footer className="bg-[#1D1D1F] text-stone-300 py-16 px-6 sm:px-12 text-left">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-12 gap-10 pb-12 border-b border-stone-800">
-          
-          <div className="sm:col-span-5 space-y-4">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-amber-900/50 border border-amber-700/60 flex items-center justify-center text-amber-400">
-                <Sparkles className="w-4 h-4 stroke-[1.75]" />
-              </div>
-              <span className="text-[16px] font-semibold text-white tracking-tight">{t.title}</span>
-            </div>
-            <p className="text-[14px] text-stone-400 font-normal leading-relaxed max-w-sm">
-              Authentic Vedic astrology consultation & Sri Vidya spiritual guidance by Narendragiri Goswami Ji based on Brihat Parashara Hora Shastra principles.
-            </p>
-          </div>
-
-          <div className="sm:col-span-3 space-y-3 text-[14px]">
-            <h5 className="font-semibold text-white uppercase tracking-wider text-[12px]">Consultations</h5>
-            <ul className="space-y-2 text-stone-400 font-normal">
-              <li><button onClick={scrollToPlans} className="hover:text-amber-400 transition-colors">Kundli Reading (₹250)</button></li>
-              <li><button onClick={scrollToPlans} className="hover:text-amber-400 transition-colors">30 Mins Live Session (₹250)</button></li>
-              <li><button onClick={scrollToPlans} className="hover:text-amber-400 transition-colors">Extra Questions (₹100)</button></li>
-            </ul>
-          </div>
-
-          <div className="sm:col-span-4 space-y-3 text-[14px]">
-            <h5 className="font-semibold text-white uppercase tracking-wider text-[12px]">Direct Contact & Support</h5>
-            <p className="text-stone-400 font-normal flex items-center gap-2">
-              <MessageSquare className="w-4 h-4 stroke-[1.75] text-emerald-400" />
-              <span>WhatsApp Delivery & Verification</span>
-            </p>
-            <p className="text-stone-500 text-[12px] font-mono">
-              Data Security: 30-Day Auto Purge Policy
-            </p>
-          </div>
-
-        </div>
-
-        <div className="max-w-6xl mx-auto pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-[14px] text-stone-500 font-normal">
-          <p>© {new Date().getFullYear()} Shree Ganeshambika Jyotish. All rights reserved.</p>
-          <div className="flex items-center gap-2 text-stone-400">
-            <Globe className="w-4 h-4 stroke-[1.75]" />
-            {(['EN', 'GU', 'HI'] as Language[]).map((l) => (
-              <button
-                key={l}
-                onClick={() => setLang(l)}
-                className={`text-[12px] font-semibold transition-colors px-2 py-1 rounded-md cursor-pointer ${
-                  lang === l ? 'text-amber-400 bg-stone-800' : 'text-stone-400 hover:text-white'
-                }`}
-              >
-                {l === 'EN' ? 'English' : l === 'GU' ? 'ગુજરાતી' : 'हिंदी'}
-              </button>
-            ))}
-          </div>
-        </div>
-      </footer>
+      {/* 4. FOOTER WITH LEGAL & PRIVACY POLICIES */}
+      <Footer lang={lang} />
 
       {/* PWA Mobile App Installation Prompt Banner (24-Hour Persistence) */}
       <PWAInstallBanner lang={lang} />
