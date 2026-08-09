@@ -29,15 +29,26 @@ export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps)
     const iosDevice = /iphone|ipad|ipod/.test(userAgent);
     setIsIOS(iosDevice);
 
-    // 3. Capture beforeinstallprompt for Android Chrome
+    // 3. Capture beforeinstallprompt for Android Chrome & auto-trigger native prompt
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e);
       setShowBanner(true);
+
+      // Auto-trigger browser native installation dialog on page load
+      setTimeout(() => {
+        try {
+          (e as any).prompt();
+        } catch (err) {
+          console.error('Auto prompt error:', err);
+        }
+      }, 800);
     };
 
-    // 4. Continuously active for 48 hours starting today (Aug 9 - Aug 11) on all browsers if not installed
-    const activeUntil = new Date('2026-08-11T23:59:59+05:30').getTime();
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    // 4. Continuously active for 20 days starting today (Aug 9 - Aug 29) on all browsers if not installed
+    const activeUntil = new Date('2026-08-29T23:59:59+05:30').getTime();
     if (Date.now() <= activeUntil) {
       setShowBanner(true);
     }
