@@ -96,124 +96,13 @@ export default function DedicatedIntakePage({ params }: { params: Promise<{ serv
     const delayDebounceFn = setTimeout(async () => {
       setIsSearching(true);
       try {
-        // Run parallel queries to OpenStreetMap Nominatim and Photon API
-        const [nomRes, photonRes] = await Promise.allSettled([
-          fetch(
-            `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-              q
-            )}&countrycodes=in&addressdetails=1&limit=10`
-          ).then((res) => res.json()),
-          fetch(
-            `https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=10`
-          ).then((res) => res.json()),
-        ]);
-
-        let nomData = nomRes.status === 'fulfilled' && Array.isArray(nomRes.value) ? nomRes.value : [];
-        
-        // Fallback global Nominatim query if Indian prioritized query returned 0 results
-        if (nomData.length === 0) {
-          try {
-            const res = await fetch(
-              `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-                q
-              )}&addressdetails=1&limit=10`
-            );
-            nomData = await res.json();
-          } catch (e) {
-            console.error('Nominatim global error:', e);
-          }
+        const res = await fetch(`/api/location/search?q=${encodeURIComponent(q)}`);
+        const data = await res.json();
+        if (data.success && Array.isArray(data.results)) {
+          setPlaceSuggestions(data.results);
+        } else {
+          setPlaceSuggestions([]);
         }
-
-        const photonFeatures =
-          photonRes.status === 'fulfilled' && photonRes.value?.features
-            ? photonRes.value.features
-            : [];
-
-        const combined: any[] = [];
-        const seenCoords = new Set<string>();
-
-        // 1. Process Nominatim results
-        for (const item of nomData) {
-          const lat = parseFloat(item.lat);
-          const lon = parseFloat(item.lon);
-          const key = `${lat.toFixed(3)},${lon.toFixed(3)}`;
-
-          if (!seenCoords.has(key) && !isNaN(lat) && !isNaN(lon)) {
-            seenCoords.add(key);
-
-            const addr = item.address || {};
-            const mainPlace =
-              addr.village ||
-              addr.town ||
-              addr.city ||
-              addr.suburb ||
-              addr.hamlet ||
-              addr.county ||
-              item.name;
-            const district = addr.state_district || addr.county || addr.district;
-            const state = addr.state;
-            const country = addr.country || 'India';
-
-            const parts = [mainPlace, district, state, country].filter(Boolean);
-            const cleanDisplay = Array.from(new Set(parts)).join(', ');
-            const typeLabel = addr.village
-              ? 'Village'
-              : addr.town
-              ? 'Town'
-              : addr.city
-              ? 'City'
-              : addr.hamlet
-              ? 'Village'
-              : 'Location';
-
-            combined.push({
-              display_name: cleanDisplay || item.display_name,
-              full_name: item.display_name,
-              lat: lat,
-              lon: lon,
-              type: typeLabel,
-            });
-          }
-        }
-
-        // 2. Process Photon API results
-        for (const feat of photonFeatures) {
-          const props = feat.properties || {};
-          const coords = feat.geometry?.coordinates || [0, 0];
-          const lon = coords[0];
-          const lat = coords[1];
-          const key = `${lat.toFixed(3)},${lon.toFixed(3)}`;
-
-          if (!seenCoords.has(key) && lat !== 0 && lon !== 0) {
-            seenCoords.add(key);
-
-            const mainPlace = props.name || props.city || props.town || props.village;
-            const district = props.county || props.district || props.city;
-            const state = props.state;
-            const country = props.country || 'India';
-
-            const parts = [mainPlace, district, state, country].filter(Boolean);
-            const cleanDisplay = Array.from(new Set(parts)).join(', ');
-            const typeLabel =
-              props.osm_value === 'village'
-                ? 'Village'
-                : props.osm_value === 'town'
-                ? 'Town'
-                : props.type === 'city'
-                ? 'City'
-                : 'Location';
-
-            combined.push({
-              display_name: cleanDisplay,
-              full_name: `${cleanDisplay} ${props.postcode ? `(${props.postcode})` : ''}`,
-              lat: lat,
-              lon: lon,
-              type: typeLabel,
-            });
-          }
-        }
-
-        setPlaceSuggestions(combined);
       } catch (err) {
         console.error('Error fetching places:', err);
       } finally {
