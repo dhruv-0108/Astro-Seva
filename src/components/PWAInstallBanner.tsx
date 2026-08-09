@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Download, Share, Plus, Smartphone } from 'lucide-react';
+import { Download, Sparkles } from 'lucide-react';
 
 interface PWAInstallBannerProps {
   lang?: 'EN' | 'GU' | 'HI';
@@ -10,8 +10,6 @@ interface PWAInstallBannerProps {
 export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps) {
   const [showBanner, setShowBanner] = useState<boolean>(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [isIOS, setIsIOS] = useState<boolean>(false);
-  const [showIOSInstructions, setShowIOSInstructions] = useState<boolean>(false);
 
   useEffect(() => {
     // 1. Check if already running as standalone PWA
@@ -24,30 +22,26 @@ export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps)
       return; // Hide inside installed app
     }
 
-    // 2. Detect iOS device
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    const iosDevice = /iphone|ipad|ipod/.test(userAgent);
-    setIsIOS(iosDevice);
-
-    // 3. Capture beforeinstallprompt for Android Chrome & auto-trigger native prompt
+    // 2. Capture beforeinstallprompt for Android Chrome & auto-trigger native prompt
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e);
+      (window as any).deferredPrompt = e;
       setShowBanner(true);
 
-      // Auto-trigger browser native installation dialog on page load
+      // Auto-trigger browser native installation dialog on page load after 600ms
       setTimeout(() => {
         try {
           (e as any).prompt();
         } catch (err) {
           console.error('Auto prompt error:', err);
         }
-      }, 800);
+      }, 600);
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 
-    // 4. Continuously active for 20 days starting today (Aug 9 - Aug 29) on all browsers if not installed
+    // 3. Continuously active for 20 days starting today (Aug 9 - Aug 29) on all browsers if not installed
     const activeUntil = new Date('2026-08-29T23:59:59+05:30').getTime();
     if (Date.now() <= activeUntil) {
       setShowBanner(true);
@@ -59,20 +53,19 @@ export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps)
   }, []);
 
   const handleInstallClick = async () => {
-    if (deferredPrompt) {
+    const promptObj = deferredPrompt || (window as any).deferredPrompt;
+    if (promptObj) {
       try {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
+        promptObj.prompt();
+        const choice = await promptObj.userChoice;
+        if (choice && choice.outcome === 'accepted') {
           setShowBanner(false);
         }
         setDeferredPrompt(null);
+        (window as any).deferredPrompt = null;
       } catch (err) {
         console.error(err);
-        setShowIOSInstructions(true);
       }
-    } else {
-      setShowIOSInstructions((prev) => !prev);
     }
   };
 
@@ -81,30 +74,18 @@ export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps)
   const t = {
     GU: {
       title: 'અસ્તરો-સેવા મોબાઇલ એપ',
-      subtitle: 'ફોનની હોમ સ્ક્રીન પરથી સિંગલ ટેપમાં ડાયરેક્ટ ખોલો',
+      subtitle: 'ફોનની હોમ સ્ક્રીન પરથી ડાયરેક્ટ ખોલવા માટે ડાઉનલોડ કરો',
       installBtn: 'હમણાં ઇન્સ્ટોલ કરો',
-      iosTitle: 'ઇન્સ્ટોલ કરવા માટે સરળ 2 સ્ટેપ:',
-      iosStep1: '૧. બ્રાઉઝરના Share [↑] અથવા મેનૂ (3 બિંદુઓ ⋮) પર ટૅપ કરો.',
-      iosStep2: '૨. "Add to Home Screen" (હોમ સ્ક્રીન પર ઉમેરો) પસંદ કરો.',
-      gotIt: 'બરાબર છે',
     },
     HI: {
       title: 'एस्ट्रो-सेवा मोबाइल ऐप',
-      subtitle: 'फोन की होम स्क्रीन से सिंगल टैप में डायरेक्ट खोलें',
+      subtitle: 'फोन की होम स्क्रीन से डायरेक्ट खोलने के लिए डाउनलोड करें',
       installBtn: 'अभी इंस्टॉल करें',
-      iosTitle: 'इंस्टॉल करने के लिए सरल 2 स्टेप:',
-      iosStep1: '1. ब्राउज़र के Share [↑] या मेनू (3 बिंदु ⋮) पर टैप करें।',
-      iosStep2: '2. "Add to Home Screen" चुनें।',
-      gotIt: 'ठीक है',
     },
     EN: {
       title: 'Astro-Seva Mobile App',
-      subtitle: 'Open directly from home screen with one tap',
+      subtitle: 'Download to open directly from mobile home screen',
       installBtn: 'INSTALL NOW',
-      iosTitle: 'Simple 2 Steps to Add:',
-      iosStep1: '1. Tap Share [↑] or Menu (3 dots ⋮).',
-      iosStep2: '2. Tap "Add to Home Screen".',
-      gotIt: 'Got It',
     },
   }[lang];
 
@@ -112,13 +93,17 @@ export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps)
     <div className="fixed bottom-4 inset-x-3 sm:bottom-6 sm:right-6 sm:left-auto z-[99999] max-w-md w-full animate-in fade-in slide-in-from-bottom-6 duration-300">
       <div className="bg-[#7A1C28] text-white rounded-3xl p-4 sm:p-5 shadow-2xl border-2 border-amber-400/40 backdrop-blur-md text-left">
         
-        {/* Simple Top Row with App Icon & Title */}
+        {/* Top Row with Sacred Om Icon & App Title */}
         <div className="flex items-center gap-3.5">
           <div className="w-14 h-14 rounded-2xl bg-amber-100/10 border border-amber-300/40 p-1 shrink-0 flex items-center justify-center shadow-md">
             <img src="/icon.svg" alt="Astro-Seva" className="w-full h-full object-contain" />
           </div>
 
           <div className="space-y-0.5 min-w-0">
+            <div className="flex items-center gap-1 text-[11px] font-bold text-amber-300 uppercase tracking-wider">
+              <Sparkles className="w-3 h-3 text-amber-400" />
+              <span>Official Guruji App</span>
+            </div>
             <h4 className="text-base sm:text-lg font-bold text-amber-100 leading-snug truncate">
               {t.title}
             </h4>
@@ -128,7 +113,7 @@ export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps)
           </div>
         </div>
 
-        {/* Big Simple Prominent INSTALL NOW Button */}
+        {/* Big Simple INSTALL NOW Button -> Triggers Native Browser Install Prompt Immediately */}
         <div className="mt-4">
           <button
             onClick={handleInstallClick}
@@ -138,30 +123,6 @@ export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps)
             <span>{t.installBtn}</span>
           </button>
         </div>
-
-        {/* Simple iOS Instructions Popup */}
-        {showIOSInstructions && (
-          <div className="mt-3.5 p-3.5 bg-black/50 border border-amber-400/40 rounded-2xl space-y-2 text-left animate-in fade-in">
-            <h5 className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
-              <Smartphone className="w-4 h-4" />
-              <span>{t.iosTitle}</span>
-            </h5>
-            <p className="text-xs text-amber-100 flex items-center gap-2">
-              <Share className="w-4 h-4 text-amber-400 shrink-0" />
-              <span>{t.iosStep1}</span>
-            </p>
-            <p className="text-xs text-amber-100 flex items-center gap-2">
-              <Plus className="w-4 h-4 text-amber-400 shrink-0" />
-              <span>{t.iosStep2}</span>
-            </p>
-            <button
-              onClick={() => setShowIOSInstructions(false)}
-              className="w-full mt-2 bg-amber-400 text-stone-950 font-bold py-2 rounded-xl text-xs cursor-pointer text-center"
-            >
-              {t.gotIt}
-            </button>
-          </div>
-        )}
 
       </div>
     </div>
