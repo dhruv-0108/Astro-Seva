@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Download, Sparkles } from 'lucide-react';
+import { Download, Sparkles, Loader2, CheckCircle2 } from 'lucide-react';
 
 interface PWAInstallBannerProps {
   lang?: 'EN' | 'GU' | 'HI';
@@ -10,6 +10,8 @@ interface PWAInstallBannerProps {
 export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps) {
   const [showBanner, setShowBanner] = useState<boolean>(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isInstalling, setIsInstalling] = useState<boolean>(false);
+  const [isInstalledSuccess, setIsInstalledSuccess] = useState<boolean>(false);
 
   useEffect(() => {
     // 1. Check if already running as standalone PWA
@@ -22,7 +24,16 @@ export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps)
       return; // Hide inside installed app
     }
 
-    // 2. Capture beforeinstallprompt for Android Chrome & auto-trigger native prompt
+    // 2. Listen for appinstalled browser event
+    const handleAppInstalled = () => {
+      setIsInstalledSuccess(true);
+      setIsInstalling(false);
+      setTimeout(() => setShowBanner(false), 3000);
+    };
+
+    window.addEventListener('appinstalled', handleAppInstalled);
+
+    // 3. Capture beforeinstallprompt for Android Chrome & auto-trigger native prompt
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e);
@@ -41,13 +52,14 @@ export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps)
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 
-    // 3. Continuously active for 20 days starting today (Aug 9 - Aug 29) on all browsers if not installed
+    // 4. Continuously active for 20 days starting today (Aug 9 - Aug 29) on all browsers if not installed
     const activeUntil = new Date('2026-08-29T23:59:59+05:30').getTime();
     if (Date.now() <= activeUntil) {
       setShowBanner(true);
     }
 
     return () => {
+      window.removeEventListener('appinstalled', handleAppInstalled);
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     };
   }, []);
@@ -56,16 +68,28 @@ export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps)
     const promptObj = deferredPrompt || (window as any).deferredPrompt;
     if (promptObj) {
       try {
-        promptObj.prompt();
+        setIsInstalling(true);
+        await promptObj.prompt();
         const choice = await promptObj.userChoice;
         if (choice && choice.outcome === 'accepted') {
-          setShowBanner(false);
+          setIsInstalledSuccess(true);
+          setIsInstalling(false);
+          setTimeout(() => setShowBanner(false), 3000);
+        } else {
+          setIsInstalling(false);
         }
         setDeferredPrompt(null);
         (window as any).deferredPrompt = null;
       } catch (err) {
         console.error(err);
+        setIsInstalling(false);
       }
+    } else {
+      // Direct visual feedback if prompt is already executing in background
+      setIsInstalling(true);
+      setTimeout(() => {
+        setIsInstalling(false);
+      }, 3000);
     }
   };
 
@@ -76,16 +100,22 @@ export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps)
       title: 'અસ્તરો-સેવા મોબાઇલ એપ',
       subtitle: 'ફોનની હોમ સ્ક્રીન પરથી ડાયરેક્ટ ખોલવા માટે ડાઉનલોડ કરો',
       installBtn: 'હમણાં ઇન્સ્ટોલ કરો',
+      installing: 'એપ ઇન્સ્ટોલ થઈ રહી છે...',
+      installed: '✓ એપ ઇન્સ્ટોલ થઈ ગઈ! હોમ સ્ક્રીન પર આયકન ઉમેરાઈ ગયું છે.',
     },
     HI: {
       title: 'एस्ट्रो-सेवा मोबाइल ऐप',
       subtitle: 'फोन की होम स्क्रीन से डायरेक्ट खोलने के लिए डाउनलोड करें',
       installBtn: 'अभी इंस्टॉल करें',
+      installing: 'ऐप इंस्टॉल हो रहा है...',
+      installed: '✓ ऐप इंस्टॉल हो गया! होम स्क्रीन पर आइकॉन जुड़ गया है।',
     },
     EN: {
       title: 'Astro-Seva Mobile App',
       subtitle: 'Download to open directly from mobile home screen',
       installBtn: 'INSTALL NOW',
+      installing: 'Installing Astro-Seva App...',
+      installed: '✓ App Installed Successfully! Check your phone home screen.',
     },
   }[lang];
 
@@ -113,15 +143,32 @@ export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps)
           </div>
         </div>
 
-        {/* Big Simple INSTALL NOW Button -> Triggers Native Browser Install Prompt Immediately */}
+        {/* Dynamic Action Area: Installing Spinner / Success Badge / Big Install Button */}
         <div className="mt-4">
-          <button
-            onClick={handleInstallClick}
-            className="w-full bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-stone-950 font-black py-3.5 px-4 rounded-2xl text-sm sm:text-base shadow-xl flex items-center justify-center gap-2 cursor-pointer transition-all transform active:scale-98 tracking-wide uppercase"
-          >
-            <Download className="w-5 h-5 stroke-[3]" />
-            <span>{t.installBtn}</span>
-          </button>
+          {isInstalledSuccess ? (
+            <div className="w-full bg-emerald-600 text-white font-bold py-3.5 px-4 rounded-2xl text-xs sm:text-sm shadow-xl flex items-center justify-center gap-2 animate-in fade-in">
+              <CheckCircle2 className="w-5 h-5 text-emerald-200 shrink-0" />
+              <span>{t.installed}</span>
+            </div>
+          ) : (
+            <button
+              onClick={handleInstallClick}
+              disabled={isInstalling}
+              className="w-full bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-stone-950 font-black py-3.5 px-4 rounded-2xl text-sm sm:text-base shadow-xl flex items-center justify-center gap-2 cursor-pointer transition-all transform active:scale-98 tracking-wide uppercase disabled:opacity-90"
+            >
+              {isInstalling ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin text-stone-950" />
+                  <span>{t.installing}</span>
+                </>
+              ) : (
+                <>
+                  <Download className="w-5 h-5 stroke-[3]" />
+                  <span>{t.installBtn}</span>
+                </>
+              )}
+            </button>
+          )}
         </div>
 
       </div>
