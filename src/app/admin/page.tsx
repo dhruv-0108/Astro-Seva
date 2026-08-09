@@ -48,6 +48,8 @@ import {
   Edit3,
   X,
   Search,
+  Info,
+  AlertTriangle,
 } from 'lucide-react';
 
 interface ClientSubmission {
@@ -252,11 +254,36 @@ export default function AdminPage() {
 
   const [placeSearch, setPlaceSearch] = useState<string>('');
   const [placeSuggestions, setPlaceSuggestions] = useState<any[]>([]);
+  const [showDiscardModal, setShowDiscardModal] = useState<boolean>(false);
+  const [formError, setFormError] = useState<string>('');
   const [isPlaceSearching, setIsPlaceSearching] = useState<boolean>(false);
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const justSelectedPlaceRef = useRef<boolean>(false);
 
   const t = ADMIN_TRANSLATIONS[lang];
+
+  const hasUnsavedChanges = () => {
+    return (
+      formData.name.trim().length > 0 ||
+      placeSearch.trim().length > 0 ||
+      phoneDigits.trim().length > 0
+    );
+  };
+
+  const handleAttemptCloseModal = () => {
+    if (hasUnsavedChanges()) {
+      setShowDiscardModal(true);
+    } else {
+      setIsModalOpen(false);
+      setFormError('');
+    }
+  };
+
+  const handleConfirmDiscard = () => {
+    setShowDiscardModal(false);
+    setIsModalOpen(false);
+    setFormError('');
+  };
 
   // Auth State Listener
   useEffect(() => {
@@ -440,9 +467,53 @@ export default function AdminPage() {
 
   const handleSaveForm = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError('');
+
+    const nameClean = formData.name.trim();
+    const phoneClean = phoneDigits.replace(/\D/g, '');
     const targetPlace = (formData.place || placeSearch).trim();
-    if (!formData.name.trim() || !targetPlace) {
-      alert('Please enter client name and birth place.');
+
+    if (!nameClean || nameClean.length < 2) {
+      setFormError(
+        lang === 'GU'
+          ? 'કૃપા કરીને પૂરું નામ દાખલ કરો (ઓછામાં ઓછા ૨ અક્ષર).'
+          : lang === 'HI'
+          ? 'कृपया पूरा नाम दर्ज करें (कम से कम 2 अक्षर)।'
+          : 'Please enter a valid full name (minimum 2 characters).'
+      );
+      return;
+    }
+
+    if (!phoneClean || phoneClean.length < 7) {
+      setFormError(
+        lang === 'GU'
+          ? 'કૃપા કરીને સાચો વોટ્સએપ ફોન નંબર દાખલ કરો.'
+          : lang === 'HI'
+          ? 'कृपया सही व्हाट्सएप फोन नंबर दर्ज करें।'
+          : 'Please enter a valid WhatsApp phone number.'
+      );
+      return;
+    }
+
+    if (!formData.date || !formData.time) {
+      setFormError(
+        lang === 'GU'
+          ? 'કૃપા કરીને જન્મ તારીખ અને સમય પસંદ કરો.'
+          : lang === 'HI'
+          ? 'कृपया जन्म तिथि और समय चुनें।'
+          : 'Please select valid birth date and time.'
+      );
+      return;
+    }
+
+    if (!targetPlace || targetPlace.length < 2) {
+      setFormError(
+        lang === 'GU'
+          ? 'કૃપા કરીને જન્મ સ્થળ (ગામ/શહેર) દાખલ કરો.'
+          : lang === 'HI'
+          ? 'कृपया जन्म स्थान (गांव/शहर) दर्ज करें।'
+          : 'Please enter a valid birth place (village or city).'
+      );
       return;
     }
 
@@ -914,7 +985,8 @@ export default function AdminPage() {
               </div>
 
               <button
-                onClick={() => setIsModalOpen(false)}
+                type="button"
+                onClick={handleAttemptCloseModal}
                 className="text-stone-400 hover:text-stone-700 p-2 rounded-xl transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
@@ -922,6 +994,12 @@ export default function AdminPage() {
             </div>
 
             <form onSubmit={handleSaveForm} className="space-y-4">
+              {formError && (
+                <div className="p-3 bg-red-50 border border-red-200 rounded-2xl text-xs font-semibold text-red-700 flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4 text-red-600 shrink-0" />
+                  <span>{formError}</span>
+                </div>
+              )}
               
               {/* Client Name */}
               <div className="space-y-1">
@@ -999,7 +1077,7 @@ export default function AdminPage() {
                 />
               </div>
 
-              {/* Birth Place Search Input (Exhaustive Nominatim + Photon Fetcher) */}
+              {/* Birth Place Search Input (Exhaustive Geocoding Engine) */}
               <div className="space-y-1 relative" ref={searchContainerRef}>
                 <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center justify-between">
                   <span>Place of Birth (Village / Town / City)</span>
@@ -1021,6 +1099,18 @@ export default function AdminPage() {
                   className="w-full bg-white border border-stone-200 rounded-2xl p-3.5 text-sm text-stone-900 outline-none focus:border-[#A14E15] focus:ring-2 focus:ring-amber-500/10"
                   required
                 />
+
+                {/* Option 2: Simple Multi-Language Guidance Tip */}
+                <p className="text-[11px] text-amber-900 bg-amber-50/80 border border-amber-200/80 p-2.5 rounded-xl mt-1.5 flex items-start gap-1.5 font-medium leading-snug">
+                  <Info className="w-3.5 h-3.5 text-amber-700 shrink-0 mt-0.5" />
+                  <span>
+                    {lang === 'GU'
+                      ? 'ગામ કે વિસ્તાર ન મળે તો નજીકનું તાલુકા કે શહેર પસંદ કરો.'
+                      : lang === 'HI'
+                      ? 'गांव या क्षेत्र न मिले तो नजदीकी तालुका या शहर चुनें।'
+                      : 'If exact village is not found, select nearest Taluka or City.'}
+                  </span>
+                </p>
 
                 {isPlaceSearching && (
                   <span className="absolute right-3.5 top-9 text-[11px] text-[#A14E15] font-semibold animate-pulse">
@@ -1082,12 +1172,28 @@ export default function AdminPage() {
                 </div>
               </div>
 
+              {/* Live Filled Details Summary Card */}
+              {formData.name.trim() && (formData.place || placeSearch).trim() && (
+                <div className="p-3.5 bg-amber-50/90 border border-amber-300/80 rounded-2xl space-y-1.5 text-xs text-stone-900 animate-in fade-in">
+                  <div className="font-bold text-[#A14E15] flex items-center gap-1.5 text-xs">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span>ચકાસણી (Selected Details Summary):</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-[11px] font-medium pt-0.5">
+                    <p><span className="text-stone-500 font-semibold">નામ:</span> {formData.name}</p>
+                    <p><span className="text-stone-500 font-semibold">ફોન:</span> {countryCode} {phoneDigits}</p>
+                    <p><span className="text-stone-500 font-semibold">તારીખ & સમય:</span> {formData.date} | {formData.time}</p>
+                    <p className="col-span-2"><span className="text-stone-500 font-semibold">સ્થળ:</span> {(formData.place || placeSearch)}</p>
+                  </div>
+                </div>
+              )}
+
               {/* Submit Buttons */}
               <div className="pt-3 flex items-center justify-end gap-2">
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => setIsModalOpen(false)}
+                  onClick={handleAttemptCloseModal}
                   className="rounded-xl text-xs font-bold"
                 >
                   Cancel
@@ -1102,6 +1208,44 @@ export default function AdminPage() {
 
             </form>
 
+          </div>
+        </div>
+      )}
+
+      {/* Discard Unsaved Changes Warning Modal */}
+      {showDiscardModal && (
+        <div className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-sm w-full p-5 text-left space-y-4 shadow-2xl border border-stone-200 animate-in zoom-in-95">
+            <div className="flex items-center gap-3 text-amber-700">
+              <div className="w-10 h-10 rounded-2xl bg-amber-100 flex items-center justify-center shrink-0">
+                <AlertTriangle className="w-5 h-5 text-amber-600" />
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-stone-900 leading-tight">
+                  {lang === 'GU' ? 'અનસેવ માહિતી કાઢી નાખવી છે?' : lang === 'HI' ? 'अनसेव जानकारी हटाना चाहते हैं?' : 'Discard Unsaved Changes?'}
+                </h4>
+                <p className="text-[11px] text-stone-500 mt-0.5">
+                  {lang === 'GU' ? 'તમે લખેલી વિગતો સેવ થયા વગર બંધ થઈ જશે.' : lang === 'HI' ? 'दर्ज की गई जानकारी सेव किए बिना मिट जाएगी।' : 'Any details entered will be lost.'}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center justify-end gap-2 pt-1">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setShowDiscardModal(false)}
+                className="rounded-xl text-xs font-bold py-2"
+              >
+                {lang === 'GU' ? 'પાછા જાઓ' : lang === 'HI' ? 'वापस जाएं' : 'Keep Editing'}
+              </Button>
+              <Button
+                type="button"
+                onClick={handleConfirmDiscard}
+                className="bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-bold py-2"
+              >
+                {lang === 'GU' ? 'હા, કાઢી નાખો' : lang === 'HI' ? 'हां, हटाएं' : 'Discard'}
+              </Button>
+            </div>
           </div>
         </div>
       )}
