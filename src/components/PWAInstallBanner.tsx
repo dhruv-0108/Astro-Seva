@@ -14,6 +14,14 @@ export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps)
   const [isInstalledSuccess, setIsInstalledSuccess] = useState<boolean>(false);
 
   useEffect(() => {
+    // 0. Register Service Worker required for Chrome PWA Installation Engine
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then((reg) => console.log('PWA Service Worker registered:', reg.scope))
+        .catch((err) => console.error('SW registration failed:', err));
+    }
+
     // 1. Check if already running as standalone PWA
     const isStandalone =
       window.matchMedia('(display-mode: standalone)').matches ||
