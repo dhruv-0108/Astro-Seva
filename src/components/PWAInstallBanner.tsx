@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Download, Sparkles, Loader2, CheckCircle2 } from 'lucide-react';
+import { Download, Sparkles, Loader2, CheckCircle2, Smartphone, Share, Plus } from 'lucide-react';
 
 interface PWAInstallBannerProps {
   lang?: 'EN' | 'GU' | 'HI';
@@ -12,6 +12,7 @@ export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps)
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isInstalling, setIsInstalling] = useState<boolean>(false);
   const [isInstalledSuccess, setIsInstalledSuccess] = useState<boolean>(false);
+  const [showInstructions, setShowInstructions] = useState<boolean>(false);
 
   useEffect(() => {
     // 0. Register Service Worker required for Chrome PWA Installation Engine
@@ -36,6 +37,7 @@ export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps)
     const handleAppInstalled = () => {
       setIsInstalledSuccess(true);
       setIsInstalling(false);
+      setShowInstructions(false);
       setTimeout(() => setShowBanner(false), 3000);
     };
 
@@ -82,6 +84,7 @@ export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps)
         if (choice && choice.outcome === 'accepted') {
           setIsInstalledSuccess(true);
           setIsInstalling(false);
+          setShowInstructions(false);
           setTimeout(() => setShowBanner(false), 3000);
         } else {
           setIsInstalling(false);
@@ -91,14 +94,11 @@ export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps)
       } catch (err) {
         console.error(err);
         setIsInstalling(false);
+        setShowInstructions(true);
       }
     } else {
-      // Chrome suppresses beforeinstallprompt for a short time after an app is uninstalled.
-      // Reset installing state after 1.2s so button never hangs.
-      setIsInstalling(true);
-      setTimeout(() => {
-        setIsInstalling(false);
-      }, 1200);
+      // Never fake installing! Show exact manual step guidance if prompt is suppressed by Chrome
+      setShowInstructions((prev) => !prev);
     }
   };
 
@@ -111,6 +111,10 @@ export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps)
       installBtn: 'હમણાં ઇન્સ્ટોલ કરો',
       installing: 'એપ ઇન્સ્ટોલ થઈ રહી છે...',
       installed: '✓ એપ ઇન્સ્ટોલ થઈ ગઈ! હોમ સ્ક્રીન પર આયકન ઉમેરાઈ ગયું છે.',
+      manualTitle: 'મેન્યુઅલ ઇન્સ્ટોલ કરવાની રીત:',
+      manualStep1: '૧. બ્રાઉઝરના 3 બિંદુઓ (⋮) અથવા Share [↑] પર ટૅપ કરો.',
+      manualStep2: '૨. "Install app" અથવા "Add to Home Screen" પસંદ કરો.',
+      gotIt: 'સમજાઈ ગયું',
     },
     HI: {
       title: 'एस्ट्रो-सेवा मोबाइल ऐप',
@@ -118,6 +122,10 @@ export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps)
       installBtn: 'अभी इंस्टॉल करें',
       installing: 'ऐप इंस्टॉल हो रहा है...',
       installed: '✓ ऐप इंस्टॉल हो गया! होम स्क्रीन पर आइकॉन जुड़ गया है।',
+      manualTitle: 'मैनुअल इंस्टॉल करने का तरीका:',
+      manualStep1: '1. ब्राउज़र के 3 बिंदु (⋮) या Share [↑] पर टैप करें।',
+      manualStep2: '2. "Install app" या "Add to Home Screen" चुनें।',
+      gotIt: 'समझ गया',
     },
     EN: {
       title: 'Astro-Seva Mobile App',
@@ -125,6 +133,10 @@ export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps)
       installBtn: 'INSTALL NOW',
       installing: 'Installing Astro-Seva App...',
       installed: '✓ App Installed Successfully! Check your phone home screen.',
+      manualTitle: 'Manual Installation Steps:',
+      manualStep1: '1. Tap Chrome Menu (3 dots ⋮) or Safari Share [↑].',
+      manualStep2: '2. Tap "Install app" or "Add to Home Screen".',
+      gotIt: 'Got It',
     },
   }[lang];
 
@@ -179,6 +191,30 @@ export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps)
             </button>
           )}
         </div>
+
+        {/* Step-by-Step Instructions Card (Only toggled if Chrome suppresses prompt or on iOS) */}
+        {showInstructions && !isInstalledSuccess && (
+          <div className="mt-3.5 p-3.5 bg-black/50 border border-amber-400/40 rounded-2xl space-y-2 text-left animate-in fade-in">
+            <h5 className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+              <Smartphone className="w-4 h-4" />
+              <span>{t.manualTitle}</span>
+            </h5>
+            <p className="text-xs text-amber-100 flex items-center gap-2">
+              <Share className="w-4 h-4 text-amber-400 shrink-0" />
+              <span>{t.manualStep1}</span>
+            </p>
+            <p className="text-xs text-amber-100 flex items-center gap-2">
+              <Plus className="w-4 h-4 text-amber-400 shrink-0" />
+              <span>{t.manualStep2}</span>
+            </p>
+            <button
+              onClick={() => setShowInstructions(false)}
+              className="w-full mt-2 bg-amber-400 text-stone-950 font-bold py-2 rounded-xl text-xs cursor-pointer text-center"
+            >
+              {t.gotIt}
+            </button>
+          </div>
+        )}
 
       </div>
     </div>
