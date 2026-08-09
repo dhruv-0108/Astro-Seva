@@ -93,11 +93,12 @@ export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps)
         setIsInstalling(false);
       }
     } else {
-      // Direct visual feedback if prompt is already executing in background
+      // Chrome suppresses beforeinstallprompt for a short time after an app is uninstalled.
+      // Reset installing state after 1.2s so button never hangs.
       setIsInstalling(true);
       setTimeout(() => {
         setIsInstalling(false);
-      }, 3000);
+      }, 1200);
     }
   };
 
