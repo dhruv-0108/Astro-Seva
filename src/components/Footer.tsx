@@ -96,12 +96,6 @@ export default function Footer({ lang = 'GU' }: FooterProps) {
                   <span>{t.refund}</span>
                 </Link>
               </li>
-              <li className="pt-1">
-                <Link href="/admin" className="text-amber-400/90 hover:text-amber-200 font-bold transition-colors flex items-center gap-1.5">
-                  <Lock className="w-3.5 h-3.5 text-amber-400" />
-                  <span>{t.adminLogin}</span>
-                </Link>
-              </li>
             </ul>
           </div>
 
