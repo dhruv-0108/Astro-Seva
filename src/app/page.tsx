@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import { Button } from '../components/ui/shadcn/button';
 import { Card } from '../components/ui/shadcn/card';
 import { GURU_SERVICES, ServiceItem } from '../lib/services';
-import PWAInstallBanner from '../components/PWAInstallBanner';
 import Footer from '../components/Footer';
 import {
   Globe,
@@ -546,9 +545,6 @@ export default function Home() {
 
       {/* 4. FOOTER WITH LEGAL & PRIVACY POLICIES */}
       <Footer lang={lang} />
-
-      {/* PWA Mobile App Installation Prompt Banner (24-Hour Persistence) */}
-      <PWAInstallBanner lang={lang} />
 
     </div>
   );
