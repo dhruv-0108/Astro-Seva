@@ -14,9 +14,10 @@ interface LocationResult {
   lon: number;
   type: string;
   code?: string;
+  score?: number;
 }
 
-// In-memory cache for fast responsive search (1 hour TTL)
+// In-memory server cache for responsive search (1 hour TTL)
 const searchCache = new Map<string, { data: LocationResult[]; timestamp: number }>();
 const CACHE_TTL = 3600 * 1000;
 
@@ -29,180 +30,174 @@ export async function GET(request: Request) {
       return NextResponse.json({ success: true, results: [] });
     }
 
-    const q = queryStr.trim().toLowerCase();
+    const rawInput = queryStr.trim();
+    const cacheKey = rawInput.toLowerCase();
 
-    // Check cache
-    const cached = searchCache.get(q);
+    // Check in-memory server cache
+    const cached = searchCache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
       return NextResponse.json({ success: true, results: cached.data });
     }
 
-    // Prepare multi-source fetchers with official server User-Agent headers
+    // 1. Clean stop-words (gaam, gam, village, vistar, taluka, dist, etc.)
+    const cleaned = rawInput
+      .toLowerCase()
+      .replace(/\b(gaam|gam|village|vistar|taluka|taluk|tehsil|dist|district)\b/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    const tokens = cleaned.split(' ').filter((t) => t.length >= 2);
+    const mainToken = tokens[0] || cleaned;
+    const contextTokens = tokens.slice(1);
+
     const customHeaders = {
       'User-Agent': 'Astro-Seva-VedicAstrology/1.0 (https://astro-seva-mocha.vercel.app; contact@astro-seva.com)',
       'Accept-Language': 'en-US,en;q=0.9,gu;q=0.8,hi;q=0.7',
     };
 
-    const nomUrlGeneral = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-      q
-    )}&countrycodes=in&addressdetails=1&extratags=1&namedetails=1&limit=15`;
+    // 2. Prepare Parallel Multi-Strategy Queries
+    const fetchUrls: string[] = [
+      // Direct freeform India search
+      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(cleaned)}&countrycodes=in&addressdetails=1&extratags=1&namedetails=1&limit=15`,
+    ];
 
-    const nomUrlVillage = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-      `${q} village India`
-    )}&addressdetails=1&extratags=1&limit=10`;
+    if (contextTokens.length > 0) {
+      // Structured token search (mainToken + context e.g. Gola Olpad / Shuklatirth Bharuch)
+      fetchUrls.push(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(mainToken)}+${encodeURIComponent(
+          contextTokens.join('+')
+        )}&countrycodes=in&addressdetails=1&extratags=1&limit=15`
+      );
+      fetchUrls.push(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+          mainToken
+        )}&county=${encodeURIComponent(contextTokens.join(' '))}&countrycodes=in&addressdetails=1&extratags=1&limit=15`
+      );
+    }
 
-    const photonUrl = `https://photon.komoot.io/api/?q=${encodeURIComponent(
-      q
-    )}&lat=20.5937&lon=78.9629&zoom=4&limit=15`;
+    // Main token village search
+    fetchUrls.push(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+        mainToken
+      )}+village+India&addressdetails=1&extratags=1&limit=15`
+    );
 
-    const [nomGenRes, nomVilRes, photonRes] = await Promise.allSettled([
-      fetch(nomUrlGeneral, { headers: customHeaders }).then((r) => r.json()),
-      fetch(nomUrlVillage, { headers: customHeaders }).then((r) => r.json()),
-      fetch(photonUrl, { headers: customHeaders }).then((r) => r.json()),
-    ]);
+    // Photon API geocoder query with India lat/lon bias
+    fetchUrls.push(
+      `https://photon.komoot.io/api/?q=${encodeURIComponent(cleaned)}&lat=20.5937&lon=78.9629&zoom=4&limit=15`
+    );
 
-    const nomGenData = nomGenRes.status === 'fulfilled' && Array.isArray(nomGenRes.value) ? nomGenRes.value : [];
-    const nomVilData = nomVilRes.status === 'fulfilled' && Array.isArray(nomVilRes.value) ? nomVilRes.value : [];
-    const photonFeatures =
-      photonRes.status === 'fulfilled' && photonRes.value?.features ? photonRes.value.features : [];
+    const responses = await Promise.allSettled(
+      fetchUrls.map((url) => fetch(url, { headers: customHeaders }).then((r) => r.json()))
+    );
 
     const results: LocationResult[] = [];
     const seenCoords = new Set<string>();
 
-    // Helper to process Nominatim items
-    const processNomItem = (item: any) => {
-      const lat = parseFloat(item.lat);
-      const lon = parseFloat(item.lon);
-      if (isNaN(lat) || isNaN(lon) || lat === 0 || lon === 0) return;
+    for (const res of responses) {
+      if (res.status !== 'fulfilled' || !res.value) continue;
+      const items = Array.isArray(res.value) ? res.value : res.value.features || [];
 
-      const coordKey = `${lat.toFixed(3)},${lon.toFixed(3)}`;
-      if (seenCoords.has(coordKey)) return;
-      seenCoords.add(coordKey);
+      for (const item of items) {
+        const isPhoton = Boolean(item.properties);
+        const props = isPhoton ? item.properties : item.address || {};
+        const coords = isPhoton ? item.geometry?.coordinates || [0, 0] : [item.lon, item.lat];
+        const lon = parseFloat(coords[0]);
+        const lat = parseFloat(coords[1]);
 
-      const addr = item.address || {};
-      const villageName =
-        addr.village ||
-        addr.town ||
-        addr.city ||
-        addr.hamlet ||
-        addr.suburb ||
-        addr.locality ||
-        addr.neighbourhood ||
-        addr.county ||
-        item.name;
+        if (isNaN(lat) || isNaN(lon) || lat === 0 || lon === 0) continue;
+        const coordKey = `${lat.toFixed(3)},${lon.toFixed(3)}`;
+        if (seenCoords.has(coordKey)) continue;
+        seenCoords.add(coordKey);
 
-      const subdistrict =
-        addr.tehsil ||
-        addr.taluk ||
-        addr.subdistrict ||
-        addr.sub_district ||
-        addr.block ||
-        addr.county ||
-        addr.state_district;
+        const rawName = isPhoton ? props.name : item.name;
 
-      const district = addr.district || addr.state_district || addr.county;
-      const state = addr.state;
-      const country = addr.country || 'India';
-      const postcode = addr.postcode || item.extratags?.postcode || item.extratags?.ref || '';
+        // Clean place name extraction (prioritize village/suburb/hamlet/town/locality tags)
+        const villageCandidate =
+          props.village ||
+          props.suburb ||
+          props.hamlet ||
+          props.town ||
+          props.city ||
+          props.locality ||
+          props.county ||
+          rawName;
 
-      // Build clean hierarchical label to distinguish duplicate village names
-      const mainPlace = villageName || item.display_name.split(',')[0];
-      const hierarchyParts = [
-        mainPlace,
-        subdistrict && subdistrict !== mainPlace ? `${subdistrict} Taluka` : null,
-        district && district !== mainPlace ? `${district} Dist` : null,
-        state,
-        country,
-      ].filter(Boolean);
+        const cleanVillageName = (villageCandidate || '')
+          .replace(/^(Primary Health Centre|PHC|Hospital|Gram Panchayat|Post Office|Temple|Ashram),?\s*/i, '')
+          .trim();
 
-      // Remove duplicate parts
-      const cleanDisplay = Array.from(new Set(hierarchyParts)).join(', ');
+        const mainPlace = cleanVillageName || rawName || 'Location';
 
-      const placeType = addr.village || addr.hamlet
-        ? 'Village'
-        : addr.town
-        ? 'Town'
-        : addr.city
-        ? 'City'
-        : addr.suburb
-        ? 'Locality'
-        : 'Location';
+        const subdistrict = (props.tehsil || props.taluk || props.subdistrict || props.sub_district || props.block || props.county || '')
+          .replace(/\s*(taluka|taluk|tehsil|block)\s*/gi, '')
+          .trim();
 
-      results.push({
-        display_name: cleanDisplay,
-        full_name: item.display_name,
-        name: mainPlace,
-        subdistrict: subdistrict || '',
-        district: district || '',
-        state: state || '',
-        country: country,
-        lat: lat,
-        lon: lon,
-        type: placeType,
-        code: postcode || item.place_id ? `OSM-${item.place_id}` : undefined,
-      });
-    };
+        const district = (props.district || props.state_district || props.county || '')
+          .replace(/\s*(district|dist)\s*/gi, '')
+          .trim();
 
-    // Process all Nominatim General & Village results
-    nomGenData.forEach(processNomItem);
-    nomVilData.forEach(processNomItem);
+        const state = props.state || '';
+        const country = props.country || 'India';
+        const postcode = props.postcode || item.extratags?.postcode || '';
 
-    // Helper to process Photon features
-    photonFeatures.forEach((feat: any) => {
-      const props = feat.properties || {};
-      const coords = feat.geometry?.coordinates || [0, 0];
-      const lon = coords[0];
-      const lat = coords[1];
+        // Form clean hierarchical label (avoiding duplicate "Taluka Taluka" suffixes)
+        const hierarchyParts = [
+          mainPlace,
+          subdistrict && subdistrict.toLowerCase() !== mainPlace.toLowerCase() ? `${subdistrict} Taluka` : null,
+          district && district.toLowerCase() !== mainPlace.toLowerCase() && district.toLowerCase() !== subdistrict.toLowerCase()
+            ? `${district} Dist`
+            : null,
+          state,
+          country,
+        ].filter(Boolean);
 
-      if (isNaN(lat) || isNaN(lon) || lat === 0 || lon === 0) return;
+        const cleanDisplay = Array.from(new Set(hierarchyParts)).join(', ');
 
-      const coordKey = `${lat.toFixed(3)},${lon.toFixed(3)}`;
-      if (seenCoords.has(coordKey)) return;
-      seenCoords.add(coordKey);
+        const placeType =
+          props.village || props.suburb || props.hamlet || props.osm_value === 'village'
+            ? 'Village'
+            : props.town || props.osm_value === 'town'
+            ? 'Town'
+            : props.city || props.type === 'city'
+            ? 'City'
+            : 'Location';
 
-      const mainPlace = props.name || props.city || props.town || props.village || props.district;
-      const subdistrict = props.district || props.county;
-      const district = props.county || props.district || props.city;
-      const state = props.state;
-      const country = props.country || 'India';
+        // Multi-Token Relevance Scoring
+        const fullSearchBlob = `${mainPlace} ${subdistrict} ${district} ${state} ${country} ${item.display_name || ''}`.toLowerCase();
+        let score = 0;
 
-      const hierarchyParts = [
-        mainPlace,
-        subdistrict && subdistrict !== mainPlace ? subdistrict : null,
-        district && district !== mainPlace ? district : null,
-        state,
-        country,
-      ].filter(Boolean);
+        tokens.forEach((token) => {
+          if (fullSearchBlob.includes(token)) {
+            score += 25;
+          }
+        });
+        if (mainPlace.toLowerCase().startsWith(mainToken)) score += 30;
+        if (placeType === 'Village') score += 15;
 
-      const cleanDisplay = Array.from(new Set(hierarchyParts)).join(', ');
+        results.push({
+          display_name: cleanDisplay,
+          full_name: item.display_name || cleanDisplay,
+          name: mainPlace,
+          subdistrict: subdistrict ? `${subdistrict} Taluka` : '',
+          district: district ? `${district} Dist` : '',
+          state: state,
+          country: country,
+          lat: lat,
+          lon: lon,
+          type: placeType,
+          code: postcode || (item.place_id ? `OSM-${item.place_id}` : undefined),
+          score: score,
+        });
+      }
+    }
 
-      const placeType =
-        props.osm_value === 'village' || props.type === 'village'
-          ? 'Village'
-          : props.osm_value === 'town' || props.type === 'town'
-          ? 'Town'
-          : props.type === 'city'
-          ? 'City'
-          : 'Location';
+    // Sort by relevance score descending
+    results.sort((a, b) => (b.score || 0) - (a.score || 0));
 
-      results.push({
-        display_name: cleanDisplay,
-        full_name: `${cleanDisplay} ${props.postcode ? `(${props.postcode})` : ''}`,
-        name: mainPlace,
-        subdistrict: subdistrict || '',
-        district: district || '',
-        state: state || '',
-        country: country,
-        lat: lat,
-        lon: lon,
-        type: placeType,
-        code: props.postcode || (props.osm_id ? `OSM-${props.osm_id}` : undefined),
-      });
-    });
-
-    // Save to in-memory cache
+    // Save to in-memory server cache
     if (results.length > 0) {
-      searchCache.set(q, { data: results, timestamp: Date.now() });
+      searchCache.set(cacheKey, { data: results, timestamp: Date.now() });
     }
 
     return NextResponse.json(
