@@ -36,11 +36,9 @@ export default function PWAInstallBanner({ lang = 'GU' }: PWAInstallBannerProps)
       setShowBanner(true);
     };
 
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-
-    // Always show banner on mobile browsers if not installed
-    const isMobile = /iphone|ipad|ipod|android|mobile/.test(userAgent);
-    if (isMobile) {
+    // 4. Continuously active for 48 hours starting today (Aug 9 - Aug 11) on all browsers if not installed
+    const activeUntil = new Date('2026-08-11T23:59:59+05:30').getTime();
+    if (Date.now() <= activeUntil) {
       setShowBanner(true);
     }
 
