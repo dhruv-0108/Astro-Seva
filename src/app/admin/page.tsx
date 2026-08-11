@@ -100,6 +100,30 @@ const ADMIN_TRANSLATIONS: Record<Language, {
   pendingBadge: string;
   createNew: string;
   searchPlaceholder: string;
+  modalTitleCreate: string;
+  modalTitleEdit: string;
+  modalSubtitle: string;
+  clientNameLabel: string;
+  clientNamePlaceholder: string;
+  phoneLabel: string;
+  phonePlaceholder: string;
+  serviceLabel: string;
+  birthDateLabel: string;
+  birthTimeLabel: string;
+  birthPlaceLabel: string;
+  birthPlacePlaceholder: string;
+  paymentStatusLabel: string;
+  paidOption: string;
+  pendingOption: string;
+  cancelBtn: string;
+  submitBtnCreate: string;
+  submitBtnEdit: string;
+  summaryTitle: string;
+  summaryName: string;
+  summaryPhone: string;
+  summaryDateTime: string;
+  summaryPlace: string;
+  locationTip: string;
 }> = {
   EN: {
     portalTitle: 'Guruji Dashboard',
@@ -126,6 +150,30 @@ const ADMIN_TRANSLATIONS: Record<Language, {
     pendingBadge: 'Pending Verification',
     createNew: 'New Kundli Entry',
     searchPlaceholder: 'Search by Name, Phone, or Village/City...',
+    modalTitleCreate: 'Create New Kundli Entry',
+    modalTitleEdit: 'Edit Kundli Entry',
+    modalSubtitle: 'Exhaustive Village & City Geocoding Enabled',
+    clientNameLabel: 'Client Full Name',
+    clientNamePlaceholder: 'e.g. Rameshchandra Varachhiya',
+    phoneLabel: 'WhatsApp Phone Number',
+    phonePlaceholder: '9876543210',
+    serviceLabel: 'Service Package',
+    birthDateLabel: 'Birth Date',
+    birthTimeLabel: 'Birth Time',
+    birthPlaceLabel: 'Place of Birth (Village / Town / City)',
+    birthPlacePlaceholder: 'Type any Indian village or city (e.g. Gola, Olpad, Vanthali)',
+    paymentStatusLabel: 'Payment Status',
+    paidOption: 'Paid / Approved',
+    pendingOption: 'Pending Verification',
+    cancelBtn: 'Cancel',
+    submitBtnCreate: 'Create & Generate Entry',
+    submitBtnEdit: 'Save Changes',
+    summaryTitle: 'Selected Details Summary',
+    summaryName: 'Name:',
+    summaryPhone: 'Phone:',
+    summaryDateTime: 'Date & Time:',
+    summaryPlace: 'Place:',
+    locationTip: 'If exact village is not found, select nearest Taluka or City.',
   },
   GU: {
     portalTitle: 'ગુરુજી ડેશબોર્ડ',
@@ -152,6 +200,30 @@ const ADMIN_TRANSLATIONS: Record<Language, {
     pendingBadge: 'ચકાસણી બાકી',
     createNew: 'નવી કુંડળી નોંધ',
     searchPlaceholder: 'નામ, ફોન અથવા ગામ/શહેર શોધો...',
+    modalTitleCreate: 'નવી કુંડળી નોંધ ઉમેરો',
+    modalTitleEdit: 'કુંડળી વિગતો સુધારો',
+    modalSubtitle: 'તમામ ભારતીય ગામો અને શહેરો શોધવા માટે સક્ષમ',
+    clientNameLabel: 'ગ્રાહકનું પૂરું નામ',
+    clientNamePlaceholder: 'દા.ત. રમેશચંદ્ર વરાછીયા',
+    phoneLabel: 'વોટ્સએપ ફોન નંબર',
+    phonePlaceholder: '૯૮૭૬૫૪૩૨૧૦',
+    serviceLabel: 'સેવા પેકેજ પસંદ કરો',
+    birthDateLabel: 'જન્મ તારીખ',
+    birthTimeLabel: 'જન્મ સમય',
+    birthPlaceLabel: 'જન્મ સ્થળ (ગામ / તાલુકા / શહેર)',
+    birthPlacePlaceholder: 'કોઈપણ ગામ કે શહેર લખો (દા.ત. ગોલા, ઓલપાડ, વંથલી)',
+    paymentStatusLabel: 'ચૂકવણી સ્થિતિ',
+    paidOption: 'ચૂકવેલ / મંજૂર',
+    pendingOption: 'ચકાસણી બાકી',
+    cancelBtn: 'રદ કરો',
+    submitBtnCreate: 'કુંડળી બનાવો અને સેવ કરો',
+    submitBtnEdit: 'ફેરફારો સેવ કરો',
+    summaryTitle: 'દાખલ કરેલી વિગતોની ચકાસણી',
+    summaryName: 'નામ:',
+    summaryPhone: 'ફોન:',
+    summaryDateTime: 'તારીખ અને સમય:',
+    summaryPlace: 'સ્થળ:',
+    locationTip: 'ગામ કે વિસ્તાર ન મળે તો નજીકનું તાલુકા કે શહેર પસંદ કરો.',
   },
   HI: {
     portalTitle: 'गुरुजी डैशबोर्ड',
@@ -173,11 +245,35 @@ const ADMIN_TRANSLATIONS: Record<Language, {
     approve: 'भुगतान स्वीकृत करें',
     viewKundli: 'कुंडली देखें',
     whatsapp: 'व्हाट्सएप',
-    deleteConfirm: 'क्या आप निश्चित रूप से इस परामर्श रिकॉर्ड को हटाना चाहते हैं?',
+    deleteConfirm: 'क्या आप वाकई इस परामर्श रिकॉर्ड को हटाना चाहते हैं?',
     paidBadge: 'भुगतान',
     pendingBadge: 'सत्यापन लंबित',
     createNew: 'नई कुंडली प्रविष्टि',
     searchPlaceholder: 'नाम, फोन या गांव/शहर खोजें...',
+    modalTitleCreate: 'नई कुंडली प्रविष्टि जोड़ें',
+    modalTitleEdit: 'कुंडली विवरण संपादित करें',
+    modalSubtitle: 'सभी भारतीय गांवों और शहरों की खोज सक्षम',
+    clientNameLabel: 'ग्राहक का पूरा नाम',
+    clientNamePlaceholder: 'जैसे रमेशचंद्र वराछिया',
+    phoneLabel: 'व्हाट्सएप फोन नंबर',
+    phonePlaceholder: '9876543210',
+    serviceLabel: 'सेवा पैकेज चुनें',
+    birthDateLabel: 'जन्म तिथि',
+    birthTimeLabel: 'जन्म समय',
+    birthPlaceLabel: 'जन्म स्थान (गांव / तहसील / शहर)',
+    birthPlacePlaceholder: 'कोई भी गांव या शहर लिखें (जैसे गोला, ओलपाड, वंथली)',
+    paymentStatusLabel: 'भुगतान स्थिति',
+    paidOption: 'भुगतान स्वीकृत',
+    pendingOption: 'सत्यापन लंबित',
+    cancelBtn: 'रद्द करें',
+    submitBtnCreate: 'कुंडली बनाएं एवं सहेजें',
+    submitBtnEdit: 'परिवर्तन सहेजें',
+    summaryTitle: 'दर्ज विवरण का सत्यापन',
+    summaryName: 'नाम:',
+    summaryPhone: 'फोन:',
+    summaryDateTime: 'तिथि एवं समय:',
+    summaryPlace: 'स्थान:',
+    locationTip: 'गांव या क्षेत्र न मिले तो नजदीकी तालुका या शहर चुनें।',
   }
 };
 
@@ -256,6 +352,13 @@ export default function AdminPage() {
   const [placeSuggestions, setPlaceSuggestions] = useState<any[]>([]);
   const [showDiscardModal, setShowDiscardModal] = useState<boolean>(false);
   const [formError, setFormError] = useState<string>('');
+  const [invalidFields, setInvalidFields] = useState<{
+    name?: boolean;
+    phone?: boolean;
+    date?: boolean;
+    time?: boolean;
+    place?: boolean;
+  }>({});
   const [isPlaceSearching, setIsPlaceSearching] = useState<boolean>(false);
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const justSelectedPlaceRef = useRef<boolean>(false);
@@ -468,51 +571,28 @@ export default function AdminPage() {
   const handleSaveForm = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError('');
+    setInvalidFields({});
 
     const nameClean = formData.name.trim();
     const phoneClean = phoneDigits.replace(/\D/g, '');
     const targetPlace = (formData.place || placeSearch).trim();
 
-    if (!nameClean || nameClean.length < 2) {
-      setFormError(
-        lang === 'GU'
-          ? 'કૃપા કરીને પૂરું નામ દાખલ કરો (ઓછામાં ઓછા ૨ અક્ષર).'
-          : lang === 'HI'
-          ? 'कृपया पूरा नाम दर्ज करें (कम से कम 2 अक्षर)।'
-          : 'Please enter a valid full name (minimum 2 characters).'
-      );
-      return;
-    }
+    const errors: typeof invalidFields = {};
+    if (!nameClean || nameClean.length < 2) errors.name = true;
+    if (!phoneClean || phoneClean.length < 7) errors.phone = true;
+    if (!formData.date) errors.date = true;
+    if (!formData.time) errors.time = true;
+    if (!targetPlace || targetPlace.length < 2) errors.place = true;
 
-    if (!phoneClean || phoneClean.length < 7) {
-      setFormError(
-        lang === 'GU'
-          ? 'કૃપા કરીને સાચો વોટ્સએપ ફોન નંબર દાખલ કરો.'
-          : lang === 'HI'
-          ? 'कृपया सही व्हाट्सएप फोन नंबर दर्ज करें।'
-          : 'Please enter a valid WhatsApp phone number.'
-      );
-      return;
-    }
+    setInvalidFields(errors);
 
-    if (!formData.date || !formData.time) {
+    if (Object.keys(errors).length > 0) {
       setFormError(
         lang === 'GU'
-          ? 'કૃપા કરીને જન્મ તારીખ અને સમય પસંદ કરો.'
+          ? 'કૃપા કરીને લાલ રંગથી દર્શાવેલી બધી વિગતો સાચી રીતે ભરો.'
           : lang === 'HI'
-          ? 'कृपया जन्म तिथि और समय चुनें।'
-          : 'Please select valid birth date and time.'
-      );
-      return;
-    }
-
-    if (!targetPlace || targetPlace.length < 2) {
-      setFormError(
-        lang === 'GU'
-          ? 'કૃપા કરીને જન્મ સ્થળ (ગામ/શહેર) દાખલ કરો.'
-          : lang === 'HI'
-          ? 'कृपया जन्म स्थान (गांव/शहर) दर्ज करें।'
-          : 'Please enter a valid birth place (village or city).'
+          ? 'कृपया लाल रंग से चिह्नित सभी फ़ील्ड सही तरीके से भरें।'
+          : 'Please correctly fill out all highlighted required fields.'
       );
       return;
     }
@@ -978,9 +1058,9 @@ export default function AdminPage() {
                 </div>
                 <div>
                   <h3 className="text-base font-bold text-stone-900">
-                    {editingId ? 'Edit Kundli Entry' : 'Create New Kundli Entry'}
+                    {editingId ? t.modalTitleEdit : t.modalTitleCreate}
                   </h3>
-                  <p className="text-xs text-stone-500">Exhaustive Village & City Geocoding Enabled</p>
+                  <p className="text-xs text-stone-500">{t.modalSubtitle}</p>
                 </div>
               </div>
 
@@ -995,7 +1075,7 @@ export default function AdminPage() {
 
             <form onSubmit={handleSaveForm} className="space-y-4">
               {formError && (
-                <div className="p-3 bg-red-50 border border-red-200 rounded-2xl text-xs font-semibold text-red-700 flex items-center gap-2">
+                <div className="p-3 bg-red-50 border-2 border-red-200 rounded-2xl text-xs font-bold text-red-700 flex items-center gap-2 animate-pulse">
                   <AlertTriangle className="w-4 h-4 text-red-600 shrink-0" />
                   <span>{formError}</span>
                 </div>
@@ -1003,29 +1083,38 @@ export default function AdminPage() {
               
               {/* Client Name */}
               <div className="space-y-1">
-                <label className="text-xs font-bold text-stone-700 uppercase tracking-wider">
-                  Client Full Name
+                <label className="text-xs font-bold text-stone-800 uppercase tracking-wider flex items-center gap-1">
+                  <span>{t.clientNameLabel}</span>
+                  <span className="text-red-500 font-bold">*</span>
                 </label>
                 <Input
                   type="text"
                   value={formData.name}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
-                  placeholder="e.g. Rameshchandra Varachhiya"
-                  className="w-full rounded-2xl p-3.5 text-sm"
+                  onChange={(e) => {
+                    setFormData((prev) => ({ ...prev, name: e.target.value }));
+                    if (invalidFields.name) setInvalidFields((prev) => ({ ...prev, name: false }));
+                  }}
+                  placeholder={t.clientNamePlaceholder}
+                  className={`w-full rounded-2xl p-3.5 text-sm font-medium transition-all outline-none ${
+                    invalidFields.name
+                      ? 'border-2 border-red-500 bg-red-50/40 ring-2 ring-red-500/20'
+                      : 'border-2 border-stone-300 focus:border-[#7A1C28] focus:ring-4 focus:ring-amber-500/20 bg-white text-stone-900'
+                  }`}
                   required
                 />
               </div>
 
               {/* Client Phone with Country Code Picker */}
               <div className="space-y-1">
-                <label className="text-xs font-bold text-stone-700 uppercase tracking-wider">
-                  WhatsApp Phone Number
+                <label className="text-xs font-bold text-stone-800 uppercase tracking-wider flex items-center gap-1">
+                  <span>{t.phoneLabel}</span>
+                  <span className="text-red-500 font-bold">*</span>
                 </label>
                 <div className="flex gap-2">
                   <select
                     value={countryCode}
                     onChange={(e) => setCountryCode(e.target.value)}
-                    className="bg-white border border-stone-200 rounded-2xl p-3 text-xs sm:text-sm font-bold text-stone-900 outline-none focus:border-[#A14E15] shrink-0 max-w-[140px] cursor-pointer"
+                    className="bg-white border-2 border-stone-300 focus:border-[#7A1C28] rounded-2xl p-3 text-xs sm:text-sm font-bold text-stone-900 outline-none shrink-0 max-w-[140px] cursor-pointer shadow-2xs"
                   >
                     {COUNTRY_CODES.map((c) => (
                       <option key={c.code + c.country} value={c.code}>
@@ -1036,9 +1125,16 @@ export default function AdminPage() {
                   <Input
                     type="tel"
                     value={phoneDigits}
-                    onChange={(e) => setPhoneDigits(e.target.value)}
-                    placeholder="9876543210"
-                    className="w-full rounded-2xl p-3.5 text-sm font-mono"
+                    onChange={(e) => {
+                      setPhoneDigits(e.target.value);
+                      if (invalidFields.phone) setInvalidFields((prev) => ({ ...prev, phone: false }));
+                    }}
+                    placeholder={t.phonePlaceholder}
+                    className={`w-full rounded-2xl p-3.5 text-sm font-mono transition-all outline-none ${
+                      invalidFields.phone
+                        ? 'border-2 border-red-500 bg-red-50/40 ring-2 ring-red-500/20'
+                        : 'border-2 border-stone-300 focus:border-[#7A1C28] focus:ring-4 focus:ring-amber-500/20 bg-white text-stone-900'
+                    }`}
                     required
                   />
                 </div>
@@ -1046,17 +1142,17 @@ export default function AdminPage() {
 
               {/* Service Selection */}
               <div className="space-y-1">
-                <label className="text-xs font-bold text-stone-700 uppercase tracking-wider">
-                  Service Package
+                <label className="text-xs font-bold text-stone-800 uppercase tracking-wider">
+                  {t.serviceLabel}
                 </label>
                 <select
                   value={formData.serviceId}
                   onChange={(e) => setFormData((prev) => ({ ...prev, serviceId: e.target.value }))}
-                  className="w-full bg-white border border-stone-200 rounded-2xl p-3.5 text-sm font-medium text-stone-900 outline-none focus:border-[#A14E15]"
+                  className="w-full bg-white border-2 border-stone-300 focus:border-[#7A1C28] rounded-2xl p-3.5 text-sm font-medium text-stone-900 outline-none shadow-2xs cursor-pointer"
                 >
                   {GURU_SERVICES.map((s) => (
                     <option key={s.id} value={s.id}>
-                      {s.titleEN} - ₹{s.price}
+                      {lang === 'GU' ? s.titleGU : lang === 'HI' ? s.titleHI : s.titleEN} - ₹{s.price}
                     </option>
                   ))}
                 </select>
@@ -1066,21 +1162,30 @@ export default function AdminPage() {
               <div className="space-y-3.5 pt-1">
                 <CustomDatePicker
                   value={formData.date}
-                  onChange={(newDate) => setFormData((prev) => ({ ...prev, date: newDate }))}
-                  label="Birth Date"
+                  onChange={(newDate) => {
+                    setFormData((prev) => ({ ...prev, date: newDate }));
+                    if (invalidFields.date) setInvalidFields((prev) => ({ ...prev, date: false }));
+                  }}
+                  label={t.birthDateLabel}
                 />
 
                 <CustomTimePicker
                   value={formData.time}
-                  onChange={(newTime) => setFormData((prev) => ({ ...prev, time: newTime }))}
-                  label="Birth Time"
+                  onChange={(newTime) => {
+                    setFormData((prev) => ({ ...prev, time: newTime }));
+                    if (invalidFields.time) setInvalidFields((prev) => ({ ...prev, time: false }));
+                  }}
+                  label={t.birthTimeLabel}
                 />
               </div>
 
               {/* Birth Place Search Input (Exhaustive Geocoding Engine) */}
               <div className="space-y-1 relative" ref={searchContainerRef}>
-                <label className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center justify-between">
-                  <span>Place of Birth (Village / Town / City)</span>
+                <label className="text-xs font-bold text-stone-800 uppercase tracking-wider flex items-center justify-between">
+                  <span className="flex items-center gap-1">
+                    <span>{t.birthPlaceLabel}</span>
+                    <span className="text-red-500 font-bold">*</span>
+                  </span>
                   {formData.lat !== 0 && (
                     <span className="text-[10px] text-emerald-700 font-mono font-bold">
                       ✓ Coords Verified ({formData.lat.toFixed(2)}, {formData.lng.toFixed(2)})
@@ -1094,44 +1199,43 @@ export default function AdminPage() {
                     const val = e.target.value;
                     setPlaceSearch(val);
                     setFormData((prev) => ({ ...prev, place: val, lat: 0, lng: 0 }));
+                    if (invalidFields.place) setInvalidFields((prev) => ({ ...prev, place: false }));
                   }}
-                  placeholder="Type any Indian village or city (e.g. Gariadhar, Talaja, Vanthali)"
-                  className="w-full bg-white border border-stone-200 rounded-2xl p-3.5 text-sm text-stone-900 outline-none focus:border-[#A14E15] focus:ring-2 focus:ring-amber-500/10"
+                  placeholder={t.birthPlacePlaceholder}
+                  className={`w-full rounded-2xl p-3.5 text-sm font-medium transition-all outline-none ${
+                    invalidFields.place
+                      ? 'border-2 border-red-500 bg-red-50/40 ring-2 ring-red-500/20'
+                      : 'border-2 border-stone-300 focus:border-[#7A1C28] focus:ring-4 focus:ring-amber-500/20 bg-white text-stone-900'
+                  }`}
                   required
                 />
 
                 {/* Option 2: Simple Multi-Language Guidance Tip */}
-                <p className="text-[11px] text-amber-900 bg-amber-50/80 border border-amber-200/80 p-2.5 rounded-xl mt-1.5 flex items-start gap-1.5 font-medium leading-snug">
+                <p className="text-[11px] text-amber-900 bg-amber-50/90 border border-amber-200 p-2.5 rounded-xl mt-1.5 flex items-start gap-1.5 font-medium leading-snug shadow-2xs">
                   <Info className="w-3.5 h-3.5 text-amber-700 shrink-0 mt-0.5" />
-                  <span>
-                    {lang === 'GU'
-                      ? 'ગામ કે વિસ્તાર ન મળે તો નજીકનું તાલુકા કે શહેર પસંદ કરો.'
-                      : lang === 'HI'
-                      ? 'गांव या क्षेत्र न मिले तो नजदीकी तालुका या शहर चुनें।'
-                      : 'If exact village is not found, select nearest Taluka or City.'}
-                  </span>
+                  <span>{t.locationTip}</span>
                 </p>
 
                 {isPlaceSearching && (
-                  <span className="absolute right-3.5 top-9 text-[11px] text-[#A14E15] font-semibold animate-pulse">
+                  <span className="absolute right-3.5 top-9 text-[11px] text-[#A14E15] font-bold animate-pulse">
                     Searching...
                   </span>
                 )}
 
                 {placeSuggestions.length > 0 && (
-                  <ul className="absolute z-50 top-[68px] left-0 w-full bg-white border border-stone-200 rounded-2xl shadow-xl max-h-56 overflow-y-auto divide-y divide-stone-100">
+                  <ul className="absolute z-50 top-[68px] left-0 w-full bg-white border-2 border-amber-300 rounded-2xl shadow-xl max-h-56 overflow-y-auto divide-y divide-stone-100">
                     {placeSuggestions.map((item, idx) => (
                       <li
                         key={idx}
                         onClick={() => handleSelectPlace(item)}
-                        className="p-3 hover:bg-amber-50/70 cursor-pointer text-xs font-medium text-stone-800 transition-colors flex items-center justify-between gap-2"
+                        className="p-3 hover:bg-amber-50 cursor-pointer text-xs font-semibold text-stone-800 transition-colors flex items-center justify-between gap-2"
                       >
                         <div className="flex items-center gap-2 min-w-0">
-                          <MapPin className="w-3.5 h-3.5 text-[#A14E15] shrink-0" />
+                          <MapPin className="w-3.5 h-3.5 text-[#7A1C28] shrink-0" />
                           <span className="truncate">{item.display_name}</span>
                         </div>
                         {item.type && (
-                          <span className="text-[9px] font-bold font-mono uppercase bg-amber-100 text-[#853E0F] px-1.5 py-0.5 rounded-md shrink-0">
+                          <span className="text-[9px] font-bold font-mono uppercase bg-amber-100 text-[#7A1C28] px-1.5 py-0.5 rounded-md shrink-0">
                             {item.type}
                           </span>
                         )}
@@ -1143,47 +1247,47 @@ export default function AdminPage() {
 
               {/* Payment Status Option */}
               <div className="space-y-1">
-                <label className="text-xs font-bold text-stone-700 uppercase tracking-wider">
-                  Payment Status
+                <label className="text-xs font-bold text-stone-800 uppercase tracking-wider">
+                  {t.paymentStatusLabel}
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
                     onClick={() => setFormData((prev) => ({ ...prev, paymentStatus: 'paid' }))}
-                    className={`py-2.5 px-3 rounded-xl text-xs font-bold transition-all border ${
+                    className={`py-2.5 px-3 rounded-xl text-xs font-bold transition-all border-2 ${
                       formData.paymentStatus === 'paid'
-                        ? 'bg-emerald-600 text-white border-emerald-700 shadow-2xs'
+                        ? 'bg-emerald-600 text-white border-emerald-700 shadow-xs'
                         : 'bg-stone-50 text-stone-700 border-stone-200'
                     }`}
                   >
-                    Paid / Approved
+                    {t.paidOption}
                   </button>
                   <button
                     type="button"
                     onClick={() => setFormData((prev) => ({ ...prev, paymentStatus: 'pending' }))}
-                    className={`py-2.5 px-3 rounded-xl text-xs font-bold transition-all border ${
+                    className={`py-2.5 px-3 rounded-xl text-xs font-bold transition-all border-2 ${
                       formData.paymentStatus === 'pending'
-                        ? 'bg-[#A14E15] text-white border-[#853E0F] shadow-2xs'
+                        ? 'bg-[#7A1C28] text-white border-[#58131C] shadow-xs'
                         : 'bg-stone-50 text-stone-700 border-stone-200'
                     }`}
                   >
-                    Pending Verification
+                    {t.pendingOption}
                   </button>
                 </div>
               </div>
 
               {/* Live Filled Details Summary Card */}
               {formData.name.trim() && (formData.place || placeSearch).trim() && (
-                <div className="p-3.5 bg-amber-50/90 border border-amber-300/80 rounded-2xl space-y-1.5 text-xs text-stone-900 animate-in fade-in">
-                  <div className="font-bold text-[#A14E15] flex items-center gap-1.5 text-xs">
+                <div className="p-3.5 bg-amber-50/90 border-2 border-amber-300/80 rounded-2xl space-y-1.5 text-xs text-stone-900 animate-in fade-in shadow-2xs">
+                  <div className="font-bold text-[#7A1C28] flex items-center gap-1.5 text-xs">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>ચકાસણી (Selected Details Summary):</span>
+                    <span>{t.summaryTitle}</span>
                   </div>
                   <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-[11px] font-medium pt-0.5">
-                    <p><span className="text-stone-500 font-semibold">નામ:</span> {formData.name}</p>
-                    <p><span className="text-stone-500 font-semibold">ફોન:</span> {countryCode} {phoneDigits}</p>
-                    <p><span className="text-stone-500 font-semibold">તારીખ & સમય:</span> {formData.date} | {formData.time}</p>
-                    <p className="col-span-2"><span className="text-stone-500 font-semibold">સ્થળ:</span> {(formData.place || placeSearch)}</p>
+                    <p><span className="text-stone-600 font-bold">{t.summaryName}</span> {formData.name}</p>
+                    <p><span className="text-stone-600 font-bold">{t.summaryPhone}</span> {countryCode} {phoneDigits}</p>
+                    <p><span className="text-stone-600 font-bold">{t.summaryDateTime}</span> {formData.date} | {formData.time}</p>
+                    <p className="col-span-2"><span className="text-stone-600 font-bold">{t.summaryPlace}</span> {(formData.place || placeSearch)}</p>
                   </div>
                 </div>
               )}
@@ -1194,15 +1298,15 @@ export default function AdminPage() {
                   type="button"
                   variant="outline"
                   onClick={handleAttemptCloseModal}
-                  className="rounded-xl text-xs font-bold"
+                  className="rounded-xl text-xs font-bold border-2 border-stone-300"
                 >
-                  Cancel
+                  {t.cancelBtn}
                 </Button>
                 <Button
                   type="submit"
-                  className="bg-gradient-to-r from-[#9E2A2B] to-[#7A1C28] hover:from-[#B2182B] text-white font-bold rounded-xl text-xs px-6 py-3"
+                  className="bg-gradient-to-r from-[#9E2A2B] to-[#7A1C28] hover:from-[#B2182B] text-white font-bold rounded-xl text-xs px-6 py-3 shadow-md"
                 >
-                  {editingId ? 'Save Changes' : 'Create & Generate Entry'}
+                  {editingId ? t.submitBtnEdit : t.submitBtnCreate}
                 </Button>
               </div>
 
