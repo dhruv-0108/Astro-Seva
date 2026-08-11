@@ -12,6 +12,7 @@ import { Input } from '../../../components/ui/shadcn/input';
 import { Badge } from '../../../components/ui/shadcn/badge';
 import { CustomDatePicker, CustomTimePicker } from '../../../components/CustomDateTimePicker';
 import { GURU_SERVICES, ServiceItem } from '../../../lib/services';
+import { resolveHistoricalTimezone } from '../../../lib/astrology/timezone';
 import {
   Sparkles,
   Calendar,
@@ -115,12 +116,19 @@ export default function DedicatedIntakePage({ params }: { params: Promise<{ serv
 
   const handleSelectPlace = (item: any) => {
     const cleanName = item.display_name || item.full_name;
+    const tzRes = resolveHistoricalTimezone(
+      birthDetails.date || '1995-01-01',
+      birthDetails.time || '12:00',
+      item.lat,
+      item.lon
+    );
 
     setBirthDetails((prev) => ({
       ...prev,
       place: cleanName,
       lat: item.lat,
       lng: item.lon,
+      tzOffset: tzRes.tzOffset,
     }));
     setPlaceSearch(cleanName);
     setPlaceSuggestions([]);
@@ -161,6 +169,22 @@ export default function DedicatedIntakePage({ params }: { params: Promise<{ serv
       const urlParams = new URLSearchParams(window.location.search);
       const utrParam = urlParams.get('utr') || '';
 
+      const tzRes = resolveHistoricalTimezone(
+        birthDetails.date,
+        birthDetails.time,
+        birthDetails.lat,
+        birthDetails.lng
+      );
+
+      const finalBirthDetails = {
+        ...birthDetails,
+        date: birthDetails.date,
+        time: birthDetails.time,
+        tzOffset: tzRes.tzOffset,
+        timeZone: tzRes.timeZone,
+        isDST: tzRes.isDST,
+      };
+
       const docRef = await addDoc(collection(db, 'submissions'), {
         name: name.trim(),
         phone: fullPhoneNumber,
@@ -169,11 +193,7 @@ export default function DedicatedIntakePage({ params }: { params: Promise<{ serv
           title: service.titleEN,
           price: service.price,
         },
-        birthDetails: {
-          ...birthDetails,
-          date: birthDetails.date,
-          time: birthDetails.time,
-        },
+        birthDetails: finalBirthDetails,
         paymentStatus: 'user_declared_paid',
         paymentDeclared: true,
         utrNumber: utrParam,

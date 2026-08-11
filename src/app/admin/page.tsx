@@ -27,6 +27,7 @@ import { Badge } from '../../components/ui/shadcn/badge';
 import { CustomDatePicker, CustomTimePicker } from '../../components/CustomDateTimePicker';
 import PWAInstallBanner from '../../components/PWAInstallBanner';
 import { GURU_SERVICES } from '../../lib/services';
+import { resolveHistoricalTimezone } from '../../lib/astrology/timezone';
 import {
   Sparkles,
   LogOut,
@@ -466,11 +467,20 @@ export default function AdminPage() {
     justSelectedPlaceRef.current = true;
     setPlaceSuggestions([]);
     setPlaceSearch(cleanName);
+
+    const tzRes = resolveHistoricalTimezone(
+      formData.date || '1995-01-01',
+      formData.time || '12:00',
+      item.lat,
+      item.lon
+    );
+
     setFormData((prev) => ({
       ...prev,
       place: cleanName,
       lat: item.lat,
       lng: item.lon,
+      tzOffset: tzRes.tzOffset,
     }));
   };
 
@@ -630,6 +640,8 @@ export default function AdminPage() {
 
     const srv = GURU_SERVICES.find((s) => s.id === formData.serviceId) || GURU_SERVICES[0];
     const combinedPhone = `${countryCode} ${phoneDigits.trim()}`;
+    const tzRes = resolveHistoricalTimezone(formData.date, formData.time, finalLat, finalLng);
+    const finalTzOffset = tzRes.tzOffset;
 
     const submissionPayload: any = {
       name: formData.name.trim(),
@@ -645,7 +657,9 @@ export default function AdminPage() {
         place: finalPlace,
         lat: finalLat,
         lng: finalLng,
-        tzOffset: formData.tzOffset || 5.5,
+        tzOffset: finalTzOffset,
+        timeZone: tzRes.timeZone,
+        isDST: tzRes.isDST,
       },
       paymentStatus: formData.paymentStatus,
     };
