@@ -24,6 +24,7 @@ import {
   Activity,
   Layers,
 } from 'lucide-react';
+import { calculateSookshmadashas, calculatePranadashas } from '../../../lib/astrology/dashas';
 
 type Language = 'EN' | 'GU' | 'HI';
 
@@ -454,7 +455,12 @@ export default function KundliReportPage() {
   const [activeTab, setActiveTab] = useState<'gochar' | 'charts' | 'dashas' | 'sadesati' | 'planets' | 'remedies'>('gochar');
   const [overlayMode, setOverlayMode] = useState<'natal' | 'gochar' | 'both'>('both');
   const [selectedVarga, setSelectedVarga] = useState<string>('D2');
-  const [expandedMdIndex, setExpandedMdIndex] = useState<number | null>(0);
+
+  // 5-Level Interactive Dasha Tree State
+  const [expandedMdIndex, setExpandedMdIndex] = useState<number | null>(null);
+  const [expandedAdKey, setExpandedAdKey] = useState<string | null>(null);
+  const [expandedPdKey, setExpandedPdKey] = useState<string | null>(null);
+  const [expandedSdKey, setExpandedSdKey] = useState<string | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -470,6 +476,45 @@ export default function KundliReportPage() {
         }
 
         setKundliData(result);
+
+        // Auto-expand active Dasha chain down to 5th level on load
+        if (result.currentDashaChain && result.dasha?.mahadashas) {
+          const chain = result.currentDashaChain;
+          const mdIdx = result.dasha.mahadashas.findIndex(
+            (md: any) => md.lord === chain.mahadasha.lord
+          );
+          if (mdIdx !== -1) {
+            setExpandedMdIndex(mdIdx);
+            const targetMd = result.dasha.mahadashas[mdIdx];
+            const adIdx = targetMd.antardashas?.findIndex(
+              (ad: any) => ad.lord === chain.antardasha.lord
+            );
+            if (adIdx !== undefined && adIdx !== -1) {
+              const adKey = `${mdIdx}-${adIdx}`;
+              setExpandedAdKey(adKey);
+
+              const targetAd = targetMd.antardashas[adIdx];
+              const pdIdx = targetAd.pratyantardashas?.findIndex(
+                (pd: any) => pd.lord === chain.pratyantardasha.lord
+              );
+              if (pdIdx !== undefined && pdIdx !== -1) {
+                const pdKey = `${mdIdx}-${adIdx}-${pdIdx}`;
+                setExpandedPdKey(pdKey);
+
+                const targetPd = targetAd.pratyantardashas[pdIdx];
+                const sds = calculateSookshmadashas(
+                  new Date(targetPd.startDate),
+                  new Date(targetPd.endDate),
+                  targetPd.lord
+                );
+                const sdIdx = sds.findIndex((sd) => sd.lord === chain.sookshmadasha.lord);
+                if (sdIdx !== -1) {
+                  setExpandedSdKey(`${mdIdx}-${adIdx}-${pdIdx}-${sdIdx}`);
+                }
+              }
+            }
+          }
+        }
       } catch (err: any) {
         console.error('Error loading Kundli report:', err);
         setError(err.message || 'Error loading Kundli report');
@@ -641,9 +686,9 @@ export default function KundliReportPage() {
         </div>
       </div>
 
-      {/* Main Navigation Bar (Tabs) */}
-      <nav className="bg-white border-b border-stone-200/60 sticky top-0 z-20 px-4 sm:px-6 overflow-x-auto scrollbar-none shadow-xs print:hidden">
-        <div className="flex gap-4 sm:gap-6 text-xs sm:text-sm font-semibold max-w-6xl mx-auto">
+      {/* Main Navigation Bar (Pressable Sacred Pill Buttons) */}
+      <nav className="bg-white border-b border-stone-200/80 sticky top-0 z-20 px-3 sm:px-6 py-2.5 overflow-x-auto scrollbar-none shadow-xs print:hidden">
+        <div className="flex gap-2 sm:gap-3 text-xs sm:text-sm font-bold max-w-6xl mx-auto items-center">
           {[
             { id: 'gochar', label: t.tabs.gochar },
             { id: 'charts', label: t.tabs.charts },
@@ -657,14 +702,13 @@ export default function KundliReportPage() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`py-3 relative whitespace-nowrap cursor-pointer transition-all duration-200 ${
-                  isActive ? 'text-[#A14E15] font-bold' : 'text-stone-500 hover:text-stone-900'
+                className={`py-2 px-3.5 sm:px-4 rounded-2xl whitespace-nowrap cursor-pointer transition-all duration-200 border-2 ${
+                  isActive
+                    ? 'bg-gradient-to-r from-[#9E2A2B] to-[#7A1C28] text-white border-amber-300 shadow-md shadow-amber-900/20 scale-105'
+                    : 'bg-amber-50/70 text-stone-800 border-amber-200/80 hover:bg-amber-100/80 hover:border-amber-300 shadow-2xs'
                 }`}
               >
                 {tab.label}
-                {isActive && (
-                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#A14E15] rounded-full shadow-[0_0_8px_rgba(161,78,21,0.4)]" />
-                )}
               </button>
             );
           })}
@@ -945,72 +989,211 @@ export default function KundliReportPage() {
 
                   return (
                     <div key={idx} className="py-3.5 space-y-3">
+                      {/* LEVEL 1: MAHADASHA */}
                       <div
                         onClick={() => setExpandedMdIndex(isExpanded ? null : idx)}
-                        className={`flex items-center justify-between p-3 rounded-2xl cursor-pointer transition-all ${
+                        className={`flex items-center justify-between p-3.5 rounded-2xl cursor-pointer transition-all border-2 ${
                           isCurrent
-                            ? 'bg-amber-100/70 border border-amber-300 text-[#59141D]'
-                            : 'hover:bg-stone-50 text-stone-800'
+                            ? 'bg-amber-100/90 border-amber-400 text-[#59141D] shadow-xs'
+                            : 'bg-stone-50/80 border-stone-200/80 hover:bg-amber-50/70 hover:border-amber-300 text-stone-800'
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          <span className="w-8 h-8 rounded-xl bg-amber-200/60 font-bold text-xs flex items-center justify-center text-[#A14E15] shrink-0">
+                          <span className="w-8 h-8 rounded-xl bg-amber-200/80 font-extrabold text-xs flex items-center justify-center text-[#A14E15] shrink-0 border border-amber-300">
                             {idx + 1}
                           </span>
                           <div>
-                            <span className="font-extrabold text-sm block">
+                            <span className="font-extrabold text-sm sm:text-base block text-stone-900">
                               {getPlanetName(md.lord)} MahaDasha
                             </span>
-                            {idx === 0 ? (
-                              <div className="space-y-0.5 mt-0.5">
-                                <span className="text-xs text-stone-700 font-bold block">
-                                  Birth Entry: {formatDateShort(md.startDate)} → End: {formatDateShort(md.endDate)}
-                                </span>
-                                {md.theoreticalStartDate && (
-                                  <span className="text-[10px] text-stone-500 font-mono block">
-                                    Full Cycle: {formatDateShort(md.theoreticalStartDate)} → {formatDateShort(md.endDate)} (7 Years Total)
-                                  </span>
-                                )}
-                              </div>
-                            ) : (
-                              <span className="text-xs text-stone-500 font-mono">
-                                {formatDateShort(md.startDate)} → {formatDateShort(md.endDate)}
-                              </span>
-                            )}
+                            <span className="text-xs text-stone-600 font-mono font-medium">
+                              {formatDateShort(md.startDate)} → {formatDateShort(md.endDate)}
+                            </span>
                           </div>
                         </div>
 
                         <div className="flex items-center gap-2 shrink-0">
-                          {isCurrent && <Badge variant="default" className="bg-[#7A1C28] text-white text-[10px]">{t.activeNow}</Badge>}
-                          {isExpanded ? <ChevronUp className="w-4 h-4 text-stone-400" /> : <ChevronDown className="w-4 h-4 text-stone-400" />}
+                          {isCurrent && (
+                            <Badge variant="default" className="bg-[#7A1C28] text-white text-[10px] font-bold px-2 py-0.5 shadow-2xs">
+                              {t.activeNow}
+                            </Badge>
+                          )}
+                          {isExpanded ? <ChevronUp className="w-4 h-4 text-stone-500" /> : <ChevronDown className="w-4 h-4 text-stone-500" />}
                         </div>
                       </div>
 
-                      {/* Expanded Antardashas */}
+                      {/* LEVEL 2: ANTARDASHAS */}
                       {isExpanded && md.antardashas && (
-                        <div className="pl-4 sm:pl-6 pr-2 space-y-2 pt-1 border-l-2 border-amber-200/80 ml-3 sm:ml-4">
-                          <h4 className="text-xs font-bold text-stone-500 uppercase tracking-wider">
-                            Antardashas under {getPlanetName(md.lord)}
+                        <div className="pl-3 sm:pl-6 space-y-2 pt-1 border-l-3 border-amber-300 ml-3 sm:ml-4">
+                          <h4 className="text-[11px] font-extrabold text-amber-900 uppercase tracking-wider flex items-center gap-1.5">
+                            <span>અંતરદશા (Antardashas under {getPlanetName(md.lord)})</span>
+                            <span className="text-[10px] text-stone-400 font-normal">(Tap to view Pratyantardasha)</span>
                           </h4>
-                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                          <div className="space-y-2">
                             {md.antardashas.map((ad: any, aIdx: number) => {
+                              const adKey = `${idx}-${aIdx}`;
+                              const isAdExpanded = expandedAdKey === adKey;
                               const isAdActive = currentDashaChain && currentDashaChain.antardasha.lord === ad.lord && isCurrent;
+
                               return (
-                                <div
-                                  key={aIdx}
-                                  className={`p-2.5 rounded-xl border text-xs ${
-                                    isAdActive
-                                      ? 'bg-amber-100 border-amber-400 font-bold text-[#59141D]'
-                                      : 'bg-stone-50 border-stone-200/70 text-stone-700'
-                                  }`}
-                                >
-                                  <div className="flex justify-between items-center">
-                                    <span>{getPlanetName(ad.lord)}</span>
-                                    {isAdActive && <span className="text-[9px] bg-[#7A1C28] text-white px-1.5 py-0.5 rounded-md">{t.activeNow}</span>}
+                                <div key={aIdx} className="space-y-2">
+                                  <div
+                                    onClick={() => setExpandedAdKey(isAdExpanded ? null : adKey)}
+                                    className={`p-3 rounded-xl border-2 flex items-center justify-between cursor-pointer transition-all text-xs ${
+                                      isAdActive
+                                        ? 'bg-amber-100 border-amber-400 font-bold text-[#59141D]'
+                                        : 'bg-white border-stone-200 hover:bg-amber-50/60 text-stone-800'
+                                    }`}
+                                  >
+                                    <div>
+                                      <span className="font-bold text-sm block">
+                                        {getPlanetName(ad.lord)} Antardasha
+                                      </span>
+                                      <span className="text-[11px] text-stone-600 font-mono">
+                                        {formatDateShort(ad.startDate)} → {formatDateShort(ad.endDate)}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      {isAdActive && (
+                                        <span className="text-[10px] bg-[#7A1C28] text-white px-2 py-0.5 rounded-md font-bold">
+                                          {t.activeNow}
+                                        </span>
+                                      )}
+                                      {isAdExpanded ? <ChevronUp className="w-3.5 h-3.5 text-stone-500" /> : <ChevronDown className="w-3.5 h-3.5 text-stone-500" />}
+                                    </div>
                                   </div>
-                                  <span className="text-[10px] text-stone-500 font-mono block mt-1">
-                                    {formatDateShort(ad.startDate)} - {formatDateShort(ad.endDate)}
-                                  </span>
+
+                                  {/* LEVEL 3: PRATYANTARDASHAS */}
+                                  {isAdExpanded && ad.pratyantardashas && (
+                                    <div className="pl-3 sm:pl-5 space-y-2 border-l-2 border-amber-400 ml-2.5">
+                                      <h5 className="text-[10px] font-extrabold text-stone-600 uppercase tracking-wider">
+                                        પ્રત્યંતર દશા (Pratyantardashas under {getPlanetName(ad.lord)})
+                                      </h5>
+                                      <div className="space-y-1.5">
+                                        {ad.pratyantardashas.map((pd: any, pIdx: number) => {
+                                          const pdKey = `${idx}-${aIdx}-${pIdx}`;
+                                          const isPdExpanded = expandedPdKey === pdKey;
+                                          const isPdActive = currentDashaChain && currentDashaChain.pratyantardasha.lord === pd.lord && isAdActive;
+
+                                          const sookshmaList = isPdExpanded ? calculateSookshmadashas(new Date(pd.startDate), new Date(pd.endDate), pd.lord) : [];
+
+                                          return (
+                                            <div key={pIdx} className="space-y-1.5">
+                                              <div
+                                                onClick={() => setExpandedPdKey(isPdExpanded ? null : pdKey)}
+                                                className={`p-2.5 rounded-lg border flex items-center justify-between cursor-pointer transition-all text-xs ${
+                                                  isPdActive
+                                                    ? 'bg-amber-100/90 border-amber-400 font-bold text-[#59141D]'
+                                                    : 'bg-stone-50 border-stone-200 hover:bg-amber-50/50 text-stone-800'
+                                                }`}
+                                              >
+                                                <div>
+                                                  <span className="font-bold text-xs block">
+                                                    {getPlanetName(pd.lord)} Pratyantara
+                                                  </span>
+                                                  <span className="text-[10px] text-stone-500 font-mono">
+                                                    {formatDateShort(pd.startDate)} → {formatDateShort(pd.endDate)}
+                                                  </span>
+                                                </div>
+                                                <div className="flex items-center gap-1.5">
+                                                  {isPdActive && (
+                                                    <span className="text-[9px] bg-[#7A1C28] text-white px-1.5 py-0.5 rounded-md font-bold">
+                                                      {t.activeNow}
+                                                    </span>
+                                                  )}
+                                                  {isPdExpanded ? <ChevronUp className="w-3.5 h-3.5 text-stone-400" /> : <ChevronDown className="w-3.5 h-3.5 text-stone-400" />}
+                                                </div>
+                                              </div>
+
+                                              {/* LEVEL 4: SOOKSHMADASHAS */}
+                                              {isPdExpanded && (
+                                                <div className="pl-3 sm:pl-4 space-y-1.5 border-l-2 border-stone-300 ml-2">
+                                                  <h6 className="text-[9px] font-extrabold text-stone-500 uppercase tracking-wider">
+                                                    સૂક્ષ્મ દશા (Sookshmadashas under {getPlanetName(pd.lord)})
+                                                  </h6>
+                                                  <div className="space-y-1">
+                                                    {sookshmaList.map((sd: any, sIdx: number) => {
+                                                      const sdKey = `${idx}-${aIdx}-${pIdx}-${sIdx}`;
+                                                      const isSdExpanded = expandedSdKey === sdKey;
+                                                      const isSdActive = currentDashaChain && currentDashaChain.sookshmadasha.lord === sd.lord && isPdActive;
+
+                                                      const pranaList = isSdExpanded ? calculatePranadashas(new Date(sd.startDate), new Date(sd.endDate), sd.lord) : [];
+
+                                                      return (
+                                                        <div key={sIdx} className="space-y-1">
+                                                          <div
+                                                            onClick={() => setExpandedSdKey(isSdExpanded ? null : sdKey)}
+                                                            className={`p-2 rounded-md border flex items-center justify-between cursor-pointer transition-all text-[11px] ${
+                                                              isSdActive
+                                                                ? 'bg-amber-100 border-amber-300 font-bold text-[#59141D]'
+                                                                : 'bg-white border-stone-200 hover:bg-stone-50 text-stone-700'
+                                                            }`}
+                                                          >
+                                                            <div>
+                                                              <span className="font-bold block">
+                                                                {getPlanetName(sd.lord)} Sookshma
+                                                              </span>
+                                                              <span className="text-[9px] text-stone-500 font-mono">
+                                                                {formatDateShort(sd.startDate)} → {formatDateShort(sd.endDate)}
+                                                              </span>
+                                                            </div>
+                                                            <div className="flex items-center gap-1">
+                                                              {isSdActive && (
+                                                                <span className="text-[8px] bg-[#7A1C28] text-white px-1 py-0.5 rounded-xs font-bold">
+                                                                  {t.activeNow}
+                                                                </span>
+                                                              )}
+                                                              {isSdExpanded ? <ChevronUp className="w-3 h-3 text-stone-400" /> : <ChevronDown className="w-3 h-3 text-stone-400" />}
+                                                            </div>
+                                                          </div>
+
+                                                          {/* LEVEL 5: PRANADASHAS */}
+                                                          {isSdExpanded && (
+                                                            <div className="pl-3 space-y-1 border-l border-amber-400 ml-1.5">
+                                                              <span className="text-[9px] font-bold text-amber-900 block">
+                                                                પ્રાણ દશા (Pranadashas under {getPlanetName(sd.lord)}):
+                                                              </span>
+                                                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
+                                                                {pranaList.map((pr: any, prIdx: number) => {
+                                                                  const isPrActive = currentDashaChain && currentDashaChain.prandasha.lord === pr.lord && isSdActive;
+                                                                  return (
+                                                                    <div
+                                                                      key={prIdx}
+                                                                      className={`p-1.5 rounded-md border text-[10px] flex items-center justify-between ${
+                                                                        isPrActive
+                                                                          ? 'bg-emerald-100 border-emerald-400 font-bold text-emerald-950 shadow-2xs'
+                                                                          : 'bg-stone-50 border-stone-200/80 text-stone-600'
+                                                                      }`}
+                                                                    >
+                                                                      <div>
+                                                                        <span className="font-bold block">{getPlanetName(pr.lord)} Prana</span>
+                                                                        <span className="text-[8px] font-mono block text-stone-500">
+                                                                          {formatDateShort(pr.startDate)} - {formatDateShort(pr.endDate)}
+                                                                        </span>
+                                                                      </div>
+                                                                      {isPrActive && (
+                                                                        <span className="text-[8px] bg-emerald-700 text-white font-bold px-1 py-0.5 rounded-xs">
+                                                                          ⚡ Active
+                                                                        </span>
+                                                                      )}
+                                                                    </div>
+                                                                  );
+                                                                })}
+                                                              </div>
+                                                            </div>
+                                                          )}
+                                                        </div>
+                                                      );
+                                                    })}
+                                                  </div>
+                                                </div>
+                                              )}
+                                            </div>
+                                          );
+                                        })}
+                                      </div>
+                                    </div>
+                                  )}
                                 </div>
                               );
                             })}

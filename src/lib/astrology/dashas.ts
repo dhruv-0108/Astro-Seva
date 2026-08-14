@@ -170,8 +170,63 @@ export function calculateVimshottari(
   };
 }
 
-export interface ActiveDashaChain {
+export function calculateSookshmadashas(
+  pdStartDate: Date,
+  pdEndDate: Date,
+  pdLord: string
+): DashaPeriod[] {
+  const pdSpanMs = pdEndDate.getTime() - pdStartDate.getTime();
+  const pdLordIdx = PLANET_ORDER.indexOf(pdLord);
+  const result: DashaPeriod[] = [];
+  let currentMs = pdStartDate.getTime();
 
+  for (let s = 0; s < 9; s++) {
+    const sdLord = PLANET_ORDER[(pdLordIdx + s) % 9];
+    const sdSpanMs = pdSpanMs * (PLANET_SPANS[sdLord] / TOTAL_SPAN);
+    const startMs = currentMs;
+    const endMs = startMs + sdSpanMs;
+
+    result.push({
+      lord: sdLord,
+      startDate: new Date(startMs),
+      endDate: new Date(endMs),
+    });
+
+    currentMs = endMs;
+  }
+
+  return result;
+}
+
+export function calculatePranadashas(
+  sdStartDate: Date,
+  sdEndDate: Date,
+  sdLord: string
+): DashaPeriod[] {
+  const sdSpanMs = sdEndDate.getTime() - sdStartDate.getTime();
+  const sdLordIdx = PLANET_ORDER.indexOf(sdLord);
+  const result: DashaPeriod[] = [];
+  let currentMs = sdStartDate.getTime();
+
+  for (let p = 0; p < 9; p++) {
+    const prLord = PLANET_ORDER[(sdLordIdx + p) % 9];
+    const prSpanMs = sdSpanMs * (PLANET_SPANS[prLord] / TOTAL_SPAN);
+    const startMs = currentMs;
+    const endMs = startMs + prSpanMs;
+
+    result.push({
+      lord: prLord,
+      startDate: new Date(startMs),
+      endDate: new Date(endMs),
+    });
+
+    currentMs = endMs;
+  }
+
+  return result;
+}
+
+export interface ActiveDashaChain {
   mahadasha: { lord: string; startDate: Date; endDate: Date };
   antardasha: { lord: string; startDate: Date; endDate: Date };
   pratyantardasha: { lord: string; startDate: Date; endDate: Date };
